@@ -48,7 +48,7 @@ function ResearchDetail() {
             <GlassPanel>
               <h3 className="text-[10px] uppercase tracking-[0.24em] text-primary/80">Methodology</h3>
               <ul className="mt-3 grid gap-2 sm:grid-cols-2">
-                {area.methodology.map((m) => (
+                {area.methodology.map((m: string) => (
                   <li key={m} className="flex items-start gap-2 text-sm text-muted-foreground">
                     <span className="mt-1.5 h-1.5 w-1.5 rounded-full" style={{ background: `var(--${area.accent})` }} />
                     {m}
@@ -65,7 +65,7 @@ function ResearchDetail() {
             <GlassPanel>
               <div className="text-[10px] uppercase tracking-[0.24em] text-primary/80">Facilities</div>
               <ul className="mt-3 space-y-2 text-sm">
-                {area.facilities.map((f) => (
+                {area.facilities.map((f: string) => (
                   <li key={f}>
                     <Link to="/facilities" className="text-muted-foreground hover:text-foreground">
                       {f}
