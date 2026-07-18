@@ -9,38 +9,442 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TeachingRouteImport } from './routes/teaching'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SitemapRouteImport } from './routes/sitemap'
+import { Route as ResearchUniverseRouteImport } from './routes/research-universe'
+import { Route as ResearchRouteImport } from './routes/research'
+import { Route as PublicationsRouteImport } from './routes/publications'
+import { Route as ProjectsRouteImport } from './routes/projects'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ObservationsRouteImport } from './routes/observations'
+import { Route as NewsRouteImport } from './routes/news'
+import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as FacilitiesRouteImport } from './routes/facilities'
+import { Route as DownloadsRouteImport } from './routes/downloads'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ConferencesRouteImport } from './routes/conferences'
+import { Route as AcademicJourneyRouteImport } from './routes/academic-journey'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ResearchSlugRouteImport } from './routes/research.$slug'
+import { Route as PublicationsSlugRouteImport } from './routes/publications.$slug'
+import { Route as ProjectsSlugRouteImport } from './routes/projects.$slug'
+import { Route as NewsSlugRouteImport } from './routes/news.$slug'
+import { Route as FacilitiesSlugRouteImport } from './routes/facilities.$slug'
 
+const TeachingRoute = TeachingRouteImport.update({
+  id: '/teaching',
+  path: '/teaching',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapRoute = SitemapRouteImport.update({
+  id: '/sitemap',
+  path: '/sitemap',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResearchUniverseRoute = ResearchUniverseRouteImport.update({
+  id: '/research-universe',
+  path: '/research-universe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResearchRoute = ResearchRouteImport.update({
+  id: '/research',
+  path: '/research',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicationsRoute = PublicationsRouteImport.update({
+  id: '/publications',
+  path: '/publications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsRoute = ProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ObservationsRoute = ObservationsRouteImport.update({
+  id: '/observations',
+  path: '/observations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsRoute = NewsRouteImport.update({
+  id: '/news',
+  path: '/news',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalleryRoute = GalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FacilitiesRoute = FacilitiesRouteImport.update({
+  id: '/facilities',
+  path: '/facilities',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DownloadsRoute = DownloadsRouteImport.update({
+  id: '/downloads',
+  path: '/downloads',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConferencesRoute = ConferencesRouteImport.update({
+  id: '/conferences',
+  path: '/conferences',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AcademicJourneyRoute = AcademicJourneyRouteImport.update({
+  id: '/academic-journey',
+  path: '/academic-journey',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResearchSlugRoute = ResearchSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ResearchRoute,
+} as any)
+const PublicationsSlugRoute = PublicationsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => PublicationsRoute,
+} as any)
+const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ProjectsRoute,
+} as any)
+const NewsSlugRoute = NewsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => NewsRoute,
+} as any)
+const FacilitiesSlugRoute = FacilitiesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => FacilitiesRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/academic-journey': typeof AcademicJourneyRoute
+  '/conferences': typeof ConferencesRoute
+  '/contact': typeof ContactRoute
+  '/downloads': typeof DownloadsRoute
+  '/facilities': typeof FacilitiesRouteWithChildren
+  '/gallery': typeof GalleryRoute
+  '/news': typeof NewsRouteWithChildren
+  '/observations': typeof ObservationsRoute
+  '/privacy': typeof PrivacyRoute
+  '/projects': typeof ProjectsRouteWithChildren
+  '/publications': typeof PublicationsRouteWithChildren
+  '/research': typeof ResearchRouteWithChildren
+  '/research-universe': typeof ResearchUniverseRoute
+  '/sitemap': typeof SitemapRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/teaching': typeof TeachingRoute
+  '/facilities/$slug': typeof FacilitiesSlugRoute
+  '/news/$slug': typeof NewsSlugRoute
+  '/projects/$slug': typeof ProjectsSlugRoute
+  '/publications/$slug': typeof PublicationsSlugRoute
+  '/research/$slug': typeof ResearchSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/academic-journey': typeof AcademicJourneyRoute
+  '/conferences': typeof ConferencesRoute
+  '/contact': typeof ContactRoute
+  '/downloads': typeof DownloadsRoute
+  '/facilities': typeof FacilitiesRouteWithChildren
+  '/gallery': typeof GalleryRoute
+  '/news': typeof NewsRouteWithChildren
+  '/observations': typeof ObservationsRoute
+  '/privacy': typeof PrivacyRoute
+  '/projects': typeof ProjectsRouteWithChildren
+  '/publications': typeof PublicationsRouteWithChildren
+  '/research': typeof ResearchRouteWithChildren
+  '/research-universe': typeof ResearchUniverseRoute
+  '/sitemap': typeof SitemapRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/teaching': typeof TeachingRoute
+  '/facilities/$slug': typeof FacilitiesSlugRoute
+  '/news/$slug': typeof NewsSlugRoute
+  '/projects/$slug': typeof ProjectsSlugRoute
+  '/publications/$slug': typeof PublicationsSlugRoute
+  '/research/$slug': typeof ResearchSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/academic-journey': typeof AcademicJourneyRoute
+  '/conferences': typeof ConferencesRoute
+  '/contact': typeof ContactRoute
+  '/downloads': typeof DownloadsRoute
+  '/facilities': typeof FacilitiesRouteWithChildren
+  '/gallery': typeof GalleryRoute
+  '/news': typeof NewsRouteWithChildren
+  '/observations': typeof ObservationsRoute
+  '/privacy': typeof PrivacyRoute
+  '/projects': typeof ProjectsRouteWithChildren
+  '/publications': typeof PublicationsRouteWithChildren
+  '/research': typeof ResearchRouteWithChildren
+  '/research-universe': typeof ResearchUniverseRoute
+  '/sitemap': typeof SitemapRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/teaching': typeof TeachingRoute
+  '/facilities/$slug': typeof FacilitiesSlugRoute
+  '/news/$slug': typeof NewsSlugRoute
+  '/projects/$slug': typeof ProjectsSlugRoute
+  '/publications/$slug': typeof PublicationsSlugRoute
+  '/research/$slug': typeof ResearchSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/academic-journey'
+    | '/conferences'
+    | '/contact'
+    | '/downloads'
+    | '/facilities'
+    | '/gallery'
+    | '/news'
+    | '/observations'
+    | '/privacy'
+    | '/projects'
+    | '/publications'
+    | '/research'
+    | '/research-universe'
+    | '/sitemap'
+    | '/sitemap.xml'
+    | '/teaching'
+    | '/facilities/$slug'
+    | '/news/$slug'
+    | '/projects/$slug'
+    | '/publications/$slug'
+    | '/research/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/academic-journey'
+    | '/conferences'
+    | '/contact'
+    | '/downloads'
+    | '/facilities'
+    | '/gallery'
+    | '/news'
+    | '/observations'
+    | '/privacy'
+    | '/projects'
+    | '/publications'
+    | '/research'
+    | '/research-universe'
+    | '/sitemap'
+    | '/sitemap.xml'
+    | '/teaching'
+    | '/facilities/$slug'
+    | '/news/$slug'
+    | '/projects/$slug'
+    | '/publications/$slug'
+    | '/research/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/academic-journey'
+    | '/conferences'
+    | '/contact'
+    | '/downloads'
+    | '/facilities'
+    | '/gallery'
+    | '/news'
+    | '/observations'
+    | '/privacy'
+    | '/projects'
+    | '/publications'
+    | '/research'
+    | '/research-universe'
+    | '/sitemap'
+    | '/sitemap.xml'
+    | '/teaching'
+    | '/facilities/$slug'
+    | '/news/$slug'
+    | '/projects/$slug'
+    | '/publications/$slug'
+    | '/research/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  AcademicJourneyRoute: typeof AcademicJourneyRoute
+  ConferencesRoute: typeof ConferencesRoute
+  ContactRoute: typeof ContactRoute
+  DownloadsRoute: typeof DownloadsRoute
+  FacilitiesRoute: typeof FacilitiesRouteWithChildren
+  GalleryRoute: typeof GalleryRoute
+  NewsRoute: typeof NewsRouteWithChildren
+  ObservationsRoute: typeof ObservationsRoute
+  PrivacyRoute: typeof PrivacyRoute
+  ProjectsRoute: typeof ProjectsRouteWithChildren
+  PublicationsRoute: typeof PublicationsRouteWithChildren
+  ResearchRoute: typeof ResearchRouteWithChildren
+  ResearchUniverseRoute: typeof ResearchUniverseRoute
+  SitemapRoute: typeof SitemapRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TeachingRoute: typeof TeachingRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/teaching': {
+      id: '/teaching'
+      path: '/teaching'
+      fullPath: '/teaching'
+      preLoaderRoute: typeof TeachingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap': {
+      id: '/sitemap'
+      path: '/sitemap'
+      fullPath: '/sitemap'
+      preLoaderRoute: typeof SitemapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/research-universe': {
+      id: '/research-universe'
+      path: '/research-universe'
+      fullPath: '/research-universe'
+      preLoaderRoute: typeof ResearchUniverseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/research': {
+      id: '/research'
+      path: '/research'
+      fullPath: '/research'
+      preLoaderRoute: typeof ResearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/publications': {
+      id: '/publications'
+      path: '/publications'
+      fullPath: '/publications'
+      preLoaderRoute: typeof PublicationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects': {
+      id: '/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof ProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/observations': {
+      id: '/observations'
+      path: '/observations'
+      fullPath: '/observations'
+      preLoaderRoute: typeof ObservationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/news': {
+      id: '/news'
+      path: '/news'
+      fullPath: '/news'
+      preLoaderRoute: typeof NewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gallery': {
+      id: '/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/facilities': {
+      id: '/facilities'
+      path: '/facilities'
+      fullPath: '/facilities'
+      preLoaderRoute: typeof FacilitiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/downloads': {
+      id: '/downloads'
+      path: '/downloads'
+      fullPath: '/downloads'
+      preLoaderRoute: typeof DownloadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/conferences': {
+      id: '/conferences'
+      path: '/conferences'
+      fullPath: '/conferences'
+      preLoaderRoute: typeof ConferencesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/academic-journey': {
+      id: '/academic-journey'
+      path: '/academic-journey'
+      fullPath: '/academic-journey'
+      preLoaderRoute: typeof AcademicJourneyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +452,122 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/research/$slug': {
+      id: '/research/$slug'
+      path: '/$slug'
+      fullPath: '/research/$slug'
+      preLoaderRoute: typeof ResearchSlugRouteImport
+      parentRoute: typeof ResearchRoute
+    }
+    '/publications/$slug': {
+      id: '/publications/$slug'
+      path: '/$slug'
+      fullPath: '/publications/$slug'
+      preLoaderRoute: typeof PublicationsSlugRouteImport
+      parentRoute: typeof PublicationsRoute
+    }
+    '/projects/$slug': {
+      id: '/projects/$slug'
+      path: '/$slug'
+      fullPath: '/projects/$slug'
+      preLoaderRoute: typeof ProjectsSlugRouteImport
+      parentRoute: typeof ProjectsRoute
+    }
+    '/news/$slug': {
+      id: '/news/$slug'
+      path: '/$slug'
+      fullPath: '/news/$slug'
+      preLoaderRoute: typeof NewsSlugRouteImport
+      parentRoute: typeof NewsRoute
+    }
+    '/facilities/$slug': {
+      id: '/facilities/$slug'
+      path: '/$slug'
+      fullPath: '/facilities/$slug'
+      preLoaderRoute: typeof FacilitiesSlugRouteImport
+      parentRoute: typeof FacilitiesRoute
+    }
   }
 }
 
+interface FacilitiesRouteChildren {
+  FacilitiesSlugRoute: typeof FacilitiesSlugRoute
+}
+
+const FacilitiesRouteChildren: FacilitiesRouteChildren = {
+  FacilitiesSlugRoute: FacilitiesSlugRoute,
+}
+
+const FacilitiesRouteWithChildren = FacilitiesRoute._addFileChildren(
+  FacilitiesRouteChildren,
+)
+
+interface NewsRouteChildren {
+  NewsSlugRoute: typeof NewsSlugRoute
+}
+
+const NewsRouteChildren: NewsRouteChildren = {
+  NewsSlugRoute: NewsSlugRoute,
+}
+
+const NewsRouteWithChildren = NewsRoute._addFileChildren(NewsRouteChildren)
+
+interface ProjectsRouteChildren {
+  ProjectsSlugRoute: typeof ProjectsSlugRoute
+}
+
+const ProjectsRouteChildren: ProjectsRouteChildren = {
+  ProjectsSlugRoute: ProjectsSlugRoute,
+}
+
+const ProjectsRouteWithChildren = ProjectsRoute._addFileChildren(
+  ProjectsRouteChildren,
+)
+
+interface PublicationsRouteChildren {
+  PublicationsSlugRoute: typeof PublicationsSlugRoute
+}
+
+const PublicationsRouteChildren: PublicationsRouteChildren = {
+  PublicationsSlugRoute: PublicationsSlugRoute,
+}
+
+const PublicationsRouteWithChildren = PublicationsRoute._addFileChildren(
+  PublicationsRouteChildren,
+)
+
+interface ResearchRouteChildren {
+  ResearchSlugRoute: typeof ResearchSlugRoute
+}
+
+const ResearchRouteChildren: ResearchRouteChildren = {
+  ResearchSlugRoute: ResearchSlugRoute,
+}
+
+const ResearchRouteWithChildren = ResearchRoute._addFileChildren(
+  ResearchRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AcademicJourneyRoute: AcademicJourneyRoute,
+  ConferencesRoute: ConferencesRoute,
+  ContactRoute: ContactRoute,
+  DownloadsRoute: DownloadsRoute,
+  FacilitiesRoute: FacilitiesRouteWithChildren,
+  GalleryRoute: GalleryRoute,
+  NewsRoute: NewsRouteWithChildren,
+  ObservationsRoute: ObservationsRoute,
+  PrivacyRoute: PrivacyRoute,
+  ProjectsRoute: ProjectsRouteWithChildren,
+  PublicationsRoute: PublicationsRouteWithChildren,
+  ResearchRoute: ResearchRouteWithChildren,
+  ResearchUniverseRoute: ResearchUniverseRoute,
+  SitemapRoute: SitemapRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TeachingRoute: TeachingRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
