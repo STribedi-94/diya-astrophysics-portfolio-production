@@ -5,7 +5,9 @@ import { researchAreas } from "@/data/research";
 import { facilities } from "@/data/facilities";
 import { MultiWavelengthFlow } from "@/components/visuals/MultiWavelengthFlow";
 import { ResearchUniverseMap } from "@/components/visuals/ResearchUniverseMap";
+import { MStarHero } from "@/components/visuals/MStarHero";
 import { Section } from "@/components/layout/Page";
+import { SpectralDivider } from "@/components/layout/SpectralDivider";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -26,18 +28,15 @@ function Home() {
     <>
       {/* HERO */}
       <section className="relative overflow-hidden pt-28 pb-20 md:pt-36 md:pb-28">
-        <div className="absolute inset-0 bg-grad-hero" aria-hidden />
-        <div className="absolute inset-0 starfield anim-drift opacity-80" aria-hidden />
-        <div className="absolute inset-0 grid-cosmic opacity-40" aria-hidden />
-
-        <div className="container-page relative grid gap-12 lg:grid-cols-[1.15fr_1fr] lg:items-center">
+        <div className="container-page relative grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-center">
           <div className="anim-fade-up">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-primary/90">
-              <Sparkles className="h-3 w-3" /> Observational Astrophysicist
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.28em] text-primary/90">
+              <Sparkles className="h-3 w-3" /> Chapter I · An Observer's Universe
             </div>
             <h1 className="font-display text-5xl font-semibold leading-[1.02] md:text-7xl">
               <span className="block">Diya Ram</span>
-              <span className="mt-3 block text-grad-accent">Magnetic lives of low-mass stars</span>
+              <span className="mt-3 block text-grad-mdwarf">The magnetic lives</span>
+              <span className="block text-grad-accent">of low-mass stars</span>
             </h1>
             <p className="mt-6 max-w-xl text-base text-muted-foreground md:text-lg">
               {site.tagline}
@@ -49,7 +48,7 @@ function Home() {
                 to="/research-universe"
                 className="group inline-flex items-center gap-2 rounded-full bg-grad-accent px-5 py-3 text-sm font-medium text-[oklch(0.12_0.04_265)] shadow-[0_0_30px_-8px_oklch(0.78_0.15_210_/_0.7)] transition-transform hover:scale-[1.02]"
               >
-                Explore the Research Universe
+                Enter the Research Universe
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
               <Link
@@ -74,7 +73,7 @@ function Home() {
               ].map(({ icon: Icon, label }) => (
                 <div key={label} className="glass rounded-xl p-3 text-center">
                   <Icon className="mx-auto h-4 w-4 text-primary" />
-                  <div className="mt-2 text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+                  <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
                     {label}
                   </div>
                 </div>
@@ -82,39 +81,28 @@ function Home() {
             </div>
           </div>
 
-          {/* Portrait / signature visual */}
+          {/* Signature M-dwarf visual */}
           <div className="relative anim-fade-up" style={{ animationDelay: "0.15s" }}>
-            <div className="relative mx-auto max-w-md">
+            <div className="relative mx-auto max-w-lg">
               <div
-                className="absolute -inset-8 rounded-3xl opacity-70 blur-3xl"
-                style={{ background: "conic-gradient(from 120deg, var(--nebula), var(--electric), var(--aurora), var(--magenta), var(--nebula))" }}
+                className="absolute -inset-10 rounded-full opacity-60 blur-3xl anim-pulse-slow"
+                style={{
+                  background:
+                    "conic-gradient(from 120deg, var(--uv-violet), var(--mdwarf), var(--flare-amber), var(--spectral-cyan), var(--uv-violet))",
+                }}
                 aria-hidden
               />
-              <div className="glass relative overflow-hidden rounded-3xl">
-                <div className="relative aspect-[4/5] bg-grad-panel">
-                  <div className="absolute inset-0 starfield opacity-60" />
-                  {/* Editorial portrait placeholder */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <svg viewBox="0 0 200 260" className="h-3/4 w-auto text-white/25">
-                      <circle cx="100" cy="90" r="42" fill="currentColor" />
-                      <path d="M30 250 C 30 180, 170 180, 170 250 Z" fill="currentColor" />
-                    </svg>
-                  </div>
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[oklch(0.10_0.04_265)] to-transparent p-6">
-                    <div className="text-xs uppercase tracking-[0.2em] text-primary/90">Portrait placeholder</div>
-                    <div className="mt-1 text-sm text-muted-foreground">
-                      A verified professional portrait will be added.
-                    </div>
-                  </div>
-                </div>
-                <div className="border-t border-white/10 p-4">
-                  <MultiWavelengthFlow />
-                </div>
+              <MStarHero className="relative" />
+              <div className="glass mt-4 rounded-2xl p-4">
+                <MultiWavelengthFlow />
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      <SpectralDivider label="Multi-wavelength · UV → Optical → Radio" />
+
 
       {/* Research areas preview */}
       <Section
