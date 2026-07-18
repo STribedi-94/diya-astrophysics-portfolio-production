@@ -6,7 +6,7 @@
 
 /*
  * Diya Ram — Astrophysics Research Universe design system.
- * All colors in oklch. Cosmic academic palette.
+ * All colors in oklch. Cinematic cosmic palette.
  */
 
 @theme inline {
@@ -41,10 +41,19 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* Cosmic palette */
+  /* Cosmic palette (Tailwind-exposed) */
   --color-cosmos: var(--cosmos);
   --color-cosmos-deep: var(--cosmos-deep);
   --color-cosmos-mid: var(--cosmos-mid);
+  --color-space-void: var(--space-void);
+  --color-mdwarf: var(--mdwarf);
+  --color-flare-amber: var(--flare-amber);
+  --color-uv-violet: var(--uv-violet);
+  --color-spectral-cyan: var(--spectral-cyan);
+  --color-radio-teal: var(--radio-teal);
+  --color-habitable-aqua: var(--habitable-aqua);
+  --color-stellar-gold: var(--stellar-gold);
+  --color-starlight: var(--starlight);
   --color-nebula: var(--nebula);
   --color-aurora: var(--aurora);
   --color-electric: var(--electric);
@@ -60,57 +69,68 @@
 :root {
   --radius: 0.75rem;
 
-  /* Cosmic foundation */
-  --cosmos-deep: oklch(0.14 0.04 265);   /* Galaxy Black-Blue */
-  --cosmos: oklch(0.18 0.06 265);        /* Deep Cosmic Navy */
-  --cosmos-mid: oklch(0.24 0.07 268);    /* Midnight Observatory */
-  --nebula: oklch(0.42 0.18 295);        /* Nebula Purple */
-  --aurora: oklch(0.78 0.15 210);        /* Aurora Cyan */
-  --electric: oklch(0.68 0.19 245);      /* Electric Blue */
-  --magenta: oklch(0.66 0.24 340);       /* Stellar Magenta */
-  --solar: oklch(0.82 0.16 85);          /* Solar Gold */
-  --flare: oklch(0.72 0.18 45);          /* Flare Orange */
-  --teal: oklch(0.72 0.13 190);          /* Spectral Teal */
+  /* Cosmic foundation — layered dark palette */
+  --space-void: oklch(0.09 0.03 265);         /* Absolute deep space */
+  --cosmos-deep: oklch(0.12 0.04 265);        /* Galaxy black-blue */
+  --cosmos: oklch(0.16 0.05 265);             /* Deep cosmic navy */
+  --cosmos-mid: oklch(0.22 0.06 268);         /* Midnight observatory */
+  --cosmos-plum: oklch(0.20 0.07 320);        /* Dark plum */
 
-  --background: var(--cosmos-deep);
-  --foreground: oklch(0.96 0.01 250);
+  /* Scientific accents (meaning-coded) */
+  --mdwarf: oklch(0.65 0.20 28);              /* M-dwarf red — magnetic activity */
+  --flare-amber: oklch(0.78 0.17 68);         /* Flare amber */
+  --uv-violet: oklch(0.55 0.22 300);          /* UV / energetic */
+  --spectral-cyan: oklch(0.80 0.14 210);      /* Optical / spectral */
+  --radio-teal: oklch(0.70 0.13 195);         /* Radio astronomy */
+  --habitable-aqua: oklch(0.74 0.12 175);     /* Habitability */
+  --stellar-gold: oklch(0.82 0.16 88);        /* Achievements */
+  --starlight: oklch(0.97 0.01 250);          /* Text / stars */
+
+  /* Legacy names — mapped to new palette for backward compatibility */
+  --nebula: var(--uv-violet);
+  --aurora: var(--spectral-cyan);
+  --electric: oklch(0.68 0.19 245);
+  --magenta: oklch(0.66 0.24 340);
+  --solar: var(--stellar-gold);
+  --flare: var(--flare-amber);
+  --teal: var(--radio-teal);
+
+  --background: var(--space-void);
+  --foreground: var(--starlight);
   --card: oklch(0.20 0.05 265 / 0.7);
-  --card-foreground: oklch(0.96 0.01 250);
-  --popover: oklch(0.16 0.05 265);
-  --popover-foreground: oklch(0.96 0.01 250);
-  --primary: var(--aurora);
-  --primary-foreground: oklch(0.12 0.04 265);
-  --secondary: oklch(0.28 0.06 265);
-  --secondary-foreground: oklch(0.96 0.01 250);
-  --muted: oklch(0.22 0.04 265);
-  --muted-foreground: oklch(0.72 0.03 250);
-  --accent: var(--electric);
-  --accent-foreground: oklch(0.12 0.04 265);
+  --card-foreground: var(--starlight);
+  --popover: oklch(0.14 0.05 265);
+  --popover-foreground: var(--starlight);
+  --primary: var(--spectral-cyan);
+  --primary-foreground: oklch(0.10 0.04 265);
+  --secondary: oklch(0.26 0.06 265);
+  --secondary-foreground: var(--starlight);
+  --muted: oklch(0.20 0.04 265);
+  --muted-foreground: oklch(0.74 0.03 250);
+  --accent: var(--mdwarf);
+  --accent-foreground: oklch(0.10 0.04 265);
   --destructive: oklch(0.62 0.22 27);
   --destructive-foreground: oklch(0.98 0 0);
   --border: oklch(0.96 0.01 250 / 0.10);
   --input: oklch(0.96 0.01 250 / 0.12);
-  --ring: var(--aurora);
+  --ring: var(--spectral-cyan);
 
   --glow-color: oklch(0.78 0.15 210 / 0.35);
 
-  --grad-hero: radial-gradient(ellipse at 20% 10%, oklch(0.42 0.18 295 / 0.35), transparent 55%),
-               radial-gradient(ellipse at 85% 30%, oklch(0.68 0.19 245 / 0.28), transparent 50%),
-               radial-gradient(ellipse at 50% 100%, oklch(0.66 0.24 340 / 0.20), transparent 60%),
-               linear-gradient(180deg, oklch(0.14 0.04 265), oklch(0.10 0.04 265));
-  --grad-panel: linear-gradient(135deg, oklch(0.22 0.06 268 / 0.65), oklch(0.16 0.05 265 / 0.55));
-  --grad-accent: linear-gradient(135deg, var(--aurora), var(--electric) 50%, var(--nebula));
-  --grad-spectral: linear-gradient(90deg, var(--nebula), var(--electric), var(--aurora), var(--teal), var(--solar), var(--flare), var(--magenta));
+  --grad-hero: radial-gradient(ellipse at 18% 12%, oklch(0.55 0.22 300 / 0.28), transparent 55%),
+               radial-gradient(ellipse at 82% 24%, oklch(0.65 0.20 28 / 0.22), transparent 55%),
+               radial-gradient(ellipse at 50% 100%, oklch(0.70 0.13 195 / 0.18), transparent 60%),
+               linear-gradient(180deg, var(--space-void), oklch(0.08 0.03 265));
+  --grad-panel: linear-gradient(135deg, oklch(0.22 0.06 268 / 0.55), oklch(0.14 0.05 265 / 0.55));
+  --grad-accent: linear-gradient(135deg, var(--spectral-cyan), var(--electric) 45%, var(--uv-violet));
+  --grad-mdwarf: radial-gradient(circle at 40% 40%, oklch(0.90 0.15 68), oklch(0.65 0.22 30) 55%, oklch(0.28 0.15 20) 90%);
+  --grad-spectral: linear-gradient(90deg, var(--uv-violet), var(--electric), var(--spectral-cyan), var(--radio-teal), var(--stellar-gold), var(--flare-amber), var(--mdwarf));
 }
 
-.dark {
-  color-scheme: dark;
-}
+.dark { color-scheme: dark; }
 
 @layer base {
-  * {
-    border-color: var(--color-border);
-  }
+  * { border-color: var(--color-border); }
   html, body {
     background-color: var(--color-background);
     color: var(--color-foreground);
@@ -119,20 +139,23 @@
     text-rendering: optimizeLegibility;
   }
   body {
-    background-image:
-      radial-gradient(1200px 600px at 10% -10%, oklch(0.42 0.18 295 / 0.15), transparent 60%),
-      radial-gradient(900px 500px at 90% 10%, oklch(0.68 0.19 245 / 0.12), transparent 60%);
-    background-attachment: fixed;
-    min-height: 100vh;
+    min-height: 100dvh;
     overflow-x: hidden;
   }
   h1, h2, h3, h4 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
   }
-  ::selection {
-    background: oklch(0.78 0.15 210 / 0.35);
+  ::selection { background: oklch(0.78 0.15 210 / 0.35); }
+
+  .skip-link {
+    position: absolute; top: 0; left: 0;
+    padding: 0.5rem 0.9rem; border-radius: 0 0 0.5rem 0;
+    background: var(--cosmos); color: var(--starlight);
+    transform: translateY(-120%); transition: transform 0.2s;
+    z-index: 100;
   }
+  .skip-link:focus { transform: translateY(0); outline: 2px solid var(--spectral-cyan); }
 }
 
 @layer utilities {
@@ -141,18 +164,27 @@
   .bg-grad-panel { background: var(--grad-panel); }
   .bg-grad-accent { background: var(--grad-accent); }
   .bg-grad-spectral { background: var(--grad-spectral); }
+  .bg-grad-mdwarf { background: var(--grad-mdwarf); }
   .text-grad-accent {
     background: var(--grad-accent);
-    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .text-grad-mdwarf {
+    background: linear-gradient(135deg, var(--flare-amber), var(--mdwarf));
     background-clip: text;
     color: transparent;
   }
   .glass {
     background: var(--grad-panel);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px) saturate(140%);
     border: 1px solid oklch(0.96 0.01 250 / 0.08);
     box-shadow: var(--shadow-panel);
+  }
+  .glass-strong {
+    background: linear-gradient(135deg, oklch(0.20 0.06 268 / 0.85), oklch(0.10 0.05 265 / 0.85));
+    backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid oklch(0.96 0.01 250 / 0.10);
   }
   .glow-ring {
     box-shadow: 0 0 0 1px oklch(0.78 0.15 210 / 0.35), 0 0 32px -8px oklch(0.78 0.15 210 / 0.5);
@@ -168,11 +200,23 @@
       radial-gradient(1.5px 1.5px at 30% 90%, oklch(0.96 0.01 250 / 0.6), transparent 60%);
     background-size: 800px 800px;
   }
+  .starfield-sparse {
+    background-image:
+      radial-gradient(1px 1px at 12% 22%, oklch(0.96 0.01 250 / 0.6), transparent 60%),
+      radial-gradient(1px 1px at 88% 70%, oklch(0.96 0.01 250 / 0.5), transparent 60%),
+      radial-gradient(1.5px 1.5px at 50% 40%, oklch(0.96 0.01 250 / 0.7), transparent 60%),
+      radial-gradient(1px 1px at 30% 78%, oklch(0.96 0.01 250 / 0.4), transparent 60%),
+      radial-gradient(1px 1px at 72% 12%, oklch(0.96 0.01 250 / 0.55), transparent 60%);
+    background-size: 900px 600px;
+  }
   .grid-cosmic {
     background-image:
       linear-gradient(oklch(0.96 0.01 250 / 0.04) 1px, transparent 1px),
       linear-gradient(90deg, oklch(0.96 0.01 250 / 0.04) 1px, transparent 1px);
     background-size: 60px 60px;
+  }
+  .vignette {
+    background: radial-gradient(ellipse at center, transparent 40%, oklch(0.06 0.02 265 / 0.75) 100%);
   }
   .container-page {
     width: 100%;
@@ -182,11 +226,22 @@
   }
   @media (min-width: 768px) { .container-page { padding-inline: 2rem; } }
 
+  .spectral-divider {
+    position: relative;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--spectral-cyan) 20%, var(--uv-violet) 50%, var(--mdwarf) 80%, transparent);
+    opacity: 0.4;
+  }
+
   .anim-float { animation: float 8s ease-in-out infinite; }
-  .anim-drift { animation: drift 60s linear infinite; }
+  .anim-drift { animation: drift 90s linear infinite; }
   .anim-pulse-slow { animation: pulseGlow 4s ease-in-out infinite; }
-  .anim-fade-up { animation: fadeUp 0.8s ease-out both; }
+  .anim-fade-up { animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .anim-fade-in { animation: fadeIn 0.9s ease-out both; }
   .anim-draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 2.4s ease-out forwards; }
+  .anim-twinkle { animation: twinkle 4s ease-in-out infinite; }
+  .anim-corona { animation: corona 7s ease-in-out infinite; transform-origin: center; }
+  .anim-rotate-slow { animation: rotate 120s linear infinite; transform-origin: center; }
 }
 
 @keyframes float {
@@ -202,11 +257,27 @@
   50% { opacity: 1; }
 }
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(18px); filter: blur(4px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 @keyframes draw {
   to { stroke-dashoffset: 0; }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+@keyframes corona {
+  0%, 100% { transform: scale(1); opacity: 0.55; }
+  50% { transform: scale(1.06); opacity: 0.85; }
+}
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {

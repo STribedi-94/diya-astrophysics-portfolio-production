@@ -29,6 +29,18 @@ export function ResearchUniverseMap({ compact = false }: { compact?: boolean }) 
     };
   });
 
+  // Scientific cross-links between related research areas
+  const linkPairs: Array<[string, string]> = [
+    ["mdwarf-magnetic-activity", "stellar-flares"],
+    ["mdwarf-magnetic-activity", "stellar-rotation-spots"],
+    ["stellar-flares", "radio-astronomy"],
+    ["stellar-rotation-spots", "spectroscopy"],
+    ["radio-astronomy", "habitability"],
+    ["spectroscopy", "habitability"],
+    ["mdwarf-magnetic-activity", "habitability"],
+  ];
+  const nodeById = Object.fromEntries(nodes.map((n) => [n.id, n]));
+
   return (
     <div className="relative w-full">
       <svg
@@ -62,7 +74,7 @@ export function ResearchUniverseMap({ compact = false }: { compact?: boolean }) 
           />
         ))}
 
-        {/* connections */}
+        {/* radial connections from centre */}
         {nodes.map((n) => (
           <line
             key={"l-" + n.id}
@@ -76,6 +88,27 @@ export function ResearchUniverseMap({ compact = false }: { compact?: boolean }) 
             style={{ animationDelay: `${Math.random() * 0.6}s` }}
           />
         ))}
+
+        {/* scientific cross-links between related areas */}
+        {linkPairs.map(([a, b], i) => {
+          const na = nodeById[a];
+          const nb = nodeById[b];
+          if (!na || !nb) return null;
+          return (
+            <line
+              key={`x-${a}-${b}`}
+              x1={na.x}
+              y1={na.y}
+              x2={nb.x}
+              y2={nb.y}
+              stroke="oklch(0.80 0.14 210 / 0.18)"
+              strokeWidth="0.8"
+              strokeDasharray="3 4"
+              className="anim-draw"
+              style={{ animationDelay: `${0.8 + i * 0.15}s` }}
+            />
+          );
+        })}
 
         {/* central glow */}
         <circle cx={cx} cy={cy} r="140" fill="url(#core)" />
