@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { site } from "@/data/site";
+import { CreatorCard } from "@/components/creator/CreatorCard";
 
 const cols = [
   {
