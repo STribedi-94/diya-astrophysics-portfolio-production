@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "../components/layout/SiteHeader";
 import { SiteFooter } from "../components/layout/SiteFooter";
+import { CosmicBackground } from "../components/layout/CosmicBackground";
 
 function NotFoundComponent() {
   return (
@@ -137,8 +138,10 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className="relative flex min-h-screen flex-col">
+        <CosmicBackground />
+        <a href="#main-content" className="skip-link">Skip to content</a>
         <SiteHeader />
-        <main className="flex-1">
+        <main id="main-content" className="flex-1">
           <Outlet />
         </main>
         <SiteFooter />
