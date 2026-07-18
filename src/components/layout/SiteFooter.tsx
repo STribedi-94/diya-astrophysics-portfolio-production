@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { site } from "@/data/site";
+import { CreatorCard } from "@/components/creator/CreatorCard";
 
 const cols = [
   {
@@ -78,9 +79,8 @@ export function SiteFooter() {
           Observational Astrophysics · M-dwarf magnetic activity · Multi-wavelength research
         </div>
       </div>
-      <div className="container-page relative border-t border-white/5 py-4 text-center text-[11px] text-muted-foreground/70">
-        Website designed &amp; developed by{" "}
-        <span className="font-mono uppercase tracking-[0.22em] text-primary/80">Aftab Alam</span>
+      <div className="container-page relative flex justify-center border-t border-white/5 py-5">
+        <CreatorCard />
       </div>
     </footer>
   );

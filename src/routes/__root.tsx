@@ -111,6 +111,28 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap",
       },
     ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Diya Ram — Observational Astrophysicist",
+          url: "https://astro-diya-portfolio.lovable.app",
+          about: {
+            "@type": "Person",
+            name: "Diya Ram",
+            jobTitle: "Observational Astrophysicist",
+          },
+          creator: {
+            "@type": "Person",
+            name: "Sandipani Tribedi",
+            jobTitle: "Website Creator, Designer and Developer",
+            url: "https://stribedi-94.github.io/Portfolio_Website/",
+          },
+        }),
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
