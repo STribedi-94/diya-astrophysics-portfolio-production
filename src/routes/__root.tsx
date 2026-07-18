@@ -84,7 +84,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Diya Ram investigates magnetic activity in M-dwarf stars using optical, spectroscopic and radio observations, including uGMRT, HCT and DOT.",
+          "Diya Ram: observational astrophysicist studying magnetic activity of M-dwarf stars with uGMRT, HCT and DOT across optical, spectroscopic and radio wavelengths.",
       },
       { name: "author", content: "Diya Ram" },
       { name: "theme-color", content: "#0b1024" },
@@ -92,14 +92,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         property: "og:description",
         content:
-          "Magnetic activity of M-dwarf stars — multi-wavelength observational astrophysics by Diya Ram.",
+          "Diya Ram: observational astrophysicist studying magnetic activity of M-dwarf stars with uGMRT, HCT and DOT across optical, spectroscopic and radio wavelengths.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Diya Ram — Observational Astrophysicist" },
+      { name: "twitter:description", content: "Diya Ram: observational astrophysicist studying magnetic activity of M-dwarf stars with uGMRT, HCT and DOT across optical, spectroscopic and radio wavelengths." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/QbxojdqJeZQI6PCz3G2jBy9jhmO2/social-images/social-1784384086675-3485.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/QbxojdqJeZQI6PCz3G2jBy9jhmO2/social-images/social-1784384086675-3485.webp" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
