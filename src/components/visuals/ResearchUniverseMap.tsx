@@ -29,6 +29,18 @@ export function ResearchUniverseMap({ compact = false }: { compact?: boolean }) 
     };
   });
 
+  // Scientific cross-links between related research areas
+  const linkPairs: Array<[string, string]> = [
+    ["mdwarf-magnetic-activity", "stellar-flares"],
+    ["mdwarf-magnetic-activity", "stellar-rotation-spots"],
+    ["stellar-flares", "radio-astronomy"],
+    ["stellar-rotation-spots", "spectroscopy"],
+    ["radio-astronomy", "habitability"],
+    ["spectroscopy", "habitability"],
+    ["mdwarf-magnetic-activity", "habitability"],
+  ];
+  const nodeById = Object.fromEntries(nodes.map((n) => [n.id, n]));
+
   return (
     <div className="relative w-full">
       <svg
