@@ -41,19 +41,22 @@ const cols = [
 
 export function SiteFooter() {
   return (
-    <footer className="relative mt-24 border-t border-white/10 bg-[oklch(0.11_0.04_265)]">
-      <div className="absolute inset-x-0 top-0 h-px bg-grad-spectral opacity-40" />
-      <div className="container-page grid gap-10 py-14 md:grid-cols-6">
+    <footer className="relative mt-24 overflow-hidden border-t border-white/10 bg-[oklch(0.10_0.04_265_/_0.85)]">
+      <div className="absolute inset-0 starfield-sparse opacity-40" aria-hidden />
+      <div className="absolute inset-x-0 top-0 h-px bg-grad-spectral opacity-60" />
+      <div className="container-page relative grid gap-10 py-14 md:grid-cols-6">
         <div className="md:col-span-2">
           <div className="font-display text-lg font-semibold">{site.name}</div>
-          <div className="mt-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.24em] text-primary/80">
             {site.title}
           </div>
           <p className="mt-4 max-w-sm text-sm text-muted-foreground">{site.tagline}</p>
         </div>
         {cols.map((c) => (
           <div key={c.title}>
-            <div className="text-xs uppercase tracking-[0.18em] text-primary/80">{c.title}</div>
+            <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary/80">
+              {c.title}
+            </div>
             <ul className="mt-3 space-y-2">
               {c.links.map((l) => (
                 <li key={l.to}>
@@ -69,9 +72,15 @@ export function SiteFooter() {
           </div>
         ))}
       </div>
-      <div className="container-page flex flex-col items-start justify-between gap-3 border-t border-white/5 py-6 text-xs text-muted-foreground md:flex-row md:items-center">
+      <div className="container-page relative flex flex-col items-start justify-between gap-3 border-t border-white/5 py-6 text-xs text-muted-foreground md:flex-row md:items-center">
         <div>© {new Date().getFullYear()} {site.name}. All rights reserved.</div>
-        <div>Observational Astrophysics · M-dwarf magnetic activity · Multi-wavelength research</div>
+        <div className="font-mono uppercase tracking-[0.18em]">
+          Observational Astrophysics · M-dwarf magnetic activity · Multi-wavelength research
+        </div>
+      </div>
+      <div className="container-page relative border-t border-white/5 py-4 text-center text-[11px] text-muted-foreground/70">
+        Website designed &amp; developed by{" "}
+        <span className="font-mono uppercase tracking-[0.22em] text-primary/80">Aftab Alam</span>
       </div>
     </footer>
   );
