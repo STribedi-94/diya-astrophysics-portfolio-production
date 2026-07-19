@@ -1,5 +1,13 @@
 // Structured, single-source content for the About & Research Profile page.
-// All values verified against V4 spec and CV. No unverified fields.
+// All values verified against Diya Ram's CV (Research_Statement_4_CV-Diya.pdf)
+// and PhD thesis (Understanding Stellar Activity in M-dwarfs, 2026). No unverified fields.
+
+import ugmrtImg from "@/assets/facility-ugmrt.jpg";
+import hctImg from "@/assets/facility-hct.jpg";
+import dotImg from "@/assets/facility-dot.jpg";
+import cvAsset from "@/assets/diya-ram-cv.pdf.asset.json";
+
+export const cvDownloadUrl = cvAsset.url;
 
 export const aboutIdentity = {
   eyebrow: "About & Research Profile",
@@ -8,28 +16,50 @@ export const aboutIdentity = {
   role: "Bridge Fellow",
   institution: "S. N. Bose National Centre for Basic Sciences",
   department: "Department of Astrophysics and High Energy Physics",
-  position: "Bridge Fellow · S. N. Bose National Centre for Basic Sciences",
+  position:
+    "Bridge Fellow · Observational Stellar Astrophysics · S. N. Bose National Centre for Basic Sciences",
+  headline:
+    "Scientist, observer and storyteller of magnetically active small stars",
   primaryStatement:
-    "Investigating the magnetic activity of M-dwarf stars through radio, optical, near-infrared and time-domain observations.",
+    "Diya studies the magnetic behaviour of M-dwarf stars using time-domain photometry, optical and near-infrared spectroscopy, and low-frequency radio observations.",
   supportingStatement:
-    "Connecting stellar flares, starspots, chromospheric diagnostics and radio emission with the environments of planets orbiting low-mass stars.",
+    "Her work connects stellar flares, starspots, chromospheric diagnostics and radio emission with the environments of planets orbiting low-mass stars.",
   thesisTitle: "Understanding Stellar Activity in M-dwarfs",
   thesisSubmitted: "4 February 2026",
-  thesisStatus: "Ph.D. thesis submitted",
+  thesisStatus: "PhD thesis submitted · Defense expected August 2026",
   researchTags: [
     "M-dwarf Magnetic Activity",
     "Stellar Flares",
     "Starspots",
     "TESS Photometry",
     "Optical Spectroscopy",
-    "Near-Infrared Spectroscopy",
     "Radio Astronomy",
-    "Exoplanetary Environments",
+    "Star–Planet Interaction",
   ],
 } as const;
 
-// Only verified URLs listed. Unverified profiles are intentionally omitted
-// (spec §6 — do not show inactive elements or guessed links).
+// --- Biography (composed for the About page, verified against CV) --------
+export const biography = [
+  "Diya Ram is an observational astrophysicist whose research explores the magnetic behaviour of M-dwarf stars and the environments they create around orbiting planets. Her work combines time-domain photometry, optical and near-infrared spectroscopy, and low-frequency radio observations to investigate stellar flares, starspots, chromospheric activity, rotational variability and the physical processes associated with stellar magnetic fields.",
+  "She completed her Bachelor of Science in Physics at Bangabasi Morning College, University of Calcutta, where she ranked first in her class, and subsequently earned a Master of Science in Physics with a specialization in Astrophysics from St. Xavier's College, Kolkata. In 2019, she qualified the CSIR–UGC National Eligibility Test with an All-India Rank of 143 and received both the Junior Research Fellowship and Lectureship awards.",
+  "Diya began her doctoral research in 2020 at the S. N. Bose National Centre for Basic Sciences under the supervision of Professor Soumen Mondal. Her PhD developed a multi-wavelength view of magnetic activity in nearby M dwarfs by bringing together observations from the Transiting Exoplanet Survey Satellite, optical spectroscopic facilities and the upgraded Giant Metrewave Radio Telescope. Through this work she has examined flare energetics, starspot distributions, chromospheric diagnostics, quasi-periodic behaviour and possible radio signatures associated with magnetic processes.",
+  "Her observational programme has included competitively awarded telescope time as Principal Investigator on the 2-m Himalayan Chandra Telescope, the 3.6-m Devasthal Optical Telescope and the upgraded Giant Metrewave Radio Telescope. Alongside her research, she has contributed to undergraduate teaching, student supervision, professional peer review and scientific-event organisation.",
+  "Following the submission of her PhD thesis in February 2026, Diya joined the S. N. Bose National Centre for Basic Sciences as a Bridge Fellow. Her current scientific direction focuses on developing a more complete understanding of how magnetic activity evolves across M-dwarf systems and how stellar radiation, energetic events and magnetic environments may influence exoplanet atmospheres, habitability and star–planet interactions.",
+] as const;
+
+export const credentialRail = [
+  { label: "Current role", value: "Bridge Fellow" },
+  { label: "Institution", value: "S. N. Bose National Centre for Basic Sciences" },
+  { label: "Research field", value: "Observational stellar astrophysics" },
+  { label: "PhD supervisor", value: "Prof. Soumen Mondal" },
+  { label: "Thesis submitted", value: "4 February 2026" },
+  { label: "National fellowship", value: "CSIR–UGC NET JRF (AIR 143, 2019)" },
+  { label: "Primary facilities", value: "TESS · uGMRT · HCT · DOT" },
+] as const;
+
+// Verified profile links only. The CV lists NASA-ADS, Google Scholar, ORCID
+// and ResearchGate under "Links to Publications" but provides an explicit URL
+// only for ORCID. Other profiles are intentionally omitted (spec §6, §13).
 export const profileLinks: Array<{
   label: string;
   url: string;
@@ -39,63 +69,110 @@ export const profileLinks: Array<{
   {
     label: "ORCID",
     url: "https://orcid.org/0009-0008-7884-3741",
-    ariaLabel: "Diya Ram on ORCID (opens in new tab)",
+    ariaLabel: "View Diya Ram on ORCID (opens in new tab)",
     external: true,
   },
 ];
 
-// Verified DOI URLs from the CV.
-export const selectedOutputs = [
+// --- Six principal research themes, mapped to existing research routes ---
+export const researchThemes = [
   {
-    title:
-      "Magnetic Activities of GJ 1151: Flares in TESS Data and Radio Observation in uGMRT",
-    journal: "The Astrophysical Journal",
-    year: "2025",
-    doi: "https://doi.org/10.3847/1538-4357/ae145a",
-    context:
-      "A multi-wavelength investigation combining TESS flare analysis with low-frequency uGMRT radio observations.",
-    firstAuthor: true,
+    slug: "m-dwarf-magnetic-activity",
+    title: "M-dwarf Magnetic Activity",
+    summary:
+      "Characterising how low-mass stars generate and sustain magnetic phenomena visible across spots, flares, chromospheric lines and radio signatures.",
+    method: "Multi-wavelength observations",
+    accent: "mdwarf",
   },
   {
-    title:
-      "Magnetic Activities of Wolf 359: Starspot Distribution and Quasiperiodic Pulsation Using TESS Data",
-    journal: "The Astrophysical Journal",
-    year: "2025",
-    doi: "https://doi.org/10.3847/1538-4357/ade9a7",
-    context:
-      "A time-domain study of starspot behaviour and quasiperiodic signatures using TESS photometry.",
-    firstAuthor: true,
+    slug: "stellar-flares",
+    title: "Stellar Flares and Flare Energetics",
+    summary:
+      "Detecting flares, estimating their energies and probing the magnetic reconnection processes that power them.",
+    method: "TESS photometry · optical spectroscopy",
+    accent: "solar",
   },
   {
-    title:
-      "Magnetic Activities of AD Leonis: Flares in TESS Data and Optical Spectra",
-    journal: "The Astrophysical Journal",
-    year: "2025",
-    doi: "https://doi.org/10.3847/1538-4357/adabc3",
-    context:
-      "A combined photometric and optical spectroscopic study of an active nearby M dwarf.",
-    firstAuthor: true,
+    slug: "stellar-rotation-and-starspots",
+    title: "Rotation and Starspot Evolution",
+    summary:
+      "Using rotational modulation in stellar light curves to trace surface inhomogeneities and how spot configurations change over time.",
+    method: "Photometric periodograms · BASSMAN spot modelling",
+    accent: "aurora",
+  },
+  {
+    slug: "optical-and-near-infrared-spectroscopy",
+    title: "Chromospheric Spectral Diagnostics",
+    summary:
+      "Reading activity-sensitive optical and near-infrared lines — Hα, Hβ, Ca II H & K — to trace how stellar atmospheres respond to magnetic processes.",
+    method: "Time-series spectroscopy",
+    accent: "spectral-cyan",
+  },
+  {
+    slug: "radio-astronomy-of-cool-stars",
+    title: "Low-Frequency Stellar Radio Emission",
+    summary:
+      "Using uGMRT observations to investigate coherent and incoherent radio emission associated with magnetic activity in nearby M dwarfs.",
+    method: "uGMRT band-3 / band-4 imaging",
+    accent: "radio-teal",
+  },
+  {
+    slug: "exoplanet-habitability-and-star-planet-interaction",
+    title: "Exoplanet Environments & Star–Planet Interaction",
+    summary:
+      "Exploring how magnetic activity, flares and radio signatures from M-dwarf hosts may shape planetary atmospheres and habitability.",
+    method: "Cross-domain synthesis",
+    accent: "uv-violet",
   },
 ] as const;
 
-export const acceptedManuscript = {
-  title:
-    "Probing the Magnetic Activity of GJ 398 through TESS Flare Detection and uGMRT Radio Observations",
-  status: "Accepted manuscript",
-} as const;
+// --- Current scientific questions (spec §5) ------------------------------
+export const currentQuestions = [
+  "How do flare rates and energies vary across active M dwarfs?",
+  "How do starspot configurations evolve over multiple rotational cycles?",
+  "Which optical spectral diagnostics best trace quiescent and flaring activity?",
+  "What radio-emission mechanisms operate in magnetically active M dwarfs?",
+  "How can photometric, spectroscopic and radio observations be combined into one coherent picture?",
+  "How might magnetic activity alter the interpretation of exoplanet environments?",
+] as const;
 
-// Verified PI facility allocations (spec §15).
+// --- Toolkit grouped by category, verified from CV -----------------------
+export const toolkitGroups = [
+  { label: "Programming", items: ["Python", "C"] },
+  {
+    label: "Scientific Python & query tools",
+    items: ["Astropy", "Astroquery", "NumPy", "Lightkurve", "Matplotlib"],
+  },
+  {
+    label: "Photometric & flare analysis",
+    items: ["ALTAIPONY", "FLARING-SPI", "BASSMAN"],
+  },
+  {
+    label: "Optical & radio data reduction",
+    items: ["IRAF", "AIPS", "CASA"],
+  },
+  {
+    label: "Scientific plotting & writing",
+    items: ["GNUplot", "Xmgrace", "LaTeX"],
+  },
+  { label: "Operating environments", items: ["Linux", "Windows"] },
+] as const;
+
+// --- Verified PI facility allocations with local artistic imagery --------
 export const facilityAllocations = [
   {
     slug: "ugmrt",
     fullName: "upgraded Giant Metrewave Radio Telescope",
     shortName: "uGMRT",
     observatory: "NCRA-TIFR",
+    location: "Khodad, Pune, India",
     allocation: "18 observing hours",
     allocationDetail: "across multiple cycles",
     proposalCodes: ["43_113", "44_107"],
-    context:
-      "Low-frequency radio observations provide a complementary probe of magnetic activity and emission processes in active M-dwarf systems.",
+    role: "Low-frequency radio observations of coherent and incoherent stellar magnetic activity, and searches for radio signatures potentially linked to star–planet interaction.",
+    image: ugmrtImg,
+    imageCredit: "Artistic visualisation · Diya Ram Portfolio",
+    officialUrl: "https://www.ncra.tifr.res.in/ncra/gmrt",
     cta: "Explore uGMRT",
     accent: "radio-teal",
   },
@@ -104,6 +181,7 @@ export const facilityAllocations = [
     fullName: "2-m Himalayan Chandra Telescope",
     shortName: "HCT",
     observatory: "Indian Astronomical Observatory · IIA",
+    location: "Hanle, Ladakh, India",
     allocation: "14 observing nights",
     allocationDetail: "across multiple cycles",
     proposalCodes: [
@@ -115,8 +193,10 @@ export const facilityAllocations = [
       "HCT-2023-C2-P36",
       "HCT-2023-C3-P28",
     ],
-    context:
-      "Optical observations and time-series spectroscopy support studies of stellar flares, activity-sensitive spectral lines and changing stellar behaviour.",
+    role: "Optical photometry and time-series spectroscopy of stellar flares, activity-sensitive spectral lines and long-baseline monitoring of magnetically active M dwarfs.",
+    image: hctImg,
+    imageCredit: "Artistic visualisation · Diya Ram Portfolio",
+    officialUrl: "https://www.iiap.res.in/centers/iao/",
     cta: "Explore HCT",
     accent: "spectral-cyan",
   },
@@ -125,6 +205,7 @@ export const facilityAllocations = [
     fullName: "3.6-m Devasthal Optical Telescope",
     shortName: "DOT",
     observatory: "ARIES",
+    location: "Devasthal, Uttarakhand, India",
     allocation: "40 observing hours",
     allocationDetail: "across multiple cycles",
     proposalCodes: [
@@ -134,49 +215,83 @@ export const facilityAllocations = [
       "DOT-2023-C2-P28",
       "DOT-2024-C1-P18",
     ],
-    context:
-      "Visible and near-infrared spectroscopic capabilities support multi-wavelength studies of magnetically active low-mass stars.",
+    role: "Deep optical and near-infrared spectroscopy supporting multi-wavelength studies of magnetically active low-mass stars.",
+    image: dotImg,
+    imageCredit: "Artistic visualisation · Diya Ram Portfolio",
+    officialUrl: "https://www.aries.res.in/facilities/astronomical-telescopes/360cm-telescope",
     cta: "Explore DOT",
     accent: "stellar-gold",
   },
 ] as const;
 
-// Verified academic trajectory (spec §16).
+// --- PhD thesis spotlight (verified from thesis PDF) ---------------------
+export const thesis = {
+  title: "Understanding Stellar Activity in M-dwarfs",
+  degree: "Doctor of Philosophy (Science) in Physics (Experimental)",
+  author: "Diya Ram",
+  institution: "S. N. Bose National Centre for Basic Sciences",
+  university: "University of Calcutta",
+  department: "Department of Physics",
+  supervisor: "Prof. Soumen Mondal",
+  submitted: "4 February 2026",
+  status: "Submitted · Defense expected August 2026",
+  overview:
+    "The thesis develops a multi-wavelength observational picture of magnetic activity in nearby M-dwarf stars. It brings together time-domain photometry from the Transiting Exoplanet Survey Satellite, optical spectroscopy from ground-based facilities and low-frequency radio observations with the upgraded Giant Metrewave Radio Telescope to study flare energetics, starspot distributions, chromospheric diagnostics and possible radio signatures associated with stellar magnetic processes.",
+  themes: [
+    "Photometric flare detection and energy estimation",
+    "Rotation periods and starspot distribution modelling",
+    "Chromospheric line diagnostics",
+    "Estimation of magnetic fields from flare events",
+    "Low-frequency radio observations and non-detections",
+    "Implications for planetary environments around active M dwarfs",
+  ],
+  targets: ["AD Leonis", "Wolf 359", "GJ 1151", "GJ 398"],
+  facilities: ["TESS", "2-m HCT (HFOSC)", "3.6-m DOT", "uGMRT"],
+  chapters: [
+    "Introduction to M-dwarfs, magnetic fields and stellar activity",
+    "Instruments and observational methods",
+    "Magnetic activities of AD Leonis — flares in TESS and optical spectra",
+    "Magnetic activities of Wolf 359 — starspot distribution and quasi-periodic pulsation",
+    "Magnetic activities of GJ 1151 — TESS flares and uGMRT radio observations",
+    "Probing the magnetic activity of GJ 398 with TESS and uGMRT",
+    "Thesis summary and scope for future work",
+  ],
+} as const;
+
+// --- Verified academic trajectory ---------------------------------------
 export const milestones = [
   {
-    period: "2016",
-    title: "Ranked First in B.Sc. Physics",
-    detail: "Bangabasi Morning College, University of Calcutta.",
+    period: "2013 – 2016",
+    title: "B.Sc. Physics · Ranked First",
+    detail:
+      "Bangabasi Morning College, University of Calcutta. First rank in B.Sc. Physics (2016).",
   },
   {
     period: "2016 – 2018",
-    title: "M.Sc. Physics with Specialization in Astrophysics",
-    detail: "St. Xavier's College, University of Calcutta.",
-  },
-  {
-    period: "2016 – 2018",
-    title: "Indira Gandhi Single Girl Child Scholarship",
-    detail: "Awarded through the graduate programme.",
+    title: "M.Sc. Physics with Astrophysics Specialization",
+    detail:
+      "St. Xavier's College, University of Calcutta. Awarded the Indira Gandhi Single Girl Child Scholarship.",
   },
   {
     period: "June 2019",
-    title: "CSIR-UGC NET Junior Research Fellowship",
-    detail: "All-India Rank 143. Also qualified for Lectureship.",
+    title: "CSIR–UGC NET · JRF + Lectureship",
+    detail: "All-India Rank 143 in the CSIR-UGC NET; JRF and Lectureship awards.",
   },
   {
     period: "Jan 2020 – Dec 2021",
     title: "Junior Research Fellow",
-    detail: "S. N. Bose National Centre for Basic Sciences.",
+    detail: "S. N. Bose National Centre for Basic Sciences, Kolkata.",
   },
   {
     period: "Jan 2022 – Dec 2025",
     title: "Senior Research Fellow",
-    detail: "S. N. Bose National Centre for Basic Sciences.",
+    detail: "S. N. Bose National Centre for Basic Sciences, Kolkata.",
   },
   {
     period: "4 February 2026",
-    title: "Ph.D. Thesis Submitted",
-    detail: "Thesis: Understanding Stellar Activity in M-dwarfs.",
+    title: "PhD Thesis Submitted",
+    detail:
+      "Understanding Stellar Activity in M-dwarfs. Supervisor: Prof. Soumen Mondal.",
   },
   {
     period: "April 2026 – Present",
@@ -186,224 +301,110 @@ export const milestones = [
   },
 ] as const;
 
-// Research snapshot panels (spec §14).
-export const snapshotPanels = [
+// --- Selected scholarly contributions (verified from CV) -----------------
+export const selectedOutputs = [
   {
-    title: "Scientific Focus",
-    items: [
-      "Magnetic activity of M-dwarf stars",
-      "Stellar flares",
-      "Starspots",
-      "Rotational variability",
-      "Chromospheric activity",
-      "Star–planet interaction",
-      "Exoplanetary environments",
-    ],
+    title:
+      "Magnetic Activities of GJ 1151: Flares in TESS Data and Radio Observation in uGMRT",
+    journal: "The Astrophysical Journal",
+    year: "2025",
+    volume: "994, 120",
+    doi: "https://doi.org/10.3847/1538-4357/ae145a",
+    role: "First author",
+    context:
+      "Multi-wavelength study combining TESS flare analysis with uGMRT radio observations of GJ 1151.",
   },
   {
-    title: "Observational Methods",
-    items: [
-      "TESS photometry",
-      "Optical spectroscopy",
-      "Near-infrared spectroscopy",
-      "Low-frequency radio observations",
-      "Time-series analysis",
-      "Multi-wavelength interpretation",
-    ],
+    title:
+      "Magnetic Activities of Wolf 359: Starspot Distribution and Quasiperiodic Pulsation Using TESS Data",
+    journal: "The Astrophysical Journal",
+    year: "2025",
+    volume: "988, 257",
+    doi: "https://doi.org/10.3847/1538-4357/ade9a7",
+    role: "First author",
+    context:
+      "Time-domain study of starspot behaviour and quasi-periodic signatures in Wolf 359 using TESS photometry.",
   },
   {
-    title: "Facilities and Mission",
-    items: [
-      "upgraded Giant Metrewave Radio Telescope",
-      "3.6-m Devasthal Optical Telescope",
-      "2-m Himalayan Chandra Telescope",
-      "Transiting Exoplanet Survey Satellite",
-    ],
-  },
-] as const;
-
-// Computational toolkit — expandable groups (spec §14 · panel 4).
-export const toolkitGroups = [
-  { label: "Programming", items: ["Python", "C"] },
-  { label: "Radio reduction", items: ["CASA", "AIPS"] },
-  {
-    label: "Astronomy & photometry",
-    items: [
-      "Astropy",
-      "Astroquery",
-      "NumPy",
-      "Lightkurve",
-      "ALTAIPONY",
-      "FLARING-SPI",
-      "BASSMAN",
-    ],
-  },
-  { label: "Spectroscopic reduction", items: ["IRAF"] },
-  { label: "Scientific visualisation", items: ["Matplotlib", "GNUplot", "Xmgrace"] },
-  { label: "Technical environment", items: ["Linux", "Windows", "LaTeX"] },
-] as const;
-
-// Expertise groups (spec §18).
-export const expertiseGroups = [
-  {
-    title: "Stellar Astrophysics",
-    items: [
-      "M-dwarf magnetic activity",
-      "Stellar flares",
-      "Starspots",
-      "Rotational modulation",
-      "Chromospheric activity",
-      "Quasiperiodic signatures",
-    ],
+    title:
+      "Magnetic Activities of AD Leonis: Flares in TESS Data and Optical Spectra",
+    journal: "The Astrophysical Journal",
+    year: "2025",
+    volume: "980, 196",
+    doi: "https://doi.org/10.3847/1538-4357/adabc3",
+    role: "First author",
+    context:
+      "Combined photometric and optical spectroscopic study of the nearby active M dwarf AD Leonis.",
   },
   {
-    title: "Photometric Analysis",
-    items: [
-      "TESS light curves",
-      "Flare detection",
-      "Rotational variability",
-      "Starspot analysis",
-      "Time-series interpretation",
-    ],
-  },
-  {
-    title: "Spectroscopic Analysis",
-    items: [
-      "Optical spectroscopy",
-      "Near-infrared spectroscopy",
-      "Time-series spectroscopy",
-      "Hα diagnostics",
-      "Hβ diagnostics",
-      "Ca II H and K diagnostics",
-    ],
-  },
-  {
-    title: "Radio Astronomy",
-    items: [
-      "uGMRT observations",
-      "Low-frequency stellar radio studies",
-      "CASA",
-      "AIPS",
-      "Radio-data reduction",
-    ],
-  },
-  {
-    title: "Scientific Computing",
-    items: [
-      "Python",
-      "C",
-      "Astropy",
-      "Astroquery",
-      "NumPy",
-      "Lightkurve",
-      "Matplotlib",
-      "Linux",
-    ],
-  },
-  {
-    title: "Research Communication",
-    items: [
-      "Scientific writing",
-      "Telescope proposal preparation",
-      "Oral presentations",
-      "Poster presentations",
-      "Peer review",
-      "Undergraduate teaching",
-      "Student supervision",
-    ],
+    title:
+      "Understanding the Magnetic Activity of M Dwarfs: Optical and Near-Infrared Spectroscopic Studies",
+    journal: "Conference Proceedings",
+    year: "2024",
+    volume: "Vol. 93, pp. 358–369",
+    doi: "https://doi.org/10.25518/0037-9565.11717",
+    role: "First author · Proceedings",
+    context:
+      "Proceedings contribution summarising optical and near-infrared spectroscopic studies of M-dwarf activity.",
   },
 ] as const;
 
-// Research directions (spec §19).
-export const researchDirections = [
-  {
-    title: "Magnetic Activity of M-dwarf Stars",
-    description:
-      "Investigating how low-mass stars produce and sustain magnetic phenomena observed through spots, flares, emission lines and radio signatures.",
-    tags: ["Multi-wavelength", "M-dwarfs"],
-    to: "/research",
-  },
-  {
-    title: "Stellar Flares and Time-Domain Behaviour",
-    description:
-      "Characterizing flare activity, temporal evolution and short-timescale signatures using photometric and spectroscopic observations.",
-    tags: ["TESS", "Time-domain"],
-    to: "/research",
-  },
-  {
-    title: "Starspots and Rotational Variability",
-    description:
-      "Using rotational modulation in stellar light curves to study surface inhomogeneities and changing spot distributions.",
-    tags: ["Photometry", "Rotation"],
-    to: "/research",
-  },
-  {
-    title: "Chromospheric Spectral Diagnostics",
-    description:
-      "Examining activity-sensitive optical and near-infrared lines to trace the response of stellar atmospheres to magnetic processes.",
-    tags: ["Hα · Hβ", "Ca II H & K"],
-    to: "/research",
-  },
-  {
-    title: "Low-Frequency Stellar Radio Emission",
-    description:
-      "Using uGMRT observations to investigate radio emission associated with magnetic activity in nearby low-mass stars.",
-    tags: ["uGMRT", "Radio"],
-    to: "/research",
-  },
-  {
-    title: "Stellar Activity and Planetary Environments",
-    description:
-      "Exploring how magnetic activity and energetic events from M-dwarf hosts may influence exoplanet atmospheres, habitability and evolution.",
-    tags: ["Star–Planet", "Habitability"],
-    to: "/research",
-  },
-] as const;
+export const acceptedManuscript = {
+  title:
+    "Probing the Magnetic Activity of GJ 398 through TESS Flare Detection and uGMRT Radio Observations",
+  status: "Accepted manuscript · The Astrophysical Journal",
+  note: "Final DOI will be linked once the article is released.",
+} as const;
 
-// Research activity indicators (spec §21) — verified values only.
+// --- Shared statistics (derived where possible) --------------------------
 export const activityIndicators = [
-  { value: "6", label: "Journal publications listed" },
-  { value: "3", label: "First-author journal publications listed" },
+  { value: "6", label: "Journal publications" },
+  { value: "3", label: "First-author journal publications" },
   { value: "2", label: "Conference proceedings" },
-  { value: "1", label: "Accepted first-author manuscript listed separately" },
-  { value: "3", label: "Principal Investigator facilities" },
-  { value: "14 nights", label: "Awarded on HCT" },
-  { value: "18 hours", label: "Awarded on uGMRT" },
-  { value: "40 hours", label: "Awarded on DOT" },
-  { value: "2", label: "Master's-level students supervised or co-supervised" },
-  { value: "1", label: "Manuscript peer-review service listed" },
+  { value: "1", label: "Accepted first-author manuscript" },
+  { value: "3", label: "PI facilities" },
+  { value: "14 nights", label: "HCT observing time (PI)" },
+  { value: "18 hours", label: "uGMRT observing time (PI)" },
+  { value: "40 hours", label: "DOT observing time (PI)" },
+  { value: "2", label: "Master's students mentored" },
+  { value: "1", label: "AAS journal manuscript review" },
 ] as const;
 
-// Professional contributions (spec §22).
+// --- Teaching, mentorship and professional service (verified from CV) ----
 export const contributions = [
   {
     title: "Teaching",
     body:
-      "Guest Lecturer in Physics at Bangabasi Morning College from July 2018 to December 2019. Taught Classical Mechanics, Elasticity, Viscosity, Surface Tension, and undergraduate physics laboratory instruction.",
+      "Guest Lecturer in Physics at Bangabasi Morning College (July 2018 – December 2019). Taught Classical Mechanics to B.Sc. (Honours) students and Elasticity, Viscosity and Surface Tension to B.Sc. (Pass) students. Delivered theory lectures and undergraduate physics laboratory instruction.",
   },
   {
     title: "Academic Assessment",
     body:
-      "External Examiner for undergraduate practical physics examinations; university examination answer-script evaluation.",
+      "Served as External Examiner for B.Sc. Physics Practical Examinations and evaluated undergraduate university examination answer scripts in Physics.",
   },
   {
     title: "Peer Review",
     body:
-      "Reviewed a manuscript for an American Astronomical Society journal in 2025.",
+      "Reviewed a manuscript for an American Astronomical Society journal in 2025 on the magnetic activity of ultracool dwarfs in the LAMOST DR11 sample.",
   },
   {
-    title: "Conference Service",
+    title: "Conference Organisation",
     body:
-      "Local Organising Committee member for Star Formation Studies in India, hosted by S. N. Bose National Centre for Basic Sciences in January 2024.",
+      "Local Organising Committee member for Star Formation Studies in India, S. N. Bose National Centre for Basic Sciences, 8–11 January 2024.",
   },
   {
     title: "Student Mentorship",
     body:
-      "Supervised or co-supervised two Master's-level summer research students in 2026.",
+      "Supervised two Master's-level Summer Research Programme projects in 2026 — Rishav De (formerly M.Sc., IIT Bombay) and Sristi Ganguly (formerly M.Sc., St. Xavier's College, Kolkata).",
+  },
+  {
+    title: "Recent Talks",
+    body:
+      "Oral presentations at Bose Fest 2023 and Bose Fest 2025; poster presentations at the 21st National Space Science Symposium (2024) and the 3rd BINA Workshop (2023).",
   },
 ] as const;
 
-// Audience pathways (spec §24) — all links map to existing routes.
+// --- Audience pathways (kept for closing navigation) ---------------------
 export const audiencePathways = [
   {
     title: "For Researchers",
@@ -447,12 +448,110 @@ export const audiencePathways = [
   },
 ] as const;
 
-// Assets marked as unresolved per spec §35 — for the implementation summary.
-export const unresolvedAssets = [
-  "Verified portrait photograph of Diya Ram (WhatsApp Image 2026-07-19 at 21.30.29.jpeg was referenced but not uploaded).",
-  "Official uGMRT / NCRA-TIFR photograph (using labelled fallback tile).",
-  "Official HCT / IIA photograph (using labelled fallback tile).",
-  "Official DOT / ARIES photograph (using labelled fallback tile).",
-  "Verified NASA ADS, Google Scholar, ResearchGate, LinkedIn and institutional profile URLs (only ORCID is currently verified).",
-  "Public professional email address for collaboration CTA.",
+// --- Snapshot panels retained but slightly refined -----------------------
+export const snapshotPanels = [
+  {
+    title: "Scientific Focus",
+    items: [
+      "M-dwarf magnetic activity",
+      "Stellar flares and energetics",
+      "Starspots and rotational variability",
+      "Chromospheric activity",
+      "Star–planet interaction",
+      "Exoplanetary environments",
+    ],
+  },
+  {
+    title: "Observational Methods",
+    items: [
+      "TESS photometry",
+      "Optical spectroscopy",
+      "Near-infrared spectroscopy",
+      "Low-frequency radio observations",
+      "Time-series analysis",
+      "Multi-wavelength interpretation",
+    ],
+  },
+  {
+    title: "Facilities & Missions",
+    items: [
+      "upgraded Giant Metrewave Radio Telescope",
+      "3.6-m Devasthal Optical Telescope",
+      "2-m Himalayan Chandra Telescope",
+      "Transiting Exoplanet Survey Satellite",
+    ],
+  },
+] as const;
+
+// Kept for backward-compat — expertise groups reuse toolkit / theme data.
+export const expertiseGroups = [
+  {
+    title: "Stellar Astrophysics",
+    items: [
+      "M-dwarf magnetic activity",
+      "Stellar flares",
+      "Starspots",
+      "Rotational modulation",
+      "Chromospheric activity",
+      "Quasi-periodic signatures",
+    ],
+  },
+  {
+    title: "Photometric Analysis",
+    items: [
+      "TESS light curves",
+      "Flare detection",
+      "Rotational variability",
+      "Starspot modelling",
+      "Time-series interpretation",
+    ],
+  },
+  {
+    title: "Spectroscopic Analysis",
+    items: [
+      "Optical spectroscopy",
+      "Near-infrared spectroscopy",
+      "Time-series spectroscopy",
+      "Hα · Hβ diagnostics",
+      "Ca II H & K diagnostics",
+    ],
+  },
+  {
+    title: "Radio Astronomy",
+    items: [
+      "uGMRT observations",
+      "Low-frequency stellar radio studies",
+      "CASA · AIPS reduction",
+      "Interferometric imaging",
+    ],
+  },
+  {
+    title: "Scientific Computing",
+    items: ["Python", "C", "Astropy", "NumPy", "Lightkurve", "Matplotlib", "Linux"],
+  },
+  {
+    title: "Research Communication",
+    items: [
+      "Scientific writing",
+      "Telescope proposal preparation",
+      "Oral & poster presentations",
+      "Peer review",
+      "Undergraduate teaching",
+    ],
+  },
+] as const;
+
+// --- Table of contents anchors -------------------------------------------
+export const aboutSections = [
+  { id: "profile", label: "Profile" },
+  { id: "biography", label: "Biography" },
+  { id: "research", label: "Research" },
+  { id: "questions", label: "Questions" },
+  { id: "methods", label: "Methods" },
+  { id: "facilities", label: "Facilities" },
+  { id: "thesis", label: "Thesis" },
+  { id: "journey", label: "Journey" },
+  { id: "publications", label: "Publications" },
+  { id: "teaching", label: "Teaching" },
+  { id: "collaboration", label: "Collaboration" },
 ] as const;
