@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ExternalLink, ArrowRight, ChevronDown } from "lucide-react";
 import { Section, GlassPanel } from "@/components/layout/Page";
 import { MStarHero } from "@/components/visuals/MStarHero";
+import diyaPortrait from "@/assets/diya-ram-portrait.png.asset.json";
 import { ResearchUniverseMap } from "@/components/visuals/ResearchUniverseMap";
 import { SpectralDivider } from "@/components/layout/SpectralDivider";
 import {
@@ -218,21 +219,45 @@ function About() {
             </div>
           </div>
 
-          {/* Right: portrait area (portrait pending) */}
+          {/* Right: verified portrait of Diya Ram, integrated into cosmic hero */}
           <div className="relative">
-            <div className="glass relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden rounded-3xl border border-white/10">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <MStarHero className="w-full opacity-90" />
-              </div>
-              <div className="absolute inset-x-0 bottom-0 border-t border-white/10 bg-[oklch(0.10_0.04_265_/_0.75)] p-4 backdrop-blur-md">
-                <div className="font-mono text-[9.5px] uppercase tracking-[0.22em] text-primary/80">
-                  Portrait pending
-                </div>
-                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                  Awaiting the verified portrait upload. In the interim, a
-                  scientific illustration of an active M-dwarf — the class of
-                  star at the centre of Diya Ram's research — is shown here.
-                </p>
+            <div className="relative mx-auto w-full max-w-md">
+              {/* Soft nebula halo behind the portrait */}
+              <div
+                className="pointer-events-none absolute -inset-8 rounded-full opacity-70 blur-3xl"
+                style={{
+                  background:
+                    "radial-gradient(closest-side, oklch(0.55 0.18 285 / 0.55), oklch(0.45 0.16 25 / 0.28) 55%, transparent 75%)",
+                }}
+                aria-hidden
+              />
+              {/* Faint orbital ring */}
+              <div
+                className="pointer-events-none absolute inset-2 rounded-full border border-white/10"
+                aria-hidden
+              />
+              <div
+                className="pointer-events-none absolute -inset-1 rounded-full border border-primary/20"
+                aria-hidden
+              />
+              {/* Portrait — transparent PNG blended over the Milky Way backdrop */}
+              <img
+                src={diyaPortrait.url}
+                alt="Portrait of observational astrophysicist Diya Ram."
+                width={880}
+                height={1100}
+                loading="eager"
+                decoding="async"
+                className="relative z-10 mx-auto block w-full max-w-[420px] select-none drop-shadow-[0_20px_60px_oklch(0.10_0.04_265_/_0.7)]"
+                style={{
+                  filter:
+                    "drop-shadow(-6px 0 12px oklch(0.70 0.14 240 / 0.25)) drop-shadow(0 8px 24px oklch(0.05 0.02 265 / 0.55))",
+                }}
+              />
+              {/* Verified caption */}
+              <div className="relative z-10 mt-4 flex items-center justify-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] text-primary/80">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary anim-pulse-slow" />
+                Diya Ram · Verified portrait
               </div>
             </div>
           </div>
