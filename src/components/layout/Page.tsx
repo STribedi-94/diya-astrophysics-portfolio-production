@@ -44,12 +44,14 @@ export function PageHero({
 }
 
 export function Section({
+  id,
   eyebrow,
   title,
   intro,
   children,
   className,
 }: {
+  id?: string;
   eyebrow?: string;
   title?: ReactNode;
   intro?: ReactNode;
@@ -57,7 +59,7 @@ export function Section({
   className?: string;
 }) {
   return (
-    <section className={cn("py-16 md:py-24", className)}>
+    <section id={id} className={cn("py-16 md:py-24 scroll-mt-24", className)}>
       <div className="container-page">
         {(eyebrow || title || intro) && (
           <div className="mb-10 max-w-3xl">
@@ -77,6 +79,7 @@ export function Section({
     </section>
   );
 }
+
 
 export function GlassPanel({
   children,
