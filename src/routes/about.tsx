@@ -94,7 +94,13 @@ export const Route = createFileRoute("/about")({
             value: "0009-0008-7884-3741",
             url: "https://orcid.org/0009-0008-7884-3741",
           },
-          sameAs: ["https://orcid.org/0009-0008-7884-3741"],
+          sameAs: [
+            "https://orcid.org/0009-0008-7884-3741",
+            "https://ui.adsabs.harvard.edu/search/q=author%3A%22ram%2Cdiya%22&sort=date%20desc",
+            "https://scholar.google.com/scholar?q=Diya+Ram",
+            "https://www.researchgate.net/profile/Diya-Ram-2",
+            "https://www.linkedin.com/in/diya-ram-638854172/",
+          ],
           knowsAbout: [
             "M-dwarf magnetic activity",
             "Stellar flares",
@@ -139,9 +145,10 @@ function ExtLink({
     <a
       href={href}
       target="_blank"
-      rel="noopener noreferrer"
+      rel="noopener noreferrer me"
       aria-label={ariaLabel}
-      className="group inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs text-muted-foreground transition-all hover:border-primary/40 hover:bg-primary/10 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+      title={label}
+      className="group inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary/10 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
     >
       {label}
       <ExternalLink className="h-3 w-3 opacity-70 transition-transform group-hover:translate-x-0.5" />
