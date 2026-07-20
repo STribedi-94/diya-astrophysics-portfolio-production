@@ -61,6 +61,18 @@ export const Route = createFileRoute("/about")({
         content:
           "Multi-wavelength research on the magnetic activity of M-dwarf stars and the environments of the planets that orbit them.",
       },
+      {
+        property: "og:image",
+        content: `https://astro-diya-portfolio.lovable.app${diyaPortrait.url}`,
+      },
+      {
+        name: "twitter:image",
+        content: `https://astro-diya-portfolio.lovable.app${diyaPortrait.url}`,
+      },
+      {
+        property: "og:image:alt",
+        content: "Portrait of Diya Ram, observational astrophysicist.",
+      },
     ],
     links: [
       { rel: "canonical", href: "https://astro-diya-portfolio.lovable.app/about" },

@@ -3,6 +3,7 @@ import { ArrowRight, Download, Sparkles, Telescope, Radio, LineChart } from "luc
 import { site } from "@/data/site";
 import { researchAreas } from "@/data/research";
 import { facilities } from "@/data/facilities";
+import { cvDownloadUrl } from "@/data/about";
 import { MultiWavelengthFlow } from "@/components/visuals/MultiWavelengthFlow";
 import { ResearchUniverseMap } from "@/components/visuals/ResearchUniverseMap";
 import { MStarHero } from "@/components/visuals/MStarHero";
@@ -57,12 +58,13 @@ function Home() {
               >
                 View Publications
               </Link>
-              <Link
-                to="/downloads"
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-5 py-3 text-sm text-muted-foreground hover:text-foreground"
+              <a
+                href={cvDownloadUrl}
+                download="Diya-Ram-CV.pdf"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-5 py-3 text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 <Download className="h-4 w-4" /> Download CV
-              </Link>
+              </a>
             </div>
 
             <div className="mt-10 grid max-w-md grid-cols-3 gap-4">
