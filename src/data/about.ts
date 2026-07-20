@@ -26,7 +26,8 @@ export const aboutIdentity = {
     "Her work connects stellar flares, starspots, chromospheric diagnostics and radio emission with the environments of planets orbiting low-mass stars.",
   thesisTitle: "Understanding Stellar Activity in M-dwarfs",
   thesisSubmitted: "4 February 2026",
-  thesisStatus: "PhD thesis submitted · Defense expected August 2026",
+  thesisStatus:
+    "PhD thesis submitted. Defence forthcoming. Degree will be awarded upon successful completion of University requirements.",
   researchTags: [
     "M-dwarf Magnetic Activity",
     "Stellar Flares",
@@ -57,9 +58,8 @@ export const credentialRail = [
   { label: "Primary facilities", value: "TESS · uGMRT · HCT · DOT" },
 ] as const;
 
-// Verified profile links only. The CV lists NASA-ADS, Google Scholar, ORCID
-// and ResearchGate under "Links to Publications" but provides an explicit URL
-// only for ORCID. Other profiles are intentionally omitted (spec §6, §13).
+// Verified researcher profiles. Used across About, Contact, Footer and
+// the Person JSON-LD sameAs array.
 export const profileLinks: Array<{
   label: string;
   url: string;
@@ -72,6 +72,38 @@ export const profileLinks: Array<{
     ariaLabel: "View Diya Ram on ORCID (opens in new tab)",
     external: true,
   },
+  {
+    label: "NASA ADS",
+    url: "https://ui.adsabs.harvard.edu/search/filter_database_fq_database=AND&filter_database_fq_database=((database%3Aastronomy%20OR%20database%3Aphysics))&filter_database_fq_database=database%3A%22astronomy%22&fq=%7B!type%3Daqp%20v%3D%24fq_database%7D&fq_database=(((database%3Aastronomy%20OR%20database%3Aphysics))%20AND%20database%3A%22astronomy%22)&p_=0&q=%20author%3A%22ram%2Cdiya%22&sort=date%20desc%2C%20bibcode%20desc",
+    ariaLabel: "View Diya Ram publications on NASA ADS (opens in new tab)",
+    external: true,
+  },
+  {
+    label: "Google Scholar",
+    url: "https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=Diya+Ram&btnG=",
+    ariaLabel: "View Diya Ram on Google Scholar (opens in new tab)",
+    external: true,
+  },
+  {
+    label: "ResearchGate",
+    url: "https://www.researchgate.net/profile/Diya-Ram-2",
+    ariaLabel: "View Diya Ram on ResearchGate (opens in new tab)",
+    external: true,
+  },
+  {
+    label: "LinkedIn",
+    url: "https://www.linkedin.com/in/diya-ram-638854172/",
+    ariaLabel: "View Diya Ram on LinkedIn (opens in new tab)",
+    external: true,
+  },
+];
+
+export const profileSameAs = [
+  "https://orcid.org/0009-0008-7884-3741",
+  "https://ui.adsabs.harvard.edu/search/q=author%3A%22ram%2Cdiya%22&sort=date%20desc",
+  "https://scholar.google.com/scholar?q=Diya+Ram",
+  "https://www.researchgate.net/profile/Diya-Ram-2",
+  "https://www.linkedin.com/in/diya-ram-638854172/",
 ];
 
 // --- Six principal research themes, mapped to existing research routes ---
@@ -234,7 +266,8 @@ export const thesis = {
   department: "Department of Physics",
   supervisor: "Prof. Soumen Mondal",
   submitted: "4 February 2026",
-  status: "Submitted · Defense expected August 2026",
+  status:
+    "PhD thesis submitted. Defence forthcoming. Degree will be awarded upon successful completion of University requirements.",
   overview:
     "The thesis develops a multi-wavelength observational picture of magnetic activity in nearby M-dwarf stars. It brings together time-domain photometry from the Transiting Exoplanet Survey Satellite, optical spectroscopy from ground-based facilities and low-frequency radio observations with the upgraded Giant Metrewave Radio Telescope to study flare energetics, starspot distributions, chromospheric diagnostics and possible radio signatures associated with stellar magnetic processes.",
   themes: [
