@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
+import { ExternalLink } from "lucide-react";
 import { site } from "@/data/site";
+import { profileLinks } from "@/data/about";
 import { CreatorCard } from "@/components/creator/CreatorCard";
 
 const cols = [
@@ -52,6 +54,22 @@ export function SiteFooter() {
             {site.title}
           </div>
           <p className="mt-4 max-w-sm text-sm text-muted-foreground">{site.tagline}</p>
+          <div className="mt-5 flex flex-wrap gap-2">
+            {profileLinks.map((p) => (
+              <a
+                key={p.url}
+                href={p.url}
+                target="_blank"
+                rel="noopener noreferrer me"
+                aria-label={p.ariaLabel}
+                title={p.label}
+                className="group inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-[11px] text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary/10 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+              >
+                {p.label}
+                <ExternalLink className="h-3 w-3 opacity-70" />
+              </a>
+            ))}
+          </div>
         </div>
         {cols.map((c) => (
           <div key={c.title}>
@@ -85,3 +103,4 @@ export function SiteFooter() {
     </footer>
   );
 }
+
