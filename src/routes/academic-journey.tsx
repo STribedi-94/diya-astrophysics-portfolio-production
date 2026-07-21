@@ -257,7 +257,7 @@ function ChapterSection({
   alignRight: boolean;
 }) {
   return (
-    <Section id={chapter.id} className="!py-14 md:!py-24">
+    <Section id={chapter.id} className="!py-16 md:!py-28">
       <div
         className={`relative grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12 ${
           alignRight ? "md:[&>*:first-child]:col-start-2" : ""
@@ -324,6 +324,33 @@ function ChapterSection({
             </ul>
           )}
 
+          {chapter.milestoneAchievements && (
+            <ul className="mt-4 space-y-2">
+              {chapter.milestoneAchievements.map((a) => (
+                <li
+                  key={a}
+                  className="flex items-start gap-3 rounded-xl border px-3 py-2 text-sm text-foreground"
+                  style={{
+                    borderColor: `color-mix(in oklch, var(--${chapter.accent}) 45%, transparent)`,
+                    background: `color-mix(in oklch, var(--${chapter.accent}) 10%, transparent)`,
+                    boxShadow: `0 0 24px -12px color-mix(in oklch, var(--${chapter.accent}) 65%, transparent)`,
+                  }}
+                >
+                  <span
+                    className="mt-0.5 inline-flex items-center rounded-full px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.22em]"
+                    style={{
+                      background: `color-mix(in oklch, var(--${chapter.accent}) 22%, transparent)`,
+                      color: `var(--${chapter.accent})`,
+                    }}
+                  >
+                    Milestone
+                  </span>
+                  <span className="text-foreground/95">{a}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+
           <div className="mt-6 rounded-xl border border-white/10 bg-white/[0.03] p-4">
             <div className="text-[10px] uppercase tracking-[0.24em] text-primary/80">
               Scientific Development
@@ -332,7 +359,15 @@ function ChapterSection({
               {chapter.development}
             </p>
           </div>
+
+          <p
+            className="mt-4 border-l-2 pl-4 text-sm italic text-foreground/85"
+            style={{ borderColor: `color-mix(in oklch, var(--${chapter.accent}) 55%, transparent)` }}
+          >
+            {chapter.significance}
+          </p>
         </article>
+
 
         {/* Scene */}
         <div
@@ -637,32 +672,32 @@ function FinaleSection() {
         />
         <div className="relative">
           <div className="text-[11px] uppercase tracking-[0.28em] text-primary/90">
-            Final Chapter
+            From Journey to Contribution
           </div>
           <h2 className="mt-3 font-display text-3xl font-semibold md:text-5xl">
-            The Journey Continues
+            The Journey Continues in <span className="text-grad-accent">Peer-Reviewed Research</span>
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-sm text-muted-foreground md:text-base">
-            From the foundations of physics to multi-wavelength investigations
-            of nearby M dwarfs, each stage of this journey has opened a new
-            scientific question. The next chapter continues through
-            observation, analysis and collaboration.
+            This academic journey culminates in peer-reviewed scientific
+            research, conference contributions and continued multi-wavelength
+            exploration of magnetically active M-dwarf stars.
           </p>
           <p className="mt-4 text-xs italic text-muted-foreground/80">
             There is always another question beyond the horizon.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link
-              to="/research"
-              className="inline-flex items-center gap-2 rounded-full bg-primary/90 px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary transition-colors"
+              to="/publications"
+              className="inline-flex items-center gap-2 rounded-full bg-primary/90 px-6 py-3 text-sm font-medium text-primary-foreground shadow-[0_0_28px_-8px_var(--spectral-cyan)] hover:bg-primary transition-colors"
             >
-              Explore Research
+              Explore Publications
+              <span aria-hidden>→</span>
             </Link>
             <Link
-              to="/publications"
+              to="/research"
               className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium text-foreground hover:bg-white/5 transition-colors"
             >
-              View Publications
+              View Current Research
             </Link>
             <Link
               to="/contact"
@@ -672,6 +707,7 @@ function FinaleSection() {
             </Link>
           </div>
         </div>
+
       </div>
     </Section>
   );

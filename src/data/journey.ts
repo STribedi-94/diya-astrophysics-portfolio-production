@@ -12,7 +12,9 @@ export type JourneyChapter = {
   supervisor?: string;
   summary: string;
   achievements?: readonly string[];
+  milestoneAchievements?: readonly string[];
   development: string;
+  significance: string;
   scene:
     | "nursery"
     | "spectroscopy"
@@ -22,6 +24,7 @@ export type JourneyChapter = {
     | "horizon";
   accent: string;
 };
+
 
 export const journeyChapters: readonly JourneyChapter[] = [
   {
@@ -40,6 +43,8 @@ export const journeyChapters: readonly JourneyChapter[] = [
     ],
     development:
       "Classical mechanics, electrodynamics, mathematical physics, quantum mechanics and laboratory methods — the language required to ask more advanced questions about the physical universe.",
+    significance:
+      "Established the conceptual and mathematical foundation on which every later stage of scientific training was built.",
     scene: "nursery",
     accent: "electric",
   },
@@ -59,6 +64,8 @@ export const journeyChapters: readonly JourneyChapter[] = [
     ],
     development:
       "Stellar structure, radiative processes, spectroscopy, astronomical instrumentation and observational methods — shaping the decision to pursue research on magnetically active stars.",
+    significance:
+      "Marked the transition from general physics to stellar astrophysics and the first sustained engagement with observational astronomy.",
     scene: "spectroscopy",
     accent: "stellar-gold",
   },
@@ -73,11 +80,15 @@ export const journeyChapters: readonly JourneyChapter[] = [
       "Qualifying the CSIR–UGC NET with an All-India Rank of 143 opened the pathway into nationally supported full-time research.",
     achievements: [
       "All-India Rank 143",
-      "Junior Research Fellowship",
       "Lectureship qualification",
+    ],
+    milestoneAchievements: [
+      "CSIR-UGC NET · Junior Research Fellowship",
     ],
     development:
       "This national qualification provided the fellowship support and academic eligibility required to begin sustained doctoral research.",
+    significance:
+      "The formal gateway into independent research — enabling the transition from student to nationally supported early-career scientist.",
     scene: "gateway",
     accent: "spectral-cyan",
   },
@@ -97,12 +108,18 @@ export const journeyChapters: readonly JourneyChapter[] = [
       "Senior Research Fellow · January 2022 – December 2025",
       "Representative M-dwarf targets: AD Leonis · Wolf 359 · GJ 1151 · GJ 398",
     ],
+    milestoneAchievements: [
+      "PhD research on M-dwarf magnetic activity · TESS · uGMRT · HCT · DOT",
+    ],
     development:
       "Stellar variability → rotation and starspots → flares → chromospheric diagnostics → low-frequency radio emission → multi-wavelength interpretation → exoplanet environments and star–planet interaction.",
+    significance:
+      "Established Diya as an independent observational astrophysicist leading PI programmes across optical, near-infrared and low-frequency radio facilities.",
     scene: "mdwarf",
     accent: "mdwarf",
   },
 ];
+
 
 export type FacilityNode = {
   slug: string;
