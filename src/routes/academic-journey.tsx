@@ -257,7 +257,7 @@ function ChapterSection({
   alignRight: boolean;
 }) {
   return (
-    <Section id={chapter.id} className="!py-14 md:!py-24">
+    <Section id={chapter.id} className="!py-16 md:!py-28">
       <div
         className={`relative grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12 ${
           alignRight ? "md:[&>*:first-child]:col-start-2" : ""
