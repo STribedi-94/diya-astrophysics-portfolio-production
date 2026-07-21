@@ -12,7 +12,9 @@ export type JourneyChapter = {
   supervisor?: string;
   summary: string;
   achievements?: readonly string[];
+  milestoneAchievements?: readonly string[];
   development: string;
+  significance: string;
   scene:
     | "nursery"
     | "spectroscopy"
@@ -22,6 +24,7 @@ export type JourneyChapter = {
     | "horizon";
   accent: string;
 };
+
 
 export const journeyChapters: readonly JourneyChapter[] = [
   {
