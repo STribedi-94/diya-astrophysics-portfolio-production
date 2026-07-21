@@ -43,6 +43,8 @@ export const journeyChapters: readonly JourneyChapter[] = [
     ],
     development:
       "Classical mechanics, electrodynamics, mathematical physics, quantum mechanics and laboratory methods — the language required to ask more advanced questions about the physical universe.",
+    significance:
+      "Established the conceptual and mathematical foundation on which every later stage of scientific training was built.",
     scene: "nursery",
     accent: "electric",
   },
