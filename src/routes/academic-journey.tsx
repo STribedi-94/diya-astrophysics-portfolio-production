@@ -672,32 +672,32 @@ function FinaleSection() {
         />
         <div className="relative">
           <div className="text-[11px] uppercase tracking-[0.28em] text-primary/90">
-            Final Chapter
+            From Journey to Contribution
           </div>
           <h2 className="mt-3 font-display text-3xl font-semibold md:text-5xl">
-            The Journey Continues
+            The Journey Continues in <span className="text-grad-accent">Peer-Reviewed Research</span>
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-sm text-muted-foreground md:text-base">
-            From the foundations of physics to multi-wavelength investigations
-            of nearby M dwarfs, each stage of this journey has opened a new
-            scientific question. The next chapter continues through
-            observation, analysis and collaboration.
+            This academic journey culminates in peer-reviewed scientific
+            research, conference contributions and continued multi-wavelength
+            exploration of magnetically active M-dwarf stars.
           </p>
           <p className="mt-4 text-xs italic text-muted-foreground/80">
             There is always another question beyond the horizon.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link
-              to="/research"
-              className="inline-flex items-center gap-2 rounded-full bg-primary/90 px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary transition-colors"
+              to="/publications"
+              className="inline-flex items-center gap-2 rounded-full bg-primary/90 px-6 py-3 text-sm font-medium text-primary-foreground shadow-[0_0_28px_-8px_var(--spectral-cyan)] hover:bg-primary transition-colors"
             >
-              Explore Research
+              Explore Publications
+              <span aria-hidden>→</span>
             </Link>
             <Link
-              to="/publications"
+              to="/research"
               className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium text-foreground hover:bg-white/5 transition-colors"
             >
-              View Publications
+              View Current Research
             </Link>
             <Link
               to="/contact"
@@ -707,6 +707,7 @@ function FinaleSection() {
             </Link>
           </div>
         </div>
+
       </div>
     </Section>
   );
