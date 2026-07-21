@@ -275,7 +275,7 @@ function SceneProceeding() {
   );
 }
 
-const sceneMap: Record<string, () => JSX.Element> = {
+const sceneMap: Record<string, () => ReactElement> = {
   gj1151: SceneGJ1151,
   wolf359: SceneWolf359,
   adleo: SceneADLeo,
@@ -511,7 +511,7 @@ function CollabCard({ pub }: { pub: PublicationRecord }) {
 
 // ---------- Main page ----------
 
-const roleIcons: Record<EventRole, JSX.Element> = {
+const roleIcons: Record<EventRole, ReactElement> = {
   "Oral Presentation": <Presentation className="h-3.5 w-3.5" />,
   "Poster Presentation": <BookOpen className="h-3.5 w-3.5" />,
   Participant: <Users className="h-3.5 w-3.5" />,
