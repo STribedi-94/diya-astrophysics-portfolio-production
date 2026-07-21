@@ -324,6 +324,33 @@ function ChapterSection({
             </ul>
           )}
 
+          {chapter.milestoneAchievements && (
+            <ul className="mt-4 space-y-2">
+              {chapter.milestoneAchievements.map((a) => (
+                <li
+                  key={a}
+                  className="flex items-start gap-3 rounded-xl border px-3 py-2 text-sm text-foreground"
+                  style={{
+                    borderColor: `color-mix(in oklch, var(--${chapter.accent}) 45%, transparent)`,
+                    background: `color-mix(in oklch, var(--${chapter.accent}) 10%, transparent)`,
+                    boxShadow: `0 0 24px -12px color-mix(in oklch, var(--${chapter.accent}) 65%, transparent)`,
+                  }}
+                >
+                  <span
+                    className="mt-0.5 inline-flex items-center rounded-full px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.22em]"
+                    style={{
+                      background: `color-mix(in oklch, var(--${chapter.accent}) 22%, transparent)`,
+                      color: `var(--${chapter.accent})`,
+                    }}
+                  >
+                    Milestone
+                  </span>
+                  <span className="text-foreground/95">{a}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+
           <div className="mt-6 rounded-xl border border-white/10 bg-white/[0.03] p-4">
             <div className="text-[10px] uppercase tracking-[0.24em] text-primary/80">
               Scientific Development
@@ -332,7 +359,15 @@ function ChapterSection({
               {chapter.development}
             </p>
           </div>
+
+          <p
+            className="mt-4 border-l-2 pl-4 text-sm italic text-foreground/85"
+            style={{ borderColor: `color-mix(in oklch, var(--${chapter.accent}) 55%, transparent)` }}
+          >
+            {chapter.significance}
+          </p>
         </article>
+
 
         {/* Scene */}
         <div
