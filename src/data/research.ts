@@ -4,12 +4,16 @@ export type ResearchArea = {
   title: string;
   shortTitle: string;
   accent: "aurora" | "electric" | "nebula" | "magenta" | "solar" | "flare" | "teal";
+  motif: "lightcurve" | "spectrum" | "radio" | "starspots" | "magnetic" | "habitable";
   scientificSummary: string;
   accessibleSummary: string;
   motivation: string;
   question: string;
   methodology: string[];
-  facilities: string[];
+  facilities: string[]; // facility slugs
+  targets: string[];
+  projects: string[]; // project slugs
+  publications: string[]; // publication slugs
   status: string;
   future: string;
 };
@@ -21,12 +25,13 @@ export const researchAreas: ResearchArea[] = [
     title: "Magnetic Activity of M-dwarf Stars",
     shortTitle: "M-dwarf Magnetic Activity",
     accent: "nebula",
+    motif: "magnetic",
     scientificSummary:
       "Characterising surface magnetic activity in low-mass stars through complementary optical and radio diagnostics.",
     accessibleSummary:
       "Understanding how small, cool stars generate powerful magnetic fields — and what that means for the planets that orbit them.",
     motivation:
-      "M-dwarfs host most of the nearby exoplanet population. Their magnetic activity governs the environment those planets experience.",
+      "M-dwarfs host most of the nearby exoplanet population; their magnetic activity governs the environment those planets experience.",
     question:
       "How do rotation, starspots, flares and magnetic fields in M-dwarfs connect across optical and radio wavelengths?",
     methodology: [
@@ -36,7 +41,20 @@ export const researchAreas: ResearchArea[] = [
       "Near-infrared spectroscopy",
       "Low-frequency radio observations",
     ],
-    facilities: ["uGMRT", "HCT", "DOT"],
+    facilities: ["ugmrt", "hct", "dot", "tess"],
+    targets: ["AD Leo", "Wolf 359", "GJ 1151", "GJ 398", "EV Lac"],
+    projects: [
+      "gj398-radio-followup",
+      "adleo-spectroscopic-monitoring",
+      "m-dwarf-radio-survey",
+    ],
+    publications: [
+      "ad-leonis-flares-spectra",
+      "wolf-359-starspots-qpp",
+      "gj1151-flares-ugmrt",
+      "gj-398-flares-radio",
+      "understanding-magnetic-activity-mdwarfs-spectroscopy",
+    ],
     status: "Ongoing observational programme",
     future:
       "Extended multi-epoch monitoring and coordinated multi-wavelength campaigns of nearby M-dwarf targets.",
@@ -47,19 +65,35 @@ export const researchAreas: ResearchArea[] = [
     title: "Stellar Flares & Time-Domain Astronomy",
     shortTitle: "Stellar Flares",
     accent: "flare",
+    motif: "lightcurve",
     scientificSummary:
       "Detecting and characterising optical and radio flares on cool stars using high-cadence time-series data.",
     accessibleSummary:
       "Catching sudden bursts of energy released by stars, and asking what powers them.",
     motivation:
       "Flares reveal magnetic reconnection processes and shape the radiation environment of orbiting planets.",
-    question: "What are the statistics, energetics and radio counterparts of M-dwarf flares?",
+    question:
+      "What are the statistics, energetics and radio counterparts of M-dwarf and brown-dwarf flares?",
     methodology: [
       "TESS short-cadence photometry",
       "Ground-based optical monitoring",
       "uGMRT radio follow-up",
+      "Flare energy statistics",
     ],
-    facilities: ["uGMRT", "HCT", "DOT"],
+    facilities: ["tess", "ugmrt", "hct"],
+    targets: ["AD Leo", "Wolf 359", "GJ 398", "MHO 4", "Young Taurus brown dwarfs"],
+    projects: [
+      "tess-flare-statistics",
+      "young-brown-dwarf-superflares",
+      "gj398-radio-followup",
+    ],
+    publications: [
+      "ad-leonis-flares-spectra",
+      "wolf-359-starspots-qpp",
+      "gj-398-flares-radio",
+      "tess-young-brown-dwarfs-taurus",
+      "young-brown-dwarf-superflares-tess",
+    ],
     status: "Ongoing",
     future: "Simultaneous optical–radio flare campaigns.",
   },
@@ -69,6 +103,7 @@ export const researchAreas: ResearchArea[] = [
     title: "Stellar Rotation & Starspots",
     shortTitle: "Rotation & Starspots",
     accent: "electric",
+    motif: "starspots",
     scientificSummary:
       "Measuring rotation periods and mapping starspot coverage from photometric modulation.",
     accessibleSummary:
@@ -77,8 +112,19 @@ export const researchAreas: ResearchArea[] = [
       "Rotation is the primary driver of the stellar dynamo; starspots trace surface magnetic geometry.",
     question:
       "How does rotation set the level and morphology of magnetic activity across the M-dwarf sequence?",
-    methodology: ["Photometric period analysis", "Spot modelling", "Long-baseline monitoring"],
-    facilities: ["HCT", "DOT"],
+    methodology: [
+      "Photometric period analysis",
+      "Spot modelling",
+      "Long-baseline monitoring",
+    ],
+    facilities: ["tess", "hct"],
+    targets: ["Wolf 359", "TIC 272272592", "GJ 182", "2MASS J05160212+2214528"],
+    projects: ["wolf359-starspot-analysis", "tic272272592-spot-modelling"],
+    publications: [
+      "wolf-359-starspots-qpp",
+      "tic-272272592-starspots",
+      "starspot-flares-two-young-mstars",
+    ],
     status: "Ongoing",
     future: "Coupled rotation–activity–age studies.",
   },
@@ -88,6 +134,7 @@ export const researchAreas: ResearchArea[] = [
     title: "Radio Astronomy of Cool Stars",
     shortTitle: "Radio Astronomy",
     accent: "aurora",
+    motif: "radio",
     scientificSummary:
       "Low-frequency radio observations of M-dwarfs with the upgraded Giant Metrewave Radio Telescope.",
     accessibleSummary:
@@ -97,11 +144,14 @@ export const researchAreas: ResearchArea[] = [
     question:
       "Which cool stars show detectable coherent radio emission, and what mechanisms produce it?",
     methodology: [
-      "uGMRT band-3 and band-4 observations",
+      "uGMRT Band-3 and Band-4 observations",
       "Interferometric imaging",
       "Dynamic spectra analysis",
     ],
-    facilities: ["uGMRT"],
+    facilities: ["ugmrt"],
+    targets: ["GJ 1151", "GJ 398"],
+    projects: ["gj1151-radio-monitoring", "gj398-radio-followup", "m-dwarf-radio-survey"],
+    publications: ["gj1151-flares-ugmrt", "gj-398-flares-radio"],
     status: "Active observing campaigns",
     future: "Expanded target sample and multi-band radio monitoring.",
   },
@@ -111,6 +161,7 @@ export const researchAreas: ResearchArea[] = [
     title: "Optical & Near-Infrared Spectroscopy",
     shortTitle: "Spectroscopy",
     accent: "magenta",
+    motif: "spectrum",
     scientificSummary:
       "Diagnosing chromospheric activity, magnetic field indicators and stellar parameters through spectra.",
     accessibleSummary:
@@ -124,7 +175,13 @@ export const researchAreas: ResearchArea[] = [
       "Near-infrared spectroscopy",
       "Line-profile analysis",
     ],
-    facilities: ["HCT", "DOT"],
+    facilities: ["hct", "dot"],
+    targets: ["AD Leo", "EV Lac", "Stkm2-809"],
+    projects: ["adleo-spectroscopic-monitoring", "spectroscopic-monitoring"],
+    publications: [
+      "ad-leonis-flares-spectra",
+      "understanding-magnetic-activity-mdwarfs-spectroscopy",
+    ],
     status: "Ongoing",
     future: "High-resolution near-infrared campaigns.",
   },
@@ -134,6 +191,7 @@ export const researchAreas: ResearchArea[] = [
     title: "Exoplanet Habitability & Star–Planet Interaction",
     shortTitle: "Habitability",
     accent: "teal",
+    motif: "habitable",
     scientificSummary:
       "Connecting stellar magnetic activity to the radiation and particle environment of planets around M-dwarfs.",
     accessibleSummary:
@@ -146,7 +204,10 @@ export const researchAreas: ResearchArea[] = [
       "Multi-wavelength activity characterisation",
       "Search for coherent star–planet signals",
     ],
-    facilities: ["uGMRT", "HCT", "DOT"],
+    facilities: ["ugmrt", "hct", "dot", "tess"],
+    targets: ["GJ 1151"],
+    projects: ["gj1151-radio-monitoring"],
+    publications: ["gj1151-flares-ugmrt"],
     status: "Emerging direction",
     future: "Targeted searches around known M-dwarf planet hosts.",
   },
