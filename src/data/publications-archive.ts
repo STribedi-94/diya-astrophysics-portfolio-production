@@ -102,6 +102,7 @@ export const publicationsArchive: PublicationRecord[] = [
     articleNumber: "257",
     doi: "10.3847/1538-4357/ade9a7",
     doiUrl: "https://doi.org/10.3847/1538-4357/ade9a7",
+    adsUrl: "https://ui.adsabs.harvard.edu/abs/2025ApJ...988..257R",
     themes: ["M-dwarf Magnetic Activity", "Flares", "Starspots", "Quasi-periodic Pulsations", "TESS Photometry"],
     instruments: ["TESS"],
     targets: ["Wolf 359"],
