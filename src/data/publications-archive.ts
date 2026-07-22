@@ -67,6 +67,7 @@ export const publicationsArchive: PublicationRecord[] = [
     articleNumber: "120",
     doi: "10.3847/1538-4357/ae145a",
     doiUrl: "https://doi.org/10.3847/1538-4357/ae145a",
+    adsUrl: "https://ui.adsabs.harvard.edu/abs/2025ApJ...994..120R",
     themes: ["M-dwarf Magnetic Activity", "Flares", "Starspots", "Radio Astronomy", "TESS Photometry"],
     instruments: ["TESS", "uGMRT"],
     targets: ["GJ 1151"],
