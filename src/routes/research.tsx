@@ -229,7 +229,7 @@ function AreaWorld({ area, index }: { area: ResearchArea; index: number }) {
                         className="flex items-start gap-2 text-sm text-muted-foreground hover:text-foreground"
                       >
                         <ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary/60" />
-                        <span className="line-clamp-2">{p.shortTitle ?? p.title}</span>
+                        <span className="line-clamp-2">{p.title}</span>
                       </Link>
                     </li>
                   ))}
