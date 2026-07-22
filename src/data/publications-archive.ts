@@ -25,6 +25,8 @@ export type PublicationRecord = {
   pages?: string;
   doi: string;
   doiUrl: string;
+  adsUrl?: string;
+  arxivUrl?: string;
   themes: string[];
   instruments: string[];
   targets: string[];
@@ -65,6 +67,7 @@ export const publicationsArchive: PublicationRecord[] = [
     articleNumber: "120",
     doi: "10.3847/1538-4357/ae145a",
     doiUrl: "https://doi.org/10.3847/1538-4357/ae145a",
+    adsUrl: "https://ui.adsabs.harvard.edu/abs/2025ApJ...994..120R",
     themes: ["M-dwarf Magnetic Activity", "Flares", "Starspots", "Radio Astronomy", "TESS Photometry"],
     instruments: ["TESS", "uGMRT"],
     targets: ["GJ 1151"],
@@ -99,6 +102,7 @@ export const publicationsArchive: PublicationRecord[] = [
     articleNumber: "257",
     doi: "10.3847/1538-4357/ade9a7",
     doiUrl: "https://doi.org/10.3847/1538-4357/ade9a7",
+    adsUrl: "https://ui.adsabs.harvard.edu/abs/2025ApJ...988..257R",
     themes: ["M-dwarf Magnetic Activity", "Flares", "Starspots", "Quasi-periodic Pulsations", "TESS Photometry"],
     instruments: ["TESS"],
     targets: ["Wolf 359"],
@@ -132,6 +136,7 @@ export const publicationsArchive: PublicationRecord[] = [
     articleNumber: "196",
     doi: "10.3847/1538-4357/adabc3",
     doiUrl: "https://doi.org/10.3847/1538-4357/adabc3",
+    adsUrl: "https://ui.adsabs.harvard.edu/abs/2025ApJ...980..196R",
     themes: ["M-dwarf Magnetic Activity", "Flares", "Optical Spectroscopy", "Chromospheric Diagnostics", "TESS Photometry"],
     instruments: ["TESS", "HCT", "GMRT"],
     targets: ["AD Leonis"],
@@ -215,6 +220,7 @@ export const publicationsArchive: PublicationRecord[] = [
     pages: "358–369",
     doi: "10.25518/0037-9565.11717",
     doiUrl: "https://doi.org/10.25518/0037-9565.11717",
+    adsUrl: "https://ui.adsabs.harvard.edu/abs/2024BSRSL..93..358R",
     themes: ["Optical Spectroscopy", "Chromospheric Diagnostics", "M-dwarf Magnetic Activity"],
     instruments: ["HCT (HFOSC)", "DOT (TANSPEC)", "TESS"],
     targets: ["AD Leo", "EV Lac", "Stkm2-809"],
@@ -256,12 +262,21 @@ export const publicationsArchive: PublicationRecord[] = [
     articleNumber: "150",
     doi: "10.3847/1538-4357/ae072c",
     doiUrl: "https://doi.org/10.3847/1538-4357/ae072c",
+    adsUrl: "https://ui.adsabs.harvard.edu/abs/2025ApJ...994..150K",
     themes: ["Starspots", "M-dwarf Magnetic Activity", "TESS Photometry"],
     instruments: ["TESS"],
     targets: ["TIC 272272592"],
     shortSummary:
-      "Multiyear TESS analysis of starspot dynamics on the active M dwarf TIC 272272592.",
-    enrichmentPending: true,
+      "Multiyear TESS study of an active rapid-rotator M dwarf: two-spot model with a stable high-latitude spot, a migrating midlatitude spot, and 36 flares with peak temperatures 11,000–24,700 K.",
+    abstract:
+      "We analyse the temporal starspot evolution of the active rapid rotator TIC 272272592 (Prot = 1.22 d) using >3 yr of TESS high-precision photometry. Starspot modelling with the BASSMAN software indicates two spots on the stellar surface — a stable high-latitude spot and an occasionally present midlatitude spot that gradually migrates polewards. A moderate negative correlation between starspot size and time (Spearman ρ = −0.43) suggests significant decay across the 3-year baseline, though no clear cyclic pattern is detected. Mean total spot coverage across sectors 14, 15, 41, 54 and 55 was 5.1%, 5.7%, 5.5%, 4.8% and 4.4%. Peak flare temperatures for 36 detected flares span 11,000 ± 1900 K to 24,700 ± 5000 K, with 70% showing peak emitting areas of 170–563 ppm. No statistically significant correlation was found between flares and rotational phase.",
+    keyFindings: [
+      "Rapid rotator (Prot = 1.22 d) modelled with a stable high-latitude spot + migrating midlatitude spot.",
+      "Spot size decays over the 3-year baseline (Spearman ρ = −0.43) with no clear cyclic pattern.",
+      "36 flares detected with peak temperatures 11,000–24,700 K.",
+      "No significant correlation between flare occurrence and rotational phase.",
+    ],
+    keywords: ["Starspots", "Stellar flares", "M dwarf stars", "Surface variability"],
   },
   {
     id: "two-young-mstars",
@@ -281,12 +296,21 @@ export const publicationsArchive: PublicationRecord[] = [
     articleNumber: "169",
     doi: "10.3847/1538-4357/adae07",
     doiUrl: "https://doi.org/10.3847/1538-4357/adae07",
+    adsUrl: "https://ui.adsabs.harvard.edu/abs/2025ApJ...981..169K",
     themes: ["Starspots", "Flares", "M-dwarf Magnetic Activity", "TESS Photometry"],
     instruments: ["TESS"],
-    targets: ["Young low-mass stars"],
+    targets: ["GJ 182", "2MASS J05160212+2214528"],
     shortSummary:
-      "TESS-based study of starspot distribution and flare events in two young low-mass stars.",
-    enrichmentPending: true,
+      "Starspot modelling and flare characterisation of two young M dwarfs — GJ 182 (three-spot, T ≈ 3279 K, 48 flares) and 2MASS J05160212+2214528 (two-spot, T ≈ 2631 K, no flares detected).",
+    abstract:
+      "We study the magnetic activity of two young M dwarfs, GJ 182 and 2MASS J05160212+2214528, using TESS 2-minute cadence light curves and the BASSMAN starspot modelling software. A three-spot model best reproduces GJ 182's light curve with mean spot temperature ≈3279 K covering 5–8.5% of the surface, while a two-spot model with mean T ≈ 2631 K and ≈5.4% coverage describes 2MASS J05160212+2214528. For GJ 182 we identify and analyse 48 flare events with bolometric energies 10^32–10^35 erg (10^31–10^33 erg in the TESS bandpass); no flares are detected on 2MASS J05160212+2214528. Flare frequency distributions in sectors 5 and 32 give power-law indices of −1.53 ± 0.12 and −1.86 ± 0.22 respectively over 10^33–10^35 erg. A positive linear flare-energy vs. duration relation with slope 0.67 ± 0.02 is consistent with a mechanism analogous to solar flares. Assuming solar-flare scaling, the inferred lower-limit magnetic field strengths lie in the range 12–232 G.",
+    keyFindings: [
+      "Three-spot model for GJ 182 (T ≈ 3279 K, 5–8.5% coverage); two-spot model for 2MASS J05160212+2214528 (T ≈ 2631 K).",
+      "48 flares on GJ 182 spanning 10^32–10^35 erg; no flares detected on 2MASS J05160212+2214528.",
+      "Flare frequency power-law indices −1.53 ± 0.12 (Sector 5) and −1.86 ± 0.22 (Sector 32).",
+      "Inferred lower-limit magnetic field strengths of 12–232 G for detected superflares.",
+    ],
+    keywords: ["Variable stars", "Starspots", "Stellar flares", "M dwarf stars"],
   },
   {
     id: "taurus-brown-dwarfs",
@@ -306,12 +330,21 @@ export const publicationsArchive: PublicationRecord[] = [
     articleNumber: "18",
     doi: "10.3847/1538-4357/aceb65",
     doiUrl: "https://doi.org/10.3847/1538-4357/aceb65",
-    themes: ["Brown Dwarfs", "TESS Photometry", "Low-mass Stars"],
+    adsUrl: "https://ui.adsabs.harvard.edu/abs/2023ApJ...955...18K",
+    themes: ["Brown Dwarfs", "TESS Photometry", "Flares", "Low-mass Stars"],
     instruments: ["TESS"],
-    targets: ["Taurus young brown dwarfs"],
+    targets: ["MHO 4", "Young Taurus brown dwarfs"],
     shortSummary:
-      "TESS photometric variability of young brown dwarfs in the Taurus star-forming region.",
-    enrichmentPending: true,
+      "TESS Sectors 43–44 photometry of 11 young (~2–3 Myr) brown dwarfs in the Taurus molecular cloud — 72% periodic (1–7 d), four superflares detected in three objects with bolometric energies 10^35–10^36 erg.",
+    abstract:
+      "We present a comprehensive analysis of TESS high-quality light curves from Sectors 43 and 44 for a sample of young (~2–3 Myr) brown dwarfs in the Taurus molecular cloud. Out of 11 young BDs, 72% are periodic, with periods 1–7 days; three BDs have periods < 1.5 d and the period of one object is estimated for the first time. Sinusoidal periodic variations are attributed to a large spot or group of small spots corotating with the objects. Four flare events were detected across three young BDs — MHO 4 exhibits two flares in two different sectors. Bolometric flare energies range from 10^35 to 10^36 erg, close to the superflare range (>10^34 erg); required magnetic field strengths lie in the kilogauss regime. Such superflares have strong implications for the habitability of any surrounding planets.",
+    keyFindings: [
+      "TESS variability survey of 11 young Taurus brown dwarfs; 72% show periodicity of 1–7 days.",
+      "Four superflares detected across three brown dwarfs (bolometric energies 10^35–10^36 erg).",
+      "MHO 4 exhibits two flare events in different sectors.",
+      "Inferred kilogauss magnetic fields with implications for habitability of orbiting planets.",
+    ],
+    keywords: ["Variable stars", "Stellar flares", "M dwarf stars", "Starspots", "Pre-main sequence stars"],
   },
 
   // ---------- COLLABORATIVE PROCEEDING ----------
@@ -333,17 +366,25 @@ export const publicationsArchive: PublicationRecord[] = [
     month: "June",
     type: "Proceeding",
     status: "Proceeding",
-    journal: "Conference Proceeding",
+    journal: "Bulletin de la Société Royale des Sciences de Liège",
     volume: "93",
+    issue: "2",
     pages: "370–380",
     doi: "10.25518/0037-9565.11722",
     doiUrl: "https://doi.org/10.25518/0037-9565.11722",
     themes: ["Brown Dwarfs", "Flares", "TESS Photometry"],
     instruments: ["TESS"],
-    targets: ["Young brown dwarf"],
+    targets: ["MHO 4"],
     shortSummary:
-      "Detection of superflares and rotational variability in a young brown dwarf using TESS data.",
-    enrichmentPending: true,
+      "TESS light-curve analysis of the young M7.0 brown dwarf MHO 4 (Taurus star-forming region) — rotation period ≈ 2.224 d and two superflare events with bolometric energies 10^34–10^35 erg.",
+    abstract:
+      "We present a comprehensive analysis of TESS high-quality light curves for the young brown dwarf MHO 4 (spectral type M7.0) in the Taurus star-forming region. The light curve reveals a rotation period of approximately 2.224 days. MHO 4 exhibits two significant flaring events with bolometric flare energies in the range 10^34–10^35 erg, classifying them as superflares. The paper was presented at the 3rd BINA Workshop on 'Scientific Potential of the Indo-Belgian Cooperation' held at Graphic Era Hill University, Bhimtal (India), 22–24 March 2023.",
+    keyFindings: [
+      "Rotation period of MHO 4 ≈ 2.224 d from TESS Sectors 43–44.",
+      "Two significant flaring events detected on this young brown dwarf.",
+      "Bolometric superflare energies of 10^34–10^35 erg.",
+    ],
+    keywords: ["Brown dwarfs", "TESS", "Photometric variability", "Periodic variables", "Starspots"],
   },
 ];
 
