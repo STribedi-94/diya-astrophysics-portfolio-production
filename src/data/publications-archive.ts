@@ -220,6 +220,7 @@ export const publicationsArchive: PublicationRecord[] = [
     pages: "358–369",
     doi: "10.25518/0037-9565.11717",
     doiUrl: "https://doi.org/10.25518/0037-9565.11717",
+    adsUrl: "https://ui.adsabs.harvard.edu/abs/2024BSRSL..93..358R",
     themes: ["Optical Spectroscopy", "Chromospheric Diagnostics", "M-dwarf Magnetic Activity"],
     instruments: ["HCT (HFOSC)", "DOT (TANSPEC)", "TESS"],
     targets: ["AD Leo", "EV Lac", "Stkm2-809"],
