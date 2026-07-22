@@ -3,6 +3,12 @@
 // (Research_Statement_4_CV-Diya-3.pdf) and the attached first-author manuscripts.
 // No citation counts, h-index or invented metadata.
 
+import wolf359Pdf from "@/assets/wolf359-2025.pdf.asset.json";
+import gj398Pdf from "@/assets/gj398-2026.pdf.asset.json";
+import tic272272592Pdf from "@/assets/tic272272592-2025.pdf.asset.json";
+import twoYoungMstarsPdf from "@/assets/two-young-mstars-2025.pdf.asset.json";
+
+
 export type PublicationStatus = "Published" | "Accepted" | "Proceeding";
 export type PublicationType = "Journal" | "Proceeding";
 export type AuthorRole = "First Author" | "Collaborative";
