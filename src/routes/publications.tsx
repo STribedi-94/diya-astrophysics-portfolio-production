@@ -813,6 +813,12 @@ function FirstAuthorPanel({
                 <ExternalLink className="h-3.5 w-3.5" /> NASA ADS
               </a>
             )}
+            {pub.pdfUrl && (
+              <a href={pub.pdfUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/[0.08] px-4 py-2 text-xs font-semibold text-primary transition-all hover:bg-primary/15" aria-label={`Read the ${pub.title} PDF in a new tab`}>
+                <BookOpen className="h-3.5 w-3.5" /> Read Paper
+              </a>
+            )}
+
             <button type="button" onClick={() => setExpanded((v) => !v)} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white/80 transition-all hover:bg-white/[0.08]" aria-expanded={expanded}>
               <Sparkles className="h-3.5 w-3.5" /> {expanded ? "Collapse research" : "Explore the research"}
             </button>
