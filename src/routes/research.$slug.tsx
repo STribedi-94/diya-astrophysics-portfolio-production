@@ -142,7 +142,7 @@ function ResearchDetail() {
               <GlassPanel>
                 <div className="text-[10px] uppercase tracking-[0.24em] text-primary/80">Stellar targets</div>
                 <div className="mt-2 flex flex-wrap gap-1.5">
-                  {area.targets.map((t) => (
+                  {area.targets.map((t: string) => (
                     <span
                       key={t}
                       className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[11px] text-muted-foreground"

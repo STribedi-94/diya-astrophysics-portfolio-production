@@ -64,7 +64,7 @@ function ProjectDetail() {
                 Methodology
               </h3>
               <ul className="mt-3 space-y-1.5">
-                {project.methodology.map((m) => (
+                {project.methodology.map((m: string) => (
                   <li key={m} className="flex items-start gap-2 text-sm text-muted-foreground">
                     <span className="mt-1.5 h-1 w-1 rounded-full bg-primary/70" />
                     {m}
