@@ -136,6 +136,7 @@ export const publicationsArchive: PublicationRecord[] = [
     articleNumber: "196",
     doi: "10.3847/1538-4357/adabc3",
     doiUrl: "https://doi.org/10.3847/1538-4357/adabc3",
+    adsUrl: "https://ui.adsabs.harvard.edu/abs/2025ApJ...980..196R",
     themes: ["M-dwarf Magnetic Activity", "Flares", "Optical Spectroscopy", "Chromospheric Diagnostics", "TESS Photometry"],
     instruments: ["TESS", "HCT", "GMRT"],
     targets: ["AD Leonis"],
