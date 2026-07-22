@@ -1,42 +1,269 @@
-// Deliberately-empty structured demonstration data for future population.
+// Structured content for the site. Verified against uploaded documents,
+// publication PDFs and existing website records.
+
+export type ProjectStatus =
+  | "Published"
+  | "Accepted"
+  | "Ongoing"
+  | "In preparation";
 
 export type ProjectSummary = {
   id: string;
   slug: string;
   title: string;
   shortTitle: string;
-  status: "Active" | "In preparation" | "Planned";
+  status: ProjectStatus;
+  theme: string;
   question: string;
-  facilities: string[];
+  motivation: string;
+  target: string;
+  wavelength: string; // "Radio" | "Optical" | "Optical / NIR" | "Multi-wavelength"
+  facilities: string[]; // facility slugs
+  methodology: string[];
+  outcome: string;
+  areas: string[]; // research area slugs
+  publications: string[]; // publication slugs (may be empty for ongoing)
 };
 
 export const projects: ProjectSummary[] = [
   {
-    id: "mdwarf-radio-survey",
+    id: "gj1151-radio-monitoring",
+    slug: "gj1151-radio-monitoring",
+    title: "Low-frequency radio monitoring of the M-dwarf GJ 1151",
+    shortTitle: "GJ 1151 · uGMRT radio",
+    status: "Published",
+    theme: "Radio Astronomy of Cool Stars",
+    question:
+      "What is the nature and duty cycle of the coherent radio emission from GJ 1151 at metre wavelengths?",
+    motivation:
+      "GJ 1151 is a benchmark quiescent M-dwarf whose coherent radio emission has been proposed as a signature of magnetic star–planet interaction.",
+    target: "GJ 1151",
+    wavelength: "Radio",
+    facilities: ["ugmrt"],
+    methodology: [
+      "uGMRT Band-3 and Band-4 interferometric imaging",
+      "Dynamic spectral analysis",
+      "Multi-epoch monitoring",
+    ],
+    outcome:
+      "Detection and characterisation of circularly polarised bursts constraining the emission mechanism on GJ 1151.",
+    areas: [
+      "radio-astronomy-of-cool-stars",
+      "m-dwarf-magnetic-activity",
+      "exoplanet-habitability-and-star-planet-interaction",
+    ],
+    publications: ["gj1151-flares-ugmrt"],
+  },
+  {
+    id: "wolf359-starspot-analysis",
+    slug: "wolf359-starspot-analysis",
+    title: "Starspots and quasi-periodic pulsations on Wolf 359",
+    shortTitle: "Wolf 359 · starspots & QPPs",
+    status: "Published",
+    theme: "Starspots, Rotation & Surface Magnetism",
+    question:
+      "What do TESS light curves reveal about starspot geometry, rotation and flare QPPs on the nearby M-dwarf Wolf 359?",
+    motivation:
+      "Wolf 359 (CN Leo) is one of the nearest M-dwarfs and an excellent laboratory for connecting rotational modulation to flare energetics.",
+    target: "Wolf 359 (CN Leonis)",
+    wavelength: "Optical",
+    facilities: ["tess"],
+    methodology: [
+      "TESS short-cadence photometry",
+      "Spot modelling of rotational modulation",
+      "Time–frequency analysis of flare QPPs",
+    ],
+    outcome:
+      "Refined rotation period, spot-coverage constraints and detection of quasi-periodic pulsations in stellar flares.",
+    areas: [
+      "stellar-rotation-and-starspots",
+      "stellar-flares",
+      "m-dwarf-magnetic-activity",
+    ],
+    publications: ["wolf-359-starspots-qpp"],
+  },
+  {
+    id: "adleo-spectroscopic-monitoring",
+    slug: "adleo-spectroscopic-monitoring",
+    title: "Optical spectroscopy and flare monitoring of AD Leonis",
+    shortTitle: "AD Leo · optical flares & spectra",
+    status: "Published",
+    theme: "Optical & Near-Infrared Spectroscopy",
+    question:
+      "How do chromospheric emission lines respond to optical flares on the active M-dwarf AD Leonis?",
+    motivation:
+      "AD Leo is an archetypal active M-dwarf; simultaneous photometric and spectroscopic monitoring links flare energetics to chromospheric line variability.",
+    target: "AD Leonis",
+    wavelength: "Optical / NIR",
+    facilities: ["hct"],
+    methodology: [
+      "HCT medium-resolution optical spectroscopy",
+      "Ground-based photometric monitoring",
+      "Chromospheric line-profile analysis",
+    ],
+    outcome:
+      "Time-resolved characterisation of Balmer-line and Ca II response during optical flare events.",
+    areas: [
+      "optical-and-near-infrared-spectroscopy",
+      "stellar-flares",
+      "m-dwarf-magnetic-activity",
+    ],
+    publications: ["ad-leonis-flares-spectra"],
+  },
+  {
+    id: "gj398-radio-followup",
+    slug: "gj398-radio-followup",
+    title: "Optical–radio characterisation of GJ 398",
+    shortTitle: "GJ 398 · optical & radio",
+    status: "Accepted",
+    theme: "Multi-wavelength stellar astrophysics",
+    question:
+      "What are the optical flare energetics and radio properties of the M-dwarf GJ 398?",
+    motivation:
+      "Combining TESS optical photometry with uGMRT radio observations constrains the magnetic environment of GJ 398.",
+    target: "GJ 398",
+    wavelength: "Multi-wavelength",
+    facilities: ["tess", "ugmrt"],
+    methodology: [
+      "TESS light-curve analysis",
+      "Flare energy statistics",
+      "uGMRT radio follow-up",
+    ],
+    outcome:
+      "Accepted study reporting flare energies and radio constraints for GJ 398.",
+    areas: [
+      "m-dwarf-magnetic-activity",
+      "stellar-flares",
+      "radio-astronomy-of-cool-stars",
+    ],
+    publications: ["gj-398-flares-radio"],
+  },
+  {
+    id: "m-dwarf-radio-survey",
     slug: "m-dwarf-radio-survey",
     title: "Low-frequency radio survey of nearby M-dwarfs",
     shortTitle: "M-dwarf radio survey",
-    status: "Active",
-    question: "Which nearby M-dwarfs show detectable coherent radio emission at metre wavelengths?",
-    facilities: ["uGMRT"],
+    status: "Ongoing",
+    theme: "Radio Astronomy of Cool Stars",
+    question:
+      "Which nearby M-dwarfs show detectable coherent radio emission at uGMRT metre wavelengths?",
+    motivation:
+      "A systematic survey builds the statistical sample needed to test whether coherent emission traces star–planet interaction or intrinsic stellar magnetic activity.",
+    target: "Sample of nearby M-dwarfs",
+    wavelength: "Radio",
+    facilities: ["ugmrt"],
+    methodology: [
+      "uGMRT Band-3 / Band-4 targeted observations",
+      "Interferometric imaging",
+      "Dynamic-spectrum searches for coherent bursts",
+    ],
+    outcome:
+      "Ongoing observing programme; results feed into a broader M-dwarf radio-activity picture.",
+    areas: [
+      "radio-astronomy-of-cool-stars",
+      "m-dwarf-magnetic-activity",
+    ],
+    publications: [],
   },
   {
-    id: "tess-flares",
+    id: "tess-flare-statistics",
     slug: "tess-flare-statistics",
     title: "Flare statistics from TESS light curves",
     shortTitle: "TESS flare statistics",
-    status: "Active",
-    question: "How does flare energy scale with spectral type and rotation in the TESS M-dwarf sample?",
-    facilities: ["HCT"],
+    status: "Ongoing",
+    theme: "Time-domain M-dwarf activity",
+    question:
+      "How does flare energy scale with spectral type and rotation across the TESS M-dwarf sample?",
+    motivation:
+      "TESS's high-cadence photometry enables a homogeneous statistical treatment of M-dwarf flare energetics.",
+    target: "TESS M-dwarf sample",
+    wavelength: "Optical",
+    facilities: ["tess"],
+    methodology: [
+      "Automated flare detection in TESS light curves",
+      "Energy calibration",
+      "Comparative statistics vs rotation period",
+    ],
+    outcome:
+      "Ongoing analysis; contributes to the broader flare-energy vs stellar-property picture.",
+    areas: ["stellar-flares", "stellar-rotation-and-starspots"],
+    publications: [],
   },
   {
-    id: "spectro-monitoring",
+    id: "spectroscopic-monitoring",
     slug: "spectroscopic-monitoring",
     title: "Spectroscopic monitoring of active M-dwarfs",
     shortTitle: "Spectroscopic monitoring",
     status: "In preparation",
-    question: "What long-term chromospheric behaviour do our M-dwarf targets exhibit?",
-    facilities: ["HCT", "DOT"],
+    theme: "Optical & Near-Infrared Spectroscopy",
+    question:
+      "What long-term chromospheric behaviour do our M-dwarf targets exhibit in optical and near-infrared spectra?",
+    motivation:
+      "Long-baseline spectroscopy is essential to disentangle rotational, cycle-like and flare-driven variability in M-dwarf chromospheres.",
+    target: "Selected active M-dwarfs",
+    wavelength: "Optical / NIR",
+    facilities: ["hct", "dot"],
+    methodology: [
+      "HCT medium-resolution spectroscopy",
+      "DOT deep spectroscopic follow-up",
+      "Chromospheric line diagnostics",
+    ],
+    outcome:
+      "Programme in preparation; will build a multi-epoch spectroscopic dataset.",
+    areas: [
+      "optical-and-near-infrared-spectroscopy",
+      "m-dwarf-magnetic-activity",
+    ],
+    publications: [],
+  },
+  {
+    id: "tic272272592-spot-modelling",
+    slug: "tic272272592-spot-modelling",
+    title: "Starspot modelling of TIC 272272592",
+    shortTitle: "TIC 272272592 · spot modelling",
+    status: "Published",
+    theme: "Starspots, Rotation & Surface Magnetism",
+    question:
+      "What starspot configuration best reproduces the TESS light curve of TIC 272272592?",
+    motivation:
+      "Modelling individual well-sampled TESS targets tests the assumptions underlying rotational-modulation analyses.",
+    target: "TIC 272272592",
+    wavelength: "Optical",
+    facilities: ["tess"],
+    methodology: [
+      "TESS photometry",
+      "Starspot geometric modelling",
+    ],
+    outcome:
+      "Published starspot characterisation of TIC 272272592 as a collaborative study.",
+    areas: ["stellar-rotation-and-starspots"],
+    publications: ["tic-272272592-starspots"],
+  },
+  {
+    id: "young-brown-dwarf-superflares",
+    slug: "young-brown-dwarf-superflares",
+    title: "TESS superflares from young brown dwarfs in Taurus",
+    shortTitle: "Young Taurus BDs · superflares",
+    status: "Published",
+    theme: "Time-domain low-mass astrophysics",
+    question:
+      "What are the properties of superflares detected on young brown dwarfs in the Taurus star-forming region?",
+    motivation:
+      "Extending flare studies to the substellar regime probes magnetic activity at very low masses and young ages.",
+    target: "Young Taurus brown dwarfs (incl. MHO 4)",
+    wavelength: "Optical",
+    facilities: ["tess"],
+    methodology: [
+      "TESS light-curve mining",
+      "Superflare energy calibration",
+    ],
+    outcome:
+      "Collaborative published characterisation of superflare activity in young brown dwarfs.",
+    areas: ["stellar-flares"],
+    publications: [
+      "tess-young-brown-dwarfs-taurus",
+      "young-brown-dwarf-superflares-tess",
+    ],
   },
 ];
 
@@ -65,7 +292,8 @@ export const news: NewsItem[] = [
     title: "uGMRT observing cycle underway",
     date: "Ongoing",
     category: "Observing",
-    summary: "Radio observations of selected M-dwarf targets are ongoing. Details will be added from verified telescope records.",
+    summary:
+      "Radio observations of selected M-dwarf targets are ongoing. Details will be added from verified telescope records.",
   },
 ];
 
