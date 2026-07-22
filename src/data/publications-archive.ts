@@ -40,6 +40,7 @@ export type PublicationRecord = {
   abstract?: string;
   keyFindings?: string[];
   keywords?: string[];
+  pdfUrl?: string;
   featured?: boolean;
   enrichmentPending?: boolean;
 };
@@ -47,6 +48,7 @@ export type PublicationRecord = {
 export const publicationsArchive: PublicationRecord[] = [
   // ---------- FIRST-AUTHOR JOURNAL ARTICLES ----------
   {
+
     id: "gj1151",
     slug: "gj1151-flares-ugmrt",
     title:
