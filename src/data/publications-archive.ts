@@ -50,6 +50,7 @@ export const publicationsArchive: PublicationRecord[] = [
   {
 
     id: "gj1151",
+    pdfUrl: "/papers/gj1151-2025.pdf",
     slug: "gj1151-flares-ugmrt",
     title:
       "Magnetic Activities of GJ 1151: Flares in TESS Data and Radio Observation in uGMRT",
@@ -94,6 +95,7 @@ export const publicationsArchive: PublicationRecord[] = [
   },
   {
     id: "wolf359",
+    pdfUrl: wolf359Pdf.url,
     slug: "wolf-359-starspots-qpp",
     title:
       "Magnetic Activities of Wolf 359: Starspot Distribution and Quasiperiodic Pulsation Using TESS Data",
@@ -129,6 +131,7 @@ export const publicationsArchive: PublicationRecord[] = [
   },
   {
     id: "adleo",
+    pdfUrl: "/papers/adleo-2025.pdf",
     slug: "ad-leonis-flares-spectra",
     title: "Magnetic Activities of AD Leonis: Flares in TESS Data and Optical Spectra",
     authors: ["Diya Ram", "Soumen Mondal", "Dushmanta Patra", "Samrat Ghosh", "Rajib Kumbhakar"],
@@ -165,6 +168,7 @@ export const publicationsArchive: PublicationRecord[] = [
   // ---------- ACCEPTED (EMERGING RESEARCH) ----------
   {
     id: "gj398",
+    pdfUrl: gj398Pdf.url,
     slug: "gj-398-flares-radio",
     title:
       "Probing the Magnetic Activity of GJ 398 through TESS Flare Detection and uGMRT Radio Observations",
@@ -206,6 +210,7 @@ export const publicationsArchive: PublicationRecord[] = [
   // ---------- CONFERENCE PROCEEDINGS (FIRST AUTHOR) ----------
   {
     id: "proc-mdwarf-spectro",
+    pdfUrl: "/papers/proc-mdwarf-spectro-2024.pdf",
     slug: "understanding-magnetic-activity-mdwarfs-spectroscopy",
     title:
       "Understanding the Magnetic Activity of M Dwarfs: Optical and Near-Infrared Spectroscopic Studies",
@@ -248,6 +253,7 @@ export const publicationsArchive: PublicationRecord[] = [
   // ---------- COLLABORATIVE JOURNAL PAPERS ----------
   {
     id: "tic272272592",
+    pdfUrl: tic272272592Pdf.url,
     slug: "tic-272272592-starspots",
     title:
       "Probing Starspot Dynamics on the Active M Dwarf TIC 272272592: A Multiyear TESS Study",
@@ -288,6 +294,7 @@ export const publicationsArchive: PublicationRecord[] = [
   },
   {
     id: "two-young-mstars",
+    pdfUrl: twoYoungMstarsPdf.url,
     slug: "starspot-flares-two-young-mstars",
     title:
       "Starspot Distribution and Flare Events in Two Young Low-mass Stars Using TESS Data",
@@ -322,6 +329,7 @@ export const publicationsArchive: PublicationRecord[] = [
   },
   {
     id: "taurus-brown-dwarfs",
+    pdfUrl: "/papers/taurus-brown-dwarfs-2023.pdf",
     slug: "tess-young-brown-dwarfs-taurus",
     title:
       "TESS Photometric Variability of Young Brown Dwarfs in the Taurus Star-forming Region",
@@ -358,6 +366,7 @@ export const publicationsArchive: PublicationRecord[] = [
   // ---------- COLLABORATIVE PROCEEDING ----------
   {
     id: "proc-young-bd-superflares",
+    pdfUrl: "/papers/proc-young-bd-superflares-2024.pdf",
     slug: "young-brown-dwarf-superflares-tess",
     title:
       "Rotational Variability and Detection of Superflares in a Young Brown Dwarf by TESS",
