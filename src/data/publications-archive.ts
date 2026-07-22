@@ -25,6 +25,8 @@ export type PublicationRecord = {
   pages?: string;
   doi: string;
   doiUrl: string;
+  adsUrl?: string;
+  arxivUrl?: string;
   themes: string[];
   instruments: string[];
   targets: string[];
