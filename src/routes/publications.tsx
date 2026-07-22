@@ -248,7 +248,7 @@ function SceneGJ398() {
       <circle cx="200" cy="130" r="150" fill="url(#gj398-halo)" />
       <circle cx="200" cy="130" r="18" fill="oklch(0.88 0.14 75)" opacity="0.9" />
       <circle cx="200" cy="130" r="30" fill="none" stroke="oklch(0.82 0.16 85)" strokeOpacity="0.4" strokeDasharray="3 5" />
-      <text x="200" y="235" textAnchor="middle" fill="oklch(0.82 0.16 85 / 0.85)" fontSize="9" style={{ letterSpacing: "0.24em" }}>ACCEPTED · METADATA PENDING</text>
+      <text x="200" y="235" textAnchor="middle" fill="oklch(0.82 0.16 85 / 0.85)" fontSize="9" style={{ letterSpacing: "0.24em" }}>GJ 398 · SUPERFLARE 2.6×10³⁴ erg</text>
     </svg>
   );
 }
