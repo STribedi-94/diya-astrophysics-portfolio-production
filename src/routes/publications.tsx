@@ -248,7 +248,7 @@ function SceneGJ398() {
       <circle cx="200" cy="130" r="150" fill="url(#gj398-halo)" />
       <circle cx="200" cy="130" r="18" fill="oklch(0.88 0.14 75)" opacity="0.9" />
       <circle cx="200" cy="130" r="30" fill="none" stroke="oklch(0.82 0.16 85)" strokeOpacity="0.4" strokeDasharray="3 5" />
-      <text x="200" y="235" textAnchor="middle" fill="oklch(0.82 0.16 85 / 0.85)" fontSize="9" style={{ letterSpacing: "0.24em" }}>ACCEPTED · METADATA PENDING</text>
+      <text x="200" y="235" textAnchor="middle" fill="oklch(0.82 0.16 85 / 0.85)" fontSize="9" style={{ letterSpacing: "0.24em" }}>GJ 398 · SUPERFLARE 2.6×10³⁴ erg</text>
     </svg>
   );
 }
@@ -813,6 +813,12 @@ function FirstAuthorPanel({
                 <ExternalLink className="h-3.5 w-3.5" /> NASA ADS
               </a>
             )}
+            {pub.pdfUrl && (
+              <a href={pub.pdfUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/[0.08] px-4 py-2 text-xs font-semibold text-primary transition-all hover:bg-primary/15" aria-label={`Read the ${pub.title} PDF in a new tab`}>
+                <BookOpen className="h-3.5 w-3.5" /> Read Paper
+              </a>
+            )}
+
             <button type="button" onClick={() => setExpanded((v) => !v)} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white/80 transition-all hover:bg-white/[0.08]" aria-expanded={expanded}>
               <Sparkles className="h-3.5 w-3.5" /> {expanded ? "Collapse research" : "Explore the research"}
             </button>
@@ -916,6 +922,12 @@ function CollabCard({ pub }: { pub: PublicationRecord }) {
               ADS <ArrowUpRight className="h-3 w-3" />
             </a>
           )}
+          {pub.pdfUrl && (
+            <a href={pub.pdfUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/[0.08] px-3 py-1.5 text-[11px] font-semibold text-primary hover:bg-primary/15" aria-label={`Read the ${pub.title} PDF in a new tab`}>
+              <BookOpen className="h-3 w-3" /> Read Paper
+            </a>
+          )}
+
           <button type="button" onClick={() => setExpanded((v) => !v)} className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.04] px-3 py-1.5 text-[11px] font-semibold text-white/85 hover:bg-white/[0.08]" aria-expanded={expanded}>
             {expanded ? "Hide summary" : "Read summary"}
           </button>
@@ -1271,9 +1283,11 @@ function PublicationsPage() {
                   <div className="mb-3 text-[10px] uppercase tracking-[0.24em] text-amber-300/90">Emerging Research</div>
                   <h2 className="font-display text-3xl font-semibold md:text-4xl">Accepted manuscript</h2>
                   <p className="mt-3 text-white/65">
-                    Accepted for publication — final bibliographic details will appear once the
-                    journal formally posts the article.
+                    Peer-accepted manuscript on the mid-M dwarf GJ 398 — combining TESS
+                    short-cadence photometry with uGMRT Band-4/5 radio observations to probe
+                    the magnetic activity of a star at the fully-convective boundary.
                   </p>
+
                 </div>
                 <div className="space-y-8">
                   {accepted.map((p) => <FirstAuthorPanel key={p.id} pub={p} />)}
