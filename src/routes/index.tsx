@@ -160,7 +160,7 @@ function Home() {
       <Section
         eyebrow="Telescope Facilities"
         title="Optical, spectroscopic and radio observatories"
-        intro="Diya Ram observes with three world-class facilities that together enable a multi-wavelength view of M-dwarf activity."
+        intro="Diya Ram works with four verified ground- and space-based facilities that together enable a multi-wavelength view of M-dwarf activity."
       >
         <div className="grid gap-4 md:grid-cols-3">
           {facilities.map((f) => (
