@@ -34,9 +34,9 @@ export const projects: ProjectSummary[] = [
     status: "Published",
     theme: "Radio Astronomy of Cool Stars",
     question:
-      "What is the nature and duty cycle of the coherent radio emission from GJ 1151 at metre wavelengths?",
+      "What constraints do uGMRT observations place on low-frequency radio emission from GJ 1151?",
     motivation:
-      "GJ 1151 is a benchmark quiescent M-dwarf whose coherent radio emission has been proposed as a signature of magnetic star–planet interaction.",
+      "GJ 1151 is a benchmark quiescent M-dwarf whose reported low-frequency radio signal has motivated the search for magnetic star–planet interaction; deeper uGMRT observations test and constrain the emission scenarios.",
     target: "GJ 1151",
     wavelength: "Radio",
     facilities: ["ugmrt"],
@@ -46,7 +46,7 @@ export const projects: ProjectSummary[] = [
       "Multi-epoch monitoring",
     ],
     outcome:
-      "Detection and characterisation of circularly polarised bursts constraining the emission mechanism on GJ 1151.",
+      "Low-frequency uGMRT observations placing constraints on possible coherent radio emission from GJ 1151.",
     areas: [
       "radio-astronomy-of-cool-stars",
       "m-dwarf-magnetic-activity",
