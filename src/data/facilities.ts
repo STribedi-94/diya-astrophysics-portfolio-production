@@ -109,6 +109,10 @@ export const facilities: Facility[] = [
     ],
     relatedProjects: ["spectroscopic-monitoring"],
     relatedPublications: ["understanding-magnetic-activity-mdwarfs-spectroscopy"],
+    officialWebsite: "https://www.aries.res.in/facilities/astronomical-telescopes/360cm-telescope",
+    officialWebsiteLabel: "ARIES (Aryabhatta Research Institute)",
+    secondaryWebsite: "https://www.aries.res.in/dot/gallery.html",
+    secondaryWebsiteLabel: "ARIES DOT Gallery",
   },
   {
     id: "tess",
@@ -147,6 +151,10 @@ export const facilities: Facility[] = [
       "tess-young-brown-dwarfs-taurus",
       "young-brown-dwarf-superflares-tess",
     ],
+    officialWebsite: "https://science.nasa.gov/mission/tess/",
+    officialWebsiteLabel: "NASA Science — TESS Mission",
+    secondaryWebsite: "https://tess.gsfc.nasa.gov/",
+    secondaryWebsiteLabel: "NASA Goddard TESS site",
   },
 ];
 
