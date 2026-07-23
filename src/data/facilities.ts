@@ -143,7 +143,7 @@ export const facilityGroups = [
     id: "radio",
     label: "Radio Observatories",
     description:
-      "Metre-wavelength interferometric facilities used to search for coherent magnetic emission from M-dwarfs.",
+      "Metre-wavelength interferometric facilities used to search for and constrain magnetic radio emission from M-dwarfs.",
   },
   {
     id: "optical-nir",
