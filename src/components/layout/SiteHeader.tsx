@@ -78,7 +78,7 @@ export function SiteHeader() {
                     <button
                       className={cn(
                         "flex items-center gap-1 rounded-md px-3 py-2 text-sm transition-colors",
-                        active
+                        active || openMenu === item.label
                           ? "text-foreground"
                           : "text-muted-foreground hover:text-foreground",
                       )}
@@ -86,27 +86,38 @@ export function SiteHeader() {
                         setOpenMenu(openMenu === item.label ? null : item.label)
                       }
                       aria-expanded={openMenu === item.label}
+                      aria-haspopup="menu"
                     >
                       {item.label}
-                      <ChevronDown className="h-3.5 w-3.5 opacity-70" />
+                      <ChevronDown className={cn("h-3.5 w-3.5 opacity-70 transition-transform", openMenu === item.label && "rotate-180")} />
                     </button>
                     {openMenu === item.label && (
-                      <div className="absolute left-1/2 top-full min-w-[240px] -translate-x-1/2 pt-2">
-                        <div className="glass rounded-xl p-2">
-                          {item.children.map((c) => (
-                            <Link
-                              key={c.to}
-                              to={c.to}
-                              className={cn(
-                                "block rounded-lg px-3 py-2 text-sm transition-colors",
-                                isActive(c.to)
-                                  ? "bg-white/5 text-foreground"
-                                  : "text-muted-foreground hover:bg-white/5 hover:text-foreground",
-                              )}
-                            >
-                              {c.label}
-                            </Link>
-                          ))}
+                      <div className="absolute left-1/2 top-full min-w-[280px] -translate-x-1/2 pt-2">
+                        <div
+                          role="menu"
+                          className="rounded-2xl border border-white/10 bg-[oklch(0.09_0.03_265_/_0.96)] p-2 shadow-[0_20px_60px_-10px_oklch(0_0_0_/_0.7),_0_0_0_1px_oklch(0.6_0.15_220_/_0.08)_inset] backdrop-blur-2xl ring-1 ring-primary/10"
+                        >
+                          {item.children.map((c) => {
+                            const childActive = isActive(c.to);
+                            return (
+                              <Link
+                                key={c.to}
+                                to={c.to}
+                                role="menuitem"
+                                className={cn(
+                                  "group flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
+                                  childActive
+                                    ? "bg-primary/15 text-foreground"
+                                    : "text-muted-foreground hover:bg-white/10 hover:text-foreground",
+                                )}
+                              >
+                                {childActive && (
+                                  <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_8px_oklch(0.78_0.15_210_/_0.8)]" aria-hidden />
+                                )}
+                                <span className={cn(!childActive && "ml-3.5")}>{c.label}</span>
+                              </Link>
+                            );
+                          })}
                         </div>
                       </div>
                     )}

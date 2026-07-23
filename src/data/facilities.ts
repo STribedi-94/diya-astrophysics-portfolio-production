@@ -17,6 +17,10 @@ export type Facility = {
   relatedAreas: string[]; // research area slugs
   relatedProjects: string[]; // project slugs
   relatedPublications: string[]; // publication slugs
+  officialWebsite: string; // authoritative institutional URL
+  officialWebsiteLabel: string; // e.g. "NCRA-TIFR", "IIA", "ARIES", "NASA"
+  secondaryWebsite?: string; // supporting official page
+  secondaryWebsiteLabel?: string;
 };
 
 export const facilities: Facility[] = [
@@ -46,6 +50,10 @@ export const facilities: Facility[] = [
     ],
     relatedProjects: ["gj1151-radio-monitoring", "gj398-radio-followup", "m-dwarf-radio-survey"],
     relatedPublications: ["gj1151-flares-ugmrt", "gj-398-flares-radio"],
+    officialWebsite: "https://www.gmrt.ncra.tifr.res.in/",
+    officialWebsiteLabel: "NCRA–TIFR / GMRT",
+    secondaryWebsite: "https://www.ncra.tifr.res.in/gmrt/aboutgmrt",
+    secondaryWebsiteLabel: "About GMRT",
   },
   {
     id: "hct",
@@ -72,6 +80,10 @@ export const facilities: Facility[] = [
     ],
     relatedProjects: ["adleo-spectroscopic-monitoring", "spectroscopic-monitoring"],
     relatedPublications: ["ad-leonis-flares-spectra", "understanding-magnetic-activity-mdwarfs-spectroscopy"],
+    officialWebsite: "https://www.iiap.res.in/centers/iao/facilities/hct/",
+    officialWebsiteLabel: "Indian Institute of Astrophysics (IIA)",
+    secondaryWebsite: "https://www.iiap.res.in/centers/iao/",
+    secondaryWebsiteLabel: "Indian Astronomical Observatory (Hanle)",
   },
   {
     id: "dot",
@@ -97,6 +109,10 @@ export const facilities: Facility[] = [
     ],
     relatedProjects: ["spectroscopic-monitoring"],
     relatedPublications: ["understanding-magnetic-activity-mdwarfs-spectroscopy"],
+    officialWebsite: "https://www.aries.res.in/facilities/astronomical-telescopes/360cm-telescope",
+    officialWebsiteLabel: "ARIES (Aryabhatta Research Institute)",
+    secondaryWebsite: "https://www.aries.res.in/dot/gallery.html",
+    secondaryWebsiteLabel: "ARIES DOT Gallery",
   },
   {
     id: "tess",
@@ -135,6 +151,10 @@ export const facilities: Facility[] = [
       "tess-young-brown-dwarfs-taurus",
       "young-brown-dwarf-superflares-tess",
     ],
+    officialWebsite: "https://science.nasa.gov/mission/tess/",
+    officialWebsiteLabel: "NASA Science — TESS Mission",
+    secondaryWebsite: "https://tess.gsfc.nasa.gov/",
+    secondaryWebsiteLabel: "NASA Goddard TESS site",
   },
 ];
 

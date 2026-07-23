@@ -5,7 +5,7 @@ import { facilities } from "@/data/facilities";
 import { researchAreas } from "@/data/research";
 import { projects } from "@/data/misc";
 import { publicationsArchive } from "@/data/publications-archive";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
 
 export const Route = createFileRoute("/facilities/$slug")({
   head: ({ params }) => {
@@ -44,7 +44,30 @@ function FacilityDetail() {
   return (
     <>
       <ResearchNavigator chapterIndex={3} sections={sections} />
-      <PageHero eyebrow={facility.abbreviation} title={facility.fullName} intro={facility.purpose} />
+      <PageHero eyebrow={facility.abbreviation} title={facility.fullName} intro={facility.purpose}>
+        <div className="flex flex-wrap gap-2">
+          <a
+            href={facility.officialWebsite}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/15 px-4 py-2 text-sm font-medium text-primary hover:bg-primary/25"
+            aria-label={`Visit official ${facility.abbreviation} website (opens in new tab)`}
+          >
+            Visit official facility website · {facility.officialWebsiteLabel}
+            <ExternalLink className="h-4 w-4" aria-hidden />
+          </a>
+          {facility.secondaryWebsite && (
+            <a
+              href={facility.secondaryWebsite}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-muted-foreground hover:bg-white/10 hover:text-foreground"
+            >
+              {facility.secondaryWebsiteLabel} <ExternalLink className="h-3.5 w-3.5" aria-hidden />
+            </a>
+          )}
+        </div>
+      </PageHero>
       <Section>
         <div className="grid gap-6 md:grid-cols-3">
           <div className="md:col-span-2 space-y-4">
