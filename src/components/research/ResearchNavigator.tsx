@@ -272,7 +272,7 @@ export function ResearchNavigator({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="glass fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full border border-white/15 px-4 py-2.5 text-xs font-medium text-foreground shadow-lg backdrop-blur-xl xl:hidden"
+        className="glass fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full border border-white/15 px-4 py-2.5 text-xs font-medium text-foreground shadow-lg backdrop-blur-xl lg:hidden"
         aria-label="Open research navigator"
       >
         <Compass className="h-4 w-4 text-primary" aria-hidden />
@@ -283,7 +283,7 @@ export function ResearchNavigator({
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 xl:hidden" role="dialog" aria-modal="true" aria-label="Research navigator">
+        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Research navigator">
           <button
             type="button"
             aria-label="Close navigator"
