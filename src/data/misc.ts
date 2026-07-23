@@ -118,7 +118,7 @@ export const projects: ProjectSummary[] = [
     status: "Accepted",
     theme: "Multi-wavelength stellar astrophysics",
     question:
-      "What are the optical flare energetics and radio properties of the M-dwarf GJ 398?",
+      "What do TESS flare detections and uGMRT radio observations reveal or constrain about the magnetic activity of GJ 398?",
     motivation:
       "Combining TESS optical photometry with uGMRT radio observations constrains the magnetic environment of GJ 398.",
     target: "GJ 398",
@@ -130,7 +130,7 @@ export const projects: ProjectSummary[] = [
       "uGMRT radio follow-up",
     ],
     outcome:
-      "Accepted study reporting flare energies and radio constraints for GJ 398.",
+      "Accepted study reporting TESS optical flare detections together with uGMRT radio constraints on the magnetic activity of GJ 398.",
     areas: [
       "m-dwarf-magnetic-activity",
       "stellar-flares",
