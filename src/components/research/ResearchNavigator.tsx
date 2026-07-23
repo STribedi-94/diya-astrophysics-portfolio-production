@@ -57,7 +57,9 @@ export function ResearchNavigator({
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (sections.length === 0) return;
-    const onScroll = () => {
+    let raf = 0;
+    const compute = () => {
+      raf = 0;
       const doc = document.documentElement;
       const scrolled = window.scrollY;
       const max = doc.scrollHeight - window.innerHeight;
@@ -71,12 +73,28 @@ export function ResearchNavigator({
       }
       setActiveId(current);
     };
-    onScroll();
+    const onScroll = () => {
+      if (raf) return;
+      raf = window.requestAnimationFrame(compute);
+    };
+    compute();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (raf) window.cancelAnimationFrame(raf);
+    };
   }, [sections]);
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+  const scrollToId = (id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.scrollY - 96;
+    window.scrollTo({ top: y, behavior: "smooth" });
+    if (history.replaceState) history.replaceState(null, "", `#${id}`);
+  };
+
 
   const prev = chapters[chapterIndex - 1];
   const next = chapters[chapterIndex + 1];
@@ -207,8 +225,12 @@ export function ResearchNavigator({
                     <li key={s.id}>
                       <a
                         href={`#${s.id}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          scrollToId(s.id);
+                        }}
                         className={cn(
-                          "block truncate rounded px-1.5 py-1 text-[11px] transition-colors",
+                          "block truncate rounded px-1.5 py-1 text-[11px] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/60",
                           activeId === s.id
                             ? "text-foreground"
                             : "text-muted-foreground hover:text-foreground",
@@ -220,6 +242,7 @@ export function ResearchNavigator({
                     </li>
                   ))}
                 </ul>
+
               </>
             )}
 
@@ -345,14 +368,19 @@ export function ResearchNavigator({
                     <li key={s.id}>
                       <a
                         href={`#${s.id}`}
-                        onClick={() => setOpen(false)}
-                        className="block rounded-lg border border-white/10 bg-white/[0.02] px-3 py-2 text-sm text-muted-foreground hover:text-foreground"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setOpen(false);
+                          setTimeout(() => scrollToId(s.id), 60);
+                        }}
+                        className="block rounded-lg border border-white/10 bg-white/[0.02] px-3 py-2 text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/60"
                       >
                         {s.label}
                       </a>
                     </li>
                   ))}
                 </ul>
+
               </div>
             )}
 
