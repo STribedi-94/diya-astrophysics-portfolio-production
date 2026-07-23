@@ -146,7 +146,7 @@ export const projects: ProjectSummary[] = [
     status: "Ongoing",
     theme: "Radio Astronomy of Cool Stars",
     question:
-      "Which nearby M-dwarfs show detectable coherent radio emission at uGMRT metre wavelengths?",
+      "Which nearby M-dwarfs show detectable low-frequency radio emission at uGMRT metre wavelengths, and what limits can be placed on non-detections?",
     motivation:
       "A systematic survey builds the statistical sample needed to test whether coherent emission traces star–planet interaction or intrinsic stellar magnetic activity.",
     target: "Sample of nearby M-dwarfs",
@@ -155,10 +155,10 @@ export const projects: ProjectSummary[] = [
     methodology: [
       "uGMRT Band-3 / Band-4 targeted observations",
       "Interferometric imaging",
-      "Dynamic-spectrum searches for coherent bursts",
+      "Dynamic-spectrum searches for possible coherent bursts",
     ],
     outcome:
-      "Ongoing observing programme; results feed into a broader M-dwarf radio-activity picture.",
+      "Ongoing observing programme; results feed into a broader picture of M-dwarf low-frequency radio activity and its constraints.",
     areas: [
       "radio-astronomy-of-cool-stars",
       "m-dwarf-magnetic-activity",
