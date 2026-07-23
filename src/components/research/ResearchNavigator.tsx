@@ -9,6 +9,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import {
   ArrowUp,
   BookOpen,
+  ChevronLeft,
   ChevronRight,
   Compass,
   Layers,
