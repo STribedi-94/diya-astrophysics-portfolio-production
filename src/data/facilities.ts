@@ -50,6 +50,10 @@ export const facilities: Facility[] = [
     ],
     relatedProjects: ["gj1151-radio-monitoring", "gj398-radio-followup", "m-dwarf-radio-survey"],
     relatedPublications: ["gj1151-flares-ugmrt", "gj-398-flares-radio"],
+    officialWebsite: "https://www.gmrt.ncra.tifr.res.in/",
+    officialWebsiteLabel: "NCRA–TIFR / GMRT",
+    secondaryWebsite: "https://www.ncra.tifr.res.in/gmrt/aboutgmrt",
+    secondaryWebsiteLabel: "About GMRT",
   },
   {
     id: "hct",
@@ -76,6 +80,10 @@ export const facilities: Facility[] = [
     ],
     relatedProjects: ["adleo-spectroscopic-monitoring", "spectroscopic-monitoring"],
     relatedPublications: ["ad-leonis-flares-spectra", "understanding-magnetic-activity-mdwarfs-spectroscopy"],
+    officialWebsite: "https://www.iiap.res.in/centers/iao/facilities/hct/",
+    officialWebsiteLabel: "Indian Institute of Astrophysics (IIA)",
+    secondaryWebsite: "https://www.iiap.res.in/centers/iao/",
+    secondaryWebsiteLabel: "Indian Astronomical Observatory (Hanle)",
   },
   {
     id: "dot",
