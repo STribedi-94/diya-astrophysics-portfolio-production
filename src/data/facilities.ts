@@ -34,11 +34,11 @@ export const facilities: Facility[] = [
     type: "ground",
     category: "radio",
     purpose:
-      "Sensitive low-frequency radio observations of coherent and incoherent stellar magnetic activity.",
+      "Sensitive low-frequency radio observations used to search for and constrain magnetic emission from nearby cool stars.",
     role:
-      "Primary radio facility for detecting and characterising coherent radio emission from nearby M-dwarfs.",
+      "Primary radio facility used to search for and constrain low-frequency emission associated with magnetic activity in nearby M-dwarfs.",
     capability:
-      "Interferometric imaging and dynamic spectra at metre wavelengths, sensitive to auroral / electron-cyclotron emission from cool stars.",
+      "Interferometric imaging and dynamic spectra at metre wavelengths, capable of probing coherent emission mechanisms in cool stars.",
     relatedAreas: [
       "radio-astronomy-of-cool-stars",
       "m-dwarf-magnetic-activity",
