@@ -245,7 +245,7 @@ function FacilityProfile({ facility: f }: { facility: Facility }) {
             {pubs.length > 0 && (
               <RelatedList label="Publications">
                 {pubs.map((p) => (
-                  <Link key={p.id} to="/publications" hash={p.slug} className={chip}>
+                  <Link key={p.id} to="/publications" hash={`pub-${p.id}`} className={chip}>
                     {p.title.length > 42 ? p.title.slice(0, 40) + "…" : p.title}
                   </Link>
                 ))}
