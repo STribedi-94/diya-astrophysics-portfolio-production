@@ -103,7 +103,7 @@ function Home() {
         </div>
       </section>
 
-      <SpectralDivider label="Multi-wavelength · UV → Optical → Radio" />
+      <SpectralDivider label="Multi-wavelength · Radio → Optical → Near-Infrared" />
 
 
       {/* Research areas preview */}
