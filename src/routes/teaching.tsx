@@ -402,7 +402,7 @@ function SpectrumMotif() {
 // ---- Local navigation -------------------------------------------------
 
 function LocalNav() {
-  const [active, setActive] = useState<string>(sections[0].id);
+  const [active, setActive] = useState<string>(sections[0].id as string);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
