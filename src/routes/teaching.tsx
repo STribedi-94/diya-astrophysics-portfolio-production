@@ -411,7 +411,7 @@ function LocalNav() {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         const y = window.scrollY + 140;
-        let current = sections[0].id;
+        let current: string = sections[0].id;
         for (const s of sections) {
           const el = document.getElementById(s.id);
           if (el && el.offsetTop <= y) current = s.id;
