@@ -5,7 +5,7 @@ import { facilities, facilityGroups, type Facility } from "@/data/facilities";
 import { researchAreas } from "@/data/research";
 import { projects } from "@/data/misc";
 import { publicationsArchive } from "@/data/publications-archive";
-import { ArrowRight, Globe2, Radio, Satellite, Telescope } from "lucide-react";
+import { ArrowRight, ExternalLink, Globe2, Radio, Satellite, Telescope } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/facilities")({
@@ -253,13 +253,24 @@ function FacilityProfile({ facility: f }: { facility: Facility }) {
             )}
           </div>
 
-          <Link
-            to="/facilities/$slug"
-            params={{ slug: f.slug }}
-            className="inline-flex items-center gap-1.5 text-xs text-primary hover:text-foreground"
-          >
-            Full facility profile <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
+          <div className="flex flex-wrap gap-2 pt-1">
+            <Link
+              to="/facilities/$slug"
+              params={{ slug: f.slug }}
+              className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/15 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/25"
+            >
+              Full facility profile <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+            <a
+              href={f.officialWebsite}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-muted-foreground hover:bg-white/10 hover:text-foreground"
+              aria-label={`Visit official ${f.abbreviation} website at ${f.officialWebsiteLabel} (opens in new tab)`}
+            >
+              Official website · {f.officialWebsiteLabel} <ExternalLink className="h-3.5 w-3.5" aria-hidden />
+            </a>
+          </div>
         </div>
       </div>
     </article>
