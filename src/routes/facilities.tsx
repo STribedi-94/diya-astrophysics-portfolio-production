@@ -123,16 +123,23 @@ function ResearchFacilitiesPage() {
 
 function SpectrumAxis() {
   const stops = [
-    { label: "Radio", pos: 8, color: "var(--aurora)" },
-    { label: "Optical", pos: 62, color: "var(--electric)" },
-    { label: "NIR", pos: 78, color: "var(--magenta)" },
+    { label: "Radio", sub: "metre λ (250–850 MHz)", pos: 10, color: "var(--aurora)" },
+    { label: "Optical", sub: "≈ 350–900 nm", pos: 58, color: "var(--electric)" },
+    { label: "Near-Infrared", sub: "to ≈ 2.5 µm", pos: 88, color: "var(--magenta)" },
   ];
   return (
     <div className="glass max-w-2xl rounded-2xl border border-white/10 p-4">
-      <div className="text-[10px] uppercase tracking-[0.24em] text-primary/70">
-        Wavelength coverage
+      <div className="flex items-center justify-between">
+        <div className="text-[10px] uppercase tracking-[0.24em] text-primary/70">
+          Combined wavelength coverage
+        </div>
+        <div className="text-[10px] text-muted-foreground">4 facilities</div>
       </div>
-      <div className="relative mt-3 h-2 rounded-full bg-gradient-to-r from-[oklch(0.6_0.16_210)] via-[oklch(0.75_0.14_60)] to-[oklch(0.5_0.18_20)]">
+      <div
+        className="relative mt-3 h-2 rounded-full bg-gradient-to-r from-[oklch(0.6_0.16_210)] via-[oklch(0.75_0.14_60)] to-[oklch(0.5_0.18_20)]"
+        role="img"
+        aria-label="Combined wavelength coverage across facilities: radio metre wavelengths, optical visible wavelengths, and near-infrared extending to approximately 2.5 micrometres."
+      >
         {stops.map((s) => (
           <div
             key={s.label}
@@ -142,10 +149,23 @@ function SpectrumAxis() {
           />
         ))}
       </div>
-      <div className="mt-1 flex justify-between text-[10px] text-muted-foreground">
-        <span>Metre</span>
-        <span>µm</span>
+      <div className="mt-2 grid grid-cols-3 gap-2 text-[10px] text-muted-foreground">
+        <div>
+          <div className="text-foreground">Radio</div>
+          <div className="text-[9px] opacity-80">metre λ · MHz</div>
+        </div>
+        <div className="text-center">
+          <div className="text-foreground">Optical</div>
+          <div className="text-[9px] opacity-80">visible · nm</div>
+        </div>
+        <div className="text-right">
+          <div className="text-foreground">Near-Infrared</div>
+          <div className="text-[9px] opacity-80">to ≈ 2.5 µm</div>
+        </div>
       </div>
+      <p className="sr-only">
+        Radio metre wavelengths, through optical visible wavelengths, to near-infrared out to approximately 2.5 micrometres. Each facility covers a subset of this combined range.
+      </p>
     </div>
   );
 }
