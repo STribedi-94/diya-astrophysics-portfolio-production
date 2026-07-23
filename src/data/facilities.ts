@@ -17,6 +17,10 @@ export type Facility = {
   relatedAreas: string[]; // research area slugs
   relatedProjects: string[]; // project slugs
   relatedPublications: string[]; // publication slugs
+  officialWebsite: string; // authoritative institutional URL
+  officialWebsiteLabel: string; // e.g. "NCRA-TIFR", "IIA", "ARIES", "NASA"
+  secondaryWebsite?: string; // supporting official page
+  secondaryWebsiteLabel?: string;
 };
 
 export const facilities: Facility[] = [
