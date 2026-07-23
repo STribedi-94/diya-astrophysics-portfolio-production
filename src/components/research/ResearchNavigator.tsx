@@ -38,8 +38,21 @@ export function ResearchNavigator({
 }) {
   const currentPath = useRouterState({ select: (r) => r.location.pathname });
   const [open, setOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const [activeId, setActiveId] = useState<string | undefined>(sections[0]?.id);
   const [progress, setProgress] = useState(0);
+
+  // Persist expand/collapse across pages; default collapsed except on very wide screens.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const saved = window.localStorage.getItem("nav:collapsed");
+    if (saved !== null) setCollapsed(saved === "1");
+    else setCollapsed(window.innerWidth < 1536);
+  }, []);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem("nav:collapsed", collapsed ? "1" : "0");
+  }, [collapsed]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
