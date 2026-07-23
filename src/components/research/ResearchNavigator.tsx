@@ -9,6 +9,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import {
   ArrowUp,
   BookOpen,
+  ChevronLeft,
   ChevronRight,
   Compass,
   Layers,
@@ -37,8 +38,21 @@ export function ResearchNavigator({
 }) {
   const currentPath = useRouterState({ select: (r) => r.location.pathname });
   const [open, setOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const [activeId, setActiveId] = useState<string | undefined>(sections[0]?.id);
   const [progress, setProgress] = useState(0);
+
+  // Persist expand/collapse across pages; default collapsed except on very wide screens.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const saved = window.localStorage.getItem("nav:collapsed");
+    if (saved !== null) setCollapsed(saved === "1");
+    else setCollapsed(window.innerWidth < 1536);
+  }, []);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem("nav:collapsed", collapsed ? "1" : "0");
+  }, [collapsed]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -71,132 +85,194 @@ export function ResearchNavigator({
 
   return (
     <>
-      {/* Desktop rail */}
+      {/* Desktop rail: collapsed by default so it never obstructs content */}
       <nav
         aria-label="Research navigator"
-        className="pointer-events-none fixed right-4 z-30 hidden xl:block"
+        className="pointer-events-none fixed right-3 z-30 hidden lg:block"
         style={{ top: railTop }}
       >
-        <div className="pointer-events-auto glass w-64 rounded-2xl border border-white/10 p-4 shadow-lg backdrop-blur-xl">
-          <div className="mb-3 flex items-center justify-between">
-            <div className="text-[10px] font-semibold uppercase tracking-[0.24em] text-primary/80">
-              Mission Navigator
-            </div>
-            <span className="text-[10px] text-muted-foreground">
-              {String(chapterIndex + 1).padStart(2, "0")}/04
-            </span>
-          </div>
-
-          <div className="mb-3 h-1 overflow-hidden rounded-full bg-white/5">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-primary/80 to-white/60 transition-[width] duration-150"
-              style={{ width: `${Math.max(6, progress * 100)}%` }}
-              aria-hidden
-            />
-          </div>
-
-          <ul className="space-y-1">
-            {chapters.map((c, i) => {
-              const active = currentPath === c.to;
-              const Icon = c.icon;
-              return (
-                <li key={c.to}>
-                  <Link
-                    to={c.to}
-                    className={cn(
-                      "group flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs transition-colors",
-                      active
-                        ? "bg-primary/15 text-foreground"
-                        : "text-muted-foreground hover:bg-white/5 hover:text-foreground",
-                    )}
-                  >
-                    <span className="w-6 text-[10px] tabular-nums text-primary/70">{c.chapter}</span>
-                    <Icon className="h-3.5 w-3.5" aria-hidden />
-                    <span className="truncate">{c.label}</span>
-                    {active && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary" aria-hidden />}
-                    {!active && i === chapterIndex + 1 && (
-                      <ChevronRight className="ml-auto h-3 w-3 opacity-40" aria-hidden />
-                    )}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-
-          {sections.length > 0 && (
-            <>
-              <div className="mt-4 mb-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-primary/60">
-                On this page
-              </div>
-              <ul className="space-y-0.5 border-l border-white/10 pl-3">
-                {sections.map((s) => (
-                  <li key={s.id}>
-                    <a
-                      href={`#${s.id}`}
-                      className={cn(
-                        "block truncate rounded px-1.5 py-1 text-[11px] transition-colors",
-                        activeId === s.id
-                          ? "text-foreground"
-                          : "text-muted-foreground hover:text-foreground",
-                      )}
-                      aria-current={activeId === s.id ? "location" : undefined}
-                    >
-                      {s.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-
-          <div className="mt-4 space-y-1 border-t border-white/5 pt-3">
-            <Link
-              to="/publications"
-              className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs text-muted-foreground hover:bg-white/5 hover:text-foreground"
-            >
-              <BookOpen className="h-3.5 w-3.5" aria-hidden />
-              Related Publications
-            </Link>
+        {collapsed ? (
+          <div className="pointer-events-auto glass flex w-12 flex-col items-center gap-2 rounded-2xl border border-white/10 bg-black/40 p-2 shadow-lg backdrop-blur-xl">
             <button
               type="button"
-              onClick={scrollToTop}
-              className="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-xs text-muted-foreground hover:bg-white/5 hover:text-foreground"
+              onClick={() => setCollapsed(false)}
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-primary hover:bg-white/10"
+              aria-label="Expand research navigator"
+              aria-expanded={false}
+              title="Expand navigator"
             >
-              <ArrowUp className="h-3.5 w-3.5" aria-hidden />
-              Back to top
+              <ChevronLeft className="h-4 w-4" />
             </button>
+            <div className="text-[9px] font-semibold tabular-nums text-primary/80">
+              {String(chapterIndex + 1).padStart(2, "0")}
+            </div>
+            <div className="text-[8px] uppercase tracking-[0.2em] text-muted-foreground">/04</div>
+            <div
+              className="relative my-1 h-24 w-1 overflow-hidden rounded-full bg-white/5"
+              aria-hidden
+            >
+              <div
+                className="absolute bottom-0 left-0 w-full rounded-full bg-gradient-to-t from-primary/80 to-white/60"
+                style={{ height: `${Math.max(6, progress * 100)}%` }}
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              {chapters.map((c) => {
+                const active = currentPath === c.to;
+                const Icon = c.icon;
+                return (
+                  <Link
+                    key={c.to}
+                    to={c.to}
+                    aria-label={c.label}
+                    title={c.label}
+                    className={cn(
+                      "flex h-7 w-7 items-center justify-center rounded-md",
+                      active ? "bg-primary/20 text-primary" : "text-muted-foreground hover:bg-white/5 hover:text-foreground",
+                    )}
+                  >
+                    <Icon className="h-3.5 w-3.5" aria-hidden />
+                  </Link>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="pointer-events-auto glass w-60 rounded-2xl border border-white/10 bg-black/60 p-4 shadow-lg backdrop-blur-xl">
+            <div className="mb-3 flex items-center justify-between">
+              <div className="text-[10px] font-semibold uppercase tracking-[0.24em] text-primary/80">
+                Mission Navigator
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-[10px] text-muted-foreground">
+                  {String(chapterIndex + 1).padStart(2, "0")}/04
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setCollapsed(true)}
+                  className="rounded p-1 text-muted-foreground hover:bg-white/10 hover:text-foreground"
+                  aria-label="Collapse navigator"
+                  aria-expanded={true}
+                  title="Collapse"
+                >
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </div>
 
-        {(prev || next) && (
-          <div className="pointer-events-auto mt-3 flex w-64 justify-between gap-2">
-            {prev ? (
-              <Link
-                to={prev.to}
-                className="glass flex-1 rounded-xl px-2 py-1.5 text-[10px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground"
-              >
-                ← {prev.label}
-              </Link>
-            ) : (
-              <span className="flex-1" />
+            <div className="mb-3 h-1 overflow-hidden rounded-full bg-white/5">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-primary/80 to-white/60 transition-[width] duration-150"
+                style={{ width: `${Math.max(6, progress * 100)}%` }}
+                aria-hidden
+              />
+            </div>
+
+            <ul className="space-y-1">
+              {chapters.map((c, i) => {
+                const active = currentPath === c.to;
+                const Icon = c.icon;
+                return (
+                  <li key={c.to}>
+                    <Link
+                      to={c.to}
+                      className={cn(
+                        "group flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs transition-colors",
+                        active
+                          ? "bg-primary/15 text-foreground"
+                          : "text-muted-foreground hover:bg-white/5 hover:text-foreground",
+                      )}
+                      aria-current={active ? "page" : undefined}
+                    >
+                      <span className="w-6 text-[10px] tabular-nums text-primary/70">{c.chapter}</span>
+                      <Icon className="h-3.5 w-3.5" aria-hidden />
+                      <span className="truncate">{c.label}</span>
+                      {active && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary" aria-hidden />}
+                      {!active && i === chapterIndex + 1 && (
+                        <ChevronRight className="ml-auto h-3 w-3 opacity-40" aria-hidden />
+                      )}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+
+            {sections.length > 0 && (
+              <>
+                <div className="mt-4 mb-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-primary/60">
+                  On this page
+                </div>
+                <ul className="max-h-56 space-y-0.5 overflow-y-auto border-l border-white/10 pl-3">
+                  {sections.map((s) => (
+                    <li key={s.id}>
+                      <a
+                        href={`#${s.id}`}
+                        className={cn(
+                          "block truncate rounded px-1.5 py-1 text-[11px] transition-colors",
+                          activeId === s.id
+                            ? "text-foreground"
+                            : "text-muted-foreground hover:text-foreground",
+                        )}
+                        aria-current={activeId === s.id ? "location" : undefined}
+                      >
+                        {s.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </>
             )}
-            {next && (
+
+            <div className="mt-4 space-y-1 border-t border-white/5 pt-3">
               <Link
-                to={next.to}
-                className="glass flex-1 rounded-xl px-2 py-1.5 text-right text-[10px] uppercase tracking-[0.2em] text-primary hover:text-foreground"
+                to="/publications"
+                className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs text-muted-foreground hover:bg-white/5 hover:text-foreground"
               >
-                {next.label} →
+                <BookOpen className="h-3.5 w-3.5" aria-hidden />
+                Related Publications
               </Link>
+              <button
+                type="button"
+                onClick={scrollToTop}
+                className="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-xs text-muted-foreground hover:bg-white/5 hover:text-foreground"
+              >
+                <ArrowUp className="h-3.5 w-3.5" aria-hidden />
+                Back to top
+              </button>
+            </div>
+
+            {(prev || next) && (
+              <div className="mt-3 flex justify-between gap-2 border-t border-white/5 pt-3">
+                {prev ? (
+                  <Link
+                    to={prev.to}
+                    className="flex-1 truncate rounded-lg px-2 py-1 text-[10px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground"
+                  >
+                    ← {prev.label}
+                  </Link>
+                ) : (
+                  <span className="flex-1" />
+                )}
+                {next && (
+                  <Link
+                    to={next.to}
+                    className="flex-1 truncate rounded-lg px-2 py-1 text-right text-[10px] uppercase tracking-[0.2em] text-primary hover:text-foreground"
+                  >
+                    {next.label} →
+                  </Link>
+                )}
+              </div>
             )}
           </div>
         )}
       </nav>
 
+
       {/* Mobile / tablet floating button */}
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="glass fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full border border-white/15 px-4 py-2.5 text-xs font-medium text-foreground shadow-lg backdrop-blur-xl xl:hidden"
+        className="glass fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full border border-white/15 px-4 py-2.5 text-xs font-medium text-foreground shadow-lg backdrop-blur-xl lg:hidden"
         aria-label="Open research navigator"
       >
         <Compass className="h-4 w-4 text-primary" aria-hidden />
@@ -207,7 +283,7 @@ export function ResearchNavigator({
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 xl:hidden" role="dialog" aria-modal="true" aria-label="Research navigator">
+        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Research navigator">
           <button
             type="button"
             aria-label="Close navigator"

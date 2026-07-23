@@ -225,7 +225,7 @@ function AreaWorld({ area, index }: { area: ResearchArea; index: number }) {
                     <li key={p.id}>
                       <Link
                         to="/publications"
-                        hash={p.slug}
+                        hash={`pub-${p.id}`}
                         className="flex items-start gap-2 text-sm text-muted-foreground hover:text-foreground"
                       >
                         <ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary/60" />

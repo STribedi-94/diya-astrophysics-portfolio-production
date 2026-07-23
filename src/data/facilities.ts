@@ -34,11 +34,11 @@ export const facilities: Facility[] = [
     type: "ground",
     category: "radio",
     purpose:
-      "Sensitive low-frequency radio observations of coherent and incoherent stellar magnetic activity.",
+      "Sensitive low-frequency radio observations used to search for and constrain magnetic emission from nearby cool stars.",
     role:
-      "Primary radio facility for detecting and characterising coherent radio emission from nearby M-dwarfs.",
+      "Primary radio facility used to search for and constrain low-frequency emission associated with magnetic activity in nearby M-dwarfs.",
     capability:
-      "Interferometric imaging and dynamic spectra at metre wavelengths, sensitive to auroral / electron-cyclotron emission from cool stars.",
+      "Interferometric imaging and dynamic spectra at metre wavelengths, capable of probing coherent emission mechanisms in cool stars.",
     relatedAreas: [
       "radio-astronomy-of-cool-stars",
       "m-dwarf-magnetic-activity",
@@ -104,7 +104,7 @@ export const facilities: Facility[] = [
     fullName: "Transiting Exoplanet Survey Satellite",
     abbreviation: "TESS",
     observatory: "NASA Explorer Mission",
-    location: "Low-Earth orbit (highly elliptical)",
+    location: "Highly elliptical 13.7-day lunar-resonant Earth orbit",
     country: "USA / International",
     band: "Optical (600–1000 nm)",
     wavelength: "Broad-band red-optical (Ic-like)",
@@ -114,7 +114,7 @@ export const facilities: Facility[] = [
     purpose:
       "All-sky high-cadence photometric survey of bright nearby stars for exoplanets and stellar variability.",
     role:
-      "Primary source of high-cadence light curves for M-dwarf rotation, starspots and flare statistics.",
+      "Space-based high-cadence photometry used to study flares, starspots, rotation and variability in active low-mass stars.",
     capability:
       "2-minute and 20-second cadence photometry, ideal for detecting flares, quasi-periodic pulsations and rotational modulation.",
     relatedAreas: [
@@ -143,7 +143,7 @@ export const facilityGroups = [
     id: "radio",
     label: "Radio Observatories",
     description:
-      "Metre-wavelength interferometric facilities used to search for coherent magnetic emission from M-dwarfs.",
+      "Metre-wavelength interferometric facilities used to search for and constrain magnetic radio emission from M-dwarfs.",
   },
   {
     id: "optical-nir",

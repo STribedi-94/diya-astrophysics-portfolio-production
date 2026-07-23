@@ -34,9 +34,9 @@ export const projects: ProjectSummary[] = [
     status: "Published",
     theme: "Radio Astronomy of Cool Stars",
     question:
-      "What is the nature and duty cycle of the coherent radio emission from GJ 1151 at metre wavelengths?",
+      "What constraints do uGMRT observations place on low-frequency radio emission from GJ 1151?",
     motivation:
-      "GJ 1151 is a benchmark quiescent M-dwarf whose coherent radio emission has been proposed as a signature of magnetic star–planet interaction.",
+      "GJ 1151 is a benchmark quiescent M-dwarf whose reported low-frequency radio signal has motivated the search for magnetic star–planet interaction; deeper uGMRT observations test and constrain the emission scenarios.",
     target: "GJ 1151",
     wavelength: "Radio",
     facilities: ["ugmrt"],
@@ -46,7 +46,7 @@ export const projects: ProjectSummary[] = [
       "Multi-epoch monitoring",
     ],
     outcome:
-      "Detection and characterisation of circularly polarised bursts constraining the emission mechanism on GJ 1151.",
+      "Low-frequency uGMRT observations placing constraints on possible coherent radio emission from GJ 1151.",
     areas: [
       "radio-astronomy-of-cool-stars",
       "m-dwarf-magnetic-activity",
@@ -118,7 +118,7 @@ export const projects: ProjectSummary[] = [
     status: "Accepted",
     theme: "Multi-wavelength stellar astrophysics",
     question:
-      "What are the optical flare energetics and radio properties of the M-dwarf GJ 398?",
+      "What do TESS flare detections and uGMRT radio observations reveal or constrain about the magnetic activity of GJ 398?",
     motivation:
       "Combining TESS optical photometry with uGMRT radio observations constrains the magnetic environment of GJ 398.",
     target: "GJ 398",
@@ -130,7 +130,7 @@ export const projects: ProjectSummary[] = [
       "uGMRT radio follow-up",
     ],
     outcome:
-      "Accepted study reporting flare energies and radio constraints for GJ 398.",
+      "Accepted study reporting TESS optical flare detections together with uGMRT radio constraints on the magnetic activity of GJ 398.",
     areas: [
       "m-dwarf-magnetic-activity",
       "stellar-flares",
@@ -146,7 +146,7 @@ export const projects: ProjectSummary[] = [
     status: "Ongoing",
     theme: "Radio Astronomy of Cool Stars",
     question:
-      "Which nearby M-dwarfs show detectable coherent radio emission at uGMRT metre wavelengths?",
+      "Which nearby M-dwarfs show detectable low-frequency radio emission at uGMRT metre wavelengths, and what limits can be placed on non-detections?",
     motivation:
       "A systematic survey builds the statistical sample needed to test whether coherent emission traces star–planet interaction or intrinsic stellar magnetic activity.",
     target: "Sample of nearby M-dwarfs",
@@ -155,10 +155,10 @@ export const projects: ProjectSummary[] = [
     methodology: [
       "uGMRT Band-3 / Band-4 targeted observations",
       "Interferometric imaging",
-      "Dynamic-spectrum searches for coherent bursts",
+      "Dynamic-spectrum searches for possible coherent bursts",
     ],
     outcome:
-      "Ongoing observing programme; results feed into a broader M-dwarf radio-activity picture.",
+      "Ongoing observing programme; results feed into a broader picture of M-dwarf low-frequency radio activity and its constraints.",
     areas: [
       "radio-astronomy-of-cool-stars",
       "m-dwarf-magnetic-activity",

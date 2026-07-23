@@ -405,7 +405,7 @@ function ProjectDossier({ project }: { project: ProjectSummary }) {
                     <li key={p.id}>
                       <Link
                         to="/publications"
-                        hash={p.slug}
+                        hash={`pub-${p.id}`}
                         className="flex items-start gap-2 text-sm text-primary hover:text-foreground"
                       >
                         <ArrowRight className="mt-0.5 h-3.5 w-3.5 shrink-0" />
