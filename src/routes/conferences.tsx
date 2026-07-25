@@ -87,14 +87,26 @@ function useReducedMotion() {
   return r;
 }
 
-// Rough city coordinates for the India-focused conference map (SVG viewBox 0..100 lat/long normalised)
-// Real geographic pins mapped by hand for the specific verified cities.
-const INDIA_CITY_COORDS: Record<string, { x: number; y: number }> = {
-  Kolkata: { x: 78, y: 55 },
-  Goa: { x: 28, y: 70 },
-  Roorkee: { x: 42, y: 30 },
-  Bhimtal: { x: 48, y: 30 },
+// Real geographic coordinates (lon, lat) for the India map. Cities are only
+// mapped when they correspond to a verified in-person conference venue.
+// Projection is applied at render time using the same bounds as the SVG paths.
+const INDIA_CITY_COORDS: Record<string, { lon: number; lat: number }> = {
+  Kolkata: { lon: 88.36, lat: 22.57 },
+  Goa: { lon: 73.87, lat: 15.30 },
+  Roorkee: { lon: 77.89, lat: 29.87 },
+  Bhimtal: { lon: 79.56, lat: 29.35 },
 };
+
+// Projection bounds — MUST match those used to generate india-states.json
+const MAP_BOUNDS = { minLon: 68.0, maxLon: 97.5, minLat: 6.5, maxLat: 35.7 };
+const MAP_W = 800;
+const MAP_H = 900;
+function projectLonLat(lon: number, lat: number) {
+  const x = ((lon - MAP_BOUNDS.minLon) / (MAP_BOUNDS.maxLon - MAP_BOUNDS.minLon)) * MAP_W;
+  const y = MAP_H - ((lat - MAP_BOUNDS.minLat) / (MAP_BOUNDS.maxLat - MAP_BOUNDS.minLat)) * MAP_H;
+  return { x, y };
+}
+
 
 // Publication slug → title lookup for cross-links
 const pubTitleBySlug = Object.fromEntries(
