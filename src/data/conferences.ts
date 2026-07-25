@@ -368,6 +368,11 @@ export const conferenceInstitutions = Array.from(
 export const conferenceStats = {
   total: conferenceRecords.length,
   oral: conferenceRecords.filter((c) => c.type === "Oral Presentation").length,
+  // Individual talks: Bose Fest 2025 is one conference record containing TWO
+  // distinct oral presentations; every other oral record contributes one talk.
+  oralTalks:
+    conferenceRecords.filter((c) => c.type === "Oral Presentation").length +
+    (conferenceRecords.some((c) => c.id === "bose-fest-2025") ? 1 : 0),
   poster: conferenceRecords.filter((c) => c.type === "Poster Presentation").length,
   workshops: conferenceRecords.filter((c) => c.type === "Workshop").length,
   online: conferenceRecords.filter((c) => c.type === "Online Participation").length,
@@ -377,6 +382,7 @@ export const conferenceStats = {
   locations: conferenceLocations.length,
   featured: conferenceRecords.filter((c) => c.featured).length,
 };
+
 
 export function galleryForConference(rec: ConferenceRecord) {
   if (!rec.galleryIds) return [];
