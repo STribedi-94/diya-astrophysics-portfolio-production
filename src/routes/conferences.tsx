@@ -953,7 +953,7 @@ function PosterExhibitionHall({
       id="poster-presentations"
       eyebrow="Exhibition"
       title="Poster Exhibition Hall"
-      intro="A curated digital exhibition of Diya Ram's peer-reviewed conference posters, with links to Gallery previews and related publications."
+      intro="A curated digital exhibition of Diya Ram's accepted conference poster presentations, with links to Gallery previews and related publications."
       tone="steel"
     >
       <div className="grid gap-6 md:grid-cols-2">
