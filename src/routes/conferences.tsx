@@ -484,16 +484,18 @@ function ForumEntrance({ reduced }: { reduced: boolean }) {
 
 function ForumDashboard() {
   const metrics = [
-    { label: "Total Conferences", value: conferenceStats.total, icon: LayoutList, hint: "Verified records from CV" },
-    { label: "Oral Presentations", value: conferenceStats.oral, icon: Mic, hint: "Talks delivered in person" },
-    { label: "Poster Presentations", value: conferenceStats.poster, icon: Presentation, hint: "Peer-reviewed poster sessions" },
-    { label: "Workshops", value: conferenceStats.workshops, icon: Workflow, hint: "Advanced technical training" },
-    { label: "Online Participation", value: conferenceStats.online, icon: Globe, hint: "Virtual / hybrid meetings" },
-    { label: "LOC Roles", value: conferenceStats.organiser, icon: Building2, hint: "Organising committee" },
-    { label: "Institutions & Organisers", value: conferenceStats.institutions, icon: Building2, hint: "Distinct organising bodies" },
-    { label: "Cities / Venues", value: conferenceStats.locations, icon: MapPin, hint: "Including online venues" },
+    { label: "Verified Conference Records", value: conferenceStats.total, icon: LayoutList, hint: "Distinct events attended" },
+    { label: "Oral Presentation Events", value: conferenceStats.oral, icon: Mic, hint: "Conferences with oral contributions" },
+    { label: "Individual Oral Talks", value: conferenceStats.oralTalks, icon: Mic, hint: "Bose Fest 2025 delivered two talks" },
+    { label: "Scientific Poster Presentations", value: conferenceStats.poster, icon: Presentation, hint: "Accepted conference posters" },
+    { label: "Workshops Attended", value: conferenceStats.workshops, icon: Workflow, hint: "Advanced technical training" },
+    { label: "Online Participation", value: conferenceStats.online, icon: Globe, hint: "Virtual and hybrid meetings" },
+    { label: "Organising Committee Roles", value: conferenceStats.organiser, icon: Building2, hint: "Local Organising Committee" },
+    { label: "Organising Institutions", value: conferenceStats.institutions, icon: Building2, hint: "Distinct organising bodies" },
+    { label: "Cities & Venues", value: conferenceStats.locations, icon: MapPin, hint: "Including online participation" },
     { label: "Years of Participation", value: conferenceStats.years, icon: Timer, hint: `${Math.min(...conferenceYears)}–${Math.max(...conferenceYears)}` },
   ].filter((m) => m.value > 0);
+
 
   return (
     <SectionShell
