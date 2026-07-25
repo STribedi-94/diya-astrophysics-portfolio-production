@@ -439,10 +439,11 @@ function ForumEntrance({ reduced }: { reduced: boolean }) {
         <dl className="mt-8 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
           {[
             { k: "Years", v: `${Math.min(...conferenceYears)}–${Math.max(...conferenceYears)}` },
-            { k: "Records", v: conferenceStats.total },
-            { k: "Oral talks", v: conferenceStats.oral },
+            { k: "Conference Records", v: conferenceStats.total },
+            { k: "Oral Talks", v: conferenceStats.oralTalks },
             { k: "Posters", v: conferenceStats.poster },
           ].map((s) => (
+
             <div
               key={s.k}
               className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 backdrop-blur-sm"
