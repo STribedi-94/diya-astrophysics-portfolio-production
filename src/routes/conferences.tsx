@@ -87,14 +87,26 @@ function useReducedMotion() {
   return r;
 }
 
-// Rough city coordinates for the India-focused conference map (SVG viewBox 0..100 lat/long normalised)
-// Real geographic pins mapped by hand for the specific verified cities.
-const INDIA_CITY_COORDS: Record<string, { x: number; y: number }> = {
-  Kolkata: { x: 78, y: 55 },
-  Goa: { x: 28, y: 70 },
-  Roorkee: { x: 42, y: 30 },
-  Bhimtal: { x: 48, y: 30 },
+// Real geographic coordinates (lon, lat) for the India map. Cities are only
+// mapped when they correspond to a verified in-person conference venue.
+// Projection is applied at render time using the same bounds as the SVG paths.
+const INDIA_CITY_COORDS: Record<string, { lon: number; lat: number }> = {
+  Kolkata: { lon: 88.36, lat: 22.57 },
+  Goa: { lon: 73.87, lat: 15.30 },
+  Roorkee: { lon: 77.89, lat: 29.87 },
+  Bhimtal: { lon: 79.56, lat: 29.35 },
 };
+
+// Projection bounds — MUST match those used to generate india-states.json
+const MAP_BOUNDS = { minLon: 68.0, maxLon: 97.5, minLat: 6.5, maxLat: 35.7 };
+const MAP_W = 800;
+const MAP_H = 900;
+function projectLonLat(lon: number, lat: number) {
+  const x = ((lon - MAP_BOUNDS.minLon) / (MAP_BOUNDS.maxLon - MAP_BOUNDS.minLon)) * MAP_W;
+  const y = MAP_H - ((lat - MAP_BOUNDS.minLat) / (MAP_BOUNDS.maxLat - MAP_BOUNDS.minLat)) * MAP_H;
+  return { x, y };
+}
+
 
 // Publication slug → title lookup for cross-links
 const pubTitleBySlug = Object.fromEntries(
@@ -427,10 +439,11 @@ function ForumEntrance({ reduced }: { reduced: boolean }) {
         <dl className="mt-8 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
           {[
             { k: "Years", v: `${Math.min(...conferenceYears)}–${Math.max(...conferenceYears)}` },
-            { k: "Records", v: conferenceStats.total },
-            { k: "Oral talks", v: conferenceStats.oral },
+            { k: "Conference Records", v: conferenceStats.total },
+            { k: "Oral Talks", v: conferenceStats.oralTalks },
             { k: "Posters", v: conferenceStats.poster },
           ].map((s) => (
+
             <div
               key={s.k}
               className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 backdrop-blur-sm"
@@ -472,16 +485,18 @@ function ForumEntrance({ reduced }: { reduced: boolean }) {
 
 function ForumDashboard() {
   const metrics = [
-    { label: "Total Conferences", value: conferenceStats.total, icon: LayoutList, hint: "Verified records from CV" },
-    { label: "Oral Presentations", value: conferenceStats.oral, icon: Mic, hint: "Talks delivered in person" },
-    { label: "Poster Presentations", value: conferenceStats.poster, icon: Presentation, hint: "Peer-reviewed poster sessions" },
-    { label: "Workshops", value: conferenceStats.workshops, icon: Workflow, hint: "Advanced technical training" },
-    { label: "Online Participation", value: conferenceStats.online, icon: Globe, hint: "Virtual / hybrid meetings" },
-    { label: "LOC Roles", value: conferenceStats.organiser, icon: Building2, hint: "Organising committee" },
-    { label: "Institutions & Organisers", value: conferenceStats.institutions, icon: Building2, hint: "Distinct organising bodies" },
-    { label: "Cities / Venues", value: conferenceStats.locations, icon: MapPin, hint: "Including online venues" },
+    { label: "Verified Conference Records", value: conferenceStats.total, icon: LayoutList, hint: "Distinct events attended" },
+    { label: "Oral Presentation Events", value: conferenceStats.oral, icon: Mic, hint: "Conferences with oral contributions" },
+    { label: "Individual Oral Talks", value: conferenceStats.oralTalks, icon: Mic, hint: "Bose Fest 2025 delivered two talks" },
+    { label: "Scientific Poster Presentations", value: conferenceStats.poster, icon: Presentation, hint: "Accepted conference posters" },
+    { label: "Workshops Attended", value: conferenceStats.workshops, icon: Workflow, hint: "Advanced technical training" },
+    { label: "Online Participation", value: conferenceStats.online, icon: Globe, hint: "Virtual and hybrid meetings" },
+    { label: "Organising Committee Roles", value: conferenceStats.organiser, icon: Building2, hint: "Local Organising Committee" },
+    { label: "Organising Institutions", value: conferenceStats.institutions, icon: Building2, hint: "Distinct organising bodies" },
+    { label: "Cities & Venues", value: conferenceStats.locations, icon: MapPin, hint: "Including online participation" },
     { label: "Years of Participation", value: conferenceStats.years, icon: Timer, hint: `${Math.min(...conferenceYears)}–${Math.max(...conferenceYears)}` },
   ].filter((m) => m.value > 0);
+
 
   return (
     <SectionShell
@@ -938,7 +953,7 @@ function PosterExhibitionHall({
       id="poster-presentations"
       eyebrow="Exhibition"
       title="Poster Exhibition Hall"
-      intro="A curated digital exhibition of Diya Ram's peer-reviewed conference posters, with links to Gallery previews and related publications."
+      intro="A curated digital exhibition of Diya Ram's accepted conference poster presentations, with links to Gallery previews and related publications."
       tone="steel"
     >
       <div className="grid gap-6 md:grid-cols-2">
@@ -1017,6 +1032,8 @@ function PosterExhibitionHall({
 
 // ---------- 7. Conference Map (India-focused SVG) ----------
 
+import indiaStates from "@/data/india-states.json";
+
 function ConferenceMap({
   openDossier,
 }: {
@@ -1036,65 +1053,134 @@ function ConferenceMap({
   }, [inCountryRecords]);
 
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
-  const selectedRecords = selectedCity ? cityGroups.find((c) => c[0] === selectedCity)?.[1] ?? [] : [];
+  const [hoverCity, setHoverCity] = useState<string | null>(null);
+  const selectedRecords = selectedCity
+    ? cityGroups.find((c) => c[0] === selectedCity)?.[1] ?? []
+    : [];
 
   return (
     <SectionShell
       id="conference-map"
       eyebrow="Cartography"
       title="Scientific Conference Map"
-      intro="Verified in-person conference venues across India. Online meetings are listed alongside the map for completeness."
+      intro="Verified in-person conference venues across India, rendered on a geographically accurate state-boundary outline. Online meetings are listed alongside the map for completeness."
     >
       <div className="grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
         <MetalPanel className="relative overflow-hidden p-4">
-          <svg viewBox="0 0 100 100" className="h-auto w-full">
-            {/* Simplified India outline */}
-            <path
-              d="M35,10 C48,8 60,12 68,20 C72,28 70,38 72,46 C74,54 72,62 66,70 C58,80 48,90 40,88 C30,84 22,74 20,60 C18,48 22,36 28,26 C30,20 32,14 35,10 Z"
-              fill="oklch(0.14 0.03 260 / 0.6)"
-              stroke="oklch(0.65 0.10 220 / 0.5)"
-              strokeWidth="0.4"
-            />
-            {/* pins */}
+          <svg
+            viewBox={`0 0 ${MAP_W} ${MAP_H}`}
+            className="h-auto w-full"
+            role="img"
+            aria-label="Geographic map of India showing verified conference venues"
+          >
+            <defs>
+              <radialGradient id="mapGlow" cx="50%" cy="50%" r="60%">
+                <stop offset="0%" stopColor="oklch(0.55 0.10 220 / 0.18)" />
+                <stop offset="100%" stopColor="transparent" />
+              </radialGradient>
+              <filter id="pinGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="6" />
+              </filter>
+            </defs>
+            <rect width={MAP_W} height={MAP_H} fill="url(#mapGlow)" />
+            {/* States */}
+            <g fill="oklch(0.14 0.03 260 / 0.55)" stroke="oklch(0.65 0.10 220 / 0.55)" strokeWidth="0.8" strokeLinejoin="round">
+              {(indiaStates as { n: string; d: string }[]).map((s) => (
+                <path key={s.n} d={s.d}>
+                  <title>{s.n}</title>
+                </path>
+              ))}
+            </g>
+            {/* Constellation lines between verified venues */}
+            <g stroke="oklch(0.80 0.14 210 / 0.25)" strokeWidth="1" strokeDasharray="3 4" fill="none">
+              {cityGroups.map(([c1], i) =>
+                cityGroups.slice(i + 1).map(([c2]) => {
+                  const p1 = projectLonLat(INDIA_CITY_COORDS[c1].lon, INDIA_CITY_COORDS[c1].lat);
+                  const p2 = projectLonLat(INDIA_CITY_COORDS[c2].lon, INDIA_CITY_COORDS[c2].lat);
+                  return <line key={`${c1}-${c2}`} x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} />;
+                }),
+              )}
+            </g>
+            {/* Pins */}
             {cityGroups.map(([city, recs]) => {
               const c = INDIA_CITY_COORDS[city];
-              if (!c) return null;
-              const active = selectedCity === city;
+              const { x, y } = projectLonLat(c.lon, c.lat);
+              const active = selectedCity === city || hoverCity === city;
               return (
-                <g key={city} className="cursor-pointer" onClick={() => setSelectedCity(city)}>
+                <g
+                  key={city}
+                  className="cursor-pointer"
+                  onClick={() => setSelectedCity(city === selectedCity ? null : city)}
+                  onMouseEnter={() => setHoverCity(city)}
+                  onMouseLeave={() => setHoverCity(null)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`${city} — ${recs.length} conference record${recs.length === 1 ? "" : "s"}`}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setSelectedCity(city === selectedCity ? null : city);
+                    }
+                  }}
+                >
+                  <circle cx={x} cy={y} r={active ? 26 : 18} fill="oklch(0.80 0.14 210 / 0.35)" filter="url(#pinGlow)" />
+                  <circle cx={x} cy={y} r={active ? 10 : 7} fill="oklch(0.80 0.14 210 / 0.25)" />
                   <circle
-                    cx={c.x}
-                    cy={c.y}
-                    r={active ? 3.2 : 2.2}
-                    fill="oklch(0.80 0.14 210)"
-                    className={active ? "" : "anim-pulse-slow"}
-                    opacity="0.9"
-                  />
-                  <circle
-                    cx={c.x}
-                    cy={c.y}
+                    cx={x}
+                    cy={y}
                     r={active ? 6 : 4.5}
-                    fill="oklch(0.80 0.14 210 / 0.15)"
+                    fill="oklch(0.85 0.16 210)"
+                    className={active ? "" : "anim-pulse-slow"}
                   />
                   <text
-                    x={c.x + 4}
-                    y={c.y + 1}
-                    fontSize="2.6"
-                    fill="oklch(0.95 0.02 240)"
-                    className="font-mono"
+                    x={x + 12}
+                    y={y - 8}
+                    fontSize="18"
+                    fontWeight="700"
+                    fill="oklch(0.97 0.02 240)"
+                    stroke="oklch(0.05 0.02 260)"
+                    strokeWidth="3"
+                    paintOrder="stroke"
+                    className="font-display select-none"
                   >
-                    {city} · {recs.length}
+                    {city}
+                  </text>
+                  <text
+                    x={x + 12}
+                    y={y + 12}
+                    fontSize="13"
+                    fill="oklch(0.80 0.14 210)"
+                    stroke="oklch(0.05 0.02 260)"
+                    strokeWidth="2.5"
+                    paintOrder="stroke"
+                    className="font-mono select-none"
+                  >
+                    {recs.length} record{recs.length === 1 ? "" : "s"}
                   </text>
                 </g>
               );
             })}
           </svg>
+          {hoverCity && (
+            <div className="pointer-events-none absolute left-4 top-4 rounded-lg border border-white/15 bg-black/70 px-3 py-2 text-xs backdrop-blur">
+              <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary/80">{hoverCity}</div>
+              <ul className="mt-1 space-y-0.5">
+                {(cityGroups.find((c) => c[0] === hoverCity)?.[1] ?? []).map((r) => (
+                  <li key={r.id} className="text-foreground/90">
+                    {r.year} · {r.acronym ?? r.event} — <span className="text-primary/80">{r.type}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </MetalPanel>
 
         {/* Accessible list alternative */}
         <div className="space-y-3">
           <div className="text-[11px] uppercase tracking-[0.22em] text-primary/80 font-mono">
-            {selectedCity ? `${selectedCity} · ${selectedRecords.length} record${selectedRecords.length === 1 ? "" : "s"}` : "All in-person venues"}
+            {selectedCity
+              ? `${selectedCity} · ${selectedRecords.length} record${selectedRecords.length === 1 ? "" : "s"}`
+              : "All in-person venues"}
           </div>
           <ul className="space-y-2">
             {(selectedCity ? selectedRecords : inCountryRecords).map((r) => (
@@ -1137,6 +1223,7 @@ function ConferenceMap({
     </SectionShell>
   );
 }
+
 
 // ---------- 8. Collaboration Constellation ----------
 
