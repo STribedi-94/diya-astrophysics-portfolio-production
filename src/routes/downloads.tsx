@@ -1309,10 +1309,10 @@ function ArchiveEmblem() {
           return (
             <line
               key={i}
-              x1={150 + Math.cos(a) * 56}
-              y1={150 + Math.sin(a) * 56}
-              x2={150 + Math.cos(a) * 84}
-              y2={150 + Math.sin(a) * 84}
+              x1={(150 + Math.cos(a) * 56).toFixed(2)}
+              y1={(150 + Math.sin(a) * 56).toFixed(2)}
+              x2={(150 + Math.cos(a) * 84).toFixed(2)}
+              y2={(150 + Math.sin(a) * 84).toFixed(2)}
               stroke="oklch(0.96 0.01 250 / 0.15)"
               strokeWidth="1"
             />
@@ -1324,8 +1324,8 @@ function ArchiveEmblem() {
           return (
             <text
               key={l}
-              x={150 + Math.cos(a) * 108}
-              y={150 + Math.sin(a) * 108}
+              x={(150 + Math.cos(a) * 108).toFixed(2)}
+              y={(150 + Math.sin(a) * 108).toFixed(2)}
               textAnchor="middle"
               className="fill-[oklch(0.74_0.03_250)] font-mono"
               fontSize="7.5"
