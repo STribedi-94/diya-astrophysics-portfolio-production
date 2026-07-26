@@ -311,7 +311,7 @@ function DownloadsPage() {
       <DocumentViewer record={viewerRecord} onOpenChange={closeViewer} />
 
       {/* ============================================================ HERO */}
-      <section className="relative isolate overflow-hidden pb-16 pt-28 md:min-h-[88dvh] md:pt-36">
+      <section className="relative isolate overflow-hidden pb-16 pt-28 md:min-h-[760px] md:pt-36">
         <img
           src={heroImage.url}
           alt="The Hubble Ultra Deep Field — thousands of distant galaxies across a dark region of sky."
