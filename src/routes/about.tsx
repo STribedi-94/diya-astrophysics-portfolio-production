@@ -1096,7 +1096,7 @@ function About() {
               Academic Journey
             </Link>
             <Link
-              to="/contact"
+              to="/contact" hash="contact-form"
               className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-all hover:brightness-110"
             >
               Contact Diya

@@ -201,7 +201,7 @@ function Home() {
             </div>
             <div className="flex flex-wrap gap-3 md:justify-end">
               <Link
-                to="/contact"
+                to="/contact" hash="contact-form"
                 className="inline-flex items-center gap-2 rounded-full bg-grad-accent px-5 py-3 text-sm font-medium text-[oklch(0.12_0.04_265)]"
               >
                 Contact Diya <ArrowRight className="h-4 w-4" />
