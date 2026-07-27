@@ -37,9 +37,10 @@ export async function submitContactEnquiry(
       signal,
     });
 
-    let data: { message?: string; error?: string } | null = null;
+    type ContactResponseBody = { message?: string; error?: string };
+    let data: ContactResponseBody | null = null;
     try {
-      data = (await response.clone().json()) as typeof data;
+      data = (await response.clone().json()) as ContactResponseBody;
     } catch {
       data = null;
     }
