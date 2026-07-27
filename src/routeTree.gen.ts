@@ -18,7 +18,6 @@ import { Route as PublicationsRouteImport } from './routes/publications'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ObservationsRouteImport } from './routes/observations'
-import { Route as NewsRouteImport } from './routes/news'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as FacilitiesRouteImport } from './routes/facilities'
 import { Route as DownloadsRouteImport } from './routes/downloads'
@@ -27,6 +26,7 @@ import { Route as ConferencesRouteImport } from './routes/conferences'
 import { Route as AcademicJourneyRouteImport } from './routes/academic-journey'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as NewsIndexRouteImport } from './routes/news.index'
 import { Route as ResearchSlugRouteImport } from './routes/research.$slug'
 import { Route as PublicationsSlugRouteImport } from './routes/publications.$slug'
 import { Route as ProjectsSlugRouteImport } from './routes/projects.$slug'
@@ -78,11 +78,6 @@ const ObservationsRoute = ObservationsRouteImport.update({
   path: '/observations',
   getParentRoute: () => rootRouteImport,
 } as any)
-const NewsRoute = NewsRouteImport.update({
-  id: '/news',
-  path: '/news',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const GalleryRoute = GalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
@@ -123,6 +118,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NewsIndexRoute = NewsIndexRouteImport.update({
+  id: '/news/',
+  path: '/news/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResearchSlugRoute = ResearchSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -139,9 +139,9 @@ const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
   getParentRoute: () => ProjectsRoute,
 } as any)
 const NewsSlugRoute = NewsSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => NewsRoute,
+  id: '/news/$slug',
+  path: '/news/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const FacilitiesSlugRoute = FacilitiesSlugRouteImport.update({
   id: '/$slug',
@@ -158,7 +158,6 @@ export interface FileRoutesByFullPath {
   '/downloads': typeof DownloadsRoute
   '/facilities': typeof FacilitiesRouteWithChildren
   '/gallery': typeof GalleryRoute
-  '/news': typeof NewsRouteWithChildren
   '/observations': typeof ObservationsRoute
   '/privacy': typeof PrivacyRoute
   '/projects': typeof ProjectsRouteWithChildren
@@ -173,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/projects/$slug': typeof ProjectsSlugRoute
   '/publications/$slug': typeof PublicationsSlugRoute
   '/research/$slug': typeof ResearchSlugRoute
+  '/news/': typeof NewsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -183,7 +183,6 @@ export interface FileRoutesByTo {
   '/downloads': typeof DownloadsRoute
   '/facilities': typeof FacilitiesRouteWithChildren
   '/gallery': typeof GalleryRoute
-  '/news': typeof NewsRouteWithChildren
   '/observations': typeof ObservationsRoute
   '/privacy': typeof PrivacyRoute
   '/projects': typeof ProjectsRouteWithChildren
@@ -198,6 +197,7 @@ export interface FileRoutesByTo {
   '/projects/$slug': typeof ProjectsSlugRoute
   '/publications/$slug': typeof PublicationsSlugRoute
   '/research/$slug': typeof ResearchSlugRoute
+  '/news': typeof NewsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -209,7 +209,6 @@ export interface FileRoutesById {
   '/downloads': typeof DownloadsRoute
   '/facilities': typeof FacilitiesRouteWithChildren
   '/gallery': typeof GalleryRoute
-  '/news': typeof NewsRouteWithChildren
   '/observations': typeof ObservationsRoute
   '/privacy': typeof PrivacyRoute
   '/projects': typeof ProjectsRouteWithChildren
@@ -224,6 +223,7 @@ export interface FileRoutesById {
   '/projects/$slug': typeof ProjectsSlugRoute
   '/publications/$slug': typeof PublicationsSlugRoute
   '/research/$slug': typeof ResearchSlugRoute
+  '/news/': typeof NewsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -236,7 +236,6 @@ export interface FileRouteTypes {
     | '/downloads'
     | '/facilities'
     | '/gallery'
-    | '/news'
     | '/observations'
     | '/privacy'
     | '/projects'
@@ -251,6 +250,7 @@ export interface FileRouteTypes {
     | '/projects/$slug'
     | '/publications/$slug'
     | '/research/$slug'
+    | '/news/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -261,7 +261,6 @@ export interface FileRouteTypes {
     | '/downloads'
     | '/facilities'
     | '/gallery'
-    | '/news'
     | '/observations'
     | '/privacy'
     | '/projects'
@@ -276,6 +275,7 @@ export interface FileRouteTypes {
     | '/projects/$slug'
     | '/publications/$slug'
     | '/research/$slug'
+    | '/news'
   id:
     | '__root__'
     | '/'
@@ -286,7 +286,6 @@ export interface FileRouteTypes {
     | '/downloads'
     | '/facilities'
     | '/gallery'
-    | '/news'
     | '/observations'
     | '/privacy'
     | '/projects'
@@ -301,6 +300,7 @@ export interface FileRouteTypes {
     | '/projects/$slug'
     | '/publications/$slug'
     | '/research/$slug'
+    | '/news/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -312,7 +312,6 @@ export interface RootRouteChildren {
   DownloadsRoute: typeof DownloadsRoute
   FacilitiesRoute: typeof FacilitiesRouteWithChildren
   GalleryRoute: typeof GalleryRoute
-  NewsRoute: typeof NewsRouteWithChildren
   ObservationsRoute: typeof ObservationsRoute
   PrivacyRoute: typeof PrivacyRoute
   ProjectsRoute: typeof ProjectsRouteWithChildren
@@ -322,6 +321,8 @@ export interface RootRouteChildren {
   SitemapRoute: typeof SitemapRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TeachingRoute: typeof TeachingRoute
+  NewsSlugRoute: typeof NewsSlugRoute
+  NewsIndexRoute: typeof NewsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -389,13 +390,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ObservationsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/news': {
-      id: '/news'
-      path: '/news'
-      fullPath: '/news'
-      preLoaderRoute: typeof NewsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/gallery': {
       id: '/gallery'
       path: '/gallery'
@@ -452,6 +446,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/news/': {
+      id: '/news/'
+      path: '/news'
+      fullPath: '/news/'
+      preLoaderRoute: typeof NewsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/research/$slug': {
       id: '/research/$slug'
       path: '/$slug'
@@ -475,10 +476,10 @@ declare module '@tanstack/react-router' {
     }
     '/news/$slug': {
       id: '/news/$slug'
-      path: '/$slug'
+      path: '/news/$slug'
       fullPath: '/news/$slug'
       preLoaderRoute: typeof NewsSlugRouteImport
-      parentRoute: typeof NewsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/facilities/$slug': {
       id: '/facilities/$slug'
@@ -501,16 +502,6 @@ const FacilitiesRouteChildren: FacilitiesRouteChildren = {
 const FacilitiesRouteWithChildren = FacilitiesRoute._addFileChildren(
   FacilitiesRouteChildren,
 )
-
-interface NewsRouteChildren {
-  NewsSlugRoute: typeof NewsSlugRoute
-}
-
-const NewsRouteChildren: NewsRouteChildren = {
-  NewsSlugRoute: NewsSlugRoute,
-}
-
-const NewsRouteWithChildren = NewsRoute._addFileChildren(NewsRouteChildren)
 
 interface ProjectsRouteChildren {
   ProjectsSlugRoute: typeof ProjectsSlugRoute
@@ -557,7 +548,6 @@ const rootRouteChildren: RootRouteChildren = {
   DownloadsRoute: DownloadsRoute,
   FacilitiesRoute: FacilitiesRouteWithChildren,
   GalleryRoute: GalleryRoute,
-  NewsRoute: NewsRouteWithChildren,
   ObservationsRoute: ObservationsRoute,
   PrivacyRoute: PrivacyRoute,
   ProjectsRoute: ProjectsRouteWithChildren,
@@ -567,6 +557,8 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapRoute: SitemapRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TeachingRoute: TeachingRoute,
+  NewsSlugRoute: NewsSlugRoute,
+  NewsIndexRoute: NewsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
