@@ -134,7 +134,7 @@ function ChroniclePage() {
             { k: "Verified records", v: chronicleStats.totalRecords },
             { k: "Years documented", v: `${chronicleStats.earliestYear}–${chronicleStats.latestYear}` },
             { k: "Publications", v: chronicleStats.totalPublications },
-            { k: "Talks & posters", v: chronicleStats.presentations },
+            { k: "Presentation records", v: chronicleStats.presentations },
           ].map((s) => (
             <div key={s.k} className="glass rounded-xl px-4 py-3">
               <dt className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{s.k}</dt>

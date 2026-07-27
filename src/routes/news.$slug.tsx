@@ -98,11 +98,14 @@ function ChronicleEntry() {
   const sameCategory = chronicleRecords
     .filter((r) => r.category === record.category && r.id !== record.id)
     .slice(0, 3);
-  const terms = Object.entries(glossary).filter(([term]) =>
-    `${record.title} ${record.summary} ${(record.fullStory ?? []).join(" ")}`
-      .toLowerCase()
-      .includes(term.toLowerCase()),
-  );
+  const haystack = `${record.title} ${record.summary} ${(record.fullStory ?? []).join(" ")}`.toLowerCase();
+  const seenDefinitions = new Set<string>();
+  const terms = Object.entries(glossary).filter(([term, definition]) => {
+    if (!haystack.includes(term.toLowerCase())) return false;
+    if (seenDefinitions.has(definition)) return false;
+    seenDefinitions.add(definition);
+    return true;
+  });
 
   return (
     <article>

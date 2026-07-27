@@ -39,7 +39,7 @@ export function ChronicleNavigator({ sections }: { sections: NavSection[] }) {
       {/* Desktop rail */}
       <nav
         aria-label="Chronicle sections"
-        className="pointer-events-none fixed right-6 top-1/2 z-40 hidden -translate-y-1/2 xl:block"
+        className="pointer-events-none fixed right-6 top-1/2 z-40 hidden -translate-y-1/2 2xl:block"
       >
         <ul className="pointer-events-auto glass rounded-2xl p-2">
           {sections.map((s) => {
@@ -70,7 +70,7 @@ export function ChronicleNavigator({ sections }: { sections: NavSection[] }) {
       </nav>
 
       {/* Mobile bottom sheet */}
-      <div className="fixed inset-x-0 bottom-4 z-40 flex justify-center px-4 xl:hidden">
+      <div className="fixed inset-x-0 bottom-4 z-40 flex justify-center px-4 2xl:hidden">
         {open ? (
           <div className="glass-strong w-full max-w-md rounded-2xl p-3">
             <div className="mb-2 flex items-center justify-between px-1">
