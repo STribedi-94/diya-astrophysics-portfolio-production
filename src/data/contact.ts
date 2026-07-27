@@ -7,7 +7,7 @@ export const contactIdentity = {
   department: "Department of Astrophysics and High Energy Physics",
   institution: "S. N. Bose National Centre for Basic Sciences",
   location: "Salt Lake, Kolkata, West Bengal, India",
-  email: "diya.ram@bose.res.in",
+  email: "ramdiya1996@gmail.com",
   emailSubject: "Academic enquiry via astrophysics portfolio",
 } as const;
 
