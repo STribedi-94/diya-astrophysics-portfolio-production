@@ -220,7 +220,7 @@ function ChroniclePage() {
       >
         <div className="relative">
           <span
-            className="pointer-events-none absolute -inset-x-6 -inset-y-8 -z-10 rounded-[2rem] opacity-50 blur-3xl"
+            className="pointer-events-none absolute inset-x-0 -inset-y-8 -z-10 sm:-inset-x-6 rounded-[2rem] opacity-50 blur-3xl"
             style={{ background: "radial-gradient(closest-side, var(--nebula), transparent 75%)" }}
             aria-hidden
           />
