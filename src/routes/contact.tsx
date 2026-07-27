@@ -74,24 +74,34 @@ function ContactCard() {
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
 
   const copy = async () => {
+    let done = false;
     try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(email);
-      } else {
+      await navigator.clipboard.writeText(email);
+      done = true;
+    } catch {
+      done = false;
+    }
+    if (!done) {
+      try {
         const el = document.createElement("textarea");
         el.value = email;
+        el.setAttribute("readonly", "");
+        el.style.position = "fixed";
+        el.style.opacity = "0";
         document.body.appendChild(el);
         el.select();
-        document.execCommand("copy");
+        done = document.execCommand("copy");
         el.remove();
+      } catch {
+        done = false;
       }
-      setCopied(true);
-      if (timer.current) clearTimeout(timer.current);
-      timer.current = setTimeout(() => setCopied(false), 2200);
-    } catch {
-      setCopied(false);
     }
+    if (!done) return;
+    setCopied(true);
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => setCopied(false), 2200);
   };
+
 
   const rows = [
     { icon: UserRound, label: "Position", value: contactIdentity.position },
