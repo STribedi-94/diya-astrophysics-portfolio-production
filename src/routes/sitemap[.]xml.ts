@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { researchAreas } from "@/data/research";
 import { facilities } from "@/data/facilities";
-import { projects, news, publications } from "@/data/misc";
+import { projects, publications } from "@/data/misc";
+import { chronicleRecords } from "@/data/chronicle";
 
 const BASE_URL = "";
 
@@ -21,7 +22,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           ...researchAreas.map((a) => ({ path: `/research/${a.slug}` })),
           ...facilities.map((f) => ({ path: `/facilities/${f.slug}` })),
           ...projects.map((p) => ({ path: `/projects/${p.slug}` })),
-          ...news.map((n) => ({ path: `/news/${n.slug}` })),
+          ...chronicleRecords.map((n) => ({ path: `/news/${n.slug}` })),
           ...publications.map((p) => ({ path: `/publications/${p.slug}` })),
         ];
         const urls = entries.map((e) =>
