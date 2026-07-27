@@ -880,8 +880,28 @@ export function phaseForYear(year: number): CareerPhase | undefined {
 
 /* ------------------------------------------------ current mission status */
 
+export type MissionStatusGroup =
+  | "Active Research"
+  | "Publications"
+  | "Thesis"
+  | "Peer Review"
+  | "Collaborations"
+  | "Applications"
+  | "Future Goals";
+
+export const missionStatusGroups: MissionStatusGroup[] = [
+  "Active Research",
+  "Publications",
+  "Thesis",
+  "Peer Review",
+  "Collaborations",
+  "Applications",
+  "Future Goals",
+];
+
 export type MissionStatusModule = {
   id: string;
+  group: MissionStatusGroup;
   label: string;
   title: string;
   description: string;
@@ -893,6 +913,7 @@ export type MissionStatusModule = {
 export const missionStatus: MissionStatusModule[] = [
   {
     id: "role",
+    group: "Active Research",
     label: "Current academic role",
     title: `${aboutIdentity.role} · ${aboutIdentity.institution}`,
     description: aboutIdentity.primaryStatement,
@@ -902,6 +923,7 @@ export const missionStatus: MissionStatusModule[] = [
   },
   {
     id: "focus",
+    group: "Active Research",
     label: "Active research focus",
     title: "Magnetic activity of M-dwarf stars across optical, spectroscopic and radio wavelengths",
     description:
@@ -911,34 +933,8 @@ export const missionStatus: MissionStatusModule[] = [
     link: { to: "/research", label: "Research themes" },
   },
   {
-    id: "latest-paper",
-    label: "Latest publication",
-    title: publicationChronicle[0]?.title ?? "",
-    description: publicationChronicle[0]?.summary ?? "",
-    date: publicationChronicle[0]?.dateLabel ?? "",
-    status: "Published",
-    link: { to: "/publications", label: "All publications" },
-  },
-  {
-    id: "accepted",
-    label: "Manuscript in press",
-    title: "Probing the Magnetic Activity of GJ 398 through TESS Flare Detection and uGMRT Radio Observations",
-    description: "Accepted by The Astrophysical Journal. The final DOI will be linked once the article is released.",
-    date: "Accepted",
-    status: "Accepted",
-    link: { to: "/publications/$slug", params: { slug: "gj-398-flares-radio" }, label: "Publication record" },
-  },
-  {
-    id: "thesis",
-    label: "Latest thesis milestone",
-    title: "Final hard-copy thesis submitted to the University of Calcutta",
-    description: "Formal submission requirements complete; the thesis is under examination ahead of the defence.",
-    date: "9 July 2026",
-    status: "Completed",
-    link: { to: "/academic-journey", label: "Academic journey" },
-  },
-  {
     id: "observing",
+    group: "Active Research",
     label: "Observing programme",
     title: "Principal investigator on uGMRT, HCT and DOT programmes",
     description:
@@ -947,31 +943,161 @@ export const missionStatus: MissionStatusModule[] = [
     status: "Active",
     link: { to: "/observations", label: "Observing programme" },
   },
+  {
+    id: "latest-paper",
+    group: "Publications",
+    label: "Latest publication",
+    title: publicationChronicle[0]?.title ?? "",
+    description: publicationChronicle[0]?.summary ?? "",
+    date: publicationChronicle[0]?.dateLabel ?? "",
+    status: "Published",
+    link: { to: "/publications", label: "All publications" },
+  },
+  {
+    id: "record",
+    group: "Publications",
+    label: "Publication record",
+    title: `${publicationsArchive.length} refereed papers and proceedings`,
+    description: `${firstAuthorCount} first-author and ${collaborativeCount} collaborative contributions, all indexed with DOI or ADS records in the Research Vault.`,
+    date: `${Math.min(...publicationsArchive.map((p) => p.year))}–${Math.max(...publicationsArchive.map((p) => p.year))}`,
+    status: "Published",
+    link: { to: "/downloads", label: "Research Vault" },
+  },
+  {
+    id: "thesis",
+    group: "Thesis",
+    label: "Latest thesis milestone",
+    title: "Final hard-copy thesis submitted to the University of Calcutta",
+    description: "Formal submission requirements complete; the thesis is under examination ahead of the defence.",
+    date: "9 July 2026",
+    status: "Completed",
+    link: { to: "/academic-journey", label: "Academic journey" },
+  },
+  {
+    id: "defence",
+    group: "Thesis",
+    label: "Next thesis step",
+    title: "Doctoral defence awaiting scheduling",
+    description:
+      "The thesis is with the examiners. The University of Calcutta will schedule the viva; no date has been announced.",
+    date: "Date to be announced",
+    status: "In Progress",
+    link: { to: "/news/$slug", params: { slug: "doctoral-thesis-defence" }, label: "Defence record" },
+  },
+  {
+    id: "peer-review",
+    group: "Peer Review",
+    label: "Academic service",
+    title: "Referee for an American Astronomical Society journal",
+    description:
+      "Reviewed a manuscript on the magnetic activity of ultracool dwarfs in the LAMOST DR11 sample. Referee content remains confidential.",
+    date: "2025",
+    status: "Completed",
+    link: { to: "/news/$slug", params: { slug: "aas-journal-manuscript-review" }, label: "Peer review record" },
+  },
+  {
+    id: "collaborations",
+    group: "Collaborations",
+    label: "Research collaborations",
+    title: "Multi-institution M-dwarf activity collaboration",
+    description:
+      "Working with colleagues at S. N. Bose National Centre for Basic Sciences, IIST and ARIES on optical, near-infrared and radio observations of low-mass stars.",
+    date: "Ongoing",
+    status: "Active",
+    link: { to: "/publications", label: "Co-authored work" },
+  },
+  {
+    id: "mentoring",
+    group: "Collaborations",
+    label: "Mentoring",
+    title: "Two Master's-level Summer Research Programme projects supervised",
+    description:
+      "Mentored Rishav De and Sristi Ganguly through observational data-analysis projects, passing on the methods developed during the doctoral programme.",
+    date: "2026",
+    status: "Completed",
+    link: { to: "/teaching", label: "Teaching & mentoring" },
+  },
+  {
+    id: "applications",
+    group: "Applications",
+    label: "Proposals & applications",
+    title: "Competitive telescope-time proposals as principal investigator",
+    description:
+      "Observing proposals to uGMRT, HCT and DOT time-allocation committees, alongside continuing applications for postdoctoral research positions.",
+    date: "Ongoing",
+    status: "In Progress",
+    link: { to: "/contact", label: "Enquiries & collaboration" },
+  },
+  {
+    id: "future",
+    group: "Future Goals",
+    label: "Future scientific goals",
+    title: "Multi-wavelength magnetic activity and its effect on planetary environments",
+    description:
+      "Extending the TESS-plus-radio approach to a larger M-dwarf sample, and connecting flare energetics to star–planet interaction and atmospheric habitability.",
+    date: "Long-term direction",
+    status: "Long-Term Vision",
+    link: { to: "/news/$slug", params: { slug: "continuing-m-dwarf-programme" }, label: "Programme outlook" },
+  },
 ];
 
 /* --------------------------------------------------------- pulse strip */
 
+const PULSE_LABEL: Partial<Record<ChronicleCategory, string>> = {
+  Publications: "Paper published",
+  Conferences: "Presentation delivered",
+  "Thesis & Academic Milestones": "Thesis milestone completed",
+  "Peer Review": "Journal review completed",
+  "Teaching & Mentoring": "Mentoring completed",
+  Career: "Career milestone",
+  Observations: "Observing programme",
+  "Awards & Recognition": "Recognition",
+};
+
 export const researchPulse = datedRecords.slice(0, 10).map((r) => ({
   id: r.id,
   slug: r.slug,
-  label:
-    r.category === "Publications"
-      ? "Paper published"
-      : r.category === "Conferences"
-        ? "Presentation delivered"
-        : r.category === "Thesis & Academic Milestones"
-          ? "Thesis milestone completed"
-          : r.category === "Peer Review"
-            ? "Journal review completed"
-            : r.category === "Teaching & Mentoring"
-              ? "Mentoring completed"
-              : r.category === "Career"
-                ? "Career milestone"
-                : "Archive record",
+  label: PULSE_LABEL[r.category] ?? "Archive record",
+  category: r.category,
   title: r.shortTitle,
   date: r.dateLabel,
+  year: r.year,
   status: r.status,
 }));
+
+/** Rolling activity counters for the pulse dashboard (last 24 months). */
+const NOW_YEAR = Math.max(...chronicleYears);
+const recentRecords = datedRecords.filter((r) => (r.year ?? 0) >= NOW_YEAR - 1);
+
+export const pulseSummary = [
+  {
+    label: "Records logged",
+    value: recentRecords.length,
+    note: `${NOW_YEAR - 1}–${NOW_YEAR}`,
+  },
+  {
+    label: "Papers",
+    value: recentRecords.filter((r) => r.category === "Publications").length,
+    note: "Refereed output",
+  },
+  {
+    label: "Presentations",
+    value: recentRecords.filter((r) => r.category === "Conferences").length,
+    note: "Talks & posters",
+  },
+  {
+    label: "Milestones",
+    value: recentRecords.filter(
+      (r) =>
+        r.category === "Thesis & Academic Milestones" ||
+        r.category === "Career" ||
+        r.category === "Peer Review",
+    ).length,
+    note: "Thesis, career & service",
+  },
+];
+
+
 
 /* --------------------------------------------------- signal to discovery */
 
