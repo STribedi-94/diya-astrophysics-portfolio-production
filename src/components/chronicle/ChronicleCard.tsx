@@ -73,22 +73,29 @@ export function ChronicleCard({
       )}
     >
       {record.image && variant !== "compact" && (
-        <div className={cn("relative overflow-hidden", feature ? "min-h-[260px]" : "aspect-[16/9]")}>
+        <div
+          className={cn(
+            "relative overflow-hidden",
+            feature ? "h-56 sm:h-72 md:h-full md:min-h-[340px]" : "aspect-[16/9]",
+          )}
+        >
           <img
             src={record.image}
             alt={record.imageAlt ?? record.title}
             loading="lazy"
             decoding="async"
             className={cn(
-              "h-full w-full transition-transform duration-700 group-hover:scale-[1.03]",
+              "absolute inset-0 h-full w-full transition-transform duration-700 group-hover:scale-[1.03]",
               record.imageOrientation === "portrait" && !feature
-                ? "object-contain bg-black/40 object-top"
+                ? "bg-black/40 object-contain object-top"
                 : "object-cover",
+              record.imageOrientation === "portrait" && feature ? "object-top" : "",
             )}
           />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
         </div>
       )}
+
 
       <div className={cn("p-5 md:p-6", feature && "flex flex-col justify-center")}>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">

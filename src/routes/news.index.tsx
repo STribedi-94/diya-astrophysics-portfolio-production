@@ -16,7 +16,10 @@ import {
   latestTransmissions,
   upcomingRecords,
   missionStatus,
+  missionStatusGroups,
   researchPulse,
+  pulseSummary,
+
   signalToDiscovery,
   impactMetrics,
   yearSummaries,
@@ -75,6 +78,14 @@ export const Route = createFileRoute("/news/")({
 });
 
 type ViewMode = "story" | "timeline" | "archive";
+
+/** Groups upcoming records into the three publicly meaningful commitment tiers. */
+function upcomingTier(r: ChronicleRecord): "Confirmed" | "In Progress" | "Long-Term Vision" {
+  if (r.status === "Long-Term Vision") return "Long-Term Vision";
+  if (r.status === "In Progress") return "In Progress";
+  return "Confirmed";
+}
+
 
 function ChroniclePage() {
   const [query, setQuery] = useState("");
@@ -152,25 +163,51 @@ function ChroniclePage() {
         id="mission-status"
         eyebrow="Mission control"
         title="Current mission status"
-        intro="Where the research programme stands right now, drawn from verified institutional and publication records."
+        intro="Where the research programme stands right now, grouped by activity and drawn from verified institutional and publication records."
       >
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {missionStatus.map((m) => (
-            <div key={m.id} className="glass flex flex-col rounded-2xl p-5">
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-[10px] uppercase tracking-[0.22em] text-primary/80">{m.label}</span>
-                <StatusBadge status={m.status} />
+        <div className="space-y-8">
+          {missionStatusGroups.map((group) => {
+            const modules = missionStatus.filter((m) => m.group === group);
+            if (modules.length === 0) return null;
+            return (
+              <div key={group}>
+                <div className="mb-3 flex items-center gap-3">
+                  <h3 className="font-mono text-[11px] uppercase tracking-[0.24em] text-primary/80">
+                    {group}
+                  </h3>
+                  <span className="h-px flex-1 bg-gradient-to-r from-white/15 to-transparent" aria-hidden />
+                  <span className="font-mono text-[10px] text-muted-foreground">
+                    {String(modules.length).padStart(2, "0")}
+                  </span>
+                </div>
+                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                  {modules.map((m) => (
+                    <div
+                      key={m.id}
+                      className="glass flex flex-col rounded-2xl p-5 transition-colors duration-300 hover:bg-white/[0.06]"
+                    >
+                      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
+                        <span className="min-w-0 text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+                          {m.label}
+                        </span>
+                        <StatusBadge status={m.status} />
+                      </div>
+                      <h4 className="mt-3 font-display text-base font-semibold leading-snug">{m.title}</h4>
+                      <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
+                        {m.description}
+                      </p>
+                      <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                        {m.date}
+                      </p>
+                      <div className="mt-3">
+                        <RelatedLinks links={[m.link]} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <h3 className="mt-3 font-display text-base font-semibold leading-snug">{m.title}</h3>
-              <p className="mt-2 flex-1 text-sm text-muted-foreground">{m.description}</p>
-              <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                {m.date}
-              </p>
-              <div className="mt-3">
-                <RelatedLinks links={[m.link]} />
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </Section>
 
@@ -181,11 +218,29 @@ function ChroniclePage() {
         title="The most recent major development"
         intro="One record is highlighted at a time — the latest significant, verified step in the programme."
       >
-        <ChronicleCard record={featuredRecord} variant="feature" />
-        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {latestTransmissions.map((r) => (
-            <ChronicleCard key={r.id} record={r} />
-          ))}
+        <div className="relative">
+          <span
+            className="pointer-events-none absolute inset-x-0 -inset-y-8 -z-10 sm:-inset-x-6 rounded-[2rem] opacity-50 blur-3xl"
+            style={{ background: "radial-gradient(closest-side, var(--nebula), transparent 75%)" }}
+            aria-hidden
+          />
+          <div className="glow-ring rounded-[1.15rem]">
+            <ChronicleCard record={featuredRecord} variant="feature" />
+          </div>
+        </div>
+
+        <div className="mt-10">
+          <div className="mb-4 flex items-center gap-3">
+            <h3 className="font-mono text-[11px] uppercase tracking-[0.24em] text-primary/80">
+              Also transmitting
+            </h3>
+            <span className="h-px flex-1 bg-gradient-to-r from-white/15 to-transparent" aria-hidden />
+          </div>
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {latestTransmissions.map((r) => (
+              <ChronicleCard key={r.id} record={r} />
+            ))}
+          </div>
         </div>
       </Section>
 
@@ -193,9 +248,21 @@ function ChroniclePage() {
       <Section
         id="pulse"
         eyebrow="Research pulse"
-        title="Signal stream"
-        intro="A compact readout of the most recent activity across the archive."
+        title="Live activity readout"
+        intro="What the programme has actually been doing lately — rolling activity counters followed by the most recent verified signals."
       >
+        <dl className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {pulseSummary.map((s) => (
+            <div key={s.label} className="glass rounded-2xl px-4 py-4">
+              <dt className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{s.label}</dt>
+              <dd className="mt-1 font-display text-2xl font-semibold">{s.value}</dd>
+              <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-primary/70">
+                {s.note}
+              </p>
+            </div>
+          ))}
+        </dl>
+
         <div className="glass overflow-hidden rounded-2xl">
           <ul className="divide-y divide-white/5">
             {researchPulse.map((p) => (
@@ -203,14 +270,14 @@ function ChroniclePage() {
                 <Link
                   to="/news/$slug"
                   params={{ slug: p.slug }}
-                  className="flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-3 text-sm hover:bg-white/5"
+                  className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-4 gap-y-1 px-5 py-3.5 text-sm transition-colors hover:bg-white/5 md:grid-cols-[auto_11rem_minmax(0,1fr)_auto] md:items-center"
                 >
-                  <Radio className="h-3.5 w-3.5 shrink-0 text-primary anim-pulse-slow" aria-hidden />
+                  <Radio className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary anim-pulse-slow md:mt-0" aria-hidden />
                   <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary/80">
                     {p.label}
                   </span>
-                  <span className="flex-1 text-foreground">{p.title}</span>
-                  <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                  <span className="col-span-2 text-foreground md:col-span-1">{p.title}</span>
+                  <span className="col-start-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground md:col-start-auto md:text-right">
                     {p.date}
                   </span>
                 </Link>
@@ -219,6 +286,7 @@ function ChroniclePage() {
           </ul>
         </div>
       </Section>
+
 
       {/* ---------------------------------------------- filters + view mode */}
       <Section
@@ -380,22 +448,40 @@ function ChroniclePage() {
         title="What comes next"
         intro="Confirmed next steps and long-term scientific directions, clearly labelled. Nothing here is presented as a completed result."
       >
-        <div className="grid gap-4 md:grid-cols-3">
-          {upcomingRecords.map((r) => (
-            <div key={r.id} className="glass flex flex-col rounded-2xl p-5">
-              <StatusBadge status={r.status} />
-              <h3 className="mt-3 font-display text-lg font-semibold leading-snug">
-                <Link to="/news/$slug" params={{ slug: r.slug }} className="hover:text-primary">
-                  {r.title}
-                </Link>
-              </h3>
-              <p className="mt-2 flex-1 text-sm text-muted-foreground">{r.summary}</p>
-              <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                {r.dateLabel}
-              </p>
-            </div>
-          ))}
+        <div className="space-y-8">
+          {(["Confirmed", "In Progress", "Long-Term Vision"] as const).map((tier) => {
+            const records = upcomingRecords.filter((r) => upcomingTier(r) === tier);
+            if (records.length === 0) return null;
+            return (
+              <div key={tier}>
+                <div className="mb-3 flex items-center gap-3">
+                  <h3 className="font-mono text-[11px] uppercase tracking-[0.24em] text-primary/80">{tier}</h3>
+                  <span className="h-px flex-1 bg-gradient-to-r from-white/15 to-transparent" aria-hidden />
+                </div>
+                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                  {records.map((r) => (
+                    <div
+                      key={r.id}
+                      className="glass flex flex-col rounded-2xl p-5 transition-colors duration-300 hover:bg-white/[0.06]"
+                    >
+                      <StatusBadge status={r.status} />
+                      <h4 className="mt-3 font-display text-lg font-semibold leading-snug">
+                        <Link to="/news/$slug" params={{ slug: r.slug }} className="hover:text-primary">
+                          {r.title}
+                        </Link>
+                      </h4>
+                      <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{r.summary}</p>
+                      <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                        {r.dateLabel}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
+
       </Section>
 
       {/* ----------------------------------------------------- full archive */}
