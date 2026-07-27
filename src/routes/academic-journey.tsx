@@ -700,7 +700,7 @@ function FinaleSection() {
               View Current Research
             </Link>
             <Link
-              to="/contact"
+              to="/contact" hash="contact-form"
               className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-medium text-foreground hover:bg-white/5 transition-colors"
             >
               Contact Diya
