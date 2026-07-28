@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "../components/layout/SiteHeader";
 import { SiteFooter } from "../components/layout/SiteFooter";
 import { CosmicBackground } from "../components/layout/CosmicBackground";
+import { CosmicEntrance } from "../components/intro/CosmicEntrance";
 
 function NotFoundComponent() {
   return (
@@ -161,6 +162,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <div className="relative flex min-h-screen flex-col">
         <CosmicBackground />
+        <CosmicEntrance />
         <a href="#main-content" className="skip-link">Skip to content</a>
         <SiteHeader />
         <main id="main-content" className="flex-1">
