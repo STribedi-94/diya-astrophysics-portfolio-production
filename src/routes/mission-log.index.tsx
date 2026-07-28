@@ -29,10 +29,10 @@ import {
 import { cn } from "@/lib/utils";
 import { Search, Radio, Rows3, LayoutGrid, GitBranch } from "lucide-react";
 
-const TITLE = "Scientific Mission Log — A Living Scientific Mission Log | Diya Ram";
+const TITLE = "Scientific Mission Log — Diya Ram's Research Journey | Diya Ram";
 const DESCRIPTION =
   "A continuously growing scientific chronicle of Diya Ram's verified research: publications, observing programmes, conference presentations, thesis milestones, teaching, peer review and upcoming missions.";
-const URL = "https://astro-diya-portfolio.lovable.app/news";
+const URL = "https://astro-diya-portfolio.lovable.app/mission-log";
 
 const SECTIONS: NavSection[] = [
   { id: "mission-status", label: "Mission status" },
@@ -64,7 +64,7 @@ export const Route = createFileRoute("/mission-log/")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "CollectionPage",
-          name: "Scientific Mission Log — A Living Scientific Mission Log",
+          name: "Scientific Mission Log",
           description: DESCRIPTION,
           url: URL,
           about: "Observational astrophysics of M-dwarf magnetic activity",
