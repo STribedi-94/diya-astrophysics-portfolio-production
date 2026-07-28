@@ -151,6 +151,7 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className="dark">
       <head>
+        <script dangerouslySetInnerHTML={{ __html: ENTRANCE_PREPAINT }} />
         <HeadContent />
       </head>
       <body>
@@ -163,12 +164,15 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const entrance = useCosmicEntrance();
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="relative flex min-h-screen flex-col">
+      <div
+        className="app-shell relative flex min-h-screen flex-col"
+        style={shellStyle(entrance)}
+      >
         <CosmicBackground />
-        <CosmicEntrance />
         <a href="#main-content" className="skip-link">Skip to content</a>
         <SiteHeader />
         <main id="main-content" className="flex-1">
@@ -176,6 +180,7 @@ function RootComponent() {
         </main>
         <SiteFooter />
       </div>
+      <CosmicEntrance state={entrance} />
     </QueryClientProvider>
   );
 }
