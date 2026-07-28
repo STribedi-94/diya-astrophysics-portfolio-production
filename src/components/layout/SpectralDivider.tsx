@@ -8,7 +8,7 @@ export function SpectralDivider({ label }: { label?: string }) {
       <div className="relative flex items-center gap-4">
         <div className="spectral-divider flex-1" />
         {label && (
-          <span className="whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground">
+          <span className="min-w-0 text-center font-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground md:whitespace-nowrap">
             {label}
           </span>
         )}
