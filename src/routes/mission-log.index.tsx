@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHero, Section, GlassPanel } from "@/components/layout/Page";
-import { MissionSync } from "@/components/chronicle/MissionSync";
 import { ChronicleNavigator, type NavSection } from "@/components/chronicle/ChronicleNavigator";
 import { ChronicleConstellation } from "@/components/chronicle/ChronicleConstellation";
 import { ChronicleCard, StatusBadge, SourceTag, RelatedLinks } from "@/components/chronicle/ChronicleCard";
@@ -30,7 +29,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Search, Radio, Rows3, LayoutGrid, GitBranch } from "lucide-react";
 
-const TITLE = "Research Chronicle — A Living Scientific Mission Log | Diya Ram";
+const TITLE = "Scientific Mission Log — A Living Scientific Mission Log | Diya Ram";
 const DESCRIPTION =
   "A continuously growing scientific chronicle of Diya Ram's verified research: publications, observing programmes, conference presentations, thesis milestones, teaching, peer review and upcoming missions.";
 const URL = "https://astro-diya-portfolio.lovable.app/news";
@@ -65,7 +64,7 @@ export const Route = createFileRoute("/mission-log/")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "CollectionPage",
-          name: "Research Chronicle — A Living Scientific Mission Log",
+          name: "Scientific Mission Log — A Living Scientific Mission Log",
           description: DESCRIPTION,
           url: URL,
           about: "Observational astrophysics of M-dwarf magnetic activity",
@@ -128,11 +127,11 @@ function ChroniclePage() {
 
   return (
     <>
-      <MissionSync recordCount={chronicleStats.totalRecords} />
+
       <ChronicleNavigator sections={SECTIONS} />
 
       <PageHero
-        eyebrow="Research Chronicle"
+        eyebrow="Scientific Mission Log"
         title={
           <>
             A living <span className="text-grad-accent">scientific mission log</span>
@@ -268,7 +267,7 @@ function ChroniclePage() {
             {researchPulse.map((p) => (
               <li key={p.id}>
                 <Link
-                  to="/news/$slug"
+                  to="/mission-log/$slug"
                   params={{ slug: p.slug }}
                   className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-4 gap-y-1 px-5 py-3.5 text-sm transition-colors hover:bg-white/5 md:grid-cols-[auto_11rem_minmax(0,1fr)_auto] md:items-center"
                 >
@@ -466,7 +465,7 @@ function ChroniclePage() {
                     >
                       <StatusBadge status={r.status} />
                       <h4 className="mt-3 font-display text-lg font-semibold leading-snug">
-                        <Link to="/news/$slug" params={{ slug: r.slug }} className="hover:text-primary">
+                        <Link to="/mission-log/$slug" params={{ slug: r.slug }} className="hover:text-primary">
                           {r.title}
                         </Link>
                       </h4>
@@ -513,7 +512,7 @@ function ChroniclePage() {
                     {records.map((r) => (
                       <li key={r.id}>
                         <Link
-                          to="/news/$slug"
+                          to="/mission-log/$slug"
                           params={{ slug: r.slug }}
                           className="flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-3 hover:bg-white/5"
                         >
@@ -650,7 +649,7 @@ function ArchiveLedger({ records }: { records: ChronicleRecord[] }) {
             <tr key={r.id} className="hover:bg-white/5">
               <td className="px-5 py-3 font-mono text-[11px] text-muted-foreground">{r.dateLabel}</td>
               <td className="px-5 py-3">
-                <Link to="/news/$slug" params={{ slug: r.slug }} className="text-foreground hover:text-primary">
+                <Link to="/mission-log/$slug" params={{ slug: r.slug }} className="text-foreground hover:text-primary">
                   {r.title}
                 </Link>
               </td>

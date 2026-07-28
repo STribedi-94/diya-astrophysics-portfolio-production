@@ -36,9 +36,9 @@ export const Route = createFileRoute("/mission-log/$slug")({
       };
     }
     const r = loaderData.record;
-    const title = `${r.title} — Research Chronicle | Diya Ram`;
+    const title = `${r.title} — Scientific Mission Log | Diya Ram`;
     const description = r.summary.slice(0, 155);
-    const url = `${BASE}/news/${params.slug}`;
+    const url = `${BASE}/mission-log/${params.slug}`;
     return {
       meta: [
         { title },
@@ -62,7 +62,7 @@ export const Route = createFileRoute("/mission-log/$slug")({
             url,
             author: { "@type": "Person", name: "Diya Ram" },
             about: r.researchTheme,
-            isPartOf: { "@type": "CollectionPage", name: "Research Chronicle", url: `${BASE}/news` },
+            isPartOf: { "@type": "CollectionPage", name: "Scientific Mission Log", url: `${BASE}/mission-log` },
           }),
         },
       ],
@@ -74,13 +74,13 @@ export const Route = createFileRoute("/mission-log/$slug")({
 
 function NotFoundEntry() {
   return (
-    <Section eyebrow="Research Chronicle" title="Chronicle entry not found">
+    <Section eyebrow="Scientific Mission Log" title="Chronicle entry not found">
       <GlassPanel>
         <p className="text-sm text-muted-foreground">
           This chronicle entry does not exist. It may have been renamed as the archive grew.
         </p>
         <div className="mt-4">
-          <RelatedLinks links={[{ to: "/news", label: "Return to the Research Chronicle" }]} />
+          <RelatedLinks links={[{ to: "/mission-log", label: "Return to the Scientific Mission Log" }]} />
         </div>
       </GlassPanel>
     </Section>
@@ -114,10 +114,10 @@ function ChronicleEntry() {
         <div className="absolute inset-0 starfield anim-drift opacity-60" aria-hidden />
         <div className="container-page relative">
           <Link
-            to="/news"
+            to="/mission-log"
             className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.22em] text-primary/90 hover:text-primary"
           >
-            <ArrowLeft className="h-3.5 w-3.5" /> Research Chronicle
+            <ArrowLeft className="h-3.5 w-3.5" /> Scientific Mission Log
           </Link>
           <div className="mt-5 flex flex-wrap items-center gap-3">
             <span className="text-[10px] uppercase tracking-[0.24em] text-primary/80">{record.category}</span>
@@ -220,7 +220,7 @@ function ChronicleEntry() {
                   {connected.map((c) => (
                     <li key={c!.id}>
                       <Link
-                        to="/news/$slug"
+                        to="/mission-log/$slug"
                         params={{ slug: c!.slug }}
                         className="flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-3 text-sm hover:bg-white/5"
                       >
@@ -308,7 +308,7 @@ function ChronicleEntry() {
       <Section className="pt-0">
         <nav aria-label="Chronicle navigation" className="grid gap-4 md:grid-cols-2">
           {previous ? (
-            <Link to="/news/$slug" params={{ slug: previous.slug }} className="glass rounded-2xl p-5 hover:bg-white/5">
+            <Link to="/mission-log/$slug" params={{ slug: previous.slug }} className="glass rounded-2xl p-5 hover:bg-white/5">
               <span className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
                 <ArrowLeft className="h-3 w-3" /> Later entry
               </span>
@@ -319,7 +319,7 @@ function ChronicleEntry() {
           )}
           {next && (
             <Link
-              to="/news/$slug"
+              to="/mission-log/$slug"
               params={{ slug: next.slug }}
               className="glass rounded-2xl p-5 text-right hover:bg-white/5"
             >
