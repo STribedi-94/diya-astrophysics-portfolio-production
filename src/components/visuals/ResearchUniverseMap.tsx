@@ -75,7 +75,7 @@ export function ResearchUniverseMap({ compact = false }: { compact?: boolean }) 
         ))}
 
         {/* radial connections from centre */}
-        {nodes.map((n) => (
+        {nodes.map((n, li) => (
           <line
             key={"l-" + n.id}
             x1={cx}
@@ -85,7 +85,7 @@ export function ResearchUniverseMap({ compact = false }: { compact?: boolean }) 
             stroke="url(#line)"
             strokeWidth="1"
             className="anim-draw"
-            style={{ animationDelay: `${Math.random() * 0.6}s` }}
+            style={{ animationDelay: `${(li % 6) * 0.1}s` }}
           />
         ))}
 
