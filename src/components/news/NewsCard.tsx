@@ -75,13 +75,13 @@ export function NewsCard({ article, isDemo }: CardProps) {
 /** Dominant lead story used at the top of the Cosmic Briefing. */
 export function NewsLeadCard({ article, isDemo }: CardProps) {
   return (
-    <article className="glass group grid overflow-hidden rounded-2xl lg:grid-cols-2">
+    <article className="glass group overflow-hidden rounded-2xl">
       <NewsImage
         src={article.imageUrl}
         alt={article.imageAlt ?? article.title}
         category={article.category}
         eager
-        className="aspect-[16/9] w-full lg:aspect-auto lg:h-full lg:min-h-[320px]"
+        className="aspect-[16/9] w-full"
       />
       <div className="flex flex-col justify-center p-6 md:p-8">
         <div className="flex flex-wrap items-center gap-2">
