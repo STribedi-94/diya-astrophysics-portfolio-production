@@ -287,3 +287,19 @@
     transition-duration: 0.001ms !important;
   }
 }
+
+/* First-entry sequence: prevent a Home-page flash before the overlay paints. */
+
+
+.app-shell { transition: opacity 650ms ease-out, filter 650ms ease-out; }
+
+@keyframes entranceStarDrift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-40px, 20px, 0); }
+}
+.entrance-drift { animation: entranceStarDrift 180s linear infinite alternate; }
+@keyframes entranceGlow {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.7; }
+}
+.entrance-glow { animation: entranceGlow 9s ease-in-out infinite; }

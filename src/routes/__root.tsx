@@ -14,7 +14,13 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "../components/layout/SiteHeader";
 import { SiteFooter } from "../components/layout/SiteFooter";
 import { CosmicBackground } from "../components/layout/CosmicBackground";
-import { CosmicEntrance } from "../components/intro/CosmicEntrance";
+import {
+  CosmicEntrance,
+  useCosmicEntrance,
+  shellStyle,
+} from "../components/intro/CosmicEntrance";
+
+const ENTRANCE_PREPAINT = `(function(){try{if(location.pathname==="/"&&!sessionStorage.getItem("dr-entrance-seen")){var s=document.createElement("style");s.id="entrance-prepaint";s.textContent="html{background-color:#04060e}.app-shell{opacity:0!important}";document.head.appendChild(s)}}catch(e){}})();`;
 
 function NotFoundComponent() {
   return (
@@ -145,6 +151,7 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className="dark">
       <head>
+        <script dangerouslySetInnerHTML={{ __html: ENTRANCE_PREPAINT }} />
         <HeadContent />
       </head>
       <body>
@@ -157,12 +164,15 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const entrance = useCosmicEntrance();
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="relative flex min-h-screen flex-col">
+      <div
+        className="app-shell relative flex min-h-screen flex-col"
+        style={shellStyle(entrance)}
+      >
         <CosmicBackground />
-        <CosmicEntrance />
         <a href="#main-content" className="skip-link">Skip to content</a>
         <SiteHeader />
         <main id="main-content" className="flex-1">
@@ -170,6 +180,7 @@ function RootComponent() {
         </main>
         <SiteFooter />
       </div>
+      <CosmicEntrance state={entrance} />
     </QueryClientProvider>
   );
 }
