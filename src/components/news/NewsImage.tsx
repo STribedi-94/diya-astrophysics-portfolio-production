@@ -30,13 +30,12 @@ export function NewsImage({
         <NewsImageFallback category={category} />
       ) : (
         <>
-          <span
-            className={cn(
-              "absolute inset-0 bg-[oklch(0.18_0.05_265)] transition-opacity duration-500",
-              loaded ? "opacity-0" : "opacity-100",
-            )}
-            aria-hidden
-          />
+          {!loaded && (
+            <span
+              className="absolute inset-0 animate-pulse bg-[oklch(0.18_0.05_265)] motion-reduce:animate-none"
+              aria-hidden
+            />
+          )}
           <img
             src={src}
             alt={alt ?? ""}
