@@ -65,7 +65,7 @@ export function CosmicEntrance() {
 
       if (!prefersReduced) {
         // Decode left-to-right between 5% and 95% of the timeline.
-        const decodeP = Math.min(1, Math.max(0, (p - 0.05) / 0.9);
+        const decodeP = Math.min(1, Math.max(0, (p - 0.05) / 0.9));
         const resolved = Math.floor(decodeP * letters.length);
         setChars(
           letters.map((c, i) => {
