@@ -271,7 +271,7 @@ function EntranceScene({ reduced, elapsed }: { reduced: boolean; elapsed: number
       <svg
         className="absolute inset-0 h-full w-full"
         viewBox="0 0 1200 800"
-        preserveAspectRatio="xMidYMid slice"
+        preserveAspectRatio="xMidYMax slice"
       >
         <defs>
           <radialGradient id="ent-earth" cx="28%" cy="18%" r="85%">
@@ -304,19 +304,19 @@ function EntranceScene({ reduced, elapsed }: { reduced: boolean; elapsed: number
         </g>
 
         {/* Distant, partly shadowed moon */}
-        <circle cx="1010" cy="205" r="34" fill="url(#ent-moon)" opacity="0.6" />
+        <circle cx="880" cy="180" r="30" fill="url(#ent-moon)" opacity="0.6" />
 
         {/* Earth limb entering from the lower-right, cropped by the frame */}
         <g opacity="0.95">
-          <circle cx="1010" cy="1000" r="420" fill="url(#ent-earth)" />
+          <circle cx="900" cy="1010" r="400" fill="url(#ent-earth)" />
           <path
-            d="M590 1000 A420 420 0 0 1 1430 1000"
+            d="M500 1010 A400 400 0 0 1 1300 1010"
             fill="none"
             stroke="url(#ent-limb)"
             strokeWidth="6"
           />
           <path
-            d="M590 1000 A420 420 0 0 1 1430 1000"
+            d="M500 1010 A400 400 0 0 1 1300 1010"
             fill="none"
             stroke="oklch(0.86 0.08 210 / 0.30)"
             strokeWidth="1.5"
@@ -325,10 +325,10 @@ function EntranceScene({ reduced, elapsed }: { reduced: boolean; elapsed: number
 
         {/* Ground-based observatory silhouette, lower third */}
         <g fill="#070b16" stroke="oklch(0.78 0.07 210 / 0.28)" strokeWidth="1.2">
-          <path d="M150 700 L150 640 A64 64 0 0 1 278 640 L278 700 Z" />
-          <path d="M196 604 L268 566" strokeLinecap="round" strokeWidth="4" />
-          <rect x="132" y="698" width="164" height="8" rx="2" />
-          <path d="M92 706 L336 706 L360 726 L68 726 Z" stroke="none" />
+          <path d="M330 706 L330 648 A62 62 0 0 1 454 648 L454 706 Z" />
+          <path d="M374 614 L444 578" strokeLinecap="round" strokeWidth="4" />
+          <rect x="312" y="704" width="162" height="8" rx="2" />
+          <path d="M272 712 L512 712 L536 732 L248 732 Z" stroke="none" />
         </g>
       </svg>
 
