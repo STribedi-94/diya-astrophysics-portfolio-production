@@ -42,6 +42,10 @@ export function NewsImage({
             alt={alt ?? ""}
             loading={eager ? "eager" : "lazy"}
             decoding="async"
+            // Cached / SSR-complete images never fire onLoad after hydration.
+            ref={(node) => {
+              if (node?.complete && node.naturalWidth > 0) setLoaded(true);
+            }}
             onLoad={() => setLoaded(true)}
             onError={() => setFailed(true)}
             className={cn(
