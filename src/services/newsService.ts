@@ -122,7 +122,7 @@ const EMPTY_FILTERS: NewsFilterOptions = {
 function normaliseFacets(raw: unknown): NewsFacet[] {
   if (!Array.isArray(raw)) return [];
   return raw
-    .map((f) => {
+    .map((f): NewsFacet | null => {
       if (!f || typeof f !== "object") return null;
       const o = f as Record<string, unknown>;
       const id = asString(o.id);
