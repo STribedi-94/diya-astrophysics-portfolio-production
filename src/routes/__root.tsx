@@ -20,7 +20,7 @@ import {
   shellStyle,
 } from "../components/intro/CosmicEntrance";
 
-const ENTRANCE_PREPAINT = `(function(){try{if(location.pathname==="/"&&!sessionStorage.getItem("dr-entrance-seen")){document.documentElement.classList.add("entrance-pending")}}catch(e){}})();`;
+const ENTRANCE_PREPAINT = `(function(){try{if(location.pathname==="/"&&!sessionStorage.getItem("dr-entrance-seen")){var s=document.createElement("style");s.id="entrance-prepaint";s.textContent="html{background-color:#04060e}.app-shell{opacity:0!important}";document.head.appendChild(s)}}catch(e){}})();`;
 
 function NotFoundComponent() {
   return (
