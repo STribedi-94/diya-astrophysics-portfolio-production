@@ -26,10 +26,12 @@ import { Route as ConferencesRouteImport } from './routes/conferences'
 import { Route as AcademicJourneyRouteImport } from './routes/academic-journey'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as NewsIndexRouteImport } from './routes/news.index'
 import { Route as MissionLogIndexRouteImport } from './routes/mission-log.index'
 import { Route as ResearchSlugRouteImport } from './routes/research.$slug'
 import { Route as PublicationsSlugRouteImport } from './routes/publications.$slug'
 import { Route as ProjectsSlugRouteImport } from './routes/projects.$slug'
+import { Route as NewsSlugRouteImport } from './routes/news.$slug'
 import { Route as MissionLogSlugRouteImport } from './routes/mission-log.$slug'
 import { Route as FacilitiesSlugRouteImport } from './routes/facilities.$slug'
 
@@ -118,6 +120,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NewsIndexRoute = NewsIndexRouteImport.update({
+  id: '/news/',
+  path: '/news/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MissionLogIndexRoute = MissionLogIndexRouteImport.update({
   id: '/mission-log/',
   path: '/mission-log/',
@@ -137,6 +144,11 @@ const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => ProjectsRoute,
+} as any)
+const NewsSlugRoute = NewsSlugRouteImport.update({
+  id: '/news/$slug',
+  path: '/news/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const MissionLogSlugRoute = MissionLogSlugRouteImport.update({
   id: '/mission-log/$slug',
@@ -169,10 +181,12 @@ export interface FileRoutesByFullPath {
   '/teaching': typeof TeachingRoute
   '/facilities/$slug': typeof FacilitiesSlugRoute
   '/mission-log/$slug': typeof MissionLogSlugRoute
+  '/news/$slug': typeof NewsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/publications/$slug': typeof PublicationsSlugRoute
   '/research/$slug': typeof ResearchSlugRoute
   '/mission-log/': typeof MissionLogIndexRoute
+  '/news/': typeof NewsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -194,10 +208,12 @@ export interface FileRoutesByTo {
   '/teaching': typeof TeachingRoute
   '/facilities/$slug': typeof FacilitiesSlugRoute
   '/mission-log/$slug': typeof MissionLogSlugRoute
+  '/news/$slug': typeof NewsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/publications/$slug': typeof PublicationsSlugRoute
   '/research/$slug': typeof ResearchSlugRoute
   '/mission-log': typeof MissionLogIndexRoute
+  '/news': typeof NewsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -220,10 +236,12 @@ export interface FileRoutesById {
   '/teaching': typeof TeachingRoute
   '/facilities/$slug': typeof FacilitiesSlugRoute
   '/mission-log/$slug': typeof MissionLogSlugRoute
+  '/news/$slug': typeof NewsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/publications/$slug': typeof PublicationsSlugRoute
   '/research/$slug': typeof ResearchSlugRoute
   '/mission-log/': typeof MissionLogIndexRoute
+  '/news/': typeof NewsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -247,10 +265,12 @@ export interface FileRouteTypes {
     | '/teaching'
     | '/facilities/$slug'
     | '/mission-log/$slug'
+    | '/news/$slug'
     | '/projects/$slug'
     | '/publications/$slug'
     | '/research/$slug'
     | '/mission-log/'
+    | '/news/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -272,10 +292,12 @@ export interface FileRouteTypes {
     | '/teaching'
     | '/facilities/$slug'
     | '/mission-log/$slug'
+    | '/news/$slug'
     | '/projects/$slug'
     | '/publications/$slug'
     | '/research/$slug'
     | '/mission-log'
+    | '/news'
   id:
     | '__root__'
     | '/'
@@ -297,10 +319,12 @@ export interface FileRouteTypes {
     | '/teaching'
     | '/facilities/$slug'
     | '/mission-log/$slug'
+    | '/news/$slug'
     | '/projects/$slug'
     | '/publications/$slug'
     | '/research/$slug'
     | '/mission-log/'
+    | '/news/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -322,7 +346,9 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TeachingRoute: typeof TeachingRoute
   MissionLogSlugRoute: typeof MissionLogSlugRoute
+  NewsSlugRoute: typeof NewsSlugRoute
   MissionLogIndexRoute: typeof MissionLogIndexRoute
+  NewsIndexRoute: typeof NewsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -446,6 +472,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/news/': {
+      id: '/news/'
+      path: '/news'
+      fullPath: '/news/'
+      preLoaderRoute: typeof NewsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mission-log/': {
       id: '/mission-log/'
       path: '/mission-log'
@@ -473,6 +506,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/projects/$slug'
       preLoaderRoute: typeof ProjectsSlugRouteImport
       parentRoute: typeof ProjectsRoute
+    }
+    '/news/$slug': {
+      id: '/news/$slug'
+      path: '/news/$slug'
+      fullPath: '/news/$slug'
+      preLoaderRoute: typeof NewsSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/mission-log/$slug': {
       id: '/mission-log/$slug'
@@ -558,7 +598,9 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TeachingRoute: TeachingRoute,
   MissionLogSlugRoute: MissionLogSlugRoute,
+  NewsSlugRoute: NewsSlugRoute,
   MissionLogIndexRoute: MissionLogIndexRoute,
+  NewsIndexRoute: NewsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

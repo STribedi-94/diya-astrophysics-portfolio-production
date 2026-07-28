@@ -242,7 +242,7 @@ function NewsHubPage() {
   useEffect(() => {
     const next = debouncedSearch.trim() || undefined;
     if (next === (search.q ?? undefined)) return;
-    navigate({ search: (prev) => ({ ...prev, q: next, page: undefined }), replace: true });
+    navigate({ search: (prev: NewsSearch) => ({ ...prev, q: next, page: undefined }), replace: true });
   }, [debouncedSearch]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const activeFilters: ActiveFilters = useMemo(() => {
@@ -279,7 +279,7 @@ function NewsHubPage() {
   const setPage = useCallback(
     (page: number) => {
       skipScrollRef.current = false;
-      navigate({ search: (prev) => ({ ...prev, page: page > 1 ? page : undefined }) });
+      navigate({ search: (prev: NewsSearch) => ({ ...prev, page: page > 1 ? page : undefined }) });
     },
     [navigate],
   );
@@ -294,7 +294,7 @@ function NewsHubPage() {
   const toggleFilter = useCallback(
     (key: MultiFilterKey, value: string) => {
       navigate({
-        search: (prev) => {
+        search: (prev: NewsSearch) => {
           const current = (prev[key] as string[] | undefined) ?? [];
           const next = current.includes(value)
             ? current.filter((v) => v !== value)
@@ -308,18 +308,18 @@ function NewsHubPage() {
 
   const clearFilters = useCallback(() => {
     navigate({
-      search: (prev) => ({ q: prev.q, sort: prev.sort, orbit: prev.orbit }),
+      search: (prev: NewsSearch) => ({ q: prev.q, sort: prev.sort, orbit: prev.orbit }),
     });
   }, [navigate]);
 
   const setSort = useCallback(
     (sort: NewsSort) =>
-      navigate({ search: (prev) => ({ ...prev, sort: sort === "newest" ? undefined : sort, page: undefined }) }),
+      navigate({ search: (prev: NewsSearch) => ({ ...prev, sort: sort === "newest" ? undefined : sort, page: undefined }) }),
     [navigate],
   );
 
   const toggleOrbit = useCallback(
-    () => navigate({ search: (prev) => ({ ...prev, orbit: prev.orbit ? undefined : true, page: undefined }) }),
+    () => navigate({ search: (prev: NewsSearch) => ({ ...prev, orbit: prev.orbit ? undefined : true, page: undefined }) }),
     [navigate],
   );
 
