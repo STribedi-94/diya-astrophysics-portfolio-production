@@ -14,7 +14,13 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "../components/layout/SiteHeader";
 import { SiteFooter } from "../components/layout/SiteFooter";
 import { CosmicBackground } from "../components/layout/CosmicBackground";
-import { CosmicEntrance } from "../components/intro/CosmicEntrance";
+import {
+  CosmicEntrance,
+  useCosmicEntrance,
+  shellStyle,
+} from "../components/intro/CosmicEntrance";
+
+const ENTRANCE_PREPAINT = `(function(){try{if(location.pathname==="/"&&!sessionStorage.getItem("dr-entrance-seen")){document.documentElement.classList.add("entrance-pending")}}catch(e){}})();`;
 
 function NotFoundComponent() {
   return (
