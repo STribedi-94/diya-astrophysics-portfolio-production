@@ -146,10 +146,10 @@ export function SiteHeader() {
 
           <div className="flex items-center gap-2">
             <Link
-              to="/contact"
+              to="/news"
               className="hidden rounded-full bg-grad-accent px-4 py-2 text-xs font-medium text-[oklch(0.12_0.04_265)] shadow-[0_0_20px_-6px_oklch(0.78_0.15_210_/_0.6)] transition-transform hover:scale-[1.02] md:inline-flex"
             >
-              Contact Diya
+              News & Updates
             </Link>
             <button
               type="button"
@@ -222,10 +222,10 @@ export function SiteHeader() {
                 ))}
               </ul>
               <Link
-                to="/contact"
+                to="/news"
                 className="mt-6 flex items-center justify-center rounded-full bg-grad-accent px-4 py-3 text-sm font-medium text-[oklch(0.12_0.04_265)]"
               >
-                Contact Diya
+                News & Updates
               </Link>
             </nav>
           </div>

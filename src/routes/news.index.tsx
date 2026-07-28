@@ -1,53 +1,88 @@
-import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { PageHero, Section, GlassPanel } from "@/components/layout/Page";
-import { MissionSync } from "@/components/chronicle/MissionSync";
-import { ChronicleNavigator, type NavSection } from "@/components/chronicle/ChronicleNavigator";
-import { ChronicleConstellation } from "@/components/chronicle/ChronicleConstellation";
-import { ChronicleCard, StatusBadge, SourceTag, RelatedLinks } from "@/components/chronicle/ChronicleCard";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  chronicleRecords,
-  chronicleStats,
-  chronicleCategories,
-  chronicleStatuses,
-  chronicleYears,
-  datedRecords,
-  featuredRecord,
-  latestTransmissions,
-  upcomingRecords,
-  missionStatus,
-  missionStatusGroups,
-  researchPulse,
-  pulseSummary,
-
-  signalToDiscovery,
-  impactMetrics,
-  yearSummaries,
-  careerPhases,
-  phaseForYear,
-  type ChronicleRecord,
-} from "@/data/chronicle";
+  ArrowRight,
+  ArrowUpRight,
+  Compass,
+  Globe2,
+  Newspaper,
+  Orbit,
+  RadioTower,
+  RefreshCw,
+  Rocket,
+  Satellite,
+  Search,
+  Signal,
+  Sparkles,
+  Telescope,
+  X,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Search, Radio, Rows3, LayoutGrid, GitBranch } from "lucide-react";
+import { isDemoMode, newsConfig } from "@/config/newsConfig";
+import { getNews } from "@/services/newsService";
+import {
+  MULTI_FILTER_KEYS,
+  type MultiFilterKey,
+  type NewsQuery,
+  type NewsSort,
+} from "@/types/news";
+import { NewsCard, NewsCompactCard, NewsLeadCard } from "@/components/news/NewsCard";
+import {
+  ActiveFilterChips,
+  NewsFilterPanel,
+  NewsFilterSheet,
+  type ActiveFilters,
+} from "@/components/news/NewsFilters";
+import { NewsPagination } from "@/components/news/NewsPagination";
+import {
+  NewsEmptyState,
+  NewsErrorState,
+  NewsFeedNotice,
+  NewsGridSkeleton,
+} from "@/components/news/NewsStates";
+import { formatNewsDateTime } from "@/components/news/NewsBadges";
 
-const TITLE = "Research Chronicle — A Living Scientific Mission Log | Diya Ram";
+const SITE = "https://astro-diya-portfolio.lovable.app";
+const TITLE = "Astrophysics News Hub — Global Astronomy & Space Science | Diya Ram";
 const DESCRIPTION =
-  "A continuously growing scientific chronicle of Diya Ram's verified research: publications, observing programmes, conference presentations, thesis milestones, teaching, peer review and upcoming missions.";
-const URL = "https://astro-diya-portfolio.lovable.app/news";
+  "A curated hub of astrophysics, astronomy and space-science news from trusted observatories, space agencies and research institutions, with a Research Orbit spotlight on stellar activity and radio astronomy.";
 
-const SECTIONS: NavSection[] = [
-  { id: "mission-status", label: "Mission status" },
-  { id: "featured", label: "Featured transmission" },
-  { id: "pulse", label: "Research pulse" },
-  { id: "timeline", label: "Mission timeline" },
-  { id: "constellation", label: "Chronicle constellation" },
-  { id: "signal", label: "Signal to discovery" },
-  { id: "impact", label: "Research impact" },
-  { id: "upcoming", label: "Upcoming missions" },
-  { id: "archive", label: "Full archive" },
-];
+/* ------------------------------------------------------------ url search */
+
+type NewsSearch = {
+  q?: string;
+  page?: number;
+  sort?: NewsSort;
+  orbit?: boolean;
+} & Partial<Record<MultiFilterKey, string[]>>;
+
+const SORTS: NewsSort[] = ["newest", "oldest", "relevance", "featured"];
+
+function toStringArray(value: unknown): string[] | undefined {
+  const arr = Array.isArray(value) ? value : typeof value === "string" ? [value] : [];
+  const clean = arr.filter((v): v is string => typeof v === "string" && v.length > 0).slice(0, 20);
+  return clean.length ? clean : undefined;
+}
+
+function validateSearch(raw: Record<string, unknown>): NewsSearch {
+  const search: NewsSearch = {};
+  if (typeof raw.q === "string" && raw.q.trim()) search.q = raw.q.slice(0, 120);
+  const page = Number(raw.page);
+  if (Number.isFinite(page) && page > 1) search.page = Math.min(Math.floor(page), 999);
+  if (typeof raw.sort === "string" && SORTS.includes(raw.sort as NewsSort)) {
+    search.sort = raw.sort as NewsSort;
+  }
+  if (raw.orbit === true || raw.orbit === "true") search.orbit = true;
+  for (const key of MULTI_FILTER_KEYS) {
+    const values = toStringArray(raw[key]);
+    if (values) search[key] = values;
+  }
+  return search;
+}
 
 export const Route = createFileRoute("/news/")({
+  validateSearch,
   head: () => ({
     meta: [
       { title: TITLE },
@@ -55,612 +90,602 @@ export const Route = createFileRoute("/news/")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: URL },
+      { property: "og:url", content: `${SITE}/news` },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
     ],
-    links: [{ rel: "canonical", href: URL }],
+    links: [{ rel: "canonical", href: `${SITE}/news` }],
     scripts: [
       {
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "CollectionPage",
-          name: "Research Chronicle — A Living Scientific Mission Log",
+          name: "Astrophysics News Hub",
           description: DESCRIPTION,
-          url: URL,
-          about: "Observational astrophysics of M-dwarf magnetic activity",
-          author: { "@type": "Person", name: "Diya Ram" },
+          url: `${SITE}/news`,
+          isPartOf: { "@type": "WebSite", name: "Diya Ram — Observational Astrophysicist", url: SITE },
+          about: [
+            { "@type": "Thing", name: "Astrophysics" },
+            { "@type": "Thing", name: "Astronomy" },
+            { "@type": "Thing", name: "Space science" },
+          ],
         }),
       },
     ],
   }),
-  component: ChroniclePage,
+  component: NewsHubPage,
 });
 
-type ViewMode = "story" | "timeline" | "archive";
+/* ------------------------------------------------------------- utilities */
 
-/** Groups upcoming records into the three publicly meaningful commitment tiers. */
-function upcomingTier(r: ChronicleRecord): "Confirmed" | "In Progress" | "Long-Term Vision" {
-  if (r.status === "Long-Term Vision") return "Long-Term Vision";
-  if (r.status === "In Progress") return "In Progress";
-  return "Confirmed";
+function useDebounced<T>(value: T, delay = 350) {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() => {
+    const id = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(id);
+  }, [value, delay]);
+  return debounced;
 }
 
+/* ------------------------------------------------------------------ hero */
 
-function ChroniclePage() {
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState<string>("All");
-  const [year, setYear] = useState<string>("All");
-  const [status, setStatus] = useState<string>("All");
-  const [view, setView] = useState<ViewMode>("story");
+function HubHero({
+  lastUpdated,
+  statusLabel,
+  sourceCount,
+  totalItems,
+  orbitCount,
+}: {
+  lastUpdated?: string;
+  statusLabel: string;
+  sourceCount: number;
+  totalItems: number;
+  orbitCount: number;
+}) {
+  return (
+    <section className="relative overflow-hidden border-b border-white/8">
+      <div className="absolute inset-0 bg-grad-hero" aria-hidden />
+      <div className="absolute inset-0 starfield opacity-60" aria-hidden />
+      <div className="absolute inset-0 grid-cosmic opacity-[0.18]" aria-hidden />
+      <svg
+        className="pointer-events-none absolute -right-24 -top-24 h-[28rem] w-[28rem] opacity-40 motion-safe:anim-rotate-slow"
+        viewBox="0 0 400 400"
+        aria-hidden
+      >
+        <circle cx="200" cy="200" r="150" fill="none" stroke="currentColor" strokeWidth="0.6" className="text-primary/40" />
+        <circle cx="200" cy="200" r="110" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-primary/25" />
+        <circle cx="200" cy="200" r="70" fill="none" stroke="currentColor" strokeWidth="0.4" className="text-primary/20" />
+        <circle cx="350" cy="200" r="3" className="fill-primary/70" />
+        <circle cx="200" cy="90" r="2" className="fill-primary/50" />
+      </svg>
+      <div className="absolute inset-0 vignette" aria-hidden />
 
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return chronicleRecords.filter((r) => {
-      if (category !== "All" && r.category !== category) return false;
-      if (status !== "All" && r.status !== status) return false;
-      if (year !== "All" && String(r.year ?? "") !== year) return false;
-      if (!q) return true;
-      return [
-        r.title,
-        r.summary,
-        r.institution,
-        r.location,
-        ...(r.tags ?? []),
-        ...(r.facility ?? []),
-        ...(r.researchTheme ?? []),
-        ...(r.collaborators ?? []),
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase()
-        .includes(q);
+      <div className="container-page relative py-16 md:py-24">
+        <p className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-primary">
+          <Satellite className="h-3 w-3" aria-hidden />
+          Global science feed
+        </p>
+        <h1 className="mt-5 max-w-3xl font-display text-4xl font-bold leading-[1.08] md:text-6xl">
+          Astrophysics <span className="text-grad-accent">News Hub</span>
+        </h1>
+        <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
+          Astronomy, astrophysics and space-science stories gathered from trusted observatories,
+          space agencies and research institutions worldwide — with a spotlight on the discoveries
+          closest to Diya Ram's own research.
+        </p>
+
+        <dl className="mt-9 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
+          {[
+            { label: "Stories in feed", value: totalItems, icon: Newspaper },
+            { label: "Trusted sources", value: sourceCount, icon: Globe2 },
+            { label: "Topics tracked", value: orbitCount, icon: Orbit },
+            { label: "Feed status", value: statusLabel, icon: Signal },
+          ].map((stat) => (
+            <div key={stat.label} className="glass rounded-xl px-4 py-3">
+              <dt className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                <stat.icon className="h-3 w-3 shrink-0" aria-hidden />
+                <span className="truncate">{stat.label}</span>
+              </dt>
+              <dd className="mt-1 font-display text-lg font-semibold text-foreground">{stat.value}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <p className="mt-5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+          Last updated · {lastUpdated ? formatNewsDateTime(lastUpdated) : "synchronising…"}
+        </p>
+
+        <div className="mt-8 flex flex-wrap gap-3">
+          <a
+            href="#news-feed"
+            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-grad-accent px-5 text-sm font-medium text-[oklch(0.12_0.04_265)] transition-all hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+          >
+            <Compass className="h-4 w-4" aria-hidden />
+            Browse the feed
+          </a>
+          <Link
+            to="/mission-log"
+            className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-5 text-sm transition-colors hover:border-primary/45 hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+          >
+            <Rocket className="h-4 w-4" aria-hidden />
+            Diya's Scientific Mission Log
+          </Link>
+        </div>
+        <p className="mt-3 max-w-2xl text-xs text-muted-foreground">
+          This hub carries external astronomy news only. Diya Ram's own research updates,
+          publications and milestones live in the Scientific Mission Log.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* ----------------------------------------------------------------- page */
+
+function NewsHubPage() {
+  const search = Route.useSearch();
+  const navigate = Route.useNavigate();
+
+  const [searchInput, setSearchInput] = useState(search.q ?? "");
+  const debouncedSearch = useDebounced(searchInput);
+  const feedRef = useRef<HTMLDivElement>(null);
+  const skipScrollRef = useRef(true);
+
+  // Keep the input in step with back/forward navigation.
+  useEffect(() => {
+    setSearchInput(search.q ?? "");
+  }, [search.q]);
+
+  // Push the debounced term into the URL (single source of truth).
+  useEffect(() => {
+    const next = debouncedSearch.trim() || undefined;
+    if (next === (search.q ?? undefined)) return;
+    navigate({ search: (prev: NewsSearch) => ({ ...prev, q: next, page: undefined }), replace: true });
+  }, [debouncedSearch]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const activeFilters: ActiveFilters = useMemo(() => {
+    const out: ActiveFilters = {};
+    for (const key of MULTI_FILTER_KEYS) if (search[key]?.length) out[key] = search[key];
+    return out;
+  }, [search]);
+
+  const activeCount = useMemo(
+    () => Object.values(activeFilters).reduce((sum, arr) => sum + (arr?.length ?? 0), 0),
+    [activeFilters],
+  );
+
+  const query: NewsQuery = useMemo(
+    () => ({
+      page: search.page ?? 1,
+      pageSize: newsConfig.pageSize,
+      search: search.q,
+      sort: search.sort ?? "newest",
+      researchOrbit: search.orbit || undefined,
+      ...activeFilters,
+    }),
+    [search.page, search.q, search.sort, search.orbit, activeFilters],
+  );
+
+  const { data, error, isPending, isFetching, refetch } = useQuery({
+    queryKey: ["news", query],
+    queryFn: ({ signal }) => getNews(query, signal),
+    placeholderData: keepPreviousData,
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+  });
+
+  const setPage = useCallback(
+    (page: number) => {
+      skipScrollRef.current = false;
+      navigate({ search: (prev: NewsSearch) => ({ ...prev, page: page > 1 ? page : undefined }) });
+    },
+    [navigate],
+  );
+
+  // Scroll to the feed only after an explicit page change.
+  useEffect(() => {
+    if (skipScrollRef.current) return;
+    skipScrollRef.current = true;
+    feedRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [search.page]);
+
+  const toggleFilter = useCallback(
+    (key: MultiFilterKey, value: string) => {
+      navigate({
+        search: (prev: NewsSearch) => {
+          const current = (prev[key] as string[] | undefined) ?? [];
+          const next = current.includes(value)
+            ? current.filter((v) => v !== value)
+            : [...current, value];
+          return { ...prev, [key]: next.length ? next : undefined, page: undefined };
+        },
+      });
+    },
+    [navigate],
+  );
+
+  const clearFilters = useCallback(() => {
+    navigate({
+      search: (prev: NewsSearch) => ({ q: prev.q, sort: prev.sort, orbit: prev.orbit }),
     });
-  }, [query, category, year, status]);
+  }, [navigate]);
 
-  const timelineRecords = filtered.filter((r) => !r.undated);
-  const reset = () => {
-    setQuery("");
-    setCategory("All");
-    setYear("All");
-    setStatus("All");
-  };
+  const setSort = useCallback(
+    (sort: NewsSort) =>
+      navigate({ search: (prev: NewsSearch) => ({ ...prev, sort: sort === "newest" ? undefined : sort, page: undefined }) }),
+    [navigate],
+  );
+
+  const toggleOrbit = useCallback(
+    () => navigate({ search: (prev: NewsSearch) => ({ ...prev, orbit: prev.orbit ? undefined : true, page: undefined }) }),
+    [navigate],
+  );
+
+  const options = data?.availableFilters;
+  const items = data?.items ?? [];
+  const featured = data?.featuredItems ?? [];
+  const [lead, ...supporting] = featured;
+
+  const orbitStories = useMemo(
+    () => items.filter((a) => a.isResearchOrbit).slice(0, 3),
+    [items],
+  );
+
+  const hasQuery = Boolean(search.q?.trim());
+  const statusLabel =
+    data?.status === "demo"
+      ? "Demo"
+      : data?.status === "partial"
+        ? "Partial"
+        : data?.status === "cached"
+          ? "Cached"
+          : error
+            ? "Offline"
+            : "Live";
 
   return (
-    <>
-      <MissionSync recordCount={chronicleStats.totalRecords} />
-      <ChronicleNavigator sections={SECTIONS} />
+    <div className="pb-24">
+      <HubHero
+        lastUpdated={data?.lastUpdated}
+        statusLabel={statusLabel}
+        sourceCount={data?.activeSourceCount ?? options?.sources.length ?? 0}
+        totalItems={data?.pagination.totalItems ?? 0}
+        orbitCount={options?.topics.length ?? 0}
+      />
 
-      <PageHero
-        eyebrow="Research Chronicle"
-        title={
-          <>
-            A living <span className="text-grad-accent">scientific mission log</span>
-          </>
-        }
-        intro="Every verified step of Diya Ram's research programme — publications, observing campaigns, conference presentations, doctoral milestones, teaching, academic service and the missions still ahead. This chronicle grows as the science does."
-      >
-        <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {[
-            { k: "Verified records", v: chronicleStats.totalRecords },
-            { k: "Years documented", v: `${chronicleStats.earliestYear}–${chronicleStats.latestYear}` },
-            { k: "Publications", v: chronicleStats.totalPublications },
-            { k: "Presentation records", v: chronicleStats.presentations },
-          ].map((s) => (
-            <div key={s.k} className="glass rounded-xl px-4 py-3">
-              <dt className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{s.k}</dt>
-              <dd className="mt-1 font-display text-xl font-semibold">{s.v}</dd>
+      {/* ---------------------------------------------------- system strip */}
+      <section aria-label="Feed system status" className="border-b border-white/8 bg-white/[0.02]">
+        <div className="container-page flex flex-wrap items-center gap-x-6 gap-y-2 py-3 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+          <span className="inline-flex items-center gap-2">
+            <span
+              className={cn(
+                "h-1.5 w-1.5 rounded-full",
+                error ? "bg-destructive" : "bg-primary motion-safe:anim-pulse-slow",
+              )}
+              aria-hidden
+            />
+            Feed {statusLabel}
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <RadioTower className="h-3 w-3" aria-hidden />
+            {data?.activeSourceCount ?? 0} sources active
+          </span>
+          {typeof data?.failedSourceCount === "number" && data.failedSourceCount > 0 && (
+            <span className="text-amber-200/90">{data.failedSourceCount} sources unavailable</span>
+          )}
+          <span>Mode · {isDemoMode ? "Demonstration" : "Live ingestion"}</span>
+          <button
+            type="button"
+            onClick={() => refetch()}
+            className="ml-auto inline-flex items-center gap-1.5 uppercase tracking-[0.16em] text-primary transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+          >
+            <RefreshCw className={cn("h-3 w-3", isFetching && "motion-safe:animate-spin")} aria-hidden />
+            Refresh
+          </button>
+        </div>
+      </section>
+
+      <div className="container-page mt-10 space-y-6">
+        {data && (
+          <NewsFeedNotice
+            status={data.status}
+            failedSourceCount={data.failedSourceCount}
+            lastUpdated={data.lastUpdated}
+            message={data.message}
+          />
+        )}
+        {error && (
+          <NewsErrorState
+            onRetry={() => refetch()}
+            lastUpdated={data?.lastUpdated}
+            hasCachedContent={items.length > 0}
+          />
+        )}
+      </div>
+
+      {/* ------------------------------------------------ cosmic briefing */}
+      {lead && (
+        <section aria-labelledby="briefing-heading" className="container-page mt-12">
+          <header className="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">
+                Cosmic briefing
+              </p>
+              <h2 id="briefing-heading" className="mt-2 font-display text-2xl font-semibold md:text-3xl">
+                Today's leading stories
+              </h2>
             </div>
-          ))}
-        </dl>
-        <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
-          Last log entry · {chronicleStats.latestDate}
-        </p>
-      </PageHero>
+            <p className="max-w-md text-xs text-muted-foreground">
+              Editorially weighted highlights from across the world's observatories and space agencies.
+            </p>
+          </header>
 
-      {/* ------------------------------------------- current mission status */}
-      <Section
-        id="mission-status"
-        eyebrow="Mission control"
-        title="Current mission status"
-        intro="Where the research programme stands right now, grouped by activity and drawn from verified institutional and publication records."
-      >
-        <div className="space-y-8">
-          {missionStatusGroups.map((group) => {
-            const modules = missionStatus.filter((m) => m.group === group);
-            if (modules.length === 0) return null;
-            return (
-              <div key={group}>
-                <div className="mb-3 flex items-center gap-3">
-                  <h3 className="font-mono text-[11px] uppercase tracking-[0.24em] text-primary/80">
-                    {group}
-                  </h3>
-                  <span className="h-px flex-1 bg-gradient-to-r from-white/15 to-transparent" aria-hidden />
-                  <span className="font-mono text-[10px] text-muted-foreground">
-                    {String(modules.length).padStart(2, "0")}
-                  </span>
+          <div className="mt-6 grid gap-5 lg:grid-cols-[1.55fr_1fr]">
+            <NewsLeadCard article={lead} isDemo={isDemoMode} />
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+              {supporting.slice(0, 3).map((article) => (
+                <NewsCompactCard key={article.id} article={article} isDemo={isDemoMode} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ------------------------------------------------- research orbit */}
+      {orbitStories.length > 0 && (
+        <section aria-labelledby="orbit-heading" className="container-page mt-16">
+          <div className="glass relative overflow-hidden rounded-3xl p-6 md:p-8">
+            <div className="absolute inset-0 starfield-sparse opacity-50" aria-hidden />
+            <div className="relative">
+              <header className="flex flex-wrap items-end justify-between gap-4">
+                <div className="max-w-2xl">
+                  <p className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] text-primary">
+                    <Orbit className="h-3 w-3" aria-hidden />
+                    Diya's Research Orbit
+                  </p>
+                  <h2 id="orbit-heading" className="mt-2 font-display text-2xl font-semibold md:text-3xl">
+                    Stories closest to this research
+                  </h2>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    External news touching M-dwarf activity, stellar flares and starspots,
+                    radio astronomy and the uGMRT, time-domain surveys, and exoplanet
+                    space-weather environments — the same questions Diya Ram studies.
+                  </p>
                 </div>
-                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                  {modules.map((m) => (
-                    <div
-                      key={m.id}
-                      className="glass flex flex-col rounded-2xl p-5 transition-colors duration-300 hover:bg-white/[0.06]"
-                    >
-                      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
-                        <span className="min-w-0 text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-                          {m.label}
-                        </span>
-                        <StatusBadge status={m.status} />
-                      </div>
-                      <h4 className="mt-3 font-display text-base font-semibold leading-snug">{m.title}</h4>
-                      <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
-                        {m.description}
-                      </p>
-                      <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                        {m.date}
-                      </p>
-                      <div className="mt-3">
-                        <RelatedLinks links={[m.link]} />
-                      </div>
-                    </div>
+                <button
+                  type="button"
+                  onClick={toggleOrbit}
+                  aria-pressed={Boolean(search.orbit)}
+                  className={cn(
+                    "inline-flex min-h-10 items-center gap-2 rounded-full border px-4 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
+                    search.orbit
+                      ? "border-primary/50 bg-primary/15 text-foreground"
+                      : "border-white/15 bg-white/[0.04] hover:border-primary/40",
+                  )}
+                >
+                  <Sparkles className="h-3.5 w-3.5" aria-hidden />
+                  {search.orbit ? "Showing Research Orbit only" : "Filter feed to Research Orbit"}
+                </button>
+              </header>
+
+              <div className="mt-6 grid gap-4 md:grid-cols-3">
+                {orbitStories.map((article) => (
+                  <NewsCompactCard key={article.id} article={article} isDemo={isDemoMode} />
+                ))}
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-4 text-xs">
+                <Link
+                  to="/research"
+                  className="inline-flex items-center gap-1.5 text-primary underline-offset-4 hover:underline"
+                >
+                  Explore Diya's research areas
+                  <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+                </Link>
+                <Link
+                  to="/publications"
+                  className="inline-flex items-center gap-1.5 text-primary underline-offset-4 hover:underline"
+                >
+                  Read the publications
+                  <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* --------------------------------------------------------- feed */}
+      <section id="news-feed" ref={feedRef} aria-labelledby="feed-heading" className="container-page mt-16 scroll-mt-24">
+        <header className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">All transmissions</p>
+            <h2 id="feed-heading" className="mt-2 font-display text-2xl font-semibold md:text-3xl">
+              The full news feed
+            </h2>
+          </div>
+          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+            {data ? `${data.pagination.totalItems} stories` : "loading…"}
+          </p>
+        </header>
+
+        {/* toolbar */}
+        <div className="glass sticky top-16 z-30 mt-6 rounded-2xl p-4">
+          <div className="flex flex-col gap-3 md:flex-row md:items-center">
+            <div className="relative flex-1">
+              <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
+              <label htmlFor="news-search" className="sr-only">
+                Search astronomy stories
+              </label>
+              <input
+                id="news-search"
+                type="search"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                placeholder="Search stories, missions, observatories, topics…"
+                maxLength={120}
+                className="min-h-11 w-full rounded-full border border-white/10 bg-white/[0.04] pl-11 pr-10 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+              />
+              {searchInput && (
+                <button
+                  type="button"
+                  onClick={() => setSearchInput("")}
+                  aria-label="Clear search"
+                  className="absolute right-3 top-1/2 inline-flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                >
+                  <X className="h-4 w-4" aria-hidden />
+                </button>
+              )}
+            </div>
+
+            <div className="flex items-center gap-3">
+              <label htmlFor="news-sort" className="sr-only">
+                Sort stories
+              </label>
+              <select
+                id="news-sort"
+                value={search.sort ?? "newest"}
+                onChange={(e) => setSort(e.target.value as NewsSort)}
+                className="min-h-11 appearance-none rounded-full border border-white/10 bg-white/[0.04] px-4 text-xs text-foreground focus:border-primary/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+              >
+                <option value="newest" className="bg-background">Newest first</option>
+                <option value="oldest" className="bg-background">Oldest first</option>
+                <option value="relevance" className="bg-background">Research relevance</option>
+                <option value="featured" className="bg-background">Featured first</option>
+              </select>
+              <div className="flex-1 md:hidden">
+                <NewsFilterSheet
+                  options={options ?? emptyOptions}
+                  active={activeFilters}
+                  onToggle={toggleFilter}
+                  onClearAll={clearFilters}
+                  activeCount={activeCount}
+                />
+              </div>
+            </div>
+          </div>
+
+          {activeCount > 0 && options && (
+            <div className="mt-3">
+              <ActiveFilterChips
+                active={activeFilters}
+                options={options}
+                onToggle={toggleFilter}
+                onClearAll={clearFilters}
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="mt-6 grid gap-6 lg:grid-cols-[16rem_1fr]">
+          <NewsFilterPanel
+            options={options ?? emptyOptions}
+            active={activeFilters}
+            onToggle={toggleFilter}
+            onClearAll={clearFilters}
+            activeCount={activeCount}
+          />
+
+          <div aria-live="polite" aria-busy={isFetching}>
+            {isPending ? (
+              <NewsGridSkeleton />
+            ) : items.length === 0 ? (
+              <NewsEmptyState
+                variant={hasQuery ? "no-search-results" : activeCount > 0 ? "no-filter-matches" : "no-articles"}
+                onClearSearch={hasQuery ? () => setSearchInput("") : undefined}
+                onClearFilters={activeCount > 0 ? clearFilters : undefined}
+              />
+            ) : (
+              <>
+                <div className={cn("grid gap-5 sm:grid-cols-2 xl:grid-cols-3", isFetching && "opacity-60 transition-opacity")}>
+                  {items.map((article) => (
+                    <NewsCard key={article.id} article={article} isDemo={isDemoMode} />
                   ))}
                 </div>
-              </div>
-            );
-          })}
-        </div>
-      </Section>
-
-      {/* -------------------------------------------- featured transmission */}
-      <Section
-        id="featured"
-        eyebrow="Featured transmission"
-        title="The most recent major development"
-        intro="One record is highlighted at a time — the latest significant, verified step in the programme."
-      >
-        <div className="relative">
-          <span
-            className="pointer-events-none absolute inset-x-0 -inset-y-8 -z-10 sm:-inset-x-6 rounded-[2rem] opacity-50 blur-3xl"
-            style={{ background: "radial-gradient(closest-side, var(--nebula), transparent 75%)" }}
-            aria-hidden
-          />
-          <div className="glow-ring rounded-[1.15rem]">
-            <ChronicleCard record={featuredRecord} variant="feature" />
+                {data && (
+                  <div className="mt-10">
+                    <NewsPagination pagination={data.pagination} onPageChange={setPage} />
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
+      </section>
 
-        <div className="mt-10">
-          <div className="mb-4 flex items-center gap-3">
-            <h3 className="font-mono text-[11px] uppercase tracking-[0.24em] text-primary/80">
-              Also transmitting
-            </h3>
-            <span className="h-px flex-1 bg-gradient-to-r from-white/15 to-transparent" aria-hidden />
-          </div>
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {latestTransmissions.map((r) => (
-              <ChronicleCard key={r.id} record={r} />
-            ))}
-          </div>
-        </div>
-      </Section>
-
-      {/* --------------------------------------------------- research pulse */}
-      <Section
-        id="pulse"
-        eyebrow="Research pulse"
-        title="Live activity readout"
-        intro="What the programme has actually been doing lately — rolling activity counters followed by the most recent verified signals."
-      >
-        <dl className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
-          {pulseSummary.map((s) => (
-            <div key={s.label} className="glass rounded-2xl px-4 py-4">
-              <dt className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{s.label}</dt>
-              <dd className="mt-1 font-display text-2xl font-semibold">{s.value}</dd>
-              <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-primary/70">
-                {s.note}
-              </p>
-            </div>
-          ))}
-        </dl>
-
-        <div className="glass overflow-hidden rounded-2xl">
-          <ul className="divide-y divide-white/5">
-            {researchPulse.map((p) => (
-              <li key={p.id}>
-                <Link
-                  to="/news/$slug"
-                  params={{ slug: p.slug }}
-                  className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-4 gap-y-1 px-5 py-3.5 text-sm transition-colors hover:bg-white/5 md:grid-cols-[auto_11rem_minmax(0,1fr)_auto] md:items-center"
+      {/* ------------------------------------------------ trusted sources */}
+      {options?.sources.length ? (
+        <section aria-labelledby="sources-heading" className="container-page mt-20">
+          <header>
+            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">Provenance</p>
+            <h2 id="sources-heading" className="mt-2 font-display text-2xl font-semibold md:text-3xl">
+              Trusted sources
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+              Every story links back to its original publisher. Nothing is reproduced in full:
+              headlines and short summaries are shown for attribution and context only.
+            </p>
+          </header>
+          <ul className="mt-6 flex flex-wrap gap-2.5">
+            {options.sources.map((source) => (
+              <li key={source.id}>
+                <button
+                  type="button"
+                  onClick={() => toggleFilter("source", source.id)}
+                  aria-pressed={(activeFilters.source ?? []).includes(source.id)}
+                  className={cn(
+                    "inline-flex min-h-10 items-center gap-2 rounded-full border px-4 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
+                    (activeFilters.source ?? []).includes(source.id)
+                      ? "border-primary/50 bg-primary/15"
+                      : "border-white/12 bg-white/[0.03] text-muted-foreground hover:border-primary/40 hover:text-foreground",
+                  )}
                 >
-                  <Radio className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary anim-pulse-slow md:mt-0" aria-hidden />
-                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary/80">
-                    {p.label}
-                  </span>
-                  <span className="col-span-2 text-foreground md:col-span-1">{p.title}</span>
-                  <span className="col-start-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground md:col-start-auto md:text-right">
-                    {p.date}
-                  </span>
-                </Link>
+                  <Telescope className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                  <span className="truncate">{source.label}</span>
+                  {typeof source.count === "number" && (
+                    <span className="font-mono text-[10px] opacity-70">{source.count}</span>
+                  )}
+                </button>
               </li>
             ))}
           </ul>
-        </div>
-      </Section>
+        </section>
+      ) : null}
 
-
-      {/* ---------------------------------------------- filters + view mode */}
-      <Section
-        id="timeline"
-        eyebrow="Mission timeline"
-        title="The chronological record"
-        intro="Filter the chronicle by category, year or status, and read it as a story feed, a vertical mission timeline, or a dense archive index."
-      >
-        <div className="sticky top-16 z-30 mb-8">
-          <div className="glass-strong rounded-2xl p-4">
-            <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
-              <label className="relative flex-1">
-                <span className="sr-only">Search the chronicle</span>
-                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <input
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search records, facilities, collaborators, themes…"
-                  className="w-full rounded-xl border border-white/10 bg-white/5 py-2 pl-9 pr-3 text-sm outline-none placeholder:text-muted-foreground focus:border-primary/50"
-                />
-              </label>
-              <div className="flex flex-wrap gap-2">
-                <FilterSelect label="Category" value={category} onChange={setCategory} options={chronicleCategories} />
-                <FilterSelect label="Year" value={year} onChange={setYear} options={chronicleYears.map(String)} />
-                <FilterSelect label="Status" value={status} onChange={setStatus} options={chronicleStatuses} />
-              </div>
-              <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-white/5 p-1">
-                {(
-                  [
-                    ["story", "Story", LayoutGrid],
-                    ["timeline", "Timeline", GitBranch],
-                    ["archive", "Archive", Rows3],
-                  ] as const
-                ).map(([mode, label, Icon]) => (
-                  <button
-                    key={mode}
-                    type="button"
-                    onClick={() => setView(mode)}
-                    aria-pressed={view === mode}
-                    className={cn(
-                      "inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs",
-                      view === mode ? "bg-primary/20 text-foreground" : "text-muted-foreground hover:bg-white/5",
-                    )}
-                  >
-                    <Icon className="h-3.5 w-3.5" />
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <p className="mt-3 text-[11px] text-muted-foreground" aria-live="polite">
-              {filtered.length} of {chronicleRecords.length} records shown
-              {filtered.length !== chronicleRecords.length && (
-                <button type="button" onClick={reset} className="ml-2 text-primary underline-offset-4 hover:underline">
-                  Reset filters
-                </button>
-              )}
+      {/* ------------------------------------------------------ mission log */}
+      <section className="container-page mt-20">
+        <div className="glass flex flex-col gap-4 rounded-2xl p-6 md:flex-row md:items-center md:justify-between md:p-8">
+          <div className="max-w-2xl">
+            <h2 className="font-display text-xl font-semibold">
+              Looking for Diya Ram's own research updates?
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              Publications, observing runs, conference talks, thesis milestones and academic service
+              are documented separately in the Scientific Mission Log.
             </p>
           </div>
+          <Link
+            to="/mission-log"
+            className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full bg-grad-accent px-5 text-sm font-medium text-[oklch(0.12_0.04_265)] transition-all hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+          >
+            Open the Mission Log
+            <ArrowUpRight className="h-4 w-4" aria-hidden />
+          </Link>
         </div>
-
-        {filtered.length === 0 ? (
-          <GlassPanel>
-            No records match this combination. Try a broader search — the chronicle only lists verified entries.
-          </GlassPanel>
-        ) : view === "story" ? (
-          <StoryFeed records={filtered} />
-        ) : view === "timeline" ? (
-          <MissionTimeline records={timelineRecords} />
-        ) : (
-          <ArchiveLedger records={filtered} />
-        )}
-      </Section>
-
-      {/* -------------------------------------------------- constellation --- */}
-      <Section
-        id="constellation"
-        eyebrow="Chronicle constellation"
-        title="How the work connects"
-        intro="Observing programmes lead to papers; papers become talks and thesis chapters. Only verified relationships are drawn."
-      >
-        <ChronicleConstellation />
-      </Section>
-
-      {/* ----------------------------------------------- signal to discovery */}
-      <Section
-        id="signal"
-        eyebrow="From signal to discovery"
-        title="How a research result is made"
-        intro="Each entry in this chronicle sits somewhere along this path."
-      >
-        <ol className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {signalToDiscovery.map((s, i) => (
-            <li key={s.id} className="glass rounded-2xl p-5">
-              <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-primary/80">
-                Stage {i + 1}
-              </span>
-              <h3 className="mt-2 font-display text-lg font-semibold">{s.stage}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{s.description}</p>
-              <div className="mt-4">
-                <RelatedLinks links={[s.link]} />
-              </div>
-            </li>
-          ))}
-        </ol>
-      </Section>
-
-      {/* -------------------------------------------------- research impact */}
-      <Section
-        id="impact"
-        eyebrow="Research impact"
-        title="Verified activity snapshot"
-        intro="Counts of documented scientific output. No citation counts, rankings or invented metrics are shown."
-      >
-        <div className="grid gap-4 lg:grid-cols-2">
-          <div className="glass rounded-2xl p-6">
-            <ul className="space-y-4">
-              {impactMetrics.map((m) => (
-                <li key={m.label}>
-                  <div className="flex items-baseline justify-between gap-3">
-                    <span className="text-sm text-muted-foreground">{m.label}</span>
-                    <span className="font-display text-lg font-semibold">{m.value}</span>
-                  </div>
-                  <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-white/10">
-                    <div
-                      className="h-1 rounded-full bg-primary/70"
-                      style={{ width: `${Math.min(100, (m.value / m.max) * 100)}%` }}
-                    />
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="glass rounded-2xl p-6">
-            <h3 className="font-display text-lg font-semibold">Year by year</h3>
-            <ul className="mt-4 space-y-3">
-              {yearSummaries.map((y) => (
-                <li key={y.year} className="flex items-start gap-4 border-b border-white/5 pb-3 last:border-0">
-                  <span className="font-mono text-sm text-primary">{y.year}</span>
-                  <div className="flex-1">
-                    <p className="text-sm text-foreground">{y.headline}</p>
-                    <p className="mt-1 text-[11px] text-muted-foreground">
-                      {y.publications} publication{y.publications === 1 ? "" : "s"} · {y.presentations} presentation
-                      {y.presentations === 1 ? "" : "s"} · {y.milestones} milestone{y.milestones === 1 ? "" : "s"}
-                      {phaseForYear(y.year) ? ` · ${phaseForYear(y.year)!.label}` : ""}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </Section>
-
-      {/* ------------------------------------------------ upcoming missions */}
-      <Section
-        id="upcoming"
-        eyebrow="Upcoming missions"
-        title="What comes next"
-        intro="Confirmed next steps and long-term scientific directions, clearly labelled. Nothing here is presented as a completed result."
-      >
-        <div className="space-y-8">
-          {(["Confirmed", "In Progress", "Long-Term Vision"] as const).map((tier) => {
-            const records = upcomingRecords.filter((r) => upcomingTier(r) === tier);
-            if (records.length === 0) return null;
-            return (
-              <div key={tier}>
-                <div className="mb-3 flex items-center gap-3">
-                  <h3 className="font-mono text-[11px] uppercase tracking-[0.24em] text-primary/80">{tier}</h3>
-                  <span className="h-px flex-1 bg-gradient-to-r from-white/15 to-transparent" aria-hidden />
-                </div>
-                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                  {records.map((r) => (
-                    <div
-                      key={r.id}
-                      className="glass flex flex-col rounded-2xl p-5 transition-colors duration-300 hover:bg-white/[0.06]"
-                    >
-                      <StatusBadge status={r.status} />
-                      <h4 className="mt-3 font-display text-lg font-semibold leading-snug">
-                        <Link to="/news/$slug" params={{ slug: r.slug }} className="hover:text-primary">
-                          {r.title}
-                        </Link>
-                      </h4>
-                      <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{r.summary}</p>
-                      <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                        {r.dateLabel}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-      </Section>
-
-      {/* ----------------------------------------------------- full archive */}
-      <Section
-        id="archive"
-        eyebrow="Chronicle archive"
-        title="Every record, permanently indexed"
-        intro="The complete mission log, grouped by career phase. Each entry has its own permanent page with sources and related links."
-      >
-        <div className="space-y-8">
-          {careerPhases
-            .slice()
-            .reverse()
-            .map((phase) => {
-              const records = datedRecords.filter(
-                (r) => (r.year ?? 0) >= phase.from && (r.year ?? 0) <= phase.to,
-              );
-              if (records.length === 0) return null;
-              return (
-                <div key={phase.id}>
-                  <div className="mb-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                    <h3 className="font-display text-xl font-semibold">{phase.label}</h3>
-                    <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-primary/80">
-                      {phase.from}–{phase.to}
-                    </span>
-                  </div>
-                  <p className="mb-4 max-w-3xl text-sm text-muted-foreground">{phase.note}</p>
-                  <ul className="glass divide-y divide-white/5 overflow-hidden rounded-2xl">
-                    {records.map((r) => (
-                      <li key={r.id}>
-                        <Link
-                          to="/news/$slug"
-                          params={{ slug: r.slug }}
-                          className="flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-3 hover:bg-white/5"
-                        >
-                          <span className="w-40 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                            {r.dateLabel}
-                          </span>
-                          <span className="flex-1 text-sm text-foreground">{r.title}</span>
-                          <span className="text-[10px] uppercase tracking-[0.2em] text-primary/80">
-                            {r.category}
-                          </span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              );
-            })}
-        </div>
-
-        <div className="mt-8">
-          <GlassPanel>
-            <p className="text-sm text-muted-foreground">
-              This chronicle is maintained as a permanent scientific record. New publications, observing campaigns,
-              presentations and milestones are appended as they are verified — nothing is removed.
-            </p>
-            <div className="mt-4">
-              <RelatedLinks
-                links={[
-                  { to: "/publications", label: "Publications" },
-                  { to: "/conferences", label: "Conferences" },
-                  { to: "/observations", label: "Observing programme" },
-                  { to: "/downloads", label: "Research Vault" },
-                  { to: "/contact", label: "Contact" },
-                ]}
-              />
-            </div>
-          </GlassPanel>
-        </div>
-      </Section>
-    </>
-  );
-}
-
-/* --------------------------------------------------------------- pieces */
-
-function FilterSelect({
-  label,
-  value,
-  onChange,
-  options,
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  options: string[];
-}) {
-  return (
-    <label className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2">
-      <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{label}</span>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="bg-transparent text-xs text-foreground outline-none"
-      >
-        <option value="All" className="bg-background">
-          All
-        </option>
-        {options.map((o) => (
-          <option key={o} value={o} className="bg-background">
-            {o}
-          </option>
-        ))}
-      </select>
-    </label>
-  );
-}
-
-function StoryFeed({ records }: { records: ChronicleRecord[] }) {
-  return (
-    <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-      {records.map((r) => (
-        <ChronicleCard key={r.id} record={r} />
-      ))}
+      </section>
     </div>
   );
 }
 
-function MissionTimeline({ records }: { records: ChronicleRecord[] }) {
-  let lastYear: number | undefined;
-  return (
-    <div className="relative border-l border-white/10 pl-6 md:pl-10">
-      {records.map((r) => {
-        const showYear = r.year !== lastYear;
-        lastYear = r.year;
-        const phase = r.year ? phaseForYear(r.year) : undefined;
-        return (
-          <div key={r.id}>
-            {showYear && (
-              <div className="relative mb-4 mt-8 first:mt-0">
-                <span className="absolute -left-[31px] top-1.5 h-3 w-3 rounded-full border border-primary/60 bg-background md:-left-[47px]" />
-                <h3 className="font-display text-2xl font-semibold">{r.year}</h3>
-                {phase && (
-                  <p className="text-[11px] uppercase tracking-[0.2em] text-primary/80">{phase.label}</p>
-                )}
-              </div>
-            )}
-            <div className="relative mb-4">
-              <span className="absolute -left-[27px] top-6 h-1.5 w-1.5 rounded-full bg-primary/70 md:-left-[43px]" />
-              <ChronicleCard record={r} variant="compact" />
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-function ArchiveLedger({ records }: { records: ChronicleRecord[] }) {
-  return (
-    <div className="glass overflow-x-auto rounded-2xl">
-      <table className="w-full min-w-[720px] text-left text-sm">
-        <caption className="sr-only">Complete chronicle archive of verified research records</caption>
-        <thead>
-          <tr className="border-b border-white/10 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-            <th scope="col" className="px-5 py-3 font-normal">Date</th>
-            <th scope="col" className="px-5 py-3 font-normal">Record</th>
-            <th scope="col" className="px-5 py-3 font-normal">Category</th>
-            <th scope="col" className="px-5 py-3 font-normal">Status</th>
-            <th scope="col" className="px-5 py-3 font-normal">Source</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-white/5">
-          {records.map((r) => (
-            <tr key={r.id} className="hover:bg-white/5">
-              <td className="px-5 py-3 font-mono text-[11px] text-muted-foreground">{r.dateLabel}</td>
-              <td className="px-5 py-3">
-                <Link to="/news/$slug" params={{ slug: r.slug }} className="text-foreground hover:text-primary">
-                  {r.title}
-                </Link>
-              </td>
-              <td className="px-5 py-3 text-[11px] text-primary/80">{r.category}</td>
-              <td className="px-5 py-3"><StatusBadge status={r.status} /></td>
-              <td className="px-5 py-3"><SourceTag label={r.sourceLabel} /></td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
+const emptyOptions = {
+  sources: [],
+  categories: [],
+  topics: [],
+  countries: [],
+  missions: [],
+  observatories: [],
+  telescopes: [],
+  newsTypes: [],
+};

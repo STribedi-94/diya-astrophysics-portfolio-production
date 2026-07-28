@@ -37,7 +37,7 @@ export const reviewLinks = [
   { label: "Teaching", to: "/teaching" },
   { label: "Gallery", to: "/gallery" },
   { label: "Downloads", to: "/downloads" },
-  { label: "Research Chronicle", to: "/news" },
+  { label: "Scientific Mission Log", to: "/mission-log" },
 ] as const;
 
 export const privacyNote =

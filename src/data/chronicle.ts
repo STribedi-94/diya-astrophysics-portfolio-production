@@ -982,7 +982,7 @@ export const missionStatus: MissionStatusModule[] = [
       "The thesis is with the examiners. The University of Calcutta will schedule the viva; no date has been announced.",
     date: "Date to be announced",
     status: "In Progress",
-    link: { to: "/news/$slug", params: { slug: "doctoral-thesis-defence" }, label: "Defence record" },
+    link: { to: "/mission-log/$slug", params: { slug: "doctoral-thesis-defence" }, label: "Defence record" },
   },
   {
     id: "peer-review",
@@ -993,7 +993,7 @@ export const missionStatus: MissionStatusModule[] = [
       "Reviewed a manuscript on the magnetic activity of ultracool dwarfs in the LAMOST DR11 sample. Referee content remains confidential.",
     date: "2025",
     status: "Completed",
-    link: { to: "/news/$slug", params: { slug: "aas-journal-manuscript-review" }, label: "Peer review record" },
+    link: { to: "/mission-log/$slug", params: { slug: "aas-journal-manuscript-review" }, label: "Peer review record" },
   },
   {
     id: "collaborations",
@@ -1037,7 +1037,7 @@ export const missionStatus: MissionStatusModule[] = [
       "Extending the TESS-plus-radio approach to a larger M-dwarf sample, and connecting flare energetics to star–planet interaction and atmospheric habitability.",
     date: "Long-term direction",
     status: "Long-Term Vision",
-    link: { to: "/news/$slug", params: { slug: "continuing-m-dwarf-programme" }, label: "Programme outlook" },
+    link: { to: "/mission-log/$slug", params: { slug: "continuing-m-dwarf-programme" }, label: "Programme outlook" },
   },
 ];
 
