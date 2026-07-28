@@ -10,7 +10,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 const LINES = ["Welcome to Diya’s", "Astrophysical Universe"] as const;
 const GLYPHS = "⟟⌇⏃⌰⋉⌖⏁⍜⌿⟒⋏⊑⏚⍀⋔⟊";
 const SESSION_KEY = "dr-entrance-seen";
-const PENDING_CLASS = "entrance-pending";
+const PREPAINT_ID = "entrance-prepaint";
 
 // Choreography (ms)
 const T_INTERFACE_IN = 800;
@@ -82,8 +82,7 @@ export function useCosmicEntrance(): EntranceState {
       shouldRun = false;
     }
 
-    const releaseClass = () =>
-      document.documentElement.classList.remove(PENDING_CLASS);
+    const releaseClass = () => document.getElementById(PREPAINT_ID)?.remove();
 
     if (!shouldRun) {
       releaseClass();
