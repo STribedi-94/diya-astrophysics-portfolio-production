@@ -1832,7 +1832,7 @@ function ContinueJourney() {
     { to: "/facilities", label: "Research Facilities", reason: "HCT, DOT, uGMRT and TESS observing capabilities.", icon: Radio },
     { to: "/academic-journey", label: "Academic Journey", reason: "The doctoral trajectory and milestones behind these talks.", icon: GraduationCap },
     { to: "/downloads", label: "Downloads", reason: "CV, publication list and other research documents.", icon: Download },
-    { to: "/news", label: "News", reason: "Latest updates and research chronicle.", icon: Newspaper },
+    { to: "/mission-log", label: "Scientific Mission Log", reason: "Verified milestones across the research programme.", icon: Newspaper },
   ] as const;
   return (
     <SectionShell

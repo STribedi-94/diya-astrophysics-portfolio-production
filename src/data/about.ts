@@ -476,7 +476,7 @@ export const audiencePathways = [
     links: [
       { label: "Research Universe", to: "/research-universe" },
       { label: "Gallery", to: "/gallery" },
-      { label: "News", to: "/news" },
+      { label: "Scientific Mission Log", to: "/mission-log" },
     ],
   },
 ] as const;

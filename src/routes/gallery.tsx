@@ -1311,7 +1311,7 @@ const RELATED = [
   { to: "/facilities", label: "Research Facilities", icon: Telescope },
   { to: "/academic-journey", label: "Academic Journey", icon: GraduationCap },
   { to: "/publications", label: "Publications", icon: BookOpen },
-  { to: "/news", label: "News & Updates", icon: Newspaper },
+  { to: "/mission-log", label: "Scientific Mission Log", icon: Newspaper },
 ] as const;
 
 function RelatedSection() {

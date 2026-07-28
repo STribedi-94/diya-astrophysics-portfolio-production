@@ -1193,7 +1193,7 @@ function DownloadsPage() {
             { to: "/gallery", label: "Scientific Gallery", icon: Camera },
             { to: "/academic-journey", label: "Academic Journey", icon: GraduationCap },
             { to: "/teaching", label: "Teaching & Mentoring", icon: Users },
-            { to: "/news", label: "News & Updates", icon: Newspaper },
+            { to: "/mission-log", label: "Scientific Mission Log", icon: Newspaper },
             { to: "/contact", label: "Contact", icon: Mail },
           ].map(({ to, label, icon: Icon }) => (
             <li key={to}>

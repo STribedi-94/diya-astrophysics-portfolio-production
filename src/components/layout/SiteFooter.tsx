@@ -29,7 +29,8 @@ const cols = [
       { label: "Teaching", to: "/teaching" },
       { label: "Gallery", to: "/gallery" },
       { label: "Downloads", to: "/downloads" },
-      { label: "News", to: "/news" },
+      { label: "Scientific Mission Log", to: "/mission-log" },
+      { label: "Astrophysics News", to: "/news" },
     ],
   },
   {
