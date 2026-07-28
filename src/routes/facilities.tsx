@@ -123,7 +123,7 @@ function ResearchFacilitiesPage() {
 
 function SpectrumAxis() {
   const stops = [
-    { label: "Radio", sub: "metre λ (250–850 MHz)", pos: 10, color: "var(--aurora)" },
+    { label: "Radio", sub: "decimetre λ (550–1460 MHz)", pos: 10, color: "var(--aurora)" },
     { label: "Optical", sub: "≈ 350–900 nm", pos: 58, color: "var(--electric)" },
     { label: "Near-Infrared", sub: "to ≈ 2.5 µm", pos: 88, color: "var(--magenta)" },
   ];
