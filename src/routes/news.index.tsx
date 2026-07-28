@@ -180,7 +180,7 @@ function HubHero({
           {[
             { label: "Stories in feed", value: totalItems, icon: Newspaper },
             { label: "Trusted sources", value: sourceCount, icon: Globe2 },
-            { label: "Research Orbit", value: orbitCount, icon: Orbit },
+            { label: "Topics tracked", value: orbitCount, icon: Orbit },
             { label: "Feed status", value: statusLabel, icon: Signal },
           ].map((stat) => (
             <div key={stat.label} className="glass rounded-xl px-4 py-3">
