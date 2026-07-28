@@ -207,14 +207,17 @@ export function CosmicEntrance({ state }: { state: EntranceState }) {
                   return (
                     <span
                       key={i}
-                      className="text-primary"
+                      className="inline-block w-[1ch] text-center align-baseline text-primary"
                       style={{ opacity: 0.75 + glyphStep * 0.08 }}
                     >
                       {GLYPHS[(index * 5 + glyphStep) % GLYPHS.length]}
                     </span>
                   );
                 return (
-                  <span key={i} className="text-primary/25">
+                  <span
+                    key={i}
+                    className="inline-block w-[1ch] text-center align-baseline text-primary/25"
+                  >
                     {GLYPHS[(index * 3) % GLYPHS.length]}
                   </span>
                 );
