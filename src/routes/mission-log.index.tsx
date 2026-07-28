@@ -47,7 +47,7 @@ const SECTIONS: NavSection[] = [
   { id: "archive", label: "Full archive" },
 ];
 
-export const Route = createFileRoute("/news/")({
+export const Route = createFileRoute("/mission-log/")({
   head: () => ({
     meta: [
       { title: TITLE },

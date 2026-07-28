@@ -114,7 +114,7 @@ export function ChronicleCard({
             feature ? "text-2xl md:text-3xl" : "text-lg",
           )}
         >
-          <Link to="/news/$slug" params={{ slug: record.slug }} className="hover:text-primary">
+          <Link to="/mission-log/$slug" params={{ slug: record.slug }} className="hover:text-primary">
             <span className="absolute inset-0" aria-hidden />
             {record.title}
           </Link>

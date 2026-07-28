@@ -22,7 +22,7 @@ type EntryLoaderData = {
   next?: ChronicleRecord;
 };
 
-export const Route = createFileRoute("/news/$slug")({
+export const Route = createFileRoute("/mission-log/$slug")({
   loader: ({ params }): EntryLoaderData => {
     const record = chronicleBySlug.get(params.slug);
     if (!record) throw notFound();

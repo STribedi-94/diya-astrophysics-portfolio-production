@@ -74,7 +74,7 @@ export function ChronicleConstellation() {
             <p className="text-[10px] uppercase tracking-[0.24em] text-primary/80">{hover.category}</p>
             <p className="mt-1 text-sm text-foreground">{hover.label}</p>
             <Link
-              to="/news/$slug"
+              to="/mission-log/$slug"
               params={{ slug: hover.slug }}
               className="mt-1 inline-block text-xs text-primary underline-offset-4 hover:underline"
             >
