@@ -784,7 +784,6 @@ function Highlights() {
 // ---- Constellation visual --------------------------------------------
 
 function Constellation() {
-  const svgRef = useRef<SVGSVGElement>(null);
   const [hover, setHover] = useState<string | null>(null);
   const nodeMap = useMemo(
     () => Object.fromEntries(constellationNodes.map((n) => [n.id, n])),
@@ -798,34 +797,92 @@ function Constellation() {
       intro="A quiet map of the ideas that connect research to mentoring."
     >
       <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
-        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-2">
+        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/50">
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(70% 90% at 50% 45%, hsl(var(--primary) / 0.12), transparent 70%), radial-gradient(45% 60% at 88% 90%, hsl(var(--nebula) / 0.16), transparent 70%), radial-gradient(40% 55% at 8% 12%, hsl(var(--nebula) / 0.10), transparent 70%)",
+            }}
+            aria-hidden
+          />
           <svg
-            ref={svgRef}
-            viewBox="0 0 100 100"
+            viewBox="0 0 200 120"
             role="img"
             aria-label="Knowledge constellation linking curiosity, observation, data, analysis, interpretation, communication, mentoring and discovery."
-            className="h-[420px] w-full motion-reduce:animate-none"
+            className="relative h-[300px] w-full sm:h-[380px] lg:h-[420px]"
           >
-            {constellationEdges.map(([a, b], i) => {
-              const na = nodeMap[a];
-              const nb = nodeMap[b];
-              const active = hover && (hover === a || hover === b);
-              return (
-                <line
+            <defs>
+              <radialGradient id="kc-core" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.55" />
+                <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
+              </radialGradient>
+              <linearGradient id="kc-link" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.55" />
+                <stop offset="100%" stopColor="white" stopOpacity="0.12" />
+              </linearGradient>
+              <filter id="kc-glow" x="-60%" y="-60%" width="220%" height="220%">
+                <feGaussianBlur stdDeviation="1.4" result="b" />
+                <feMerge>
+                  <feMergeNode in="b" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            {/* distant field stars */}
+            <g aria-hidden>
+              {fieldStars.map((s, i) => (
+                <circle
                   key={i}
-                  x1={na.x}
-                  y1={na.y}
-                  x2={nb.x}
-                  y2={nb.y}
-                  stroke="hsl(var(--primary))"
-                  strokeOpacity={active ? 0.75 : 0.25}
-                  strokeWidth={active ? 0.35 : 0.2}
+                  cx={s.x}
+                  cy={s.y}
+                  r={s.r}
+                  fill="white"
+                  fillOpacity={s.o}
+                  className={i % 7 === 0 ? "anim-pulse-slow motion-reduce:animate-none" : undefined}
+                  style={i % 7 === 0 ? { animationDelay: `${(i % 5) * 0.6}s` } : undefined}
                 />
-              );
-            })}
+              ))}
+            </g>
+
+            {/* faint halo behind the central star */}
+            <circle cx={100} cy={58} r={44} fill="url(#kc-core)" aria-hidden />
+
+            {/* curved connecting paths */}
+            <g aria-hidden>
+              {constellationEdges.map(([a, b], i) => {
+                const na = nodeMap[a];
+                const nb = nodeMap[b];
+                const active = hover && (hover === a || hover === b);
+                const mx = (na.x + nb.x) / 2;
+                const my = (na.y + nb.y) / 2;
+                const bow = i % 2 === 0 ? 4 : -4;
+                const dx = nb.x - na.x;
+                const dy = nb.y - na.y;
+                const len = Math.max(1, Math.hypot(dx, dy));
+                const cx = Number((mx + (-dy / len) * bow).toFixed(2));
+                const cy = Number((my + (dx / len) * bow).toFixed(2));
+                return (
+                  <path
+                    key={i}
+                    d={`M ${na.x} ${na.y} Q ${cx} ${cy} ${nb.x} ${nb.y}`}
+                    fill="none"
+                    stroke="url(#kc-link)"
+                    strokeOpacity={active ? 0.95 : 0.32}
+                    strokeWidth={active ? 0.55 : 0.28}
+                    strokeLinecap="round"
+                    className="transition-all duration-300"
+                  />
+                );
+              })}
+            </g>
+
+            {/* stellar nodes */}
             {constellationNodes.map((n) => {
               const isCenter = n.id === "discovery";
               const active = hover === n.id;
+              const labelAbove = n.y > 60;
               return (
                 <g
                   key={n.id}
@@ -834,29 +891,60 @@ function Constellation() {
                   onFocus={() => setHover(n.id)}
                   onBlur={() => setHover(null)}
                   tabIndex={0}
-                  className="cursor-pointer focus:outline-none"
+                  role="listitem"
+                  aria-label={n.label}
+                  className="cursor-pointer outline-none focus-visible:[&>circle:first-child]:stroke-primary"
                 >
+                  {/* focus/hover halo */}
                   <circle
                     cx={n.x}
                     cy={n.y}
-                    r={isCenter ? 2.4 : active ? 1.6 : 1.2}
-                    fill={isCenter ? "hsl(var(--primary))" : "white"}
-                    fillOpacity={isCenter ? 1 : active ? 1 : 0.85}
-                  />
-                  <circle
-                    cx={n.x}
-                    cy={n.y}
-                    r={isCenter ? 4.5 : 3}
+                    r={isCenter ? 9 : 6}
                     fill="hsl(var(--primary))"
-                    fillOpacity={active ? 0.25 : 0.1}
+                    fillOpacity={active ? 0.22 : 0.08}
+                    stroke="transparent"
+                    strokeWidth={0.4}
+                    className="transition-all duration-300"
                   />
+                  {/* diffraction spikes */}
+                  <g
+                    stroke={isCenter ? "hsl(var(--primary))" : "white"}
+                    strokeOpacity={active ? 0.6 : 0.28}
+                    strokeWidth={isCenter ? 0.4 : 0.25}
+                    strokeLinecap="round"
+                  >
+                    <line x1={n.x - n.mag * 2.6} y1={n.y} x2={n.x + n.mag * 2.6} y2={n.y} />
+                    <line x1={n.x} y1={n.y - n.mag * 2.6} x2={n.x} y2={n.y + n.mag * 2.6} />
+                  </g>
+                  <circle
+                    cx={n.x}
+                    cy={n.y}
+                    r={active ? n.mag * 0.95 : n.mag * 0.75}
+                    fill={isCenter ? "hsl(var(--primary))" : "white"}
+                    fillOpacity={0.95}
+                    filter="url(#kc-glow)"
+                    className="transition-all duration-300"
+                  />
+                  {isCenter && (
+                    <circle
+                      cx={n.x}
+                      cy={n.y}
+                      r={6.5}
+                      fill="none"
+                      stroke="hsl(var(--primary))"
+                      strokeOpacity={0.45}
+                      strokeWidth={0.3}
+                      className="anim-pulse-slow motion-reduce:animate-none"
+                    />
+                  )}
                   <text
                     x={n.x}
-                    y={n.y - 3.5}
+                    y={labelAbove ? n.y - (isCenter ? 10 : 7) : n.y + (isCenter ? 15 : 12)}
                     textAnchor="middle"
-                    fontSize="2.4"
+                    fontSize={isCenter ? 5 : 4.2}
                     fill="white"
-                    fillOpacity={active || isCenter ? 0.95 : 0.7}
+                    fillOpacity={active || isCenter ? 0.96 : 0.68}
+                    className="font-display transition-opacity duration-300"
                   >
                     {n.label}
                   </text>
@@ -895,6 +983,7 @@ function Constellation() {
     </Section>
   );
 }
+
 
 function Vision() {
   return (
