@@ -41,7 +41,7 @@ export const projects: ProjectSummary[] = [
     wavelength: "Radio",
     facilities: ["ugmrt"],
     methodology: [
-      "uGMRT Band-3 and Band-4 interferometric imaging",
+      "uGMRT Band 4 and Band 5 interferometric imaging",
       "Dynamic spectral analysis",
       "Multi-epoch monitoring",
     ],
@@ -153,7 +153,7 @@ export const projects: ProjectSummary[] = [
     wavelength: "Radio",
     facilities: ["ugmrt"],
     methodology: [
-      "uGMRT Band-3 / Band-4 targeted observations",
+      "uGMRT Band 4 / Band 5 targeted observations",
       "Interferometric imaging",
       "Dynamic-spectrum searches for possible coherent bursts",
     ],

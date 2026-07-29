@@ -145,7 +145,7 @@ export const researchThemes = [
     title: "Low-Frequency Stellar Radio Emission",
     summary:
       "Using uGMRT observations to investigate coherent and incoherent radio emission associated with magnetic activity in nearby M dwarfs.",
-    method: "uGMRT band-3 / band-4 imaging",
+    method: "uGMRT Band 4 / Band 5 imaging",
     accent: "radio-teal",
   },
   {

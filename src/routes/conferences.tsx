@@ -1363,7 +1363,7 @@ function ImpactJourney() {
     },
     {
       label: "Data Acquisition",
-      detail: "TANSPEC, HFOSC, Band-3/4/5 uGMRT",
+      detail: "TANSPEC, HFOSC, uGMRT Band 4 / Band 5",
       to: "/facilities",
       icon: Radio,
     },

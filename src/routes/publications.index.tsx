@@ -1284,7 +1284,7 @@ function PublicationsPage() {
                   <h2 className="font-display text-3xl font-semibold md:text-4xl">Accepted manuscript</h2>
                   <p className="mt-3 text-white/65">
                     Peer-accepted manuscript on the mid-M dwarf GJ 398 — combining TESS
-                    short-cadence photometry with uGMRT Band-4/5 radio observations to probe
+                    short-cadence photometry with uGMRT Band 4 / Band 5 radio observations to probe
                     the magnetic activity of a star at the fully-convective boundary.
                   </p>
 

@@ -156,7 +156,7 @@ const methodGroups = [
       { name: "TESS time-domain photometry", note: "Short-cadence light curves, flare detection, rotational modulation." },
       { name: "Optical spectroscopy (HCT)", note: "Medium-resolution chromospheric diagnostics on nearby M-dwarfs." },
       { name: "Near-infrared spectroscopy (DOT)", note: "Cool-atmosphere diagnostics and molecular features." },
-      { name: "Low-frequency radio (uGMRT)", note: "Band-3 / Band-4 interferometric imaging of quiescent M-dwarfs." },
+      { name: "Low-frequency radio (uGMRT)", note: "Band 4 / Band 5 interferometric imaging of quiescent M-dwarfs (550–850 MHz and 1000–1450 MHz)." },
     ],
   },
   {

@@ -405,7 +405,7 @@ const JOURNEY_STAGES = [
   {
     icon: Settings2,
     title: "Instrument Configuration",
-    desc: "Choose the appropriate telescope, backend and mode — HFOSC on HCT, spectrographs on DOT, Band-3/Band-4 on uGMRT, TESS short cadence.",
+    desc: "Choose the appropriate telescope, backend and mode — HFOSC on HCT, spectrographs on DOT, Band 4 / Band 5 on uGMRT, TESS short cadence.",
   },
   {
     icon: Telescope,
@@ -485,7 +485,7 @@ const LOGBOOK: LogbookEntry[] = [
   {
     facilitySlug: "ugmrt",
     facility: "upgraded GMRT",
-    instrument: "Band-3 & Band-4 interferometry",
+    instrument: "Band 4 & Band 5 interferometry (550–850 MHz · 1000–1450 MHz)",
     wavelength: "Radio",
     purpose: "Search for and constrain low-frequency emission from nearby M-dwarfs.",
     targetType: "Nearby M-dwarfs (GJ 1151, GJ 398)",

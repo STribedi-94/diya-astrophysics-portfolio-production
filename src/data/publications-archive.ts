@@ -194,9 +194,9 @@ export const publicationsArchive: PublicationRecord[] = [
     instruments: ["TESS", "uGMRT"],
     targets: ["GJ 398"],
     shortSummary:
-      "TESS photometry and uGMRT Band-4/5 observations of the highly active mid-M dwarf GJ 398 — reporting its first superflare and constraining coronal magnetic fields near the fully-convective boundary.",
+      "TESS photometry and uGMRT Band 4 and Band 5 observations of the highly active mid-M dwarf GJ 398 — reporting its first superflare and constraining coronal magnetic fields near the fully-convective boundary.",
     abstract:
-      "GJ 398 is a highly active mid-M dwarf (M4V) at ~15 pc, sitting near the transition between partially and fully convective interiors — a benchmark for multi-wavelength magnetic energy release in active mid-M dwarfs. Using 2-minute TESS short-cadence photometry and uGMRT Band-4 and Band-5 observations, we report for the first time a superflare of 2.6 × 10^34 erg with a duration of ≈90 min, implying a magnetic field of at least 362 G. The flare duration–energy scaling Δt ∝ E_bol^(0.51 ± 0.03) implies a characteristic coronal field of ≈60 G, with localised >200 G regions needed only for the most energetic events. No radio emission was detected in 56 min of on-source integration per band.",
+      "GJ 398 is a highly active mid-M dwarf (M4V) at ~15 pc, sitting near the transition between partially and fully convective interiors — a benchmark for multi-wavelength magnetic energy release in active mid-M dwarfs. Using 2-minute TESS short-cadence photometry and uGMRT Band 4 and Band 5 observations, we report for the first time a superflare of 2.6 × 10^34 erg with a duration of ≈90 min, implying a magnetic field of at least 362 G. The flare duration–energy scaling Δt ∝ E_bol^(0.51 ± 0.03) implies a characteristic coronal field of ≈60 G, with localised >200 G regions needed only for the most energetic events. No radio emission was detected in 56 min of on-source integration per band.",
     keyFindings: [
       "First-reported superflare on GJ 398: 2.6 × 10^34 erg over ≈90 min.",
       "Characteristic coronal magnetic field ≈60 G; localised >200 G required for the largest flare.",

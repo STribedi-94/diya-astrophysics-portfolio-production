@@ -144,7 +144,7 @@ export const researchAreas: ResearchArea[] = [
     question:
       "Which cool stars show detectable coherent radio emission, and what mechanisms produce it?",
     methodology: [
-      "uGMRT Band-3 and Band-4 observations",
+      "uGMRT Band 4 (550–850 MHz) and Band 5 (1000–1450 MHz) observations",
       "Interferometric imaging",
       "Dynamic spectra analysis",
     ],

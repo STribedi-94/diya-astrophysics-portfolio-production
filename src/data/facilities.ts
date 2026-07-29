@@ -33,7 +33,7 @@ export const facilities: Facility[] = [
     location: "Khodad, Pune",
     country: "India",
     band: "Radio (Band 4 & Band 5)",
-    wavelength: "Decimetre (Band 4: 550–850 MHz · Band 5: 1000–1460 MHz)",
+    wavelength: "Decimetre (Band 4: 550–850 MHz · Band 5: 1000–1450 MHz)",
     aperture: "Array of 30 × 45 m parabolic dishes",
     type: "ground",
     category: "radio",
