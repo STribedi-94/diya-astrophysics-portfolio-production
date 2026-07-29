@@ -336,14 +336,15 @@ function NewsHubPage() {
   const hasQuery = Boolean(search.q?.trim());
   const statusLabel =
     data?.status === "demo"
-      ? "Demo"
+      ? "Demonstration"
       : data?.status === "partial"
-        ? "Partial"
+        ? "Partial update"
         : data?.status === "cached"
           ? "Cached"
-          : error
-            ? "Offline"
+          : error || data?.status === "error"
+            ? "Unavailable"
             : "Live";
+
 
   return (
     <div className="pb-24">
