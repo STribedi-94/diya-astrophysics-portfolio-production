@@ -97,13 +97,26 @@ export function ObservatoryNetworkGlobe() {
 
   useEffect(() => {
     const el = wrapRef.current;
-    if (!el || typeof IntersectionObserver === "undefined") return;
-    const io = new IntersectionObserver((entries) => setInView(entries[0].isIntersecting), {
-      rootMargin: "200px",
-    });
-    io.observe(el);
-    return () => io.disconnect();
+    if (!el) return;
+    const check = () => {
+      const r = el.getBoundingClientRect();
+      setInView(r.bottom > -300 && r.top < window.innerHeight + 300);
+    };
+    check();
+    let io: IntersectionObserver | undefined;
+    if (typeof IntersectionObserver !== "undefined") {
+      io = new IntersectionObserver(() => check(), { rootMargin: "300px", threshold: 0 });
+      io.observe(el);
+    }
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    return () => {
+      io?.disconnect();
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
   }, []);
+
 
   useEffect(() => {
     if (!selectedId) return;
