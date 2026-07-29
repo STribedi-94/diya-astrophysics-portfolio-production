@@ -87,7 +87,6 @@ export function ObservatoryNetworkGlobe() {
   const selected = networkNodes.find((n) => n.id === selectedId) ?? null;
 
   useEffect(() => {
-    console.log("DBG effect run");
     setMounted(true);
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReduced(mq.matches);
@@ -99,10 +98,8 @@ export function ObservatoryNetworkGlobe() {
   useEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
-    console.log("DBG io attached");
     const check = () => {
       const r = el.getBoundingClientRect();
-      console.log("DBG check", r.top, window.innerHeight);
       setInView(r.bottom > -300 && r.top < window.innerHeight + 300);
     };
     check();
@@ -111,11 +108,11 @@ export function ObservatoryNetworkGlobe() {
       io = new IntersectionObserver(() => check(), { rootMargin: "300px", threshold: 0 });
       io.observe(el);
     }
-    window.addEventListener("scroll", check, { passive: true });
+    document.addEventListener("scroll", check, { passive: true, capture: true });
     window.addEventListener("resize", check);
     return () => {
       io?.disconnect();
-      window.removeEventListener("scroll", check);
+      document.removeEventListener("scroll", check, true);
       window.removeEventListener("resize", check);
     };
   }, []);
@@ -131,7 +128,6 @@ export function ObservatoryNetworkGlobe() {
   }, [selectedId]);
 
   const showScene = mounted && inView && !failed;
-  if (typeof window !== "undefined") console.log("DBG", { mounted, inView, failed, showScene });
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1.55fr_1fr]">
