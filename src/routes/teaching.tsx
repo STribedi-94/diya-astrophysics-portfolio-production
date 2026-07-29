@@ -802,7 +802,7 @@ function Constellation() {
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                "radial-gradient(70% 90% at 50% 45%, color-mix(in oklab, var(--primary) 12%, transparent), transparent 70%), radial-gradient(45% 60% at 88% 90%, color-mix(in oklab, var(--nebula) 16%, transparent), transparent 70%), radial-gradient(40% 55% at 8% 12%, color-mix(in oklab, var(--nebula) 10%, transparent), transparent 70%)",
+                "radial-gradient(55% 70% at 50% 48%, color-mix(in oklab, var(--primary) 8%, transparent), transparent 70%), radial-gradient(45% 60% at 88% 90%, color-mix(in oklab, var(--nebula) 16%, transparent), transparent 70%), radial-gradient(40% 55% at 8% 12%, color-mix(in oklab, var(--nebula) 10%, transparent), transparent 70%)",
             }}
             aria-hidden
           />
@@ -814,11 +814,11 @@ function Constellation() {
           >
             <defs>
               <radialGradient id="kc-core" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="var(--primary)" stopOpacity="0.55" />
+                <stop offset="0%" stopColor="var(--primary)" stopOpacity="0.28" />
                 <stop offset="100%" stopColor="var(--primary)" stopOpacity="0" />
               </radialGradient>
               <linearGradient id="kc-link" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="var(--primary)" stopOpacity="0.55" />
+                <stop offset="0%" stopColor="var(--primary)" stopOpacity="0.28" />
                 <stop offset="100%" stopColor="white" stopOpacity="0.12" />
               </linearGradient>
               <filter id="kc-glow" x="-60%" y="-60%" width="220%" height="220%">
@@ -847,7 +847,7 @@ function Constellation() {
             </g>
 
             {/* faint halo behind the central star */}
-            <circle cx={100} cy={58} r={44} fill="url(#kc-core)" aria-hidden />
+            <circle cx={100} cy={58} r={30} fill="url(#kc-core)" aria-hidden />
 
             {/* curved connecting paths */}
             <g aria-hidden>
