@@ -63,7 +63,14 @@ export function NewsCard({ article, isDemo }: CardProps) {
               {formatNewsDate(article.publishedAt)}
             </time>
           </dd>
+          {article.author && (
+            <>
+              <dt className="sr-only">Author</dt>
+              <dd className="min-w-0 truncate">{article.author}</dd>
+            </>
+          )}
         </dl>
+
         <div className="mt-4">
           <ReadOnSource article={article} />
         </div>
@@ -100,8 +107,10 @@ export function NewsLeadCard({ article, isDemo }: CardProps) {
           <time dateTime={article.publishedAt} className="font-mono">
             {formatNewsDate(article.publishedAt)}
           </time>
+          {article.author && <span className="min-w-0 truncate">{article.author}</span>}
           {article.newsType && <NewsTag>{article.newsType}</NewsTag>}
         </div>
+
         <div className="mt-6">
           <ReadOnSource article={article} />
         </div>

@@ -336,14 +336,15 @@ function NewsHubPage() {
   const hasQuery = Boolean(search.q?.trim());
   const statusLabel =
     data?.status === "demo"
-      ? "Demo"
+      ? "Demonstration"
       : data?.status === "partial"
-        ? "Partial"
+        ? "Partial update"
         : data?.status === "cached"
           ? "Cached"
-          : error
-            ? "Offline"
+          : error || data?.status === "error"
+            ? "Unavailable"
             : "Live";
+
 
   return (
     <div className="pb-24">
@@ -591,7 +592,7 @@ function NewsHubPage() {
           <div aria-live="polite" aria-busy={isFetching}>
             {isPending ? (
               <NewsGridSkeleton />
-            ) : items.length === 0 ? (
+            ) : error && items.length === 0 ? null : items.length === 0 ? (
               <NewsEmptyState
                 variant={hasQuery ? "no-search-results" : activeCount > 0 ? "no-filter-matches" : "no-articles"}
                 onClearSearch={hasQuery ? () => setSearchInput("") : undefined}

@@ -88,7 +88,14 @@ function normaliseArticle(raw: unknown, index: number): NewsArticle | null {
     imageUrl: safeImageUrl(r.imageUrl),
     imageAlt: typeof r.imageAlt === "string" ? r.imageAlt : undefined,
     imageCredit: typeof r.imageCredit === "string" ? r.imageCredit : undefined,
+    author:
+      typeof r.author === "string" && r.author.trim()
+        ? r.author.trim()
+        : Array.isArray(r.authors)
+          ? r.authors.filter((a): a is string => typeof a === "string").join(", ") || undefined
+          : undefined,
     publishedAt: asString(r.publishedAt),
+
     updatedAt: typeof r.updatedAt === "string" ? r.updatedAt : undefined,
     fetchedAt: typeof r.fetchedAt === "string" ? r.fetchedAt : undefined,
     category: asString(r.category, "Astronomy"),
@@ -108,7 +115,21 @@ function normaliseArticle(raw: unknown, index: number): NewsArticle | null {
   };
 }
 
+/** Live feeds can republish the same story across sources — keep the first. */
+function dedupeArticles(articles: NewsArticle[]): NewsArticle[] {
+  const seen = new Set<string>();
+  return articles.filter((a) => {
+    const key = (a.canonicalUrl || a.articleUrl).toLowerCase();
+    const idKey = a.id.toLowerCase();
+    if (seen.has(key) || seen.has(idKey)) return false;
+    seen.add(key);
+    seen.add(idKey);
+    return true;
+  });
+}
+
 const EMPTY_FILTERS: NewsFilterOptions = {
+
   sources: [],
   categories: [],
   topics: [],
@@ -141,12 +162,17 @@ function normaliseResponse(raw: unknown, query: NewsQuery): NewsApiResponse {
     throw new NewsServiceError("malformed", "The news service returned an unexpected response.");
   }
   const r = raw as Record<string, unknown>;
-  const items = (Array.isArray(r.items) ? r.items : [])
-    .map(normaliseArticle)
-    .filter((a): a is NewsArticle => a !== null);
-  const featuredItems = (Array.isArray(r.featuredItems) ? r.featuredItems : [])
-    .map(normaliseArticle)
-    .filter((a): a is NewsArticle => a !== null);
+  const items = dedupeArticles(
+    (Array.isArray(r.items) ? r.items : [])
+      .map(normaliseArticle)
+      .filter((a): a is NewsArticle => a !== null),
+  );
+  const featuredItems = dedupeArticles(
+    (Array.isArray(r.featuredItems) ? r.featuredItems : [])
+      .map(normaliseArticle)
+      .filter((a): a is NewsArticle => a !== null),
+  );
+
 
   const p = (r.pagination ?? {}) as Record<string, unknown>;
   const page = typeof p.page === "number" ? p.page : (query.page ?? 1);
@@ -205,9 +231,12 @@ async function loadDemoBundle(): Promise<DemoBundle> {
   if (demoBundle) return demoBundle;
   const mod = await import("@/data/news-demo.json");
   const raw = (mod.default ?? mod) as Record<string, unknown>;
-  const articles = (Array.isArray(raw.articles) ? raw.articles : [])
-    .map(normaliseArticle)
-    .filter((a): a is NewsArticle => a !== null);
+  const articles = dedupeArticles(
+    (Array.isArray(raw.articles) ? raw.articles : [])
+      .map(normaliseArticle)
+      .filter((a): a is NewsArticle => a !== null),
+  );
+
   const sources = (Array.isArray(raw.sources) ? raw.sources : []).map((s) => {
     const o = s as Record<string, unknown>;
     return {
