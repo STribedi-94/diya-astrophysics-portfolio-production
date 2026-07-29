@@ -231,9 +231,12 @@ async function loadDemoBundle(): Promise<DemoBundle> {
   if (demoBundle) return demoBundle;
   const mod = await import("@/data/news-demo.json");
   const raw = (mod.default ?? mod) as Record<string, unknown>;
-  const articles = (Array.isArray(raw.articles) ? raw.articles : [])
-    .map(normaliseArticle)
-    .filter((a): a is NewsArticle => a !== null);
+  const articles = dedupeArticles(
+    (Array.isArray(raw.articles) ? raw.articles : [])
+      .map(normaliseArticle)
+      .filter((a): a is NewsArticle => a !== null),
+  );
+
   const sources = (Array.isArray(raw.sources) ? raw.sources : []).map((s) => {
     const o = s as Record<string, unknown>;
     return {
