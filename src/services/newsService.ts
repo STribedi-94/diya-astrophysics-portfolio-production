@@ -115,7 +115,21 @@ function normaliseArticle(raw: unknown, index: number): NewsArticle | null {
   };
 }
 
+/** Live feeds can republish the same story across sources — keep the first. */
+function dedupeArticles(articles: NewsArticle[]): NewsArticle[] {
+  const seen = new Set<string>();
+  return articles.filter((a) => {
+    const key = (a.canonicalUrl || a.articleUrl).toLowerCase();
+    const idKey = a.id.toLowerCase();
+    if (seen.has(key) || seen.has(idKey)) return false;
+    seen.add(key);
+    seen.add(idKey);
+    return true;
+  });
+}
+
 const EMPTY_FILTERS: NewsFilterOptions = {
+
   sources: [],
   categories: [],
   topics: [],
