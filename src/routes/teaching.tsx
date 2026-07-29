@@ -237,16 +237,32 @@ const visionPoints = [
   "Build students' confidence to formulate independent scientific questions of their own.",
 ];
 
+// Constellation laid out on a 200 x 120 field, with natural (non-circular)
+// stellar placement and per-node magnitudes for depth.
 const constellationNodes = [
-  { id: "curiosity", label: "Curiosity", x: 50, y: 12 },
-  { id: "observation", label: "Observation", x: 88, y: 32 },
-  { id: "data", label: "Data", x: 90, y: 72 },
-  { id: "analysis", label: "Analysis", x: 62, y: 90 },
-  { id: "interpretation", label: "Interpretation", x: 30, y: 88 },
-  { id: "communication", label: "Communication", x: 8, y: 66 },
-  { id: "mentoring", label: "Mentoring", x: 12, y: 28 },
-  { id: "discovery", label: "Discovery", x: 50, y: 50 },
+  { id: "curiosity", label: "Curiosity", x: 30, y: 24, mag: 1.7 },
+  { id: "observation", label: "Observation", x: 62, y: 15, mag: 2.0 },
+  { id: "data", label: "Data", x: 96, y: 32, mag: 1.6 },
+  { id: "analysis", label: "Analysis", x: 132, y: 19, mag: 1.9 },
+  { id: "interpretation", label: "Interpretation", x: 166, y: 44, mag: 1.7 },
+  { id: "communication", label: "Communication", x: 148, y: 92, mag: 1.8 },
+  { id: "mentoring", label: "Mentoring", x: 56, y: 94, mag: 1.9 },
+  { id: "discovery", label: "Discovery", x: 100, y: 58, mag: 3.2 },
 ];
+
+// Deterministic background field (no Math.random — SSR/hydration safe).
+const fieldStars = Array.from({ length: 70 }, (_, i) => {
+  const a = Math.sin(i * 12.9898) * 43758.5453;
+  const b = Math.sin(i * 78.233) * 12345.6789;
+  const c = Math.sin(i * 4.1414) * 9876.5432;
+  return {
+    x: Number((((a - Math.floor(a)) * 200)).toFixed(2)),
+    y: Number((((b - Math.floor(b)) * 120)).toFixed(2)),
+    r: Number((0.25 + (c - Math.floor(c)) * 0.65).toFixed(2)),
+    o: Number((0.18 + (c - Math.floor(c)) * 0.45).toFixed(2)),
+  };
+});
+
 
 const constellationEdges: Array<[string, string]> = [
   ["curiosity", "observation"],
