@@ -13,21 +13,21 @@ import { Route as TeachingRouteImport } from './routes/teaching'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SitemapRouteImport } from './routes/sitemap'
 import { Route as ResearchUniverseRouteImport } from './routes/research-universe'
-import { Route as ResearchRouteImport } from './routes/research'
-import { Route as PublicationsRouteImport } from './routes/publications'
-import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ObservationsRouteImport } from './routes/observations'
 import { Route as GalleryRouteImport } from './routes/gallery'
-import { Route as FacilitiesRouteImport } from './routes/facilities'
 import { Route as DownloadsRouteImport } from './routes/downloads'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ConferencesRouteImport } from './routes/conferences'
 import { Route as AcademicJourneyRouteImport } from './routes/academic-journey'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ResearchIndexRouteImport } from './routes/research.index'
+import { Route as PublicationsIndexRouteImport } from './routes/publications.index'
+import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as NewsIndexRouteImport } from './routes/news.index'
 import { Route as MissionLogIndexRouteImport } from './routes/mission-log.index'
+import { Route as FacilitiesIndexRouteImport } from './routes/facilities.index'
 import { Route as ResearchSlugRouteImport } from './routes/research.$slug'
 import { Route as PublicationsSlugRouteImport } from './routes/publications.$slug'
 import { Route as ProjectsSlugRouteImport } from './routes/projects.$slug'
@@ -55,21 +55,6 @@ const ResearchUniverseRoute = ResearchUniverseRouteImport.update({
   path: '/research-universe',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ResearchRoute = ResearchRouteImport.update({
-  id: '/research',
-  path: '/research',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PublicationsRoute = PublicationsRouteImport.update({
-  id: '/publications',
-  path: '/publications',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProjectsRoute = ProjectsRouteImport.update({
-  id: '/projects',
-  path: '/projects',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
@@ -83,11 +68,6 @@ const ObservationsRoute = ObservationsRouteImport.update({
 const GalleryRoute = GalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FacilitiesRoute = FacilitiesRouteImport.update({
-  id: '/facilities',
-  path: '/facilities',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DownloadsRoute = DownloadsRouteImport.update({
@@ -120,6 +100,21 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResearchIndexRoute = ResearchIndexRouteImport.update({
+  id: '/research/',
+  path: '/research/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicationsIndexRoute = PublicationsIndexRouteImport.update({
+  id: '/publications/',
+  path: '/publications/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
+  id: '/projects/',
+  path: '/projects/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NewsIndexRoute = NewsIndexRouteImport.update({
   id: '/news/',
   path: '/news/',
@@ -130,20 +125,25 @@ const MissionLogIndexRoute = MissionLogIndexRouteImport.update({
   path: '/mission-log/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FacilitiesIndexRoute = FacilitiesIndexRouteImport.update({
+  id: '/facilities/',
+  path: '/facilities/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResearchSlugRoute = ResearchSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => ResearchRoute,
+  id: '/research/$slug',
+  path: '/research/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const PublicationsSlugRoute = PublicationsSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => PublicationsRoute,
+  id: '/publications/$slug',
+  path: '/publications/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => ProjectsRoute,
+  id: '/projects/$slug',
+  path: '/projects/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const NewsSlugRoute = NewsSlugRouteImport.update({
   id: '/news/$slug',
@@ -156,9 +156,9 @@ const MissionLogSlugRoute = MissionLogSlugRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const FacilitiesSlugRoute = FacilitiesSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => FacilitiesRoute,
+  id: '/facilities/$slug',
+  path: '/facilities/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -168,13 +168,9 @@ export interface FileRoutesByFullPath {
   '/conferences': typeof ConferencesRoute
   '/contact': typeof ContactRoute
   '/downloads': typeof DownloadsRoute
-  '/facilities': typeof FacilitiesRouteWithChildren
   '/gallery': typeof GalleryRoute
   '/observations': typeof ObservationsRoute
   '/privacy': typeof PrivacyRoute
-  '/projects': typeof ProjectsRouteWithChildren
-  '/publications': typeof PublicationsRouteWithChildren
-  '/research': typeof ResearchRouteWithChildren
   '/research-universe': typeof ResearchUniverseRoute
   '/sitemap': typeof SitemapRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -185,8 +181,12 @@ export interface FileRoutesByFullPath {
   '/projects/$slug': typeof ProjectsSlugRoute
   '/publications/$slug': typeof PublicationsSlugRoute
   '/research/$slug': typeof ResearchSlugRoute
+  '/facilities/': typeof FacilitiesIndexRoute
   '/mission-log/': typeof MissionLogIndexRoute
   '/news/': typeof NewsIndexRoute
+  '/projects/': typeof ProjectsIndexRoute
+  '/publications/': typeof PublicationsIndexRoute
+  '/research/': typeof ResearchIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -195,13 +195,9 @@ export interface FileRoutesByTo {
   '/conferences': typeof ConferencesRoute
   '/contact': typeof ContactRoute
   '/downloads': typeof DownloadsRoute
-  '/facilities': typeof FacilitiesRouteWithChildren
   '/gallery': typeof GalleryRoute
   '/observations': typeof ObservationsRoute
   '/privacy': typeof PrivacyRoute
-  '/projects': typeof ProjectsRouteWithChildren
-  '/publications': typeof PublicationsRouteWithChildren
-  '/research': typeof ResearchRouteWithChildren
   '/research-universe': typeof ResearchUniverseRoute
   '/sitemap': typeof SitemapRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -212,8 +208,12 @@ export interface FileRoutesByTo {
   '/projects/$slug': typeof ProjectsSlugRoute
   '/publications/$slug': typeof PublicationsSlugRoute
   '/research/$slug': typeof ResearchSlugRoute
+  '/facilities': typeof FacilitiesIndexRoute
   '/mission-log': typeof MissionLogIndexRoute
   '/news': typeof NewsIndexRoute
+  '/projects': typeof ProjectsIndexRoute
+  '/publications': typeof PublicationsIndexRoute
+  '/research': typeof ResearchIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -223,13 +223,9 @@ export interface FileRoutesById {
   '/conferences': typeof ConferencesRoute
   '/contact': typeof ContactRoute
   '/downloads': typeof DownloadsRoute
-  '/facilities': typeof FacilitiesRouteWithChildren
   '/gallery': typeof GalleryRoute
   '/observations': typeof ObservationsRoute
   '/privacy': typeof PrivacyRoute
-  '/projects': typeof ProjectsRouteWithChildren
-  '/publications': typeof PublicationsRouteWithChildren
-  '/research': typeof ResearchRouteWithChildren
   '/research-universe': typeof ResearchUniverseRoute
   '/sitemap': typeof SitemapRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -240,8 +236,12 @@ export interface FileRoutesById {
   '/projects/$slug': typeof ProjectsSlugRoute
   '/publications/$slug': typeof PublicationsSlugRoute
   '/research/$slug': typeof ResearchSlugRoute
+  '/facilities/': typeof FacilitiesIndexRoute
   '/mission-log/': typeof MissionLogIndexRoute
   '/news/': typeof NewsIndexRoute
+  '/projects/': typeof ProjectsIndexRoute
+  '/publications/': typeof PublicationsIndexRoute
+  '/research/': typeof ResearchIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -252,13 +252,9 @@ export interface FileRouteTypes {
     | '/conferences'
     | '/contact'
     | '/downloads'
-    | '/facilities'
     | '/gallery'
     | '/observations'
     | '/privacy'
-    | '/projects'
-    | '/publications'
-    | '/research'
     | '/research-universe'
     | '/sitemap'
     | '/sitemap.xml'
@@ -269,8 +265,12 @@ export interface FileRouteTypes {
     | '/projects/$slug'
     | '/publications/$slug'
     | '/research/$slug'
+    | '/facilities/'
     | '/mission-log/'
     | '/news/'
+    | '/projects/'
+    | '/publications/'
+    | '/research/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -279,13 +279,9 @@ export interface FileRouteTypes {
     | '/conferences'
     | '/contact'
     | '/downloads'
-    | '/facilities'
     | '/gallery'
     | '/observations'
     | '/privacy'
-    | '/projects'
-    | '/publications'
-    | '/research'
     | '/research-universe'
     | '/sitemap'
     | '/sitemap.xml'
@@ -296,8 +292,12 @@ export interface FileRouteTypes {
     | '/projects/$slug'
     | '/publications/$slug'
     | '/research/$slug'
+    | '/facilities'
     | '/mission-log'
     | '/news'
+    | '/projects'
+    | '/publications'
+    | '/research'
   id:
     | '__root__'
     | '/'
@@ -306,13 +306,9 @@ export interface FileRouteTypes {
     | '/conferences'
     | '/contact'
     | '/downloads'
-    | '/facilities'
     | '/gallery'
     | '/observations'
     | '/privacy'
-    | '/projects'
-    | '/publications'
-    | '/research'
     | '/research-universe'
     | '/sitemap'
     | '/sitemap.xml'
@@ -323,8 +319,12 @@ export interface FileRouteTypes {
     | '/projects/$slug'
     | '/publications/$slug'
     | '/research/$slug'
+    | '/facilities/'
     | '/mission-log/'
     | '/news/'
+    | '/projects/'
+    | '/publications/'
+    | '/research/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -334,21 +334,25 @@ export interface RootRouteChildren {
   ConferencesRoute: typeof ConferencesRoute
   ContactRoute: typeof ContactRoute
   DownloadsRoute: typeof DownloadsRoute
-  FacilitiesRoute: typeof FacilitiesRouteWithChildren
   GalleryRoute: typeof GalleryRoute
   ObservationsRoute: typeof ObservationsRoute
   PrivacyRoute: typeof PrivacyRoute
-  ProjectsRoute: typeof ProjectsRouteWithChildren
-  PublicationsRoute: typeof PublicationsRouteWithChildren
-  ResearchRoute: typeof ResearchRouteWithChildren
   ResearchUniverseRoute: typeof ResearchUniverseRoute
   SitemapRoute: typeof SitemapRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TeachingRoute: typeof TeachingRoute
+  FacilitiesSlugRoute: typeof FacilitiesSlugRoute
   MissionLogSlugRoute: typeof MissionLogSlugRoute
   NewsSlugRoute: typeof NewsSlugRoute
+  ProjectsSlugRoute: typeof ProjectsSlugRoute
+  PublicationsSlugRoute: typeof PublicationsSlugRoute
+  ResearchSlugRoute: typeof ResearchSlugRoute
+  FacilitiesIndexRoute: typeof FacilitiesIndexRoute
   MissionLogIndexRoute: typeof MissionLogIndexRoute
   NewsIndexRoute: typeof NewsIndexRoute
+  ProjectsIndexRoute: typeof ProjectsIndexRoute
+  PublicationsIndexRoute: typeof PublicationsIndexRoute
+  ResearchIndexRoute: typeof ResearchIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -381,27 +385,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResearchUniverseRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/research': {
-      id: '/research'
-      path: '/research'
-      fullPath: '/research'
-      preLoaderRoute: typeof ResearchRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/publications': {
-      id: '/publications'
-      path: '/publications'
-      fullPath: '/publications'
-      preLoaderRoute: typeof PublicationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/projects': {
-      id: '/projects'
-      path: '/projects'
-      fullPath: '/projects'
-      preLoaderRoute: typeof ProjectsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/privacy': {
       id: '/privacy'
       path: '/privacy'
@@ -421,13 +404,6 @@ declare module '@tanstack/react-router' {
       path: '/gallery'
       fullPath: '/gallery'
       preLoaderRoute: typeof GalleryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/facilities': {
-      id: '/facilities'
-      path: '/facilities'
-      fullPath: '/facilities'
-      preLoaderRoute: typeof FacilitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/downloads': {
@@ -472,6 +448,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/research/': {
+      id: '/research/'
+      path: '/research'
+      fullPath: '/research/'
+      preLoaderRoute: typeof ResearchIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/publications/': {
+      id: '/publications/'
+      path: '/publications'
+      fullPath: '/publications/'
+      preLoaderRoute: typeof PublicationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects/': {
+      id: '/projects/'
+      path: '/projects'
+      fullPath: '/projects/'
+      preLoaderRoute: typeof ProjectsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/news/': {
       id: '/news/'
       path: '/news'
@@ -486,26 +483,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MissionLogIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/facilities/': {
+      id: '/facilities/'
+      path: '/facilities'
+      fullPath: '/facilities/'
+      preLoaderRoute: typeof FacilitiesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/research/$slug': {
       id: '/research/$slug'
-      path: '/$slug'
+      path: '/research/$slug'
       fullPath: '/research/$slug'
       preLoaderRoute: typeof ResearchSlugRouteImport
-      parentRoute: typeof ResearchRoute
+      parentRoute: typeof rootRouteImport
     }
     '/publications/$slug': {
       id: '/publications/$slug'
-      path: '/$slug'
+      path: '/publications/$slug'
       fullPath: '/publications/$slug'
       preLoaderRoute: typeof PublicationsSlugRouteImport
-      parentRoute: typeof PublicationsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/projects/$slug': {
       id: '/projects/$slug'
-      path: '/$slug'
+      path: '/projects/$slug'
       fullPath: '/projects/$slug'
       preLoaderRoute: typeof ProjectsSlugRouteImport
-      parentRoute: typeof ProjectsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/news/$slug': {
       id: '/news/$slug'
@@ -523,61 +527,13 @@ declare module '@tanstack/react-router' {
     }
     '/facilities/$slug': {
       id: '/facilities/$slug'
-      path: '/$slug'
+      path: '/facilities/$slug'
       fullPath: '/facilities/$slug'
       preLoaderRoute: typeof FacilitiesSlugRouteImport
-      parentRoute: typeof FacilitiesRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
-
-interface FacilitiesRouteChildren {
-  FacilitiesSlugRoute: typeof FacilitiesSlugRoute
-}
-
-const FacilitiesRouteChildren: FacilitiesRouteChildren = {
-  FacilitiesSlugRoute: FacilitiesSlugRoute,
-}
-
-const FacilitiesRouteWithChildren = FacilitiesRoute._addFileChildren(
-  FacilitiesRouteChildren,
-)
-
-interface ProjectsRouteChildren {
-  ProjectsSlugRoute: typeof ProjectsSlugRoute
-}
-
-const ProjectsRouteChildren: ProjectsRouteChildren = {
-  ProjectsSlugRoute: ProjectsSlugRoute,
-}
-
-const ProjectsRouteWithChildren = ProjectsRoute._addFileChildren(
-  ProjectsRouteChildren,
-)
-
-interface PublicationsRouteChildren {
-  PublicationsSlugRoute: typeof PublicationsSlugRoute
-}
-
-const PublicationsRouteChildren: PublicationsRouteChildren = {
-  PublicationsSlugRoute: PublicationsSlugRoute,
-}
-
-const PublicationsRouteWithChildren = PublicationsRoute._addFileChildren(
-  PublicationsRouteChildren,
-)
-
-interface ResearchRouteChildren {
-  ResearchSlugRoute: typeof ResearchSlugRoute
-}
-
-const ResearchRouteChildren: ResearchRouteChildren = {
-  ResearchSlugRoute: ResearchSlugRoute,
-}
-
-const ResearchRouteWithChildren = ResearchRoute._addFileChildren(
-  ResearchRouteChildren,
-)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -586,21 +542,25 @@ const rootRouteChildren: RootRouteChildren = {
   ConferencesRoute: ConferencesRoute,
   ContactRoute: ContactRoute,
   DownloadsRoute: DownloadsRoute,
-  FacilitiesRoute: FacilitiesRouteWithChildren,
   GalleryRoute: GalleryRoute,
   ObservationsRoute: ObservationsRoute,
   PrivacyRoute: PrivacyRoute,
-  ProjectsRoute: ProjectsRouteWithChildren,
-  PublicationsRoute: PublicationsRouteWithChildren,
-  ResearchRoute: ResearchRouteWithChildren,
   ResearchUniverseRoute: ResearchUniverseRoute,
   SitemapRoute: SitemapRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TeachingRoute: TeachingRoute,
+  FacilitiesSlugRoute: FacilitiesSlugRoute,
   MissionLogSlugRoute: MissionLogSlugRoute,
   NewsSlugRoute: NewsSlugRoute,
+  ProjectsSlugRoute: ProjectsSlugRoute,
+  PublicationsSlugRoute: PublicationsSlugRoute,
+  ResearchSlugRoute: ResearchSlugRoute,
+  FacilitiesIndexRoute: FacilitiesIndexRoute,
   MissionLogIndexRoute: MissionLogIndexRoute,
   NewsIndexRoute: NewsIndexRoute,
+  ProjectsIndexRoute: ProjectsIndexRoute,
+  PublicationsIndexRoute: PublicationsIndexRoute,
+  ResearchIndexRoute: ResearchIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
