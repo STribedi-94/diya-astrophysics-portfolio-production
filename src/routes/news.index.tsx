@@ -592,7 +592,7 @@ function NewsHubPage() {
           <div aria-live="polite" aria-busy={isFetching}>
             {isPending ? (
               <NewsGridSkeleton />
-            ) : items.length === 0 ? (
+            ) : error && items.length === 0 ? null : items.length === 0 ? (
               <NewsEmptyState
                 variant={hasQuery ? "no-search-results" : activeCount > 0 ? "no-filter-matches" : "no-articles"}
                 onClearSearch={hasQuery ? () => setSearchInput("") : undefined}
