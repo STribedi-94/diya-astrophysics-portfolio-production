@@ -25,6 +25,8 @@ import {
 import { PageHero, Section } from "@/components/layout/Page";
 import { cn } from "@/lib/utils";
 import { facilities } from "@/data/facilities";
+import { ObservatoryNetworkGlobe } from "@/components/observatory/ObservatoryNetworkGlobe";
+
 import { projects } from "@/data/misc";
 import facilityUgmrt from "@/assets/facility-ugmrt.jpg";
 import facilityHct from "@/assets/facility-hct.jpg";
@@ -964,94 +966,13 @@ function DataPipeline() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Observatory Network map                                           */
+/*  Observatory Network — interactive 3D globe (see components/observatory) */
 /* ------------------------------------------------------------------ */
 
-const MAP_LOCATIONS = [
-  { slug: "ugmrt", label: "uGMRT", place: "Khodad, Pune", x: 74, y: 60 },
-  { slug: "hct", label: "HCT", place: "Hanle, Ladakh", x: 79, y: 44 },
-  { slug: "dot", label: "DOT", place: "Devasthal, Uttarakhand", x: 78, y: 50 },
-  { slug: "tess", label: "TESS", place: "Earth-orbit (NASA)", x: 20, y: 30 },
-];
-
 function ObservatoryNetwork() {
-  return (
-    <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
-      <figure
-        className="relative overflow-hidden rounded-2xl border border-white/10 bg-[oklch(0.09_0.03_260/0.75)] p-4"
-        aria-label="Schematic world map showing the geographical locations of the observatories used in Diya Ram's research."
-      >
-        <div className="relative aspect-[16/9] w-full">
-          <svg viewBox="0 0 1000 500" className="h-full w-full" role="img" aria-hidden>
-            {/* Latitude grid */}
-            {[100, 200, 300, 400].map((y) => (
-              <line key={y} x1="0" x2="1000" y1={y} y2={y} stroke="oklch(0.30 0.02 260 / 0.5)" />
-            ))}
-            {[200, 400, 600, 800].map((x) => (
-              <line key={x} x1={x} x2={x} y1="0" y2="500" stroke="oklch(0.30 0.02 260 / 0.5)" />
-            ))}
-            {/* Rough continent silhouettes */}
-            <g fill="oklch(0.20 0.03 260 / 0.85)" stroke="oklch(0.35 0.04 220 / 0.6)" strokeWidth="1">
-              <path d="M60,140 Q140,120 180,150 Q220,170 240,220 Q210,270 160,280 Q90,270 60,220 Z" />
-              <path d="M300,200 Q360,190 410,220 Q400,290 360,340 Q320,320 300,270 Z" />
-              <path d="M470,120 Q560,100 640,120 Q720,140 780,180 Q820,220 800,270 Q740,290 680,270 Q600,260 540,240 Q490,220 470,180 Z" />
-              <path d="M760,270 Q820,270 840,320 Q820,360 780,360 Q740,350 760,300 Z" />
-              <path d="M860,320 Q900,300 940,320 Q930,360 890,360 Q860,350 860,330 Z" />
-            </g>
-
-            {/* Location dots + labels */}
-            {MAP_LOCATIONS.map((l) => {
-              const cx = (l.x / 100) * 1000;
-              const cy = (l.y / 100) * 500;
-              return (
-                <g key={l.slug}>
-                  <circle cx={cx} cy={cy} r="18" fill="oklch(0.65 0.18 55 / 0.15)" />
-                  <circle cx={cx} cy={cy} r="6" fill="oklch(0.75 0.18 55)" />
-                  <text
-                    x={cx + 12}
-                    y={cy + 4}
-                    fontSize="14"
-                    fill="oklch(0.92 0.02 260)"
-                    fontFamily="ui-sans-serif, system-ui"
-                  >
-                    {l.label}
-                  </text>
-                </g>
-              );
-            })}
-          </svg>
-        </div>
-        <figcaption className="mt-3 text-xs text-muted-foreground">
-          Approximate positions of the observatories used across Diya Ram's programmes.
-          Schematic — not a survey-grade map.
-        </figcaption>
-      </figure>
-
-      <ul className="grid gap-3 self-start">
-        {MAP_LOCATIONS.map((l) => (
-          <li
-            key={l.slug}
-            className="rounded-xl border border-white/10 bg-white/[0.03] p-4"
-          >
-            <div className="flex items-center justify-between">
-              <div className="font-display text-base font-semibold">{l.label}</div>
-              <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-                <MapPin className="h-3 w-3" aria-hidden /> {l.place}
-              </span>
-            </div>
-            <Link
-              to="/facilities/$slug"
-              params={{ slug: l.slug }}
-              className="mt-2 inline-flex items-center gap-1 text-xs text-primary hover:underline"
-            >
-              Facility profile <ArrowRight className="h-3 w-3" aria-hidden />
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+  return <ObservatoryNetworkGlobe />;
 }
+
 
 /* ------------------------------------------------------------------ */
 /*  Research outputs cross-link                                       */
