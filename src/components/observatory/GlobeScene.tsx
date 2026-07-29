@@ -147,7 +147,7 @@ export default function GlobeScene({
     disposables.push(starGeo, starMat);
 
     /* ---------------- earth ---------------- */
-    const sunDir = new THREE.Vector3(0.75, 0.35, 0.85).normalize();
+    const sunDir = new THREE.Vector3(0.35, 0.3, 1.0).normalize();
     const earthGroup = new THREE.Group();
     earthGroup.rotation.y = facingRotation(78);
     scene.add(earthGroup);
@@ -176,7 +176,7 @@ export default function GlobeScene({
           vec3 night = texture2D(nightMap, vUv).rgb;
           float d = dot(normalize(vN), normalize(sunDir));
           float lit = smoothstep(-0.18, 0.22, d);
-          vec3 col = mix(night*0.55 + day*0.10, day*(0.35+0.75*max(d,0.0)), lit);
+          vec3 col = mix(night*0.6 + day*0.12, day*(0.75+0.7*max(d,0.0)), lit);
           gl_FragColor = vec4(col, reveal);
         }`,
     });
