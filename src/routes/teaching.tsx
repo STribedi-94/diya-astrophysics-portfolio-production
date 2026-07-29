@@ -524,6 +524,98 @@ function Experience() {
   );
 }
 
+function PeerReview() {
+  const facets = [
+    {
+      icon: ScrollText,
+      title: "Manuscript reviewed",
+      body:
+        "An American Astronomical Society journal manuscript on the magnetic activity of ultracool dwarfs in the LAMOST DR11 sample.",
+    },
+    {
+      icon: Globe2,
+      title: "Scientific service",
+      body:
+        "Contributed to the international quality-assurance process through which astrophysical results enter the published literature.",
+    },
+    {
+      icon: ShieldCheck,
+      title: "Subject expertise",
+      body:
+        "The invitation drew directly on Diya's doctoral work on magnetic activity in low-mass and ultracool dwarf stars.",
+    },
+  ];
+
+  return (
+    <Section
+      id="peer-review"
+      eyebrow="Peer Review Experience"
+      title="Professional scientific service during the PhD"
+      intro="An independent professional activity carried out during the doctoral research period — distinct from classroom teaching and from student mentoring."
+    >
+      <div className="relative overflow-hidden rounded-2xl border border-primary/25 bg-black/30 p-6 md:p-8">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-60"
+          style={{
+            background:
+              "radial-gradient(560px 220px at 15% 0%, hsl(var(--primary) / 0.16), transparent 65%), radial-gradient(480px 220px at 95% 100%, hsl(var(--nebula) / 0.14), transparent 65%)",
+          }}
+          aria-hidden
+        />
+        <div className="relative grid gap-6 lg:grid-cols-[1.1fr_1fr]">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.24em] text-primary">
+              <BookOpen className="h-3.5 w-3.5" aria-hidden />
+              Invited Referee · 2025
+            </div>
+            <h3 className="mt-4 font-display text-2xl font-semibold">
+              Reviewer for an American Astronomical Society journal
+            </h3>
+            <p className="mt-3 text-sm text-muted-foreground">
+              During her PhD research period, Diya was invited to review a
+              scientific manuscript submitted to an American Astronomical
+              Society journal, on the magnetic activity of ultracool dwarfs in
+              the LAMOST DR11 sample. Reviewing a peer's manuscript at the
+              doctoral stage is a recognised academic milestone: referee
+              invitations are extended on the basis of demonstrated expertise in
+              the manuscript's subject area.
+            </p>
+            <p className="mt-3 text-sm text-muted-foreground">
+              The review was completed as unpaid professional service to the
+              international research community.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2 text-[11px]">
+              {["Peer review", "PhD research period", "Ultracool dwarfs", "LAMOST DR11"].map((t) => (
+                <span
+                  key={t}
+                  className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-muted-foreground"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <ul className="grid gap-3 self-start">
+            {facets.map((f) => (
+              <li
+                key={f.title}
+                className="glass rounded-xl border border-white/10 p-4 transition-colors hover:border-primary/30"
+              >
+                <div className="flex items-center gap-2">
+                  <f.icon className="h-4 w-4 text-primary" aria-hidden />
+                  <span className="font-display text-sm font-semibold">{f.title}</span>
+                </div>
+                <p className="mt-1.5 text-sm text-muted-foreground">{f.body}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
 function Mentoring() {
   return (
     <Section
