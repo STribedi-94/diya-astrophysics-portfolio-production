@@ -99,8 +99,10 @@ export function ObservatoryNetworkGlobe() {
   useEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
+    console.log("DBG io attached");
     const check = () => {
       const r = el.getBoundingClientRect();
+      console.log("DBG check", r.top, window.innerHeight);
       setInView(r.bottom > -300 && r.top < window.innerHeight + 300);
     };
     check();
