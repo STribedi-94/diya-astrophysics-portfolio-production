@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   BookOpen,
   Compass,
@@ -18,10 +18,12 @@ import {
   Code2,
   Microscope,
   Lightbulb,
-  Menu,
-  X,
+  ScrollText,
+  ShieldCheck,
+  Globe2,
 } from "lucide-react";
 import { PageHero, Section, GlassPanel } from "@/components/layout/Page";
+import { ChronicleNavigator } from "@/components/chronicle/ChronicleNavigator";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/teaching")({
@@ -51,6 +53,7 @@ export const Route = createFileRoute("/teaching")({
 const sections = [
   { id: "philosophy", label: "Philosophy" },
   { id: "experience", label: "Experience" },
+  { id: "peer-review", label: "Peer Review" },
   { id: "mentoring", label: "Mentoring" },
   { id: "methods", label: "Methods" },
   { id: "pathway", label: "Learning Pathways" },
@@ -116,12 +119,6 @@ const assessmentRoles = [
     title: "Answer-script evaluation",
     body:
       "Evaluated undergraduate university examination answer scripts in Physics.",
-  },
-  {
-    icon: BookOpen,
-    title: "Peer review",
-    body:
-      "Reviewed an American Astronomical Society journal manuscript (2025) on the magnetic activity of ultracool dwarfs in the LAMOST DR11 sample.",
   },
 ];
 
@@ -240,16 +237,32 @@ const visionPoints = [
   "Build students' confidence to formulate independent scientific questions of their own.",
 ];
 
+// Constellation laid out on a 200 x 120 field, with natural (non-circular)
+// stellar placement and per-node magnitudes for depth.
 const constellationNodes = [
-  { id: "curiosity", label: "Curiosity", x: 50, y: 12 },
-  { id: "observation", label: "Observation", x: 88, y: 32 },
-  { id: "data", label: "Data", x: 90, y: 72 },
-  { id: "analysis", label: "Analysis", x: 62, y: 90 },
-  { id: "interpretation", label: "Interpretation", x: 30, y: 88 },
-  { id: "communication", label: "Communication", x: 8, y: 66 },
-  { id: "mentoring", label: "Mentoring", x: 12, y: 28 },
-  { id: "discovery", label: "Discovery", x: 50, y: 50 },
+  { id: "curiosity", label: "Curiosity", x: 30, y: 24, mag: 1.7 },
+  { id: "observation", label: "Observation", x: 62, y: 15, mag: 2.0 },
+  { id: "data", label: "Data", x: 96, y: 32, mag: 1.6 },
+  { id: "analysis", label: "Analysis", x: 132, y: 19, mag: 1.9 },
+  { id: "interpretation", label: "Interpretation", x: 166, y: 44, mag: 1.7 },
+  { id: "communication", label: "Communication", x: 148, y: 92, mag: 1.8 },
+  { id: "mentoring", label: "Mentoring", x: 56, y: 94, mag: 1.9 },
+  { id: "discovery", label: "Discovery", x: 100, y: 58, mag: 3.2 },
 ];
+
+// Deterministic background field (no Math.random — SSR/hydration safe).
+const fieldStars = Array.from({ length: 70 }, (_, i) => {
+  const a = Math.sin(i * 12.9898) * 43758.5453;
+  const b = Math.sin(i * 78.233) * 12345.6789;
+  const c = Math.sin(i * 4.1414) * 9876.5432;
+  return {
+    x: Number((((a - Math.floor(a)) * 200)).toFixed(2)),
+    y: Number((((b - Math.floor(b)) * 120)).toFixed(2)),
+    r: Number((0.25 + (c - Math.floor(c)) * 0.65).toFixed(2)),
+    o: Number((0.18 + (c - Math.floor(c)) * 0.45).toFixed(2)),
+  };
+});
+
 
 const constellationEdges: Array<[string, string]> = [
   ["curiosity", "observation"],
@@ -313,9 +326,10 @@ function TeachingPage() {
   return (
     <>
       <TeachingHero />
-      <LocalNav />
+      <ChronicleNavigator sections={[...sections]} label="Teaching" />
       <Philosophy />
       <Experience />
+      <PeerReview />
       <Mentoring />
       <Methods />
       <Pathway />
@@ -372,9 +386,9 @@ function SpectrumMotif() {
     >
       <defs>
         <linearGradient id="tspec" x1="0" x2="1">
-          <stop offset="0" stopColor="hsl(var(--primary))" stopOpacity="0" />
-          <stop offset="0.5" stopColor="hsl(var(--primary))" stopOpacity="0.6" />
-          <stop offset="1" stopColor="hsl(var(--primary))" stopOpacity="0" />
+          <stop offset="0" stopColor="var(--primary)" stopOpacity="0" />
+          <stop offset="0.5" stopColor="var(--primary)" stopOpacity="0.6" />
+          <stop offset="1" stopColor="var(--primary)" stopOpacity="0" />
         </linearGradient>
       </defs>
       <path
@@ -390,7 +404,7 @@ function SpectrumMotif() {
           x2={x}
           y1={20}
           y2={140}
-          stroke="hsl(var(--primary))"
+          stroke="var(--primary)"
           strokeOpacity={0.15 + (i % 3) * 0.1}
           strokeWidth="0.6"
         />
@@ -399,115 +413,6 @@ function SpectrumMotif() {
   );
 }
 
-// ---- Local navigation -------------------------------------------------
-
-function LocalNav() {
-  const [active, setActive] = useState<string>(sections[0].id as string);
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    let raf = 0;
-    const onScroll = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const y = window.scrollY + 140;
-        let current: string = sections[0].id;
-        for (const s of sections) {
-          const el = document.getElementById(s.id);
-          if (el && el.offsetTop <= y) current = s.id;
-        }
-        setActive(current);
-      });
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, []);
-
-  const jump = (id: string) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    setOpen(false);
-    const y = el.getBoundingClientRect().top + window.scrollY - 96;
-    window.scrollTo({ top: y, behavior: "smooth" });
-    history.replaceState(null, "", `#${id}`);
-  };
-
-  return (
-    <>
-      {/* Desktop rail */}
-      <aside
-        className="pointer-events-none fixed right-4 top-1/2 z-30 hidden -translate-y-1/2 lg:block"
-        aria-label="On this page"
-      >
-        <nav className="pointer-events-auto glass rounded-2xl border border-white/10 px-2 py-3">
-          <ul className="flex flex-col gap-1">
-            {sections.map((s) => (
-              <li key={s.id}>
-                <button
-                  onClick={() => jump(s.id)}
-                  className={cn(
-                    "group flex w-full items-center gap-2 rounded-full px-3 py-1.5 text-xs transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
-                    active === s.id
-                      ? "text-foreground"
-                      : "text-muted-foreground hover:text-foreground",
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "h-1.5 w-1.5 rounded-full transition-all",
-                      active === s.id
-                        ? "bg-primary shadow-[0_0_8px_hsl(var(--primary))]"
-                        : "bg-white/25 group-hover:bg-white/50",
-                    )}
-                  />
-                  {s.label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </aside>
-
-      {/* Mobile button */}
-      <div className="fixed bottom-5 right-4 z-30 lg:hidden">
-        <button
-          onClick={() => setOpen((v) => !v)}
-          aria-expanded={open}
-          aria-label="Jump to section"
-          className="glass flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-xs text-foreground"
-        >
-          {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-          {open ? "Close" : "Sections"}
-        </button>
-        {open && (
-          <div className="glass mt-2 w-56 rounded-2xl border border-white/10 p-2 animate-fade-in">
-            <ul className="flex flex-col">
-              {sections.map((s) => (
-                <li key={s.id}>
-                  <button
-                    onClick={() => jump(s.id)}
-                    className={cn(
-                      "w-full rounded-lg px-3 py-2 text-left text-sm transition-colors",
-                      active === s.id
-                        ? "bg-primary/15 text-foreground"
-                        : "text-muted-foreground hover:bg-white/5 hover:text-foreground",
-                    )}
-                  >
-                    {s.label}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
-    </>
-  );
-}
 
 // ---- Sections ---------------------------------------------------------
 
@@ -561,7 +466,7 @@ function Experience() {
       id="experience"
       eyebrow="Verified Teaching Experience"
       title="Undergraduate physics at the University of Calcutta"
-      intro="Formal lecturing and laboratory instruction, alongside academic assessment responsibilities and professional peer review."
+      intro="Formal lecturing and laboratory instruction, alongside undergraduate academic assessment responsibilities."
     >
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-4">
@@ -629,6 +534,98 @@ function Experience() {
               <p className="mt-1.5 text-sm text-muted-foreground">{a.body}</p>
             </GlassPanel>
           ))}
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+function PeerReview() {
+  const facets = [
+    {
+      icon: ScrollText,
+      title: "Manuscript reviewed",
+      body:
+        "An American Astronomical Society journal manuscript on the magnetic activity of ultracool dwarfs in the LAMOST DR11 sample.",
+    },
+    {
+      icon: Globe2,
+      title: "Scientific service",
+      body:
+        "Contributed to the international quality-assurance process through which astrophysical results enter the published literature.",
+    },
+    {
+      icon: ShieldCheck,
+      title: "Subject expertise",
+      body:
+        "The invitation drew directly on Diya's doctoral work on magnetic activity in low-mass and ultracool dwarf stars.",
+    },
+  ];
+
+  return (
+    <Section
+      id="peer-review"
+      eyebrow="Peer Review Experience"
+      title="Professional scientific service during the PhD"
+      intro="An independent professional activity carried out during the doctoral research period — distinct from classroom teaching and from student mentoring."
+    >
+      <div className="relative overflow-hidden rounded-2xl border border-primary/25 bg-black/30 p-6 md:p-8">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-60"
+          style={{
+            background:
+              "radial-gradient(560px 220px at 15% 0%, color-mix(in oklab, var(--primary) 16%, transparent), transparent 65%), radial-gradient(480px 220px at 95% 100%, color-mix(in oklab, var(--nebula) 14%, transparent), transparent 65%)",
+          }}
+          aria-hidden
+        />
+        <div className="relative grid gap-6 lg:grid-cols-[1.1fr_1fr]">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.24em] text-primary">
+              <BookOpen className="h-3.5 w-3.5" aria-hidden />
+              Invited Referee · 2025
+            </div>
+            <h3 className="mt-4 font-display text-2xl font-semibold">
+              Reviewer for an American Astronomical Society journal
+            </h3>
+            <p className="mt-3 text-sm text-muted-foreground">
+              During her PhD research period, Diya was invited to review a
+              scientific manuscript submitted to an American Astronomical
+              Society journal, on the magnetic activity of ultracool dwarfs in
+              the LAMOST DR11 sample. Reviewing a peer's manuscript at the
+              doctoral stage is a recognised academic milestone: referee
+              invitations are extended on the basis of demonstrated expertise in
+              the manuscript's subject area.
+            </p>
+            <p className="mt-3 text-sm text-muted-foreground">
+              The review was completed as unpaid professional service to the
+              international research community.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2 text-[11px]">
+              {["Peer review", "PhD research period", "Ultracool dwarfs", "LAMOST DR11"].map((t) => (
+                <span
+                  key={t}
+                  className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-muted-foreground"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <ul className="grid gap-3 self-start">
+            {facets.map((f) => (
+              <li
+                key={f.title}
+                className="glass rounded-xl border border-white/10 p-4 transition-colors hover:border-primary/30"
+              >
+                <div className="flex items-center gap-2">
+                  <f.icon className="h-4 w-4 text-primary" aria-hidden />
+                  <span className="font-display text-sm font-semibold">{f.title}</span>
+                </div>
+                <p className="mt-1.5 text-sm text-muted-foreground">{f.body}</p>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </Section>
@@ -718,7 +715,7 @@ function Pathway() {
           className="pointer-events-none absolute inset-0 opacity-40"
           style={{
             background:
-              "radial-gradient(600px 200px at 20% 30%, hsl(var(--primary) / 0.15), transparent 60%), radial-gradient(500px 200px at 80% 70%, hsl(var(--nebula) / 0.15), transparent 60%)",
+              "radial-gradient(600px 200px at 20% 30%, color-mix(in oklab, var(--primary) 15%, transparent), transparent 60%), radial-gradient(500px 200px at 80% 70%, color-mix(in oklab, var(--nebula) 15%, transparent), transparent 60%)",
           }}
           aria-hidden
         />
@@ -787,7 +784,6 @@ function Highlights() {
 // ---- Constellation visual --------------------------------------------
 
 function Constellation() {
-  const svgRef = useRef<SVGSVGElement>(null);
   const [hover, setHover] = useState<string | null>(null);
   const nodeMap = useMemo(
     () => Object.fromEntries(constellationNodes.map((n) => [n.id, n])),
@@ -801,34 +797,92 @@ function Constellation() {
       intro="A quiet map of the ideas that connect research to mentoring."
     >
       <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
-        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-2">
+        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/50">
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(55% 70% at 50% 48%, color-mix(in oklab, var(--primary) 8%, transparent), transparent 70%), radial-gradient(45% 60% at 88% 90%, color-mix(in oklab, var(--nebula) 16%, transparent), transparent 70%), radial-gradient(40% 55% at 8% 12%, color-mix(in oklab, var(--nebula) 10%, transparent), transparent 70%)",
+            }}
+            aria-hidden
+          />
           <svg
-            ref={svgRef}
-            viewBox="0 0 100 100"
+            viewBox="0 0 200 120"
             role="img"
             aria-label="Knowledge constellation linking curiosity, observation, data, analysis, interpretation, communication, mentoring and discovery."
-            className="h-[420px] w-full motion-reduce:animate-none"
+            className="relative h-[300px] w-full sm:h-[380px] lg:h-[420px]"
           >
-            {constellationEdges.map(([a, b], i) => {
-              const na = nodeMap[a];
-              const nb = nodeMap[b];
-              const active = hover && (hover === a || hover === b);
-              return (
-                <line
+            <defs>
+              <radialGradient id="kc-core" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="var(--primary)" stopOpacity="0.28" />
+                <stop offset="100%" stopColor="var(--primary)" stopOpacity="0" />
+              </radialGradient>
+              <linearGradient id="kc-link" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="var(--primary)" stopOpacity="0.28" />
+                <stop offset="100%" stopColor="white" stopOpacity="0.12" />
+              </linearGradient>
+              <filter id="kc-glow" x="-60%" y="-60%" width="220%" height="220%">
+                <feGaussianBlur stdDeviation="1.4" result="b" />
+                <feMerge>
+                  <feMergeNode in="b" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            {/* distant field stars */}
+            <g aria-hidden>
+              {fieldStars.map((s, i) => (
+                <circle
                   key={i}
-                  x1={na.x}
-                  y1={na.y}
-                  x2={nb.x}
-                  y2={nb.y}
-                  stroke="hsl(var(--primary))"
-                  strokeOpacity={active ? 0.75 : 0.25}
-                  strokeWidth={active ? 0.35 : 0.2}
+                  cx={s.x}
+                  cy={s.y}
+                  r={s.r}
+                  fill="white"
+                  fillOpacity={s.o}
+                  className={i % 7 === 0 ? "anim-pulse-slow motion-reduce:animate-none" : undefined}
+                  style={i % 7 === 0 ? { animationDelay: `${(i % 5) * 0.6}s` } : undefined}
                 />
-              );
-            })}
+              ))}
+            </g>
+
+            {/* faint halo behind the central star */}
+            <circle cx={100} cy={58} r={30} fill="url(#kc-core)" aria-hidden />
+
+            {/* curved connecting paths */}
+            <g aria-hidden>
+              {constellationEdges.map(([a, b], i) => {
+                const na = nodeMap[a];
+                const nb = nodeMap[b];
+                const active = hover && (hover === a || hover === b);
+                const mx = (na.x + nb.x) / 2;
+                const my = (na.y + nb.y) / 2;
+                const bow = i % 2 === 0 ? 4 : -4;
+                const dx = nb.x - na.x;
+                const dy = nb.y - na.y;
+                const len = Math.max(1, Math.hypot(dx, dy));
+                const cx = Number((mx + (-dy / len) * bow).toFixed(2));
+                const cy = Number((my + (dx / len) * bow).toFixed(2));
+                return (
+                  <path
+                    key={i}
+                    d={`M ${na.x} ${na.y} Q ${cx} ${cy} ${nb.x} ${nb.y}`}
+                    fill="none"
+                    stroke="url(#kc-link)"
+                    strokeOpacity={active ? 0.95 : 0.32}
+                    strokeWidth={active ? 0.55 : 0.28}
+                    strokeLinecap="round"
+                    className="transition-all duration-300"
+                  />
+                );
+              })}
+            </g>
+
+            {/* stellar nodes */}
             {constellationNodes.map((n) => {
               const isCenter = n.id === "discovery";
               const active = hover === n.id;
+              const labelAbove = n.y > 60;
               return (
                 <g
                   key={n.id}
@@ -837,29 +891,59 @@ function Constellation() {
                   onFocus={() => setHover(n.id)}
                   onBlur={() => setHover(null)}
                   tabIndex={0}
-                  className="cursor-pointer focus:outline-none"
+                  aria-label={n.label}
+                  className="cursor-pointer outline-none focus-visible:[&>circle:first-child]:stroke-primary"
                 >
+                  {/* focus/hover halo */}
                   <circle
                     cx={n.x}
                     cy={n.y}
-                    r={isCenter ? 2.4 : active ? 1.6 : 1.2}
-                    fill={isCenter ? "hsl(var(--primary))" : "white"}
-                    fillOpacity={isCenter ? 1 : active ? 1 : 0.85}
+                    r={isCenter ? 9 : 6}
+                    fill="var(--primary)"
+                    fillOpacity={active ? 0.22 : 0.08}
+                    stroke="transparent"
+                    strokeWidth={0.4}
+                    className="transition-all duration-300"
                   />
+                  {/* diffraction spikes */}
+                  <g
+                    stroke={isCenter ? "var(--primary)" : "white"}
+                    strokeOpacity={active ? 0.6 : 0.28}
+                    strokeWidth={isCenter ? 0.4 : 0.25}
+                    strokeLinecap="round"
+                  >
+                    <line x1={n.x - n.mag * 2.6} y1={n.y} x2={n.x + n.mag * 2.6} y2={n.y} />
+                    <line x1={n.x} y1={n.y - n.mag * 2.6} x2={n.x} y2={n.y + n.mag * 2.6} />
+                  </g>
                   <circle
                     cx={n.x}
                     cy={n.y}
-                    r={isCenter ? 4.5 : 3}
-                    fill="hsl(var(--primary))"
-                    fillOpacity={active ? 0.25 : 0.1}
+                    r={active ? n.mag * 0.95 : n.mag * 0.75}
+                    fill={isCenter ? "var(--primary)" : "white"}
+                    fillOpacity={0.95}
+                    filter="url(#kc-glow)"
+                    className="transition-all duration-300"
                   />
+                  {isCenter && (
+                    <circle
+                      cx={n.x}
+                      cy={n.y}
+                      r={6.5}
+                      fill="none"
+                      stroke="var(--primary)"
+                      strokeOpacity={0.45}
+                      strokeWidth={0.3}
+                      className="anim-pulse-slow motion-reduce:animate-none"
+                    />
+                  )}
                   <text
                     x={n.x}
-                    y={n.y - 3.5}
+                    y={labelAbove ? n.y - (isCenter ? 10 : 7) : n.y + (isCenter ? 15 : 12)}
                     textAnchor="middle"
-                    fontSize="2.4"
+                    fontSize={isCenter ? 5 : 4.2}
                     fill="white"
-                    fillOpacity={active || isCenter ? 0.95 : 0.7}
+                    fillOpacity={active || isCenter ? 0.96 : 0.68}
+                    className="font-display transition-opacity duration-300"
                   >
                     {n.label}
                   </text>
@@ -898,6 +982,7 @@ function Constellation() {
     </Section>
   );
 }
+
 
 function Vision() {
   return (

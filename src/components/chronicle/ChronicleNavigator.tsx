@@ -9,7 +9,14 @@ export type NavSection = { id: string; label: string };
  * on hover/focus/click, and a bottom sheet on tablet and mobile.
  * Tracks the section currently in view via IntersectionObserver.
  */
-export function ChronicleNavigator({ sections }: { sections: NavSection[] }) {
+export function ChronicleNavigator({
+  sections,
+  label = "Chronicle",
+}: {
+  sections: NavSection[];
+  /** Short rail caption + accessible name prefix (defaults to "Chronicle"). */
+  label?: string;
+}) {
   const [active, setActive] = useState(sections[0]?.id ?? "");
   const [expanded, setExpanded] = useState(false);
   const [pinned, setPinned] = useState(false);
@@ -82,7 +89,7 @@ export function ChronicleNavigator({ sections }: { sections: NavSection[] }) {
       {/* ------------------------------------------------- desktop floating rail */}
       <nav
         ref={railRef}
-        aria-label="Chronicle sections"
+        aria-label={`${label} sections`}
         onMouseEnter={() => setExpanded(true)}
         onMouseLeave={() => !pinned && setExpanded(false)}
         onFocusCapture={() => setExpanded(true)}
@@ -107,7 +114,7 @@ export function ChronicleNavigator({ sections }: { sections: NavSection[] }) {
           <div className="relative flex items-center justify-between px-1 pb-1">
             {showLabels && (
               <span className="truncate font-mono text-[9px] uppercase tracking-[0.22em] text-primary/80">
-                Chronicle
+                {label}
               </span>
             )}
             <button
@@ -117,7 +124,7 @@ export function ChronicleNavigator({ sections }: { sections: NavSection[] }) {
                 setExpanded(true);
               }}
               aria-expanded={showLabels}
-              aria-label={pinned ? "Collapse chronicle navigator" : "Keep chronicle navigator open"}
+              aria-label={pinned ? `Collapse ${label} navigator` : `Keep ${label} navigator open`}
               className={cn(
                 "grid h-8 w-8 shrink-0 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/60",
                 pinned && "text-primary",
@@ -178,7 +185,7 @@ export function ChronicleNavigator({ sections }: { sections: NavSection[] }) {
           <div className="glass-strong pointer-events-auto w-full max-w-md rounded-2xl p-3 anim-fade-in">
             <div className="mb-2 flex items-center justify-between px-1">
               <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-primary/80">
-                Chronicle sections
+                {label} sections
               </span>
               <button
                 type="button"
