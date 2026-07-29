@@ -33,7 +33,7 @@ import {
 import heroImage from "@/assets/hubble-ultra-deep-field.jpg.asset.json";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/publications")({
+export const Route = createFileRoute("/publications/")({
   head: () => ({
     meta: [
       { title: "Publications & Scientific Exchange | Diya Ram — Astrophysics Research" },

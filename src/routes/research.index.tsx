@@ -9,7 +9,7 @@ import { publicationsArchive } from "@/data/publications-archive";
 import { ArrowRight, ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/research")({
+export const Route = createFileRoute("/research/")({
   head: () => ({
     meta: [
       { title: "Research Areas — Diya Ram" },
@@ -300,7 +300,7 @@ function AreaMotif({ motif, accent }: { motif: ResearchArea["motif"]; accent: st
                 width="3"
                 height="80"
                 fill={color}
-                opacity={0.15 + 0.6 * Math.abs(Math.sin(i * 0.6))}
+                opacity={Number((0.15 + 0.6 * Math.abs(Math.sin(i * 0.6))).toFixed(3))}
               />
             ))}
           </>

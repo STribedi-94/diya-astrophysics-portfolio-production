@@ -8,7 +8,7 @@ import { publicationsArchive } from "@/data/publications-archive";
 import { ArrowRight, ExternalLink, Globe2, Radio, Satellite, Telescope } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/facilities")({
+export const Route = createFileRoute("/facilities/")({
   head: () => ({
     meta: [
       { title: "Research Facilities — Diya Ram" },

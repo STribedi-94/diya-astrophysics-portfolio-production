@@ -49,7 +49,7 @@ export const facilities: Facility[] = [
       "exoplanet-habitability-and-star-planet-interaction",
     ],
     relatedProjects: ["gj1151-radio-monitoring", "gj398-radio-followup", "m-dwarf-radio-survey"],
-    relatedPublications: ["gj1151-flares-ugmrt", "gj-398-flares-radio"],
+    relatedPublications: ["gj1151-flares-ugmrt", "gj-398-flares-radio", "ad-leonis-flares-spectra"],
     officialWebsite: "https://www.gmrt.ncra.tifr.res.in/",
     officialWebsiteLabel: "NCRA–TIFR / GMRT",
     secondaryWebsite: "https://www.ncra.tifr.res.in/gmrt/aboutgmrt",
