@@ -9,7 +9,14 @@ export type NavSection = { id: string; label: string };
  * on hover/focus/click, and a bottom sheet on tablet and mobile.
  * Tracks the section currently in view via IntersectionObserver.
  */
-export function ChronicleNavigator({ sections }: { sections: NavSection[] }) {
+export function ChronicleNavigator({
+  sections,
+  label = "Chronicle",
+}: {
+  sections: NavSection[];
+  /** Short rail caption + accessible name prefix (defaults to "Chronicle"). */
+  label?: string;
+}) {
   const [active, setActive] = useState(sections[0]?.id ?? "");
   const [expanded, setExpanded] = useState(false);
   const [pinned, setPinned] = useState(false);
