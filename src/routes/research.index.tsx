@@ -9,7 +9,7 @@ import { publicationsArchive } from "@/data/publications-archive";
 import { ArrowRight, ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/research")({
+export const Route = createFileRoute("/research/")({
   head: () => ({
     meta: [
       { title: "Research Areas — Diya Ram" },
