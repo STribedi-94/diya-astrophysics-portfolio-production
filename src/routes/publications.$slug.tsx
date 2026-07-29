@@ -63,7 +63,7 @@ function PubDetail() {
               <GlassPanel>
                 <h3 className="text-[10px] uppercase tracking-[0.24em] text-primary/80">Main results</h3>
                 <ul className="mt-3 space-y-1.5">
-                  {pub.keyFindings.map((k) => (
+                  {pub.keyFindings.map((k: string) => (
                     <li key={k} className="flex items-start gap-2 text-sm text-muted-foreground">
                       <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-primary/70" />
                       {k}
