@@ -76,7 +76,9 @@ function StaticFallback() {
 
 export function ObservatoryNetworkGlobe() {
   const wrapRef = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(false);
+  // Starts true so the scene mounts with the component; checks below only pause
+  // the render loop when the globe is scrolled well out of view.
+  const [inView, setInView] = useState(true);
   const [mounted, setMounted] = useState(false);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -127,8 +129,7 @@ export function ObservatoryNetworkGlobe() {
     return () => window.removeEventListener("keydown", onKey);
   }, [selectedId]);
 
-  const showScene = mounted && inView && !failed;
-  if (typeof window !== "undefined") console.log("DBG2", mounted, inView, failed, ready);
+  const showScene = mounted && !failed;
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1.55fr_1fr]">
