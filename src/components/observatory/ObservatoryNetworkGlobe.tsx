@@ -87,6 +87,7 @@ export function ObservatoryNetworkGlobe() {
   const selected = networkNodes.find((n) => n.id === selectedId) ?? null;
 
   useEffect(() => {
+    console.log("DBG effect run");
     setMounted(true);
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReduced(mq.matches);
