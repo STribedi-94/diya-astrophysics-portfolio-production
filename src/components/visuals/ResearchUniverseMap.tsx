@@ -24,8 +24,8 @@ export function ResearchUniverseMap({ compact = false }: { compact?: boolean }) 
     const angle = (i / researchAreas.length) * Math.PI * 2 - Math.PI / 2;
     return {
       ...a,
-      x: cx + Math.cos(angle) * r,
-      y: cy + Math.sin(angle) * r,
+      x: Number((cx + Math.cos(angle) * r).toFixed(3)),
+      y: Number((cy + Math.sin(angle) * r).toFixed(3)),
     };
   });
 
