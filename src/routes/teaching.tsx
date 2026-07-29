@@ -386,9 +386,9 @@ function SpectrumMotif() {
     >
       <defs>
         <linearGradient id="tspec" x1="0" x2="1">
-          <stop offset="0" stopColor="hsl(var(--primary))" stopOpacity="0" />
-          <stop offset="0.5" stopColor="hsl(var(--primary))" stopOpacity="0.6" />
-          <stop offset="1" stopColor="hsl(var(--primary))" stopOpacity="0" />
+          <stop offset="0" stopColor="var(--primary)" stopOpacity="0" />
+          <stop offset="0.5" stopColor="var(--primary)" stopOpacity="0.6" />
+          <stop offset="1" stopColor="var(--primary)" stopOpacity="0" />
         </linearGradient>
       </defs>
       <path
@@ -404,7 +404,7 @@ function SpectrumMotif() {
           x2={x}
           y1={20}
           y2={140}
-          stroke="hsl(var(--primary))"
+          stroke="var(--primary)"
           strokeOpacity={0.15 + (i % 3) * 0.1}
           strokeWidth="0.6"
         />
@@ -574,7 +574,7 @@ function PeerReview() {
           className="pointer-events-none absolute inset-0 opacity-60"
           style={{
             background:
-              "radial-gradient(560px 220px at 15% 0%, hsl(var(--primary) / 0.16), transparent 65%), radial-gradient(480px 220px at 95% 100%, hsl(var(--nebula) / 0.14), transparent 65%)",
+              "radial-gradient(560px 220px at 15% 0%, color-mix(in oklab, var(--primary) 16%, transparent), transparent 65%), radial-gradient(480px 220px at 95% 100%, color-mix(in oklab, var(--nebula) 14%, transparent), transparent 65%)",
           }}
           aria-hidden
         />
@@ -715,7 +715,7 @@ function Pathway() {
           className="pointer-events-none absolute inset-0 opacity-40"
           style={{
             background:
-              "radial-gradient(600px 200px at 20% 30%, hsl(var(--primary) / 0.15), transparent 60%), radial-gradient(500px 200px at 80% 70%, hsl(var(--nebula) / 0.15), transparent 60%)",
+              "radial-gradient(600px 200px at 20% 30%, color-mix(in oklab, var(--primary) 15%, transparent), transparent 60%), radial-gradient(500px 200px at 80% 70%, color-mix(in oklab, var(--nebula) 15%, transparent), transparent 60%)",
           }}
           aria-hidden
         />
@@ -802,7 +802,7 @@ function Constellation() {
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                "radial-gradient(70% 90% at 50% 45%, hsl(var(--primary) / 0.12), transparent 70%), radial-gradient(45% 60% at 88% 90%, hsl(var(--nebula) / 0.16), transparent 70%), radial-gradient(40% 55% at 8% 12%, hsl(var(--nebula) / 0.10), transparent 70%)",
+                "radial-gradient(70% 90% at 50% 45%, color-mix(in oklab, var(--primary) 12%, transparent), transparent 70%), radial-gradient(45% 60% at 88% 90%, color-mix(in oklab, var(--nebula) 16%, transparent), transparent 70%), radial-gradient(40% 55% at 8% 12%, color-mix(in oklab, var(--nebula) 10%, transparent), transparent 70%)",
             }}
             aria-hidden
           />
@@ -814,11 +814,11 @@ function Constellation() {
           >
             <defs>
               <radialGradient id="kc-core" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.55" />
-                <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
+                <stop offset="0%" stopColor="var(--primary)" stopOpacity="0.55" />
+                <stop offset="100%" stopColor="var(--primary)" stopOpacity="0" />
               </radialGradient>
               <linearGradient id="kc-link" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.55" />
+                <stop offset="0%" stopColor="var(--primary)" stopOpacity="0.55" />
                 <stop offset="100%" stopColor="white" stopOpacity="0.12" />
               </linearGradient>
               <filter id="kc-glow" x="-60%" y="-60%" width="220%" height="220%">
@@ -899,7 +899,7 @@ function Constellation() {
                     cx={n.x}
                     cy={n.y}
                     r={isCenter ? 9 : 6}
-                    fill="hsl(var(--primary))"
+                    fill="var(--primary)"
                     fillOpacity={active ? 0.22 : 0.08}
                     stroke="transparent"
                     strokeWidth={0.4}
@@ -907,7 +907,7 @@ function Constellation() {
                   />
                   {/* diffraction spikes */}
                   <g
-                    stroke={isCenter ? "hsl(var(--primary))" : "white"}
+                    stroke={isCenter ? "var(--primary)" : "white"}
                     strokeOpacity={active ? 0.6 : 0.28}
                     strokeWidth={isCenter ? 0.4 : 0.25}
                     strokeLinecap="round"
@@ -919,7 +919,7 @@ function Constellation() {
                     cx={n.x}
                     cy={n.y}
                     r={active ? n.mag * 0.95 : n.mag * 0.75}
-                    fill={isCenter ? "hsl(var(--primary))" : "white"}
+                    fill={isCenter ? "var(--primary)" : "white"}
                     fillOpacity={0.95}
                     filter="url(#kc-glow)"
                     className="transition-all duration-300"
@@ -930,7 +930,7 @@ function Constellation() {
                       cy={n.y}
                       r={6.5}
                       fill="none"
-                      stroke="hsl(var(--primary))"
+                      stroke="var(--primary)"
                       strokeOpacity={0.45}
                       strokeWidth={0.3}
                       className="anim-pulse-slow motion-reduce:animate-none"
