@@ -470,7 +470,7 @@ export default function GlobeScene({
     ro.observe(host);
 
     /* ---------------- animation loop ---------------- */
-    const clock = new THREE.Clock();
+    let lastT = performance.now();
     let raf = 0;
     let reveal = 0;
     let orbitT = reducedMotion ? 0.18 : 0;
@@ -479,7 +479,9 @@ export default function GlobeScene({
 
     const tick = () => {
       raf = requestAnimationFrame(tick);
-      const dt = Math.min(clock.getDelta(), 0.05);
+      const now = performance.now();
+      const dt = Math.min((now - lastT) / 1000, 0.05);
+      lastT = now;
       if (!activeRef.current || document.hidden) return;
 
       reveal = Math.min(1, reveal + dt * 0.7);
