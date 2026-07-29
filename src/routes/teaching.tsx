@@ -18,10 +18,12 @@ import {
   Code2,
   Microscope,
   Lightbulb,
-  Menu,
-  X,
+  ScrollText,
+  ShieldCheck,
+  Globe2,
 } from "lucide-react";
 import { PageHero, Section, GlassPanel } from "@/components/layout/Page";
+import { ChronicleNavigator } from "@/components/chronicle/ChronicleNavigator";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/teaching")({
@@ -51,6 +53,7 @@ export const Route = createFileRoute("/teaching")({
 const sections = [
   { id: "philosophy", label: "Philosophy" },
   { id: "experience", label: "Experience" },
+  { id: "peer-review", label: "Peer Review" },
   { id: "mentoring", label: "Mentoring" },
   { id: "methods", label: "Methods" },
   { id: "pathway", label: "Learning Pathways" },
@@ -116,12 +119,6 @@ const assessmentRoles = [
     title: "Answer-script evaluation",
     body:
       "Evaluated undergraduate university examination answer scripts in Physics.",
-  },
-  {
-    icon: BookOpen,
-    title: "Peer review",
-    body:
-      "Reviewed an American Astronomical Society journal manuscript (2025) on the magnetic activity of ultracool dwarfs in the LAMOST DR11 sample.",
   },
 ];
 
@@ -313,9 +310,10 @@ function TeachingPage() {
   return (
     <>
       <TeachingHero />
-      <LocalNav />
+      <ChronicleNavigator sections={[...sections]} label="Teaching" />
       <Philosophy />
       <Experience />
+      <PeerReview />
       <Mentoring />
       <Methods />
       <Pathway />
@@ -561,7 +559,7 @@ function Experience() {
       id="experience"
       eyebrow="Verified Teaching Experience"
       title="Undergraduate physics at the University of Calcutta"
-      intro="Formal lecturing and laboratory instruction, alongside academic assessment responsibilities and professional peer review."
+      intro="Formal lecturing and laboratory instruction, alongside undergraduate academic assessment responsibilities."
     >
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-4">
