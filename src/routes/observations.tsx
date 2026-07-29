@@ -25,6 +25,8 @@ import {
 import { PageHero, Section } from "@/components/layout/Page";
 import { cn } from "@/lib/utils";
 import { facilities } from "@/data/facilities";
+import { ObservatoryNetworkGlobe } from "@/components/observatory/ObservatoryNetworkGlobe";
+
 import { projects } from "@/data/misc";
 import facilityUgmrt from "@/assets/facility-ugmrt.jpg";
 import facilityHct from "@/assets/facility-hct.jpg";
