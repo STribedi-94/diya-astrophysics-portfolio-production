@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   BookOpen,
   Compass,
@@ -891,7 +891,6 @@ function Constellation() {
                   onFocus={() => setHover(n.id)}
                   onBlur={() => setHover(null)}
                   tabIndex={0}
-                  role="listitem"
                   aria-label={n.label}
                   className="cursor-pointer outline-none focus-visible:[&>circle:first-child]:stroke-primary"
                 >

@@ -245,26 +245,6 @@ export const conferenceRecords: ConferenceRecord[] = [
     role: "Online Participant",
   },
   {
-    id: "bose-fest-2022",
-    type: "Poster Presentation",
-    event: "Bose Fest 2022",
-    acronym: "Bose Fest",
-    organiser: "S. N. Bose National Centre for Basic Sciences (SNBNCBS)",
-    venue: "S. N. Bose National Centre for Basic Sciences",
-    city: "Kolkata",
-    country: "India",
-    location: "Kolkata, India",
-    scope: "National",
-    year: 2022,
-    date: "27–29 April 2022",
-    topic: "M-dwarf magnetic activity",
-    summary:
-      "Poster contribution to the institutional annual Bose Fest. Detailed presentation title and abstract are not preserved in the verified archive; information currently unavailable in the verified archive.",
-    thesisConnection: true,
-    role: "Presenter",
-  },
-
-  {
     id: "asi-2022",
     title: "Magnetic Activity of M-dwarfs: Optical and Near-Infrared Spectroscopic Studies",
     type: "Poster Presentation",
