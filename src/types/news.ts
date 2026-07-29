@@ -29,8 +29,11 @@ export type NewsArticle = {
   imageUrl?: string;
   imageAlt?: string;
   imageCredit?: string;
+  /** Optional byline supplied by live feeds; omitted safely when absent. */
+  author?: string;
 
   publishedAt: string;
+
   updatedAt?: string;
   fetchedAt?: string;
 

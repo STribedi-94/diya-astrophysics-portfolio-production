@@ -88,7 +88,14 @@ function normaliseArticle(raw: unknown, index: number): NewsArticle | null {
     imageUrl: safeImageUrl(r.imageUrl),
     imageAlt: typeof r.imageAlt === "string" ? r.imageAlt : undefined,
     imageCredit: typeof r.imageCredit === "string" ? r.imageCredit : undefined,
+    author:
+      typeof r.author === "string" && r.author.trim()
+        ? r.author.trim()
+        : Array.isArray(r.authors)
+          ? r.authors.filter((a): a is string => typeof a === "string").join(", ") || undefined
+          : undefined,
     publishedAt: asString(r.publishedAt),
+
     updatedAt: typeof r.updatedAt === "string" ? r.updatedAt : undefined,
     fetchedAt: typeof r.fetchedAt === "string" ? r.fetchedAt : undefined,
     category: asString(r.category, "Astronomy"),
