@@ -128,6 +128,7 @@ export function ObservatoryNetworkGlobe() {
   }, [selectedId]);
 
   const showScene = mounted && inView && !failed;
+  if (typeof window !== "undefined") console.log("DBG", { mounted, inView, failed, showScene });
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1.55fr_1fr]">
