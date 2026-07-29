@@ -300,7 +300,7 @@ function AreaMotif({ motif, accent }: { motif: ResearchArea["motif"]; accent: st
                 width="3"
                 height="80"
                 fill={color}
-                opacity={0.15 + 0.6 * Math.abs(Math.sin(i * 0.6))}
+                opacity={Number((0.15 + 0.6 * Math.abs(Math.sin(i * 0.6))).toFixed(3))}
               />
             ))}
           </>
