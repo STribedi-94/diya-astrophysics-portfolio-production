@@ -162,12 +162,17 @@ function normaliseResponse(raw: unknown, query: NewsQuery): NewsApiResponse {
     throw new NewsServiceError("malformed", "The news service returned an unexpected response.");
   }
   const r = raw as Record<string, unknown>;
-  const items = (Array.isArray(r.items) ? r.items : [])
-    .map(normaliseArticle)
-    .filter((a): a is NewsArticle => a !== null);
-  const featuredItems = (Array.isArray(r.featuredItems) ? r.featuredItems : [])
-    .map(normaliseArticle)
-    .filter((a): a is NewsArticle => a !== null);
+  const items = dedupeArticles(
+    (Array.isArray(r.items) ? r.items : [])
+      .map(normaliseArticle)
+      .filter((a): a is NewsArticle => a !== null),
+  );
+  const featuredItems = dedupeArticles(
+    (Array.isArray(r.featuredItems) ? r.featuredItems : [])
+      .map(normaliseArticle)
+      .filter((a): a is NewsArticle => a !== null),
+  );
+
 
   const p = (r.pagination ?? {}) as Record<string, unknown>;
   const page = typeof p.page === "number" ? p.page : (query.page ?? 1);
