@@ -244,7 +244,7 @@ export const methodsRibbon: readonly Method[] = [
     code: "04",
     label: "Low-Frequency Radio Astronomy",
     detail: [
-      "uGMRT band-3 & band-4 imaging",
+      "uGMRT Band 4 & Band 5 imaging",
       "Coherent and incoherent emission",
     ],
     accent: "radio-teal",
