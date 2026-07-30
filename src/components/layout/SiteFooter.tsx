@@ -3,6 +3,9 @@ import { ExternalLink } from "lucide-react";
 import { site } from "@/data/site";
 import { profileLinks } from "@/data/about";
 import { CreatorCard } from "@/components/creator/CreatorCard";
+import { ResearchStatistics } from "@/components/layout/ResearchStatistics";
+import { COPYRIGHT_SECTION_ID } from "@/data/legal";
+
 
 const cols = [
   {
