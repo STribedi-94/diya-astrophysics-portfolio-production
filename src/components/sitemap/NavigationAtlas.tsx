@@ -35,7 +35,7 @@ function Node({
         <Icon className="h-4 w-4" aria-hidden />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block truncate font-display text-sm font-semibold text-foreground">
+        <span className="block font-display text-sm font-semibold leading-snug text-foreground">
           {node.label}
         </span>
         <span className="block text-[11px] leading-snug text-muted-foreground">

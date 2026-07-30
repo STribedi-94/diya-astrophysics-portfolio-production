@@ -51,7 +51,7 @@ export function SiteFooter() {
     <footer className="relative mt-24 overflow-hidden border-t border-white/10 bg-[oklch(0.10_0.04_265_/_0.85)]">
       <div className="absolute inset-0 starfield-sparse opacity-40" aria-hidden />
       <div className="absolute inset-x-0 top-0 h-px bg-grad-spectral opacity-60" />
-      <div className="container-page relative grid gap-10 py-14 md:grid-cols-6 lg:grid-cols-7">
+      <div className="container-page relative grid gap-10 py-14 md:grid-cols-6 lg:grid-cols-8">
         <div className="md:col-span-6 lg:col-span-2">
           <div className="font-display text-lg font-semibold">{site.name}</div>
           <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.24em] text-primary/80">
@@ -94,7 +94,7 @@ export function SiteFooter() {
             </ul>
           </div>
         ))}
-        <div className="md:col-span-2 lg:col-span-1">
+        <div className="md:col-span-2 lg:col-span-2">
           <ResearchStatistics />
         </div>
       </div>
