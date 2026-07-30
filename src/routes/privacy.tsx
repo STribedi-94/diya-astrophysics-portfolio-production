@@ -146,7 +146,7 @@ function PrivacyPage() {
       </PageHero>
 
       <Section>
-        <div className="grid gap-10 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-12">
+        <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-12">
           <PrivacySectionNavigation />
 
           <div className="min-w-0 space-y-6">
