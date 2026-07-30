@@ -63,7 +63,7 @@ function PrivacySectionNavigation() {
   }, []);
 
   return (
-    <nav aria-label="On this page" className="lg:sticky lg:top-28">
+    <nav aria-label="On this page" className="min-w-0 max-w-full lg:sticky lg:top-28">
       <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.22em] text-primary/80">
         On this page
       </div>
