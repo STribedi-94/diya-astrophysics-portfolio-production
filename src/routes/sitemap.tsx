@@ -1,41 +1,75 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHero, Section, GlassPanel } from "@/components/layout/Page";
-import { nav } from "@/data/site";
-
-type NavChild = { label: string; to: string };
-type NavItem = { label: string; to?: string; children?: readonly NavChild[] };
+import { NavigationAtlas } from "@/components/sitemap/NavigationAtlas";
+import { Map, MessageSquare } from "lucide-react";
 
 export const Route = createFileRoute("/sitemap")({
-  head: () => ({ meta: [{ title: "Sitemap — Diya Ram" }] }),
-  component: () => (
-    <>
-      <PageHero eyebrow="Sitemap" title="Human-readable sitemap" intro="A structured index of every page on this research website." />
-      <Section>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {(nav.primary as readonly NavItem[]).map((item) => (
-            <GlassPanel key={item.label}>
-              <div className="font-display text-sm font-semibold">
-                {item.to ? (
-                  <Link to={item.to} className="hover:text-primary">{item.label}</Link>
-                ) : (
-                  item.label
-                )}
-              </div>
-              {item.children && (
-                <ul className="mt-3 space-y-1.5">
-                  {item.children.map((c) => (
-                    <li key={c.to}>
-                      <Link to={c.to} className="text-sm text-muted-foreground hover:text-foreground">
-                        {c.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </GlassPanel>
-          ))}
-        </div>
-      </Section>
-    </>
-  ),
+  head: () => ({
+    meta: [
+      { title: "Website Sitemap | Diya Ram — Observational Astrophysicist" },
+      {
+        name: "description",
+        content:
+          "Explore the complete structure of Diya Ram's astrophysics portfolio through an interactive, accessible website navigation atlas.",
+      },
+      { property: "og:title", content: "Website Sitemap | Diya Ram — Observational Astrophysicist" },
+      {
+        property: "og:description",
+        content:
+          "Explore the complete structure of Diya Ram's astrophysics portfolio through an interactive, accessible website navigation atlas.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://astro-diya-portfolio.lovable.app/sitemap" },
+      { name: "twitter:card", content: "summary" },
+    ],
+    links: [{ rel: "canonical", href: "https://astro-diya-portfolio.lovable.app/sitemap" }],
+  }),
+  component: SitemapPage,
 });
+
+function SitemapPage() {
+  return (
+    <main>
+      <PageHero
+        eyebrow="Explore the Research Universe"
+        title="Website Sitemap"
+        intro="Navigate every major section of Diya Ram's astrophysics portfolio through a connected and interactive website atlas."
+      >
+        <p className="flex items-center gap-2 text-xs text-muted-foreground">
+          <Map className="h-4 w-4 text-primary/80" aria-hidden />
+          Select any node to open that page.
+        </p>
+      </PageHero>
+
+      <Section>
+        <nav aria-label="Website navigation atlas">
+          <NavigationAtlas />
+        </nav>
+      </Section>
+
+      <Section>
+        <GlassPanel className="max-w-3xl">
+          <h2 className="font-display text-xl font-semibold">About This Sitemap</h2>
+          <div className="mt-4 space-y-3 text-sm leading-relaxed text-muted-foreground">
+            <p>
+              This is the human-readable navigation map for visitors, providing direct access to
+              every major public section of the research portfolio.
+            </p>
+            <p>
+              Individual publications, mission-log records, news articles and research-detail
+              records are reached through their relevant parent pages, where they are listed,
+              filtered and searchable.
+            </p>
+          </div>
+          <Link
+            to="/contact"
+            className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-5 text-sm text-foreground transition-colors hover:border-primary/40 hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+          >
+            <MessageSquare className="h-4 w-4 text-primary/80" aria-hidden />
+            Cannot find something? Contact Diya
+          </Link>
+        </GlassPanel>
+      </Section>
+    </main>
+  );
+}

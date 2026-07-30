@@ -3,6 +3,9 @@ import { ExternalLink } from "lucide-react";
 import { site } from "@/data/site";
 import { profileLinks } from "@/data/about";
 import { CreatorCard } from "@/components/creator/CreatorCard";
+import { ResearchStatistics } from "@/components/layout/ResearchStatistics";
+import { COPYRIGHT_SECTION_ID } from "@/data/legal";
+
 
 const cols = [
   {
@@ -48,8 +51,8 @@ export function SiteFooter() {
     <footer className="relative mt-24 overflow-hidden border-t border-white/10 bg-[oklch(0.10_0.04_265_/_0.85)]">
       <div className="absolute inset-0 starfield-sparse opacity-40" aria-hidden />
       <div className="absolute inset-x-0 top-0 h-px bg-grad-spectral opacity-60" />
-      <div className="container-page relative grid gap-10 py-14 md:grid-cols-6">
-        <div className="md:col-span-2">
+      <div className="container-page relative grid gap-10 py-14 md:grid-cols-6 lg:grid-cols-8">
+        <div className="md:col-span-6 lg:col-span-2">
           <div className="font-display text-lg font-semibold">{site.name}</div>
           <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.24em] text-primary/80">
             {site.title}
@@ -91,9 +94,25 @@ export function SiteFooter() {
             </ul>
           </div>
         ))}
+        <div className="md:col-span-2 lg:col-span-2">
+          <ResearchStatistics />
+        </div>
       </div>
-      <div className="container-page relative flex flex-col items-start justify-between gap-3 border-t border-white/5 py-6 text-xs text-muted-foreground md:flex-row md:items-center">
-        <div>© {new Date().getFullYear()} {site.name}. All rights reserved.</div>
+      <div className="container-page relative flex flex-col gap-3 border-t border-white/5 py-6 text-xs text-muted-foreground">
+        <p className="max-w-4xl leading-relaxed">
+          © {new Date().getFullYear()} {site.name}. Research Copyright &amp; Intellectual Property.
+          Original scientific content is protected under applicable copyright and international
+          intellectual-property laws. Proper academic citation and attribution are required.
+          Unauthorised reproduction or redistribution may violate legal, licensing and
+          academic-integrity requirements.{" "}
+          <Link
+            to="/privacy"
+            hash={COPYRIGHT_SECTION_ID}
+            className="text-foreground underline underline-offset-4 transition-colors hover:text-primary"
+          >
+            Read the Privacy, Copyright &amp; Citation Policy
+          </Link>
+        </p>
         <div className="font-mono uppercase tracking-[0.18em]">
           Observational Astrophysics · M-dwarf magnetic activity · Multi-wavelength research
         </div>
@@ -101,6 +120,7 @@ export function SiteFooter() {
       <div className="container-page relative flex justify-center border-t border-white/5 py-5">
         <CreatorCard />
       </div>
+
     </footer>
   );
 }
