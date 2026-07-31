@@ -4,6 +4,7 @@ import { site } from "@/data/site";
 import { profileLinks } from "@/data/about";
 import { CreatorCard } from "@/components/creator/CreatorCard";
 import { ResearchStatistics } from "@/components/layout/ResearchStatistics";
+import { VisualPerformanceControl } from "@/components/layout/VisualPerformanceControl";
 import { COPYRIGHT_SECTION_ID } from "@/data/legal";
 
 
