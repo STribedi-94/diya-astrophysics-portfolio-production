@@ -94,8 +94,9 @@ export function SiteFooter() {
             </ul>
           </div>
         ))}
-        <div className="md:col-span-2 lg:col-span-2">
+        <div className="space-y-8 md:col-span-2 lg:col-span-2">
           <ResearchStatistics />
+          <VisualPerformanceControl />
         </div>
       </div>
       <div className="container-page relative flex flex-col gap-3 border-t border-white/5 py-6 text-xs text-muted-foreground">
