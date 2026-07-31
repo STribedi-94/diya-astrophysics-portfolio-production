@@ -340,3 +340,7 @@ html[data-perf="reduced-motion"] *::after {
   transition-duration: 0.001ms !important;
   scroll-behavior: auto !important;
 }
+
+/* Layout stability: full-bleed rails and decorative overscan must never
+   create a horizontal scrollbar. `clip` (not `hidden`) preserves sticky. */
+html, body { overflow-x: clip; }
