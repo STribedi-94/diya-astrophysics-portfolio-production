@@ -170,19 +170,21 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div
-        className="app-shell relative flex min-h-screen flex-col"
-        style={shellStyle(entrance)}
-      >
-        <CosmicBackground />
-        <a href="#main-content" className="skip-link">Skip to content</a>
-        <SiteHeader />
-        <main id="main-content" className="flex-1">
-          <Outlet />
-        </main>
-        <SiteFooter />
-      </div>
-      <CosmicEntrance state={entrance} />
+      <PerformanceProvider>
+        <div
+          className="app-shell relative flex min-h-screen flex-col"
+          style={shellStyle(entrance)}
+        >
+          <CosmicBackground />
+          <a href="#main-content" className="skip-link">Skip to content</a>
+          <SiteHeader />
+          <main id="main-content" className="flex-1">
+            <Outlet />
+          </main>
+          <SiteFooter />
+        </div>
+        <CosmicEntrance state={entrance} />
+      </PerformanceProvider>
     </QueryClientProvider>
   );
 }
