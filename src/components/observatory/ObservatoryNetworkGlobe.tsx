@@ -143,6 +143,7 @@ export function ObservatoryNetworkGlobe() {
       {/* ---------- Globe ---------- */}
       <figure
         ref={wrapRef}
+        data-dbg={`${mounted}|${near}|${allowWebGL}|${inView}|${mode}`}
         className="relative m-0 overflow-hidden rounded-2xl border border-white/10 bg-[oklch(0.07_0.025_265/0.9)]"
       >
         <div
