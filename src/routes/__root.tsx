@@ -151,6 +151,7 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className="dark">
       <head>
+        <script dangerouslySetInnerHTML={{ __html: PERF_PREPAINT }} />
         <script dangerouslySetInnerHTML={{ __html: ENTRANCE_PREPAINT }} />
         <HeadContent />
       </head>
