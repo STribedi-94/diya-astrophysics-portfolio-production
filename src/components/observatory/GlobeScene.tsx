@@ -92,7 +92,7 @@ export default function GlobeScene({
 
     let disposed = false;
     const disposables: Array<{ dispose: () => void }> = [];
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, maxPixelRatio));
     renderer.setSize(host.clientWidth, host.clientHeight, false);
     renderer.domElement.style.width = "100%";
     renderer.domElement.style.height = "100%";
