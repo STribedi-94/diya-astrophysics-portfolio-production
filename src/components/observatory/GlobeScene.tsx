@@ -7,6 +7,7 @@
  */
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { usePerf } from "@/lib/performance";
 import { groundNodes, spaceNode, type NetworkNode } from "@/data/observatory-network";
 import dayTex from "@/assets/globe/earth-day-2k.jpg.asset.json";
 import nightTex from "@/assets/globe/earth-night-1k.jpg.asset.json";
