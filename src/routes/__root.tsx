@@ -19,6 +19,7 @@ import {
   useCosmicEntrance,
   shellStyle,
 } from "../components/intro/CosmicEntrance";
+import { PerformanceProvider, PERF_PREPAINT } from "../lib/performance";
 
 const ENTRANCE_PREPAINT = `(function(){try{if(location.pathname==="/"&&!sessionStorage.getItem("dr-entrance-seen")){var s=document.createElement("style");s.id="entrance-prepaint";s.textContent="html{background-color:#04060e}.app-shell{opacity:0!important}";document.head.appendChild(s)}}catch(e){}})();`;
 
