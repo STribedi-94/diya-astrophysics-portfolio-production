@@ -87,8 +87,6 @@ export function ObservatoryNetworkGlobe() {
   const [reduced, setReduced] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [hintDismissed, setHintDismissed] = useState(false);
-  // The WebGL scene is only created once the section approaches the viewport.
-  const [near, setNear] = useState(false);
 
   const selected = networkNodes.find((n) => n.id === selectedId) ?? null;
 
@@ -106,9 +104,7 @@ export function ObservatoryNetworkGlobe() {
     if (!el) return;
     const check = () => {
       const r = el.getBoundingClientRect();
-      const visible = r.bottom > -300 && r.top < window.innerHeight + 300;
-      setInView(visible);
-      if (r.top < window.innerHeight + 800 && r.bottom > -800) setNear(true);
+      setInView(r.bottom > -300 && r.top < window.innerHeight + 300);
     };
     check();
     let io: IntersectionObserver | undefined;
@@ -136,14 +132,13 @@ export function ObservatoryNetworkGlobe() {
   }, [selectedId]);
 
   const lowPower = reduced || mode === "reduced-motion" || mode === "performance";
-  const showScene = mounted && near && allowWebGL && !failed;
+  const showScene = mounted && allowWebGL && !failed;
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1.55fr_1fr]">
       {/* ---------- Globe ---------- */}
       <figure
         ref={wrapRef}
-        data-dbg={`${mounted}|${near}|${allowWebGL}|${inView}|${mode}`}
         className="relative m-0 overflow-hidden rounded-2xl border border-white/10 bg-[oklch(0.07_0.025_265/0.9)]"
       >
         <div
