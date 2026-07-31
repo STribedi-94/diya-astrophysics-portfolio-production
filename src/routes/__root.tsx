@@ -19,6 +19,7 @@ import {
   useCosmicEntrance,
   shellStyle,
 } from "../components/intro/CosmicEntrance";
+import { PerformanceProvider, PERF_PREPAINT } from "../lib/performance";
 
 const ENTRANCE_PREPAINT = `(function(){try{if(location.pathname==="/"&&!sessionStorage.getItem("dr-entrance-seen")){var s=document.createElement("style");s.id="entrance-prepaint";s.textContent="html{background-color:#04060e}.app-shell{opacity:0!important}";document.head.appendChild(s)}}catch(e){}})();`;
 
@@ -149,8 +150,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: PERF_PREPAINT }} />
         <script dangerouslySetInnerHTML={{ __html: ENTRANCE_PREPAINT }} />
         <HeadContent />
       </head>
@@ -168,19 +170,21 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div
-        className="app-shell relative flex min-h-screen flex-col"
-        style={shellStyle(entrance)}
-      >
-        <CosmicBackground />
-        <a href="#main-content" className="skip-link">Skip to content</a>
-        <SiteHeader />
-        <main id="main-content" className="flex-1">
-          <Outlet />
-        </main>
-        <SiteFooter />
-      </div>
-      <CosmicEntrance state={entrance} />
+      <PerformanceProvider>
+        <div
+          className="app-shell relative flex min-h-screen flex-col"
+          style={shellStyle(entrance)}
+        >
+          <CosmicBackground />
+          <a href="#main-content" className="skip-link">Skip to content</a>
+          <SiteHeader />
+          <main id="main-content" className="flex-1">
+            <Outlet />
+          </main>
+          <SiteFooter />
+        </div>
+        <CosmicEntrance state={entrance} />
+      </PerformanceProvider>
     </QueryClientProvider>
   );
 }

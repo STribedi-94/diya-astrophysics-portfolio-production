@@ -303,3 +303,44 @@
   50% { opacity: 0.7; }
 }
 .entrance-glow { animation: entranceGlow 9s ease-in-out infinite; }
+
+/* ------------------------------------------------------------------ */
+/*  Adaptive visual-performance governance (html[data-perf])           */
+/*  Same layout, colours, typography and content in every mode — only  */
+/*  hidden rendering work changes.                                     */
+/* ------------------------------------------------------------------ */
+
+/* Performance mode: keep the premium look, drop continuous decorative work. */
+html[data-perf="performance"] .anim-drift,
+html[data-perf="performance"] .anim-pulse-slow,
+html[data-perf="performance"] .anim-twinkle,
+html[data-perf="performance"] .anim-float,
+html[data-perf="performance"] .anim-corona,
+html[data-perf="performance"] .anim-rotate-slow,
+html[data-perf="performance"] .entrance-drift {
+  animation: none !important;
+}
+html[data-perf="performance"] .glass {
+  backdrop-filter: blur(6px) saturate(120%);
+}
+html[data-perf="performance"] .glass-strong {
+  backdrop-filter: blur(8px) saturate(130%);
+}
+html[data-perf="performance"] .blur-3xl {
+  --tw-blur: blur(28px);
+  filter: blur(28px);
+}
+
+/* Reduced motion: no decorative motion at all, composition preserved. */
+html[data-perf="reduced-motion"] *,
+html[data-perf="reduced-motion"] *::before,
+html[data-perf="reduced-motion"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Layout stability: full-bleed rails and decorative overscan must never
+   create a horizontal scrollbar. `clip` (not `hidden`) preserves sticky. */
+html, body { overflow-x: clip; }

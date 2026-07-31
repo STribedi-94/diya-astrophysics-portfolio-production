@@ -7,6 +7,7 @@
  */
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { usePerf } from "@/lib/performance";
 import { groundNodes, spaceNode, type NetworkNode } from "@/data/observatory-network";
 import dayTex from "@/assets/globe/earth-day-2k.jpg.asset.json";
 import nightTex from "@/assets/globe/earth-night-1k.jpg.asset.json";
@@ -63,6 +64,7 @@ export default function GlobeScene({
   reducedMotion,
   active,
 }: GlobeSceneProps) {
+  const { maxPixelRatio } = usePerf();
   const hostRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLDivElement>(null);
   const selectedRef = useRef<string | null>(selectedId);
@@ -92,7 +94,7 @@ export default function GlobeScene({
 
     let disposed = false;
     const disposables: Array<{ dispose: () => void }> = [];
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, maxPixelRatio));
     renderer.setSize(host.clientWidth, host.clientHeight, false);
     renderer.domElement.style.width = "100%";
     renderer.domElement.style.height = "100%";

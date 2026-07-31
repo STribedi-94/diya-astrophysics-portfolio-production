@@ -4,6 +4,7 @@ import { site } from "@/data/site";
 import { profileLinks } from "@/data/about";
 import { CreatorCard } from "@/components/creator/CreatorCard";
 import { ResearchStatistics } from "@/components/layout/ResearchStatistics";
+import { VisualPerformanceControl } from "@/components/layout/VisualPerformanceControl";
 import { COPYRIGHT_SECTION_ID } from "@/data/legal";
 
 
@@ -94,8 +95,9 @@ export function SiteFooter() {
             </ul>
           </div>
         ))}
-        <div className="md:col-span-2 lg:col-span-2">
+        <div className="space-y-8 md:col-span-2 lg:col-span-2">
           <ResearchStatistics />
+          <VisualPerformanceControl />
         </div>
       </div>
       <div className="container-page relative flex flex-col gap-3 border-t border-white/5 py-6 text-xs text-muted-foreground">

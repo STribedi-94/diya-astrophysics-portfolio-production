@@ -8,6 +8,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight, Globe2, MapPin, Move3d, Satellite, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { groundNodes, networkNodes, spaceNode, type NetworkNode } from "@/data/observatory-network";
+import { usePerf } from "@/lib/performance";
 
 const GlobeScene = lazy(() => import("./GlobeScene"));
 
@@ -75,6 +76,7 @@ function StaticFallback() {
 /* ------------------------------------------------------------------ */
 
 export function ObservatoryNetworkGlobe() {
+  const { allowWebGL, mode } = usePerf();
   const wrapRef = useRef<HTMLDivElement>(null);
   // Starts true so the scene mounts with the component; checks below only pause
   // the render loop when the globe is scrolled well out of view.
@@ -129,7 +131,8 @@ export function ObservatoryNetworkGlobe() {
     return () => window.removeEventListener("keydown", onKey);
   }, [selectedId]);
 
-  const showScene = mounted && !failed;
+  const lowPower = reduced || mode === "reduced-motion" || mode === "performance";
+  const showScene = mounted && allowWebGL && !failed;
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1.55fr_1fr]">
@@ -154,16 +157,16 @@ export function ObservatoryNetworkGlobe() {
                   }}
                   onReady={() => setReady(true)}
                   onError={() => setFailed(true)}
-                  reducedMotion={reduced}
+                  reducedMotion={lowPower}
                   active={inView}
                 />
               </Suspense>
             </SceneBoundary>
           )}
 
-          {failed && <StaticFallback />}
+          {(failed || (mounted && !allowWebGL)) && <StaticFallback />}
 
-          {!ready && !failed && (
+          {!ready && !failed && allowWebGL && (
             <div className="absolute inset-0 grid place-items-center">
               <div className="flex flex-col items-center gap-3">
                 <div className="h-24 w-24 rounded-full border border-white/10 bg-[radial-gradient(circle_at_35%_30%,oklch(0.32_0.06_250),oklch(0.11_0.03_265))]" />
@@ -184,7 +187,7 @@ export function ObservatoryNetworkGlobe() {
           )}
 
           {/* Legend */}
-          {!failed && (
+          {!failed && allowWebGL && (
             <div className="pointer-events-none absolute left-3 top-3 space-y-1 rounded-xl border border-white/10 bg-[oklch(0.10_0.03_265/0.6)] px-2.5 py-2 text-[10px] backdrop-blur-sm">
               {networkNodes.map((n) => (
                 <div key={n.id} className="flex items-center gap-1.5 text-muted-foreground">
