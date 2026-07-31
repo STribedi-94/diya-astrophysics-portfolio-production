@@ -63,6 +63,7 @@ export default function GlobeScene({
   reducedMotion,
   active,
 }: GlobeSceneProps) {
+  const { maxPixelRatio } = usePerf();
   const hostRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLDivElement>(null);
   const selectedRef = useRef<string | null>(selectedId);
