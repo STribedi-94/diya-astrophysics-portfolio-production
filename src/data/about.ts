@@ -5,9 +5,7 @@
 import ugmrtImg from "@/assets/facility-ugmrt.jpg";
 import hctImg from "@/assets/facility-hct.jpg";
 import dotImg from "@/assets/facility-dot.jpg";
-import cvAsset from "@/assets/diya-ram-cv.pdf.asset.json";
-
-export const cvDownloadUrl = cvAsset.url;
+export const cvDownloadUrl = "/assets/documents/cv/diya-ram-cv.pdf";
 
 export const aboutIdentity = {
   eyebrow: "About & Research Profile",

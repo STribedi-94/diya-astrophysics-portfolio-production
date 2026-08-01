@@ -30,3 +30,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Local production assets (Cloudflare R2 source)
+public/assets/

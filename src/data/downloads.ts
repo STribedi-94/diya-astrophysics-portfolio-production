@@ -15,7 +15,11 @@ import {
 import { gallery, type GalleryRecord } from "./gallery";
 import { aboutIdentity } from "./about";
 
-import cvAsset from "@/assets/diya-ram-cv.pdf.asset.json";
+const cvAsset = {
+  url: "/assets/documents/cv/diya-ram-cv.pdf",
+  created_at: "2026-02-04T00:00:00.000Z",
+  size: 246883,
+};
 
 import thumbCv from "@/assets/thumbs/cv-first-page.jpg.asset.json";
 import thumbGj1151 from "@/assets/thumbs/gj1151-first-page.jpg.asset.json";
