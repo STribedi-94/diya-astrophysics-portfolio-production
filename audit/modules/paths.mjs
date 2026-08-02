@@ -15,6 +15,24 @@ export const PATHS = {
 
   metadata: path.resolve("public/assets/metadata"),
 
+  thumbnails: path.resolve("public/assets/thumbnails"),
+
+  thumbnailCv: path.resolve("public/assets/thumbnails/cv"),
+
+  thumbnailThesis: path.resolve("public/assets/thumbnails/thesis"),
+
+  thumbnailDocuments: path.resolve("public/assets/thumbnails"),
+
+
+  previews: path.resolve("public/assets/previews"),
+
+  previewCv: path.resolve("public/assets/previews/cv"),
+
+  previewThesis: path.resolve("public/assets/previews/thesis"),
+
+  previewDocuments: path.resolve("public/assets/previews"),
+  
+
   audit: path.resolve("audit"),
 
   auditModules: path.resolve("audit/modules"),
