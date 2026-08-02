@@ -14,9 +14,10 @@ import {
 } from "./publications-archive";
 import { gallery, type GalleryRecord } from "./gallery";
 import { aboutIdentity } from "./about";
+import { assetUrl } from "@/config/assets";
 
 const cvAsset = {
-  url: "/assets/documents/cv/diya-ram-cv.pdf",
+  url: assetUrl("documents/cv/diya-ram-cv.pdf"),
   created_at: "2026-02-04T00:00:00.000Z",
   size: 246883,
 };

@@ -5,7 +5,10 @@
 import ugmrtImg from "@/assets/facility-ugmrt.jpg";
 import hctImg from "@/assets/facility-hct.jpg";
 import dotImg from "@/assets/facility-dot.jpg";
-export const cvDownloadUrl = "/assets/documents/cv/diya-ram-cv.pdf";
+import { assetUrl } from "@/config/assets";
+export const cvDownloadUrl = assetUrl(
+  "documents/cv/diya-ram-cv.pdf",
+);
 
 export const aboutIdentity = {
   eyebrow: "About & Research Profile",
