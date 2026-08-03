@@ -2,9 +2,11 @@
  * AMP Asset Registry
  *
  * Central collection for AMP-managed asset records.
- * Asset records will be added incrementally as each
- * asset class is integrated into the platform.
+ * Asset records are validated before registration.
  */
+
+import { isAssetRecord } from "../contracts/asset-record.mjs";
+import { isValidAssetId } from "../identity/asset-id.mjs";
 
 const assetRegistry = [];
 
@@ -13,6 +15,28 @@ export function getAssetRegistry() {
 }
 
 export function registerAsset(assetRecord) {
+    if (!isAssetRecord(assetRecord)) {
+        throw new TypeError(
+            "AMP asset record does not satisfy the required contract."
+        );
+    }
+
+    if (!isValidAssetId(assetRecord.id)) {
+        throw new TypeError(
+            "AMP asset record must contain a valid Asset ID."
+        );
+    }
+
+    const alreadyExists = assetRegistry.some(
+        (asset) => asset.id === assetRecord.id
+    );
+
+    if (alreadyExists) {
+        throw new Error(
+            `Duplicate AMP Asset ID: ${assetRecord.id}`
+        );
+    }
+
     assetRegistry.push(assetRecord);
 }
 
