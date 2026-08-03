@@ -36,7 +36,9 @@ export const Route = createFileRoute("/publications/$slug")({
 });
 
 function PubDetail() {
-  const { pub } = Route.useLoaderData();
+  const { pub } = Route.useLoaderData() as {
+  pub: (typeof publicationsArchive)[number];
+  };
   const links = [
     { label: "DOI", url: pub.doiUrl },
     { label: "NASA ADS", url: pub.adsUrl },

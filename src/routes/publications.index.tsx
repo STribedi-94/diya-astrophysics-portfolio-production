@@ -1063,10 +1063,26 @@ function PublicationsPage() {
             className="absolute inset-0 will-change-transform"
             style={{ transform: `translate3d(0, ${scrollY * 0.05}px, 0)` }}
           >
-            <svg className="h-full w-full" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
-              {[...Array(60)].map((_, i) => (
-                <circle key={i} cx={(i * 137) % 800} cy={(i * 89) % 600} r={Math.random() * 1.2} fill="white" opacity={Math.random() * 0.6} />
-              ))}
+            <svg
+             className="h-full w-full"
+             viewBox="0 0 800 600"
+             preserveAspectRatio="xMidYMid slice"
+             >
+             {Array.from({ length: 60 }, (_, i) => {
+             const radius = 0.35 + ((i * 17) % 12) / 10;
+             const opacity = 0.18 + ((i * 29) % 42) / 100;
+
+             return (
+             <circle
+             key={i}
+             cx={(i * 137) % 800}
+             cy={(i * 89) % 600}
+             r={radius}
+             fill="white"
+             opacity={opacity}
+             />
+             );
+             })}
             </svg>
           </div>
         </div>

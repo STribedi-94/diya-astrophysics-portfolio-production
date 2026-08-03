@@ -22,15 +22,7 @@ import { conferenceRecords, type ConferenceRecord } from "./conferences";
 import { gallery } from "./gallery";
 import { aboutIdentity } from "./about";
 
-import thumbGj1151 from "@/assets/thumbs/gj1151-first-page.jpg.asset.json";
-import thumbWolf359 from "@/assets/thumbs/wolf359-first-page.jpg.asset.json";
-import thumbAdleo from "@/assets/thumbs/adleo-first-page.jpg.asset.json";
-import thumbGj398 from "@/assets/thumbs/gj398-first-page.jpg.asset.json";
-import thumbProcSpectro from "@/assets/thumbs/proc-mdwarf-spectro-first-page.jpg.asset.json";
-import thumbTic from "@/assets/thumbs/tic272272592-first-page.jpg.asset.json";
-import thumbTwoYoung from "@/assets/thumbs/two-young-mstars-first-page.jpg.asset.json";
-import thumbTaurus from "@/assets/thumbs/taurus-brown-dwarfs-first-page.jpg.asset.json";
-import thumbProcBd from "@/assets/thumbs/proc-young-bd-superflares-first-page.jpg.asset.json";
+import { documentService } from "@/services/documents";
 
 /* ------------------------------------------------------------------ types */
 
@@ -155,17 +147,10 @@ function galleryImage(id?: string) {
   };
 }
 
-const PUB_THUMB: Record<string, string> = {
-  gj1151: thumbGj1151.url,
-  wolf359: thumbWolf359.url,
-  adleo: thumbAdleo.url,
-  gj398: thumbGj398.url,
-  "proc-mdwarf-spectro": thumbProcSpectro.url,
-  tic272272592: thumbTic.url,
-  "two-young-mstars": thumbTwoYoung.url,
-  "taurus-brown-dwarfs": thumbTaurus.url,
-  "proc-young-bd-superflares": thumbProcBd.url,
-};
+const publicationThumbnail = (
+  publicationId: string,
+): string | undefined =>
+  documentService.getByPublicationId(publicationId)?.thumbnailUrl;
 
 /** Verified, cautiously-worded significance notes for major publications. */
 const PUB_WHY: Record<string, string> = {
@@ -221,7 +206,7 @@ function publicationToRecord(p: PublicationRecord): ChronicleRecord {
       p.journal,
       ...p.targets,
     ],
-    image: PUB_THUMB[p.id],
+    image: publicationThumbnail(p.id),
     imageAlt: `First page of the paper “${p.title}”.`,
     imageOrientation: "portrait",
     imageCredit: "Author manuscript first page.",
@@ -724,7 +709,7 @@ const manualChronicle: ChronicleRecord[] = [
     facility: ["TESS", "uGMRT"],
     researchTheme: ["M-dwarf Magnetic Activity", "Radio Astronomy"],
     tags: ["Accepted manuscript", "The Astrophysical Journal"],
-    image: thumbGj398.url,
+    image: publicationThumbnail("gj398"),
     imageAlt: "First page of the accepted GJ 398 manuscript.",
     imageOrientation: "portrait",
     sourceLabel: "Verified Publication Record",

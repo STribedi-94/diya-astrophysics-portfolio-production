@@ -14,24 +14,25 @@ import {
 } from "./publications-archive";
 import { gallery, type GalleryRecord } from "./gallery";
 import { aboutIdentity } from "./about";
-import { assetUrl } from "@/config/assets";
+import { documentService } from "@/services/documents";
+
+function requireDocument(recordId: string) {
+  const managedDocument = documentService.getDocument(recordId);
+
+  if (!managedDocument) {
+    throw new Error(`Missing AMP document mapping for "${recordId}".`);
+  }
+
+  return managedDocument;
+}
+
+const cvDocument = requireDocument("cv");
 
 const cvAsset = {
-  url: assetUrl("documents/cv/diya-ram-cv.pdf"),
+  url: cvDocument.documentUrl,
   created_at: "2026-02-04T00:00:00.000Z",
   size: 246883,
 };
-
-import thumbCv from "@/assets/thumbs/cv-first-page.jpg.asset.json";
-import thumbGj1151 from "@/assets/thumbs/gj1151-first-page.jpg.asset.json";
-import thumbWolf359 from "@/assets/thumbs/wolf359-first-page.jpg.asset.json";
-import thumbAdleo from "@/assets/thumbs/adleo-first-page.jpg.asset.json";
-import thumbGj398 from "@/assets/thumbs/gj398-first-page.jpg.asset.json";
-import thumbProcSpectro from "@/assets/thumbs/proc-mdwarf-spectro-first-page.jpg.asset.json";
-import thumbTic from "@/assets/thumbs/tic272272592-first-page.jpg.asset.json";
-import thumbTwoYoung from "@/assets/thumbs/two-young-mstars-first-page.jpg.asset.json";
-import thumbTaurus from "@/assets/thumbs/taurus-brown-dwarfs-first-page.jpg.asset.json";
-import thumbProcBd from "@/assets/thumbs/proc-young-bd-superflares-first-page.jpg.asset.json";
 
 /* ------------------------------------------------------------------ types */
 
@@ -91,28 +92,16 @@ export type ArchiveRecord = {
 
 /* ------------------------------------------------------- measured metadata */
 
-const PDF_META: Record<string, { size: number; pages: number; thumb: string }> = {
-  gj1151: { size: 2491329, pages: 9, thumb: thumbGj1151.url },
-  wolf359: { size: 65891134, pages: 21, thumb: thumbWolf359.url },
-  adleo: { size: 2285425, pages: 13, thumb: thumbAdleo.url },
-  gj398: { size: 11316791, pages: 16, thumb: thumbGj398.url },
-  "proc-mdwarf-spectro": { size: 1361630, pages: 12, thumb: thumbProcSpectro.url },
-  tic272272592: { size: 54960883, pages: 26, thumb: thumbTic.url },
-  "two-young-mstars": { size: 26022186, pages: 22, thumb: thumbTwoYoung.url },
-  "taurus-brown-dwarfs": { size: 2340193, pages: 12, thumb: thumbTaurus.url },
-  "proc-young-bd-superflares": { size: 2970737, pages: 11, thumb: thumbProcBd.url },
-};
-
-const DOWNLOAD_NAMES: Record<string, string> = {
-  gj1151: "diya_ram_gj1151_magnetic_activity_2025.pdf",
-  wolf359: "diya_ram_wolf359_starspots_qpp_2025.pdf",
-  adleo: "diya_ram_ad_leonis_flares_spectra_2025.pdf",
-  gj398: "diya_ram_gj398_flares_radio_2026.pdf",
-  "proc-mdwarf-spectro": "diya_ram_mdwarf_spectroscopy_proceeding_2024.pdf",
-  tic272272592: "tic272272592_starspots_2025.pdf",
-  "two-young-mstars": "starspots_flares_two_young_mstars_2025.pdf",
-  "taurus-brown-dwarfs": "tess_young_brown_dwarfs_taurus_2023.pdf",
-  "proc-young-bd-superflares": "young_brown_dwarf_superflares_proceeding_2024.pdf",
+const PDF_META: Record<string, { size: number; pages: number }> = {
+  gj1151: { size: 2491329, pages: 9 },
+  wolf359: { size: 65891134, pages: 21 },
+  adleo: { size: 2285425, pages: 13 },
+  gj398: { size: 11316791, pages: 16 },
+  "proc-mdwarf-spectro": { size: 1361630, pages: 12 },
+  tic272272592: { size: 54960883, pages: 26 },
+  "two-young-mstars": { size: 26022186, pages: 22 },
+  "taurus-brown-dwarfs": { size: 2340193, pages: 12 },
+  "proc-young-bd-superflares": { size: 2970737, pages: 11 },
 };
 
 /** Wavelength domain inferred strictly from the verified instrument list. */
@@ -137,6 +126,7 @@ export function formatBytes(bytes?: number): string | undefined {
 
 const publicationRecords: ArchiveRecord[] = publicationsArchive.map((p) => {
   const meta = PDF_META[p.id];
+  const managedDocument = documentService.getByPublicationId(p.id);
   const isFirst = p.role === "First Author";
   const venue =
     p.type === "Proceeding"
@@ -161,7 +151,7 @@ const publicationRecords: ArchiveRecord[] = publicationsArchive.map((p) => {
     slug: p.slug,
     title: p.title,
     type: isFirst ? "first-author" : "collaborative",
-    access: p.pdfUrl ? "preview-download" : "external",
+    access: managedDocument?.access ?? (p.pdfUrl ? "preview-download" : "external"),
     summary: p.shortSummary,
     abstract: p.abstract,
     authors: p.authors,
@@ -174,12 +164,15 @@ const publicationRecords: ArchiveRecord[] = publicationsArchive.map((p) => {
     doi: p.doi || undefined,
     doiUrl: p.doiUrl || undefined,
     adsUrl: p.adsUrl,
-    fileUrl: p.pdfUrl,
-    downloadName: DOWNLOAD_NAMES[p.id],
+    fileUrl:
+      managedDocument?.access === "metadata-only"
+        ? undefined
+        : managedDocument?.documentUrl ?? p.pdfUrl,
+    downloadName: managedDocument?.downloadName,
     fileKind: "PDF" as const,
     fileSize: meta?.size,
     pageCount: meta?.pages,
-    thumbnail: meta?.thumb,
+    thumbnail: managedDocument?.thumbnailUrl,
     thumbnailAlt: `First page of the paper “${p.title}”.`,
     themes: p.themes,
     facilities: p.instruments,
@@ -198,7 +191,7 @@ export const cvRecord: ArchiveRecord = {
   slug: "curriculum-vitae",
   title: "Curriculum Vitae — Diya Ram",
   type: "cv",
-  access: "preview-download",
+  access: cvDocument.access,
   summary:
     "Complete academic record: education, doctoral research, competitively awarded telescope time, publications, presentations, teaching and scientific service.",
   authors: ["Diya Ram"],
@@ -210,11 +203,11 @@ export const cvRecord: ArchiveRecord = {
   }),
   year: new Date(cvAsset.created_at).getFullYear(),
   fileUrl: cvAsset.url,
-  downloadName: "diya_ram_curriculum_vitae.pdf",
+  downloadName: cvDocument.downloadName,
   fileKind: "PDF",
   fileSize: cvAsset.size,
   pageCount: 5,
-  thumbnail: thumbCv.url,
+  thumbnail: cvDocument.thumbnailUrl,
   thumbnailAlt: "First page of Diya Ram's curriculum vitae.",
   themes: ["Academic profile"],
   facilities: ["TESS", "uGMRT", "HCT", "DOT"],

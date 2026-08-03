@@ -32,7 +32,9 @@ export const Route = createFileRoute("/projects/$slug")({
 });
 
 function ProjectDetail() {
-  const { project } = Route.useLoaderData();
+  const { project } = Route.useLoaderData() as {
+  project: (typeof projects)[number];
+  };
   const facs = facilities.filter((f) => project.facilities.includes(f.slug));
   const areas = researchAreas.filter((a) => project.areas.includes(a.slug));
   const pubs = publicationsArchive.filter((p) => project.publications.includes(p.slug));
