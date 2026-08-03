@@ -30,7 +30,7 @@ import {
   type PublicationRecord,
   type EventRole,
 } from "@/data/publications-archive";
-import heroImage from "@/assets/hubble-ultra-deep-field.jpg.asset.json";
+import { imageService } from "@/services/images";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/publications/")({
@@ -50,13 +50,13 @@ export const Route = createFileRoute("/publications/")({
       },
       { property: "og:type", content: "article" },
       { property: "og:url", content: "https://astro-diya-portfolio.lovable.app/publications" },
-      { property: "og:image", content: `https://astro-diya-portfolio.lovable.app${heroImage.url}` },
+      { property: "og:image", content: `https://astro-diya-portfolio.lovable.app${imageService.getRequiredImage("hubble-hero").imageUrl}` },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: `https://astro-diya-portfolio.lovable.app${heroImage.url}` },
+      { name: "twitter:image", content: `https://astro-diya-portfolio.lovable.app${imageService.getRequiredImage("hubble-hero").imageUrl}` },
     ],
     links: [
       { rel: "canonical", href: "https://astro-diya-portfolio.lovable.app/publications" },
-      { rel: "preload", as: "image", href: heroImage.url },
+      { rel: "preload", as: "image", href: imageService.getRequiredImage("hubble-hero").imageUrl },
     ],
   }),
   component: PublicationsPage,
@@ -1047,7 +1047,7 @@ function PublicationsPage() {
             style={{ transform: `translate3d(0, ${scrollY * 0.15}px, 0)` }}
           >
             <img
-              src={heroImage.url}
+              src={imageService.getRequiredImage("hubble-hero").imageUrl}
               alt=""
               width={1280}
               height={1280}

@@ -58,7 +58,7 @@ import { aboutIdentity, credentialRail } from "@/data/about";
 import { ArchiveNavigator, buildSections, RelatedLink } from "@/components/downloads/ArchiveNavigator";
 import { RecordCard } from "@/components/downloads/RecordCard";
 import { DocumentViewer } from "@/components/downloads/DocumentViewer";
-import heroImage from "@/assets/hubble-ultra-deep-field.jpg.asset.json";
+import { imageService } from "@/services/images";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/downloads")({
@@ -313,7 +313,7 @@ function DownloadsPage() {
       {/* ============================================================ HERO */}
       <section className="relative isolate overflow-hidden pb-16 pt-28 md:min-h-[760px] md:pt-36">
         <img
-          src={heroImage.url}
+          src={imageService.getRequiredImage("hubble-hero").imageUrl}
           alt="The Hubble Ultra Deep Field — thousands of distant galaxies across a dark region of sky."
           className="absolute inset-0 -z-20 h-full w-full object-cover opacity-55"
           fetchPriority="high"

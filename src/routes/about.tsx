@@ -8,7 +8,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import { Section, GlassPanel } from "@/components/layout/Page";
-import diyaPortrait from "@/assets/diya-ram-portrait.png.asset.json";
+import { imageService } from "@/services/images";
 import { SpectralDivider } from "@/components/layout/SpectralDivider";
 import {
   aboutIdentity,
@@ -63,11 +63,11 @@ export const Route = createFileRoute("/about")({
       },
       {
         property: "og:image",
-        content: `https://astro-diya-portfolio.lovable.app${diyaPortrait.url}`,
+        content: `https://astro-diya-portfolio.lovable.app${imageService.getRequiredImage("portrait-primary").imageUrl}`,
       },
       {
         name: "twitter:image",
-        content: `https://astro-diya-portfolio.lovable.app${diyaPortrait.url}`,
+        content: `https://astro-diya-portfolio.lovable.app${imageService.getRequiredImage("portrait-primary").imageUrl}`,
       },
       {
         property: "og:image:alt",
@@ -412,7 +412,7 @@ function About() {
                   {/* Aspect ratio holder — taller portrait crop */}
                   <div className="relative aspect-[4/5]">
                     <img
-                      src={diyaPortrait.url}
+                      src={imageService.getRequiredImage("portrait-primary").imageUrl}
                       alt="Portrait of Diya Ram, observational astrophysicist and Bridge Fellow at S. N. Bose National Centre for Basic Sciences."
                       loading="eager"
                       decoding="async"

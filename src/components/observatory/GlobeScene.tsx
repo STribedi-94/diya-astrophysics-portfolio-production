@@ -9,8 +9,8 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { usePerf } from "@/lib/performance";
 import { groundNodes, spaceNode, type NetworkNode } from "@/data/observatory-network";
-import dayTex from "@/assets/globe/earth-day-2k.jpg.asset.json";
-import nightTex from "@/assets/globe/earth-night-1k.jpg.asset.json";
+import { imageService } from "@/services/images";
+
 
 const EARTH_R = 1;
 const ORBIT_A = 2.625;
@@ -223,8 +223,8 @@ export default function GlobeScene({
         },
       );
     };
-    loadTex(dayTex.url, "dayMap");
-    loadTex(nightTex.url, "nightMap");
+    loadTex(imageService.getRequiredImage("earth-day-texture").imageUrl, "dayMap");
+    loadTex(imageService.getRequiredImage("earth-night-texture").imageUrl, "nightMap");
 
     // Atmospheric rim
     const atmGeo = new THREE.SphereGeometry(EARTH_R * 1.035, 48, 32);
@@ -421,6 +421,7 @@ export default function GlobeScene({
         if (Math.abs(dx) + Math.abs(dy) > 3) didDrag = true;
         camAz -= dx * 0.005;
         camPol = THREE.MathUtils.clamp(camPol - dy * 0.005, 0.55, Math.PI - 0.55);
+        applyCamera();
         pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
         lastInteraction = performance.now();
         return;

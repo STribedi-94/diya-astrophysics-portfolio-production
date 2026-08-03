@@ -2,35 +2,8 @@
 // Single source of truth. Every image record lives here and is used by
 // filters, search, lightbox, timeline, facility explorer and conference archive.
 
-import a01 from "@/assets/gallery/academic_bsc_physics_honours_batchmates_study_session_01.jpg.asset.json";
-import a02 from "@/assets/gallery/academic_bsc_physics_honours_light_practical_lab_02.jpg.asset.json";
-import a03 from "@/assets/gallery/academic_msc_astrophysics_annual_sports_day_group_photo_02.jpg.asset.json";
-import a04 from "@/assets/gallery/academic_msc_astrophysics_moon_observation_14inch_telescope_01.jpg.asset.json";
-import a05 from "@/assets/gallery/academic_msc_astrophysics_xavotsav_group_photo_03.jpg.asset.json";
-import a06 from "@/assets/gallery/academic_phd_5000_word_thesis_submission_presentation_01.jpg.asset.json";
-import a07 from "@/assets/gallery/academic_phd_final_hard_copy_thesis_submission_university_of_calcutta_02.jpg.asset.json";
-import c08 from "@/assets/gallery/campus_teachers_day_celebration_cake_cutting_02.jpg.jpg.asset.json";
-import c09 from "@/assets/gallery/campus_teachers_day_celebration_faculty_and_researchers_01.jpg.asset.json";
-import c10 from "@/assets/gallery/campus_teachers_day_celebration_group_photo_03.jpg.asset.json";
-import c11 from "@/assets/gallery/campus_teachers_day_celebration_outdoor_group_photo_04.jpg.asset.json";
-import cf12 from "@/assets/gallery/conference_asi_2022_group_photo_02.jpg.asset.json";
-import cf13 from "@/assets/gallery/conference_asi_2022_poster_presentation_m_dwarf_spectroscopy_01.jpg.asset.json";
-import cf14 from "@/assets/gallery/conference_bina_group_photo_01.jpg.asset.json";
-import cf15 from "@/assets/gallery/conference_bose_fest_2023_observational_facilities_presentation_01.jpg.asset.json";
-import cf16 from "@/assets/gallery/conference_bose_fest_2023_observational_facilities_presentation_02.jpg.asset.json";
-import cf17 from "@/assets/gallery/conference_bose_fest_2023_oral_presentation_01.jpg.asset.json";
-import cf18 from "@/assets/gallery/conference_bose_fest_2023_oral_presentation_02.jpg.asset.json";
-import cf19 from "@/assets/gallery/conference_bose_fest_2023_oral_presentation_03.jpg.asset.json";
-import cf20 from "@/assets/gallery/conference_bose_fest_2024_poster_presentation_ad_leonis_01.jpg.asset.json";
-import cf21 from "@/assets/gallery/conference_bose_fest_2025_oral_presentation_flare_energy_analysis_01.jpg.jpg.asset.json";
-import cf22 from "@/assets/gallery/conference_bose_fest_2025_oral_presentation_starspots_02.jpg.jpg.asset.json";
-import cf23 from "@/assets/gallery/conference_nsss_2024_poster_presentation_ad_leonis_01.jpg.asset.json";
-import cf24 from "@/assets/gallery/conference_nsss_2024_symposium_participation_02.jpg.asset.json";
-import cf25 from "@/assets/gallery/conference_star_formation_2024_research_team_group_photo_02.jpg.asset.json";
-import cf26 from "@/assets/gallery/conference_star_formation_2024_supervisor_and_collaborators_01.jpg.asset.json";
-import r27 from "@/assets/gallery/research_facility_aries_devasthal_dfot_13m_visit_01.jpg.asset.json";
-import r28 from "@/assets/gallery/research_facility_aries_devasthal_dot_36m_observing_team_03.jpg.asset.json";
-import r29 from "@/assets/gallery/research_facility_aries_devasthal_dot_36m_visit_02.jpg.asset.json";
+
+import { imageService } from "@/services/images";
 
 export type GalleryCategory =
   | "facility"
@@ -84,7 +57,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "dot-observing-team",
     filename: "research_facility_aries_devasthal_dot_36m_observing_team_03.jpg",
-    src: r28.url,
+    src: imageService.getRequiredImage("dot-observing-team").imageUrl,
     title: "3.6-m DOT — Observing Team",
     caption:
       "Research team at the 3.6-meter Devasthal Optical Telescope (DOT), Aryabhatta Research Institute of Observational Sciences (ARIES), Devasthal Observatory, during an observing run focused on M-dwarf stars. The visit, undertaken as Principal Investigator (PI) together with Ph.D. supervisor Dr. Soumen Mondal and telescope operators, provided hands-on experience with India's premier optical observing facility, advanced instrumentation, and professional nighttime observational operations.",
@@ -109,7 +82,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "dot-visit",
     filename: "research_facility_aries_devasthal_dot_36m_visit_02.jpg",
-    src: r29.url,
+    src: imageService.getRequiredImage("dot-visit").imageUrl,
     title: "3.6-m Devasthal Optical Telescope",
     caption:
       "Visiting the 3.6-meter Devasthal Optical Telescope (DOT) at the Devasthal Observatory, operated by the Aryabhatta Research Institute of Observational Sciences (ARIES), Nainital. As the Principal Investigator (PI) of an observing proposal focused on M-dwarf stars, this visit provided direct experience with India's largest optical telescope, its advanced instrumentation, and professional observational facilities supporting front-line astronomical research.",
@@ -134,7 +107,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "dfot-visit",
     filename: "research_facility_aries_devasthal_dfot_13m_visit_01.jpg",
-    src: r27.url,
+    src: imageService.getRequiredImage("dfot-visit").imageUrl,
     title: "1.3-m DFOT — Facility Visit",
     caption:
       "Visiting the 1.3-m Devasthal Fast Optical Telescope (DFOT) at the Devasthal Observatory, operated by the Aryabhatta Research Institute of Observational Sciences (ARIES), Nainital. The visit provided first-hand exposure to a modern 1.3-meter Ritchey–Chrétien Cassegrain optical telescope, offering valuable insight into professional observational astronomy, telescope instrumentation, and the facilities supporting contemporary astrophysical research.",
@@ -157,7 +130,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "asi-2022-poster",
     filename: "conference_asi_2022_poster_presentation_m_dwarf_spectroscopy_01.jpg",
-    src: cf13.url,
+    src: imageService.getRequiredImage("asi-2022-poster").imageUrl,
     title: "ASI 2022 — M-dwarf Spectroscopy Poster",
     caption:
       "Presenting the research poster \"Magnetic Activity of M-dwarfs: Optical and Near-Infrared Spectroscopic Studies\" during the Astronomical Society of India (ASI) Meeting 2022, jointly hosted by IIT Roorkee and ARIES, highlighting optical and near-infrared spectroscopic investigations of magnetically active M-dwarf stars.",
@@ -182,7 +155,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "asi-2022-group",
     filename: "conference_asi_2022_group_photo_02.jpg",
-    src: cf12.url,
+    src: imageService.getRequiredImage("asi-2022-group").imageUrl,
     title: "ASI 2022 — Official Group Photograph",
     caption:
       "Official group photograph of participants during the Astronomical Society of India (ASI) Meeting 2022, jointly hosted by IIT Roorkee and ARIES at the IIT Roorkee campus, bringing together researchers, students, and faculty from astronomy and astrophysics institutions across India.",
@@ -204,7 +177,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "bosefest-2023-oral-01",
     filename: "conference_bose_fest_2023_oral_presentation_01.jpg",
-    src: cf17.url,
+    src: imageService.getRequiredImage("bosefest-2023-oral-01").imageUrl,
     title: "Bose Fest 2023 — Optical Spectra (DOT / TANSPEC)",
     caption:
       "Presenting optical spectroscopic results of M-dwarf stars during Bose Fest 2023.",
@@ -227,7 +200,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "bosefest-2023-oral-02",
     filename: "conference_bose_fest_2023_oral_presentation_02.jpg",
-    src: cf18.url,
+    src: imageService.getRequiredImage("bosefest-2023-oral-02").imageUrl,
     title: "Bose Fest 2023 — What is an M-dwarf?",
     caption:
       "Explaining the fundamental properties and classification of M-dwarf stars during the oral presentation at Bose Fest 2023.",
@@ -250,7 +223,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "bosefest-2023-oral-03",
     filename: "conference_bose_fest_2023_oral_presentation_03.jpg",
-    src: cf19.url,
+    src: imageService.getRequiredImage("bosefest-2023-oral-03").imageUrl,
     title: "Bose Fest 2023 — Scientific Motivation",
     caption:
       "Introducing the scientific motivation and fundamental properties of M-dwarf stars during the oral presentation at Bose Fest 2023.",
@@ -273,7 +246,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "bosefest-2023-facilities-01",
     filename: "conference_bose_fest_2023_observational_facilities_presentation_01.jpg",
-    src: cf15.url,
+    src: imageService.getRequiredImage("bosefest-2023-facilities-01").imageUrl,
     title: "Bose Fest 2023 — Observational Facilities",
     caption:
       "Presenting the observational facilities used in the research, including the Hanle/Leh-Chandra Telescope and the 1.3-m Devasthal Optical Telescope, during the Bose Fest 2023 oral presentation.",
@@ -297,7 +270,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "bosefest-2023-facilities-02",
     filename: "conference_bose_fest_2023_observational_facilities_presentation_02.jpg",
-    src: cf16.url,
+    src: imageService.getRequiredImage("bosefest-2023-facilities-02").imageUrl,
     title: "Bose Fest 2023 — Telescope Infrastructure",
     caption:
       "Discussing the major observational facilities and telescope infrastructure employed in the research during the Bose Fest 2023 oral presentation.",
@@ -320,7 +293,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "bosefest-2024-poster-adleo",
     filename: "conference_bose_fest_2024_poster_presentation_ad_leonis_01.jpg",
-    src: cf20.url,
+    src: imageService.getRequiredImage("bosefest-2024-poster-adleo").imageUrl,
     title: "Bose Fest 2024 — AD Leonis Poster",
     caption:
       "Research poster presentation at BOSE FEST 2024 featuring the study \"Stellar Activity and Probable Star–Planet Interaction in AD Leonis\", showcasing multi-wavelength investigations of magnetically active M-dwarf stars.",
@@ -345,7 +318,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "bosefest-2025-flare",
     filename: "conference_bose_fest_2025_oral_presentation_flare_energy_analysis_01.jpg",
-    src: cf21.url,
+    src: imageService.getRequiredImage("bosefest-2025-flare").imageUrl,
     title: "Bose Fest 2025 — Flare Duration vs Energy",
     caption:
       "Presenting research findings at BOSE FEST 2025 on the correlation between stellar flare duration and flare energy, highlighting observational results for AD Leonis and Wolf 359.",
@@ -370,7 +343,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "bosefest-2025-starspots",
     filename: "conference_bose_fest_2025_oral_presentation_starspots_02.jpg",
-    src: cf22.url,
+    src: imageService.getRequiredImage("bosefest-2025-starspots").imageUrl,
     title: "Bose Fest 2025 — Starspots & BASSMAN",
     caption:
       "Delivering an oral presentation at BOSE FEST 2025, discussing starspot modelling, photometric observations, and computational analysis of magnetically active stars using the BASSMAN framework.",
@@ -393,7 +366,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "nsss-2024-poster",
     filename: "conference_nsss_2024_poster_presentation_ad_leonis_01.jpg",
-    src: cf23.url,
+    src: imageService.getRequiredImage("nsss-2024-poster").imageUrl,
     title: "NSSS 2024 — AD Leonis Poster",
     caption:
       "Presenting the research poster \"Stellar Activity and Probable Star–Planet Interaction in AD Leonis\" during the 22nd National Space Science Symposium (NSSS 2024) at Goa University, showcasing multi-wavelength investigations of magnetically active M-dwarf stars.",
@@ -418,7 +391,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "nsss-2024-participation",
     filename: "conference_nsss_2024_symposium_participation_02.jpg",
-    src: cf24.url,
+    src: imageService.getRequiredImage("nsss-2024-participation").imageUrl,
     title: "NSSS 2024 — Symposium Participation",
     caption:
       "Participating in the 22nd National Space Science Symposium (NSSS 2024) at Goa University, an event organized in collaboration with the Indian Space Research Organisation (ISRO), bringing together researchers in astronomy and astrophysics.",
@@ -439,7 +412,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "starformation-2024-team",
     filename: "conference_star_formation_2024_research_team_group_photo_02.jpg",
-    src: cf25.url,
+    src: imageService.getRequiredImage("starformation-2024-team").imageUrl,
     title: "Star Formation Conference 2024 — Research Team",
     caption:
       "Group photograph during the Star Formation Conference 2024 at S. N. Bose National Centre for Basic Sciences, Kolkata, with Ph.D. supervisor Dr. Soumen Mandal and fellow members of the Department of Astrophysics and Cosmology, reflecting the collaborative research environment fostered during the conference.",
@@ -462,7 +435,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "starformation-2024-supervisor",
     filename: "conference_star_formation_2024_supervisor_and_collaborators_01.jpg",
-    src: cf26.url,
+    src: imageService.getRequiredImage("starformation-2024-supervisor").imageUrl,
     title: "Star Formation Conference 2024 — With Supervisor & Collaborators",
     caption:
       "Group photograph during the Star Formation Conference 2024 at S. N. Bose National Centre for Basic Sciences, Kolkata, with Ph.D. supervisor Dr. Soumen Mandal and research collaborators, celebrating scientific collaboration and academic exchange.",
@@ -485,7 +458,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "bina",
     filename: "conference_bina_group_photo_01.jpg",
-    src: cf14.url,
+    src: imageService.getRequiredImage("bina").imageUrl,
     title: "BINA Conference — Group Photograph",
     caption:
       "Group photograph of conference participants during the BINA Conference.",
@@ -503,7 +476,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "phd-thesis-5000",
     filename: "academic_phd_5000_word_thesis_submission_presentation_01.jpg",
-    src: a06.url,
+    src: imageService.getRequiredImage("phd-thesis-5000").imageUrl,
     title: "Ph.D. — 5000-Word Thesis Presentation",
     caption:
       "Delivering the 5000-word Ph.D. thesis submission presentation at S. N. Bose National Centre for Basic Sciences, Kolkata, on 29 August 2025, marking an important doctoral research milestone alongside fellow researcher Rajib Kumbhakar.",
@@ -528,7 +501,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "phd-thesis-hardcopy",
     filename: "academic_phd_final_hard_copy_thesis_submission_university_of_calcutta_02.jpg",
-    src: a07.url,
+    src: imageService.getRequiredImage("phd-thesis-hardcopy").imageUrl,
     title: "Ph.D. — Final Hard-Copy Thesis Submission",
     caption:
       "Submission of the final hard copy of the Ph.D. thesis to the University of Calcutta on 9 July 2026, marking the successful completion of a major doctoral milestone before the thesis evaluation and defense process.",
@@ -553,7 +526,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "msc-moon",
     filename: "academic_msc_astrophysics_moon_observation_14inch_telescope_01.jpg",
-    src: a04.url,
+    src: imageService.getRequiredImage("msc-moon").imageUrl,
     title: "M.Sc. — Moon through a 14-inch Telescope",
     caption:
       "Observing the Moon through a 14-inch telescope during an observational astronomy session at St. Xavier's College, Kolkata, as part of the M.Sc. Physics (Astrophysics) programme. The session provided practical experience in telescope operation, astronomical observation, and observational techniques fundamental to astrophysical research.",
@@ -576,7 +549,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "msc-sports",
     filename: "academic_msc_astrophysics_annual_sports_day_group_photo_02.jpg",
-    src: a03.url,
+    src: imageService.getRequiredImage("msc-sports").imageUrl,
     title: "M.Sc. — Annual Sports Day",
     caption:
       "Group photograph with classmates representing the M.Sc. Physics programme during the Annual Sports Day at St. Xavier's College, Kolkata, celebrating friendship, teamwork, and memorable moments beyond the classroom.",
@@ -598,7 +571,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "msc-xavotsav",
     filename: "academic_msc_astrophysics_xavotsav_group_photo_03.jpg",
-    src: a05.url,
+    src: imageService.getRequiredImage("msc-xavotsav").imageUrl,
     title: "M.Sc. — Xavotsav Festival",
     caption:
       "Group photograph with classmates during Xavotsav, the premier annual inter-college cultural festival of St. Xavier's College (Autonomous), Kolkata, celebrating student life, cultural diversity, and memorable moments shared beyond academics throughout the M.Sc. Physics journey.",
@@ -620,7 +593,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "bsc-study",
     filename: "academic_bsc_physics_honours_batchmates_study_session_01.jpg",
-    src: a01.url,
+    src: imageService.getRequiredImage("bsc-study").imageUrl,
     title: "B.Sc. — Study Session with Batchmates",
     caption:
       "Group photograph with Sandipani Tribedi and other classmates during the B.Sc. Physics (Honours) programme at Banagabasi Morning College, University of Calcutta, capturing moments of collaborative learning, academic discussions, and friendships that shaped the undergraduate journey.",
@@ -642,7 +615,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "bsc-light-lab",
     filename: "academic_bsc_physics_honours_light_practical_lab_02.jpg",
-    src: a02.url,
+    src: imageService.getRequiredImage("bsc-light-lab").imageUrl,
     title: "B.Sc. — Light Practical Laboratory",
     caption:
       "Conducting a hands-on optics experiment in the Light Practical Laboratory during the B.Sc. Physics (Honours) programme at Banagabasi Morning College, University of Calcutta, while a fellow batchmate observes the procedure—reflecting practical training in optical alignment, measurement, and experimental physics.",
@@ -663,7 +636,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "teachers-day-cake",
     filename: "campus_teachers_day_celebration_cake_cutting_02.jpg",
-    src: c08.url,
+    src: imageService.getRequiredImage("teachers-day-cake").imageUrl,
     title: "Teacher's Day — Cake-Cutting Ceremony",
     caption:
       "Cake-cutting ceremony during the Teacher's Day Celebration at S. N. Bose National Centre for Basic Sciences, Kolkata, bringing together Ph.D. supervisors, research scholars, and fellow researchers in appreciation of mentorship and academic guidance.",
@@ -685,7 +658,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "teachers-day-faculty",
     filename: "campus_teachers_day_celebration_faculty_and_researchers_01.jpg",
-    src: c09.url,
+    src: imageService.getRequiredImage("teachers-day-faculty").imageUrl,
     title: "Teacher's Day — Faculty & Researchers",
     caption:
       "Group gathering during the Teacher's Day Celebration at S. N. Bose National Centre for Basic Sciences, Kolkata, bringing together Ph.D. supervisors, research scholars, and fellow researchers to celebrate mentorship, academic excellence, and the strong research community beyond the laboratory.",
@@ -707,7 +680,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "teachers-day-group",
     filename: "campus_teachers_day_celebration_group_photo_03.jpg",
-    src: c10.url,
+    src: imageService.getRequiredImage("teachers-day-group").imageUrl,
     title: "Teacher's Day — Group Photograph",
     caption:
       "Group photograph with Ph.D. supervisors, research scholars, and fellow researchers during the Teacher's Day Celebration at S. N. Bose National Centre for Basic Sciences, Kolkata, commemorating the occasion through shared moments of gratitude, collaboration, and academic fellowship.",
@@ -729,7 +702,7 @@ export const gallery: GalleryRecord[] = [
   {
     id: "teachers-day-outdoor",
     filename: "campus_teachers_day_celebration_outdoor_group_photo_04.jpg",
-    src: c11.url,
+    src: imageService.getRequiredImage("teachers-day-outdoor").imageUrl,
     title: "Teacher's Day — Outdoor Group Photograph",
     caption:
       "Outdoor group photograph during the Teacher's Day Celebration at S. N. Bose National Centre for Basic Sciences, Kolkata, with Ph.D. supervisors, research scholars, and fellow researchers, celebrating mentorship, collaboration, and the vibrant academic community beyond the laboratory.",
