@@ -9,10 +9,13 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { usePerf } from "@/lib/performance";
 import { groundNodes, spaceNode, type NetworkNode } from "@/data/observatory-network";
-import { imageService } from "@/services/images";
+import { AstraCameraController } from "./astra/camera-controller";
+import {
+  createEarthSystem,
+  EARTH_RADIUS,
+} from "./astra/earth-system";
 
 
-const EARTH_R = 1;
 const ORBIT_A = 2.625;
 const ORBIT_E = 0.4857; // perigee ≈ 1.35 R⊕, apogee ≈ 3.9 R⊕ — illustrative, not to scale
 const ORBIT_B = ORBIT_A * Math.sqrt(1 - ORBIT_E * ORBIT_E);
@@ -106,22 +109,14 @@ export default function GlobeScene({
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
 
-    /* ---------------- camera orbit state ---------------- */
-    let camDist = 5.4;
-    let camAz = 0;
-    let camPol = Math.PI / 2 - 0.28; // modest northern tilt
-    const MIN_D = 3.2;
-    const MAX_D = 8.5;
-
-    function applyCamera() {
-      camera.position.set(
-        camDist * Math.sin(camPol) * Math.sin(camAz),
-        camDist * Math.cos(camPol),
-        camDist * Math.sin(camPol) * Math.cos(camAz),
-      );
-      camera.lookAt(0, 0, 0);
-    }
-    applyCamera();
+    /* ---------------- Project Diya Astra camera controller ---------------- */
+    const cameraController = new AstraCameraController(camera, {
+      initialDistance: 5.4,
+      initialAzimuth: 0,
+      initialPolar: Math.PI / 2 - 0.28,
+      minDistance: 3.2,
+      maxDistance: 8.5,
+    });
 
     /* ---------------- stars ---------------- */
     let seed = 20260729;
@@ -148,105 +143,22 @@ export default function GlobeScene({
     scene.add(new THREE.Points(starGeo, starMat));
     disposables.push(starGeo, starMat);
 
-    /* ---------------- earth ---------------- */
-    const sunDir = new THREE.Vector3(0.35, 0.3, 1.0).normalize();
-    const earthGroup = new THREE.Group();
-    earthGroup.rotation.y = facingRotation(78);
-    scene.add(earthGroup);
-
-    const loader = new THREE.TextureLoader();
-    const earthGeo = new THREE.SphereGeometry(EARTH_R, 64, 48);
-    const earthUniforms = {
-      dayMap: { value: null as THREE.Texture | null },
-      nightMap: { value: null as THREE.Texture | null },
-      sunDir: { value: sunDir.clone() },
-      reveal: { value: 0 },
-    };
-    const earthMat = new THREE.ShaderMaterial({
-      uniforms: earthUniforms,
-      transparent: true,
-      vertexShader: `
-        varying vec2 vUv; varying vec3 vN;
-        void main(){ vUv=uv; vN=normalize(mat3(modelMatrix)*normal);
-          gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
-      fragmentShader: `
-        uniform sampler2D dayMap; uniform sampler2D nightMap;
-        uniform vec3 sunDir; uniform float reveal;
-        varying vec2 vUv; varying vec3 vN;
-        void main(){
-          vec3 day = texture2D(dayMap, vUv).rgb;
-          vec3 night = texture2D(nightMap, vUv).rgb;
-          float d = dot(normalize(vN), normalize(sunDir));
-          float lit = smoothstep(-0.18, 0.22, d);
-          vec3 col = mix(night*0.6 + day*0.12, day*(0.75+0.7*max(d,0.0)), lit);
-          gl_FragColor = vec4(col, reveal);
-        }`,
+    /* ---------------- Project Diya Astra Earth system ---------------- */
+    const earthSystem = createEarthSystem({
+      scene,
+      renderer,
+      onReady,
+      isDisposed: () => disposed,
     });
-    const earth = new THREE.Mesh(earthGeo, earthMat);
-    earthGroup.add(earth);
-    disposables.push(earthGeo, earthMat);
 
-    let texLoaded = 0;
-    const finishTex = () => {
-      texLoaded++;
-      if (texLoaded === 2 && !disposed) onReady();
-    };
-    const loadTex = (url: string, key: "dayMap" | "nightMap") => {
-      loader.load(
-        url,
-        (t) => {
-          if (disposed) {
-            t.dispose();
-            return;
-          }
-          t.colorSpace = THREE.SRGBColorSpace;
-          t.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
-          earthUniforms[key].value = t;
-          disposables.push(t);
-          finishTex();
-        },
-        undefined,
-        () => {
-          if (disposed) return;
-          // Missing texture must not blank the scene — fall back to a flat marble.
-          const c = document.createElement("canvas");
-          c.width = c.height = 4;
-          const ctx = c.getContext("2d");
-          if (ctx) {
-            ctx.fillStyle = key === "dayMap" ? "#1b3a5c" : "#000010";
-            ctx.fillRect(0, 0, 4, 4);
-          }
-          const t = new THREE.CanvasTexture(c);
-          earthUniforms[key].value = t;
-          disposables.push(t);
-          finishTex();
-        },
-      );
-    };
-    loadTex(imageService.getRequiredImage("earth-day-texture").imageUrl, "dayMap");
-    loadTex(imageService.getRequiredImage("earth-night-texture").imageUrl, "nightMap");
+    const earthGroup = earthSystem.group;
+    const earthUniforms = earthSystem.uniforms;
+    const atmMat = earthSystem.atmosphereMaterial;
 
-    // Atmospheric rim
-    const atmGeo = new THREE.SphereGeometry(EARTH_R * 1.035, 48, 32);
-    const atmMat = new THREE.ShaderMaterial({
-      transparent: true,
-      side: THREE.BackSide,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-      uniforms: { reveal: { value: 0 } },
-      vertexShader: `varying vec3 vN; varying vec3 vP;
-        void main(){ vN=normalize(mat3(modelMatrix)*normal);
-          vec4 wp=modelMatrix*vec4(position,1.0); vP=wp.xyz;
-          gl_Position=projectionMatrix*viewMatrix*wp; }`,
-      fragmentShader: `varying vec3 vN; varying vec3 vP; uniform float reveal;
-        void main(){
-          vec3 v=normalize(cameraPosition-vP);
-          float f=pow(1.0-abs(dot(v,normalize(vN))),3.0);
-          gl_FragColor=vec4(vec3(0.32,0.55,0.95)*f*1.25, f*reveal);
-        }`,
-    });
-    scene.add(new THREE.Mesh(atmGeo, atmMat));
-    disposables.push(atmGeo, atmMat);
+    earthGroup.rotation.y =
+      facingRotation(78);
+
+    disposables.push(earthSystem);
 
     /* ---------------- ground markers ---------------- */
     type MarkerRec = { node: NetworkNode; group: THREE.Group; core: THREE.Mesh; halo: THREE.Mesh };
@@ -257,7 +169,7 @@ export default function GlobeScene({
     disposables.push(coreGeo, haloGeo, beaconGeo);
 
     groundNodes.forEach((node) => {
-      const pos = latLonToVec3(node.lat!, node.lon!, EARTH_R);
+      const pos = latLonToVec3(node.lat!, node.lon!, EARTH_RADIUS);
       const g = new THREE.Group();
       g.position.copy(pos);
       g.lookAt(pos.clone().multiplyScalar(2));
@@ -396,7 +308,7 @@ export default function GlobeScene({
       if (pointers.size === 2) {
         const [a, b] = [...pointers.values()];
         pinchDist = Math.hypot(a.x - b.x, a.y - b.y);
-        pinchStart = camDist;
+        pinchStart = cameraController.getDistance();
       }
       dragging = true;
       didDrag = false;
@@ -410,7 +322,11 @@ export default function GlobeScene({
         pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
         const [a, b] = [...pointers.values()];
         const d = Math.hypot(a.x - b.x, a.y - b.y);
-        if (pinchDist > 0) camDist = THREE.MathUtils.clamp(pinchStart * (pinchDist / d), MIN_D, MAX_D);
+        if (pinchDist > 0) {
+          cameraController.zoomToDistance(
+            pinchStart * (pinchDist / d),
+          );
+        }
         lastInteraction = performance.now();
         didDrag = true;
         return;
@@ -419,9 +335,7 @@ export default function GlobeScene({
         const dx = e.clientX - prev.x;
         const dy = e.clientY - prev.y;
         if (Math.abs(dx) + Math.abs(dy) > 3) didDrag = true;
-        camAz -= dx * 0.005;
-        camPol = THREE.MathUtils.clamp(camPol - dy * 0.005, 0.55, Math.PI - 0.55);
-        applyCamera();
+        cameraController.orbit(dx, dy);
         pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
         lastInteraction = performance.now();
         return;
@@ -447,7 +361,7 @@ export default function GlobeScene({
 
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
-      camDist = THREE.MathUtils.clamp(camDist * (1 + Math.sign(e.deltaY) * 0.08), MIN_D, MAX_D);
+      cameraController.zoomByWheel(e.deltaY);
       lastInteraction = performance.now();
     };
 
