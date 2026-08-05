@@ -548,8 +548,22 @@ export function createTessOrbitSystem(options: {
    * cannot permanently stop the orbit.
    */
 
-  const initialProgress =
-    reducedMotion ? 0.18 : 0;
+  /*
+   * Opening orbital phase deliberately separates TESS
+   * from the visible Sun in the canonical overview.
+   */
+  /*
+   * Refined opening phase keeps TESS away from both
+   * the visible Sun and the India-first Earth region.
+   */
+  /*
+   * Opening visibility phase.
+   *
+   * TESS begins in a clearly readable region of the orbit,
+   * away from India, the Sun and the interaction controls,
+   * so visitors immediately recognise the spacecraft.
+   */
+  const initialProgress = 0.82;
 
   const orbitStartTime =
     performance.now() -

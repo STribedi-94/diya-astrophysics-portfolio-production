@@ -5,12 +5,30 @@
  */
 import { Component, lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Globe2, MapPin, Move3d, Satellite, X } from "lucide-react";
+import {
+  ArrowRight,
+  Globe2,
+  MapPin,
+  Move3d,
+  Orbit,
+  Rotate3d,
+  RotateCcw,
+  Satellite,
+  X,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { groundNodes, networkNodes, spaceNode, type NetworkNode } from "@/data/observatory-network";
 import { usePerf } from "@/lib/performance";
 
-const GlobeScene = lazy(() => import("./GlobeScene"));
+const GlobeScene =
+  lazy(
+    () =>
+      import("./GlobeScene"),
+  );
+
+type AstraInteractionMode =
+  | "earth"
+  | "scene";
 
 /* ------------------------------------------------------------------ */
 /*  Error isolation                                                    */
@@ -84,8 +102,25 @@ export function ObservatoryNetworkGlobe() {
   const [mounted, setMounted] = useState(false);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [reduced, setReduced] = useState(false);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [reduced, setReduced] =
+    useState(false);
+
+  const [selectedId, setSelectedId] =
+    useState<string | null>(null);
+
+  const [
+    interactionMode,
+    setInteractionMode,
+  ] =
+    useState<AstraInteractionMode>(
+      "earth",
+    );
+
+  const [
+    restoreSignal,
+    setRestoreSignal,
+  ] =
+    useState(0);
   const [hintDismissed, setHintDismissed] = useState(false);
 
   const selected = networkNodes.find((n) => n.id === selectedId) ?? null;
@@ -157,8 +192,16 @@ export function ObservatoryNetworkGlobe() {
                   }}
                   onReady={() => setReady(true)}
                   onError={() => setFailed(true)}
-                  reducedMotion={lowPower}
+                  reducedMotion={
+                    lowPower
+                  }
                   active={inView}
+                  interactionMode={
+                    interactionMode
+                  }
+                  restoreSignal={
+                    restoreSignal
+                  }
                 />
               </Suspense>
             </SceneBoundary>
@@ -180,9 +223,117 @@ export function ObservatoryNetworkGlobe() {
             </div>
           )}
 
-          {ready && !hintDismissed && !failed && (
-            <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full border border-white/10 bg-[oklch(0.12_0.03_265/0.75)] px-3 py-1 text-[10px] text-muted-foreground backdrop-blur-sm">
-              <Move3d className="mr-1 inline h-3 w-3" aria-hidden /> Drag to rotate · scroll or pinch to zoom
+          {ready && !failed && (
+            <div
+              className="absolute bottom-3 left-1/2 z-20 flex max-w-[calc(100%-1rem)] -translate-x-1/2 items-center gap-1 rounded-xl border border-white/10 bg-[oklch(0.10_0.03_265/0.82)] p-1 text-[10px] shadow-lg backdrop-blur-md"
+              role="toolbar"
+              aria-label="Observatory interaction controls"
+            >
+              <button
+                type="button"
+                onClick={() => {
+                  setInteractionMode(
+                    "earth",
+                  );
+                  setHintDismissed(
+                    true,
+                  );
+                }}
+                className={cn(
+                  "flex items-center gap-1 rounded-lg px-2 py-1.5 transition-colors",
+                  interactionMode ===
+                    "earth"
+                    ? "bg-primary/20 text-primary"
+                    : "text-muted-foreground hover:bg-white/5 hover:text-foreground",
+                )}
+                aria-pressed={
+                  interactionMode ===
+                  "earth"
+                }
+                title="Drag to rotate Earth independently"
+              >
+                <Rotate3d
+                  className="h-3 w-3"
+                  aria-hidden
+                />
+                <span className="whitespace-nowrap">
+                  Rotate Earth
+                </span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setInteractionMode(
+                    "scene",
+                  );
+                  setHintDismissed(
+                    true,
+                  );
+                }}
+                className={cn(
+                  "flex items-center gap-1 rounded-lg px-2 py-1.5 transition-colors",
+                  interactionMode ===
+                    "scene"
+                    ? "bg-primary/20 text-primary"
+                    : "text-muted-foreground hover:bg-white/5 hover:text-foreground",
+                )}
+                aria-pressed={
+                  interactionMode ===
+                  "scene"
+                }
+                title="Drag to orbit the complete astronomical scene"
+              >
+                <Orbit
+                  className="h-3 w-3"
+                  aria-hidden
+                />
+                <span className="whitespace-nowrap">
+                  Orbit Scene
+                </span>
+              </button>
+
+              <span
+                className="mx-0.5 h-4 w-px bg-white/10"
+                aria-hidden
+              />
+
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedId(null);
+                  setInteractionMode(
+                    "earth",
+                  );
+                  setRestoreSignal(
+                    (value) =>
+                      value + 1,
+                  );
+                  setHintDismissed(
+                    true,
+                  );
+                }}
+                className="flex items-center gap-1 rounded-lg px-2 py-1.5 text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground"
+                title="Restore the canonical India–Sun overview"
+              >
+                <RotateCcw
+                  className="h-3 w-3"
+                  aria-hidden
+                />
+                <span className="whitespace-nowrap">
+                  Restore
+                </span>
+              </button>
+
+              {!hintDismissed && (
+                <span className="hidden items-center gap-1 px-1 text-muted-foreground sm:flex">
+                  <Move3d
+                    className="h-3 w-3"
+                    aria-hidden
+                  />
+                  Drag · scroll or pinch
+                </span>
+              )}
             </div>
           )}
 

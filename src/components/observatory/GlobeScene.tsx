@@ -24,6 +24,9 @@ import {
 import {
   createAstraSunSystem,
 } from "./astra/sun-system";
+import {
+  ASTRA_OVERVIEW_CAMERA,
+} from "./astra/composition";
 
 
 const SPIN_PERIOD = 240; // seconds per full Earth rotation
@@ -34,6 +37,10 @@ function facingRotation(lon: number) {
   return -Math.atan2(v.x, v.z);
 }
 
+export type AstraInteractionMode =
+  | "earth"
+  | "scene";
+
 export type GlobeSceneProps = {
   selectedId: string | null;
   onSelect: (id: string | null) => void;
@@ -41,6 +48,8 @@ export type GlobeSceneProps = {
   onError: () => void;
   reducedMotion: boolean;
   active: boolean;
+  interactionMode: AstraInteractionMode;
+  restoreSignal: number;
 };
 
 export default function GlobeScene({
@@ -50,17 +59,42 @@ export default function GlobeScene({
   onError,
   reducedMotion,
   active,
+  interactionMode,
+  restoreSignal,
 }: GlobeSceneProps) {
   const { maxPixelRatio } = usePerf();
   const hostRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLDivElement>(null);
-  const selectedRef = useRef<string | null>(selectedId);
-  const activeRef = useRef(active);
-  const onSelectRef = useRef(onSelect);
+  const selectedRef =
+    useRef<string | null>(
+      selectedId,
+    );
 
-  selectedRef.current = selectedId;
-  activeRef.current = active;
-  onSelectRef.current = onSelect;
+  const activeRef =
+    useRef(active);
+
+  const onSelectRef =
+    useRef(onSelect);
+
+  const interactionModeRef =
+    useRef<AstraInteractionMode>(
+      interactionMode,
+    );
+
+  const restoreSignalRef =
+    useRef(restoreSignal);
+
+  selectedRef.current =
+    selectedId;
+
+  activeRef.current =
+    active;
+
+  onSelectRef.current =
+    onSelect;
+
+  interactionModeRef.current =
+    interactionMode;
 
   useEffect(() => {
     const host = hostRef.current;
@@ -95,11 +129,16 @@ export default function GlobeScene({
 
     /* ---------------- Project Diya Astra camera controller ---------------- */
     const cameraController = new AstraCameraController(camera, {
-      initialDistance: 5.4,
-      initialAzimuth: 0,
-      initialPolar: Math.PI / 2 - 0.28,
-      minDistance: 3.2,
-      maxDistance: 8.5,
+      initialDistance:
+        ASTRA_OVERVIEW_CAMERA.distance,
+      initialAzimuth:
+        ASTRA_OVERVIEW_CAMERA.azimuth,
+      initialPolar:
+        ASTRA_OVERVIEW_CAMERA.polar,
+      minDistance:
+        ASTRA_OVERVIEW_CAMERA.minDistance,
+      maxDistance:
+        ASTRA_OVERVIEW_CAMERA.maxDistance,
     });
 
     /* ---------------- Project Diya Astra Sun system ---------------- */
@@ -148,8 +187,20 @@ export default function GlobeScene({
     const earthUniforms = earthSystem.uniforms;
     const atmMat = earthSystem.atmosphereMaterial;
 
+    /*
+     * India-first overview orientation.
+     *
+     * facingRotation(78) aligns India's approximate longitude
+     * with the original positive-Z overview camera. The canonical
+     * camera azimuth is added so India remains aligned with the
+     * actual opening camera direction.
+     */
+    const overviewEarthRotation =
+      facingRotation(78) +
+      ASTRA_OVERVIEW_CAMERA.azimuth;
+
     earthGroup.rotation.y =
-      facingRotation(78);
+      overviewEarthRotation;
 
     disposables.push(earthSystem);
 
@@ -194,7 +245,6 @@ export default function GlobeScene({
     let hoverId: string | null = null;
     let dragging = false;
     let didDrag = false;
-    let lastInteraction = -Infinity;
     const pointers = new Map<number, { x: number; y: number }>();
     let pinchStart = 0;
     let pinchDist = 0;
@@ -240,7 +290,6 @@ export default function GlobeScene({
       }
       dragging = true;
       didDrag = false;
-      lastInteraction = performance.now();
       el.setPointerCapture?.(e.pointerId);
     };
 
@@ -255,17 +304,63 @@ export default function GlobeScene({
             pinchStart * (pinchDist / d),
           );
         }
-        lastInteraction = performance.now();
         didDrag = true;
         return;
       }
-      if (dragging && prev) {
-        const dx = e.clientX - prev.x;
-        const dy = e.clientY - prev.y;
-        if (Math.abs(dx) + Math.abs(dy) > 3) didDrag = true;
-        cameraController.orbit(dx, dy);
-        pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
-        lastInteraction = performance.now();
+      if (
+        dragging &&
+        prev
+      ) {
+        const dx =
+          e.clientX -
+          prev.x;
+
+        const dy =
+          e.clientY -
+          prev.y;
+
+        if (
+          Math.abs(dx) +
+            Math.abs(dy) >
+          3
+        ) {
+          didDrag = true;
+        }
+
+        if (
+          interactionModeRef.current ===
+          "earth"
+        ) {
+          /*
+           * Default interaction: rotate Earth itself.
+           * Observatory markers are children of earthGroup,
+           * so they remain geographically attached.
+           */
+          /*
+           * Direct-manipulation behaviour:
+           * Earth follows the user's hand.
+           */
+          earthDragRotation +=
+            dx * 0.006;
+        } else {
+          /*
+           * Explicit Orbit Scene mode:
+           * move the camera around the complete system.
+           */
+          cameraController.orbit(
+            dx,
+            dy,
+          );
+        }
+
+        pointers.set(
+          e.pointerId,
+          {
+            x: e.clientX,
+            y: e.clientY,
+          },
+        );
+
         return;
       }
       if (e.pointerType === "mouse") {
@@ -280,7 +375,6 @@ export default function GlobeScene({
       pointers.delete(e.pointerId);
       if (pointers.size < 2) pinchDist = 0;
       if (pointers.size === 0) dragging = false;
-      lastInteraction = performance.now();
       if (!wasDrag && e.type === "pointerup") {
         const id = pick(e.clientX, e.clientY);
         onSelectRef.current(id && id === selectedRef.current ? null : id);
@@ -290,7 +384,6 @@ export default function GlobeScene({
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
       cameraController.zoomByWheel(e.deltaY);
-      lastInteraction = performance.now();
     };
 
     el.addEventListener("pointerdown", onPointerDown);
@@ -319,7 +412,18 @@ export default function GlobeScene({
     let raf = 0;
     let reveal = 0;
     let spin = 0;
-    const tmp = new THREE.Vector3();
+
+    /*
+     * Manual Earth rotation is separate from automatic
+     * scientific rotation and from whole-scene camera orbit.
+     */
+    let earthDragRotation = 0;
+
+    let previousRestoreSignal =
+      restoreSignalRef.current;
+
+    const tmp =
+      new THREE.Vector3();
 
     const tick = () => {
       raf = requestAnimationFrame(tick);
@@ -329,18 +433,86 @@ export default function GlobeScene({
       if (!activeRef.current || document.hidden) return;
 
       sunSystem.update({
-        elapsedSeconds: now / 1000,
+        elapsedSeconds:
+          now / 1000,
         reducedMotion,
       });
 
-      reveal = Math.min(1, reveal + dt * 0.7);
+      /*
+       * Restore requests originate from the visible React
+       * control bar and are consumed once inside the scene.
+       */
+      if (
+        restoreSignal !==
+        previousRestoreSignal
+      ) {
+        previousRestoreSignal =
+          restoreSignal;
+
+        restoreSignalRef.current =
+          restoreSignal;
+
+        cameraController
+          .restoreOverview();
+
+        spin = 0;
+        earthDragRotation = 0;
+        dragging = false;
+        didDrag = false;
+        pointers.clear();
+      }
+
+      reveal =
+        Math.min(
+          1,
+          reveal +
+            dt *
+              0.7,
+        );
       earthUniforms.reveal.value = reveal;
       atmMat.uniforms.reveal.value = reveal;
 
-      // Slow auto-rotation, paused while the user interacts.
-      const idle = performance.now() - lastInteraction > 3500;
-      if (!reducedMotion && idle && reveal > 0.6) spin += (dt / SPIN_PERIOD) * Math.PI * 2;
-      earthGroup.rotation.y = facingRotation(78) + spin;
+      /*
+       * Essential scientific Earth motion.
+       *
+       * Performance or reduced-motion mode slows the rotation
+       * but never freezes the astronomical system completely.
+       * Rotation pauses only during an active Earth drag.
+       */
+      /*
+       * Motion remains restrained, but must be visibly
+       * perceptible within the first few seconds.
+       */
+      /*
+       * The rotation must be recognisable as soon as the
+       * scene settles, while remaining calm and suitable
+       * for an academic visualisation.
+       */
+      const essentialMotionScale =
+        reducedMotion
+          ? 0.9
+          : 3.0;
+
+      const earthDragActive =
+        dragging &&
+        interactionModeRef.current ===
+          "earth";
+
+      if (
+        !earthDragActive &&
+        reveal > 0.6
+      ) {
+        spin +=
+          (dt / SPIN_PERIOD) *
+          Math.PI *
+          2 *
+          essentialMotionScale;
+      }
+
+      earthGroup.rotation.y =
+        overviewEarthRotation +
+        earthDragRotation +
+        spin;
 
       // Markers: staged reveal + gentle pulse
       const pulse = reducedMotion ? 0.5 : (Math.sin(performance.now() / 1400) + 1) / 2;
@@ -427,7 +599,10 @@ export default function GlobeScene({
     };
     // Scene is built once; live values are read through refs.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reducedMotion]);
+  }, [
+    reducedMotion,
+    restoreSignal,
+  ]);
 
   return (
     <div className="absolute inset-0">

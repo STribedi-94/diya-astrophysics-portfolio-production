@@ -1,5 +1,10 @@
 import * as THREE from "three";
 
+import {
+  ASTRA_OVERVIEW_CAMERA,
+  createAstraOverviewTarget,
+} from "./composition";
+
 export type AstraCameraMode =
   | "overview"
   | "earthInteraction"
@@ -44,11 +49,25 @@ export class AstraCameraController {
     options: AstraCameraControllerOptions = {},
   ) {
     this.camera = camera;
-    this.distance = options.initialDistance ?? 5.4;
-    this.azimuth = options.initialAzimuth ?? 0;
-    this.polar = options.initialPolar ?? Math.PI / 2 - 0.28;
-    this.minDistance = options.minDistance ?? 3.2;
-    this.maxDistance = options.maxDistance ?? 8.5;
+    this.distance =
+      options.initialDistance ??
+      ASTRA_OVERVIEW_CAMERA.distance;
+
+    this.azimuth =
+      options.initialAzimuth ??
+      ASTRA_OVERVIEW_CAMERA.azimuth;
+
+    this.polar =
+      options.initialPolar ??
+      ASTRA_OVERVIEW_CAMERA.polar;
+
+    this.minDistance =
+      options.minDistance ??
+      ASTRA_OVERVIEW_CAMERA.minDistance;
+
+    this.maxDistance =
+      options.maxDistance ??
+      ASTRA_OVERVIEW_CAMERA.maxDistance;
 
     this.apply();
   }
@@ -138,10 +157,18 @@ export class AstraCameraController {
   restoreOverview() {
     this.mode = "returning";
 
-    this.distance = 5.4;
-    this.azimuth = 0;
-    this.polar = Math.PI / 2 - 0.28;
-    this.target.set(0, 0, 0);
+    this.distance =
+      ASTRA_OVERVIEW_CAMERA.distance;
+
+    this.azimuth =
+      ASTRA_OVERVIEW_CAMERA.azimuth;
+
+    this.polar =
+      ASTRA_OVERVIEW_CAMERA.polar;
+
+    this.target.copy(
+      createAstraOverviewTarget(),
+    );
 
     this.apply();
 
