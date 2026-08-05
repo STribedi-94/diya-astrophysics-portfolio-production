@@ -4,6 +4,19 @@ import { imageService } from "@/services/images";
 
 export const EARTH_RADIUS = 1;
 
+/**
+ * Shared world-space Sun direction for Project Diya Astra.
+ *
+ * Earth illumination, spacecraft lighting, solar-panel response,
+ * and future Sun-related systems must use this same normalized vector
+ * so that day/night behaviour remains visually coherent.
+ */
+export const ASTRA_SUN_DIRECTION = new THREE.Vector3(
+  0.35,
+  0.3,
+  1,
+).normalize();
+
 export type EarthSystemOptions = {
   scene: THREE.Scene;
   renderer: THREE.WebGLRenderer;
@@ -60,11 +73,8 @@ export function createEarthSystem({
     dispose: () => void;
   }> = [];
 
-  const sunDirection = new THREE.Vector3(
-    0.35,
-    0.3,
-    1,
-  ).normalize();
+    const sunDirection =
+    ASTRA_SUN_DIRECTION.clone();
 
   const group = new THREE.Group();
 

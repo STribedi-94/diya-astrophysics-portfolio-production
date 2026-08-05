@@ -8,46 +8,30 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { usePerf } from "@/lib/performance";
-import { groundNodes, spaceNode, type NetworkNode } from "@/data/observatory-network";
+import { groundNodes, spaceNode } from "@/data/observatory-network";
 import { AstraCameraController } from "./astra/camera-controller";
 import {
   createEarthSystem,
   EARTH_RADIUS,
 } from "./astra/earth-system";
+import {
+  createObservatorySystem,
+  latLonToVec3,
+} from "./astra/observatory-system";
+import {
+  createTessOrbitSystem,
+} from "./astra/tess-orbit-system";
+import {
+  createAstraSunSystem,
+} from "./astra/sun-system";
 
 
-const ORBIT_A = 2.625;
-const ORBIT_E = 0.4857; // perigee ≈ 1.35 R⊕, apogee ≈ 3.9 R⊕ — illustrative, not to scale
-const ORBIT_B = ORBIT_A * Math.sqrt(1 - ORBIT_E * ORBIT_E);
-const ORBIT_PERIOD = 45; // seconds per visual orbit (time-compressed)
 const SPIN_PERIOD = 240; // seconds per full Earth rotation
-
-function latLonToVec3(lat: number, lon: number, r: number) {
-  const phi = (90 - lat) * (Math.PI / 180);
-  const theta = (lon + 180) * (Math.PI / 180);
-  return new THREE.Vector3(
-    -r * Math.sin(phi) * Math.cos(theta),
-    r * Math.cos(phi),
-    r * Math.sin(phi) * Math.sin(theta),
-  );
-}
 
 /** Earth spin offset that puts the given longitude in front of the camera (+Z). */
 function facingRotation(lon: number) {
   const v = latLonToVec3(0, lon, 1);
   return -Math.atan2(v.x, v.z);
-}
-
-function orbitPoint(E: number) {
-  return new THREE.Vector3(ORBIT_A * (Math.cos(E) - ORBIT_E), 0, ORBIT_B * Math.sin(E));
-}
-
-function solveKepler(M: number) {
-  let E = M;
-  for (let i = 0; i < 6; i++) {
-    E = E - (E - ORBIT_E * Math.sin(E) - M) / (1 - ORBIT_E * Math.cos(E));
-  }
-  return E;
 }
 
 export type GlobeSceneProps = {
@@ -118,6 +102,15 @@ export default function GlobeScene({
       maxDistance: 8.5,
     });
 
+    /* ---------------- Project Diya Astra Sun system ---------------- */
+    const sunSystem = createAstraSunSystem({
+      scene,
+      camera,
+      reducedMotion,
+    });
+
+    disposables.push(sunSystem);
+
     /* ---------------- stars ---------------- */
     let seed = 20260729;
     const rnd = () => {
@@ -160,88 +153,23 @@ export default function GlobeScene({
 
     disposables.push(earthSystem);
 
-    /* ---------------- ground markers ---------------- */
-    type MarkerRec = { node: NetworkNode; group: THREE.Group; core: THREE.Mesh; halo: THREE.Mesh };
-    const markers: MarkerRec[] = [];
-    const coreGeo = new THREE.SphereGeometry(0.022, 16, 12);
-    const haloGeo = new THREE.RingGeometry(0.035, 0.055, 24);
-    const beaconGeo = new THREE.CylinderGeometry(0.0035, 0.0035, 0.11, 6);
-    disposables.push(coreGeo, haloGeo, beaconGeo);
-
-    groundNodes.forEach((node) => {
-      const pos = latLonToVec3(node.lat!, node.lon!, EARTH_RADIUS);
-      const g = new THREE.Group();
-      g.position.copy(pos);
-      g.lookAt(pos.clone().multiplyScalar(2));
-      const col = new THREE.Color(node.color);
-
-      const coreMat = new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0 });
-      const core = new THREE.Mesh(coreGeo, coreMat);
-      core.position.z = 0.03;
-      g.add(core);
-
-      const haloMat = new THREE.MeshBasicMaterial({
-        color: col,
-        transparent: true,
-        opacity: 0,
-        side: THREE.DoubleSide,
-        depthWrite: false,
-      });
-      const halo = new THREE.Mesh(haloGeo, haloMat);
-      halo.position.z = 0.004;
-      g.add(halo);
-
-      const beaconMat = new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0 });
-      const beacon = new THREE.Mesh(beaconGeo, beaconMat);
-      beacon.rotation.x = Math.PI / 2;
-      beacon.position.z = 0.055;
-      g.add(beacon);
-
-      disposables.push(coreMat, haloMat, beaconMat);
-      earthGroup.add(g);
-      markers.push({ node, group: g, core, halo });
+    /* ---------------- Project Diya Astra Observatory system ---------------- */
+    const observatorySystem = createObservatorySystem({
+      earthGroup,
+      nodes: groundNodes,
+      disposables,
     });
 
-    /* ---------------- TESS orbit + spacecraft ---------------- */
-    const orbitGroup = new THREE.Group();
-    orbitGroup.rotation.set(0.42, 0.55, 0.22);
-    scene.add(orbitGroup);
+    const markers = observatorySystem.markers;
 
-    const pathPts: THREE.Vector3[] = [];
-    for (let i = 0; i <= 240; i++) pathPts.push(orbitPoint((i / 240) * Math.PI * 2));
-    const pathGeo = new THREE.BufferGeometry().setFromPoints(pathPts);
-    const pathMat = new THREE.LineBasicMaterial({
-      color: new THREE.Color(spaceNode.color),
-      transparent: true,
-      opacity: 0,
-      depthWrite: false,
+    /* ---------------- Project Diya Astra TESS orbit system ---------------- */
+    const tessSystem = createTessOrbitSystem({
+      scene,
+      node: spaceNode,
+      reducedMotion,
     });
-    orbitGroup.add(new THREE.Line(pathGeo, pathMat));
-    disposables.push(pathGeo, pathMat);
 
-    const sat = new THREE.Group();
-    const satBodyGeo = new THREE.BoxGeometry(0.075, 0.075, 0.1);
-    const satBodyMat = new THREE.MeshBasicMaterial({ color: 0xd8d8e4, transparent: true, opacity: 0 });
-    sat.add(new THREE.Mesh(satBodyGeo, satBodyMat));
-    const panelGeo = new THREE.BoxGeometry(0.16, 0.006, 0.07);
-    const panelMat = new THREE.MeshBasicMaterial({ color: 0x3f5fa8, transparent: true, opacity: 0 });
-    [-0.12, 0.12].forEach((x) => {
-      const p = new THREE.Mesh(panelGeo, panelMat);
-      p.position.x = x;
-      sat.add(p);
-    });
-    const glowGeo = new THREE.SphereGeometry(0.1, 12, 10);
-    const glowMat = new THREE.MeshBasicMaterial({
-      color: new THREE.Color(spaceNode.color),
-      transparent: true,
-      opacity: 0,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-    });
-    const satGlow = new THREE.Mesh(glowGeo, glowMat);
-    sat.add(satGlow);
-    orbitGroup.add(sat);
-    disposables.push(satBodyGeo, satBodyMat, panelGeo, panelMat, glowGeo, glowMat);
+    disposables.push(tessSystem);
 
     /* ---------------- labels (DOM overlay) ---------------- */
     const labelEls = new Map<string, HTMLSpanElement>();
@@ -278,7 +206,7 @@ export default function GlobeScene({
       ptr.set(((cx - r.left) / r.width) * 2 - 1, -((cy - r.top) / r.height) * 2 + 1);
       raycaster.setFromCamera(ptr, camera);
       const targets: Array<{ id: string; obj: THREE.Object3D }> = markers.map((m) => ({ id: m.node.id, obj: m.core }));
-      targets.push({ id: spaceNode.id, obj: satGlow });
+      targets.push({ id: spaceNode.id, obj: tessSystem.glow });
       let best: { id: string; d: number } | null = null;
       for (const t of targets) {
         const hits = raycaster.intersectObject(t.obj, true);
@@ -288,7 +216,7 @@ export default function GlobeScene({
       if (!best) {
         const r2 = el.getBoundingClientRect();
         let bestPx: { id: string; d: number } | null = null;
-        for (const t of [...markers.map((m) => ({ id: m.node.id, obj: m.core })), { id: spaceNode.id, obj: satGlow }]) {
+        for (const t of [...markers.map((m) => ({ id: m.node.id, obj: m.core })), { id: spaceNode.id, obj: tessSystem.glow }]) {
           const p = t.obj.getWorldPosition(new THREE.Vector3());
           const occluded = t.id !== spaceNode.id && p.clone().sub(camera.position).normalize().dot(p.clone().normalize()) > 0;
           if (occluded) continue;
@@ -390,7 +318,6 @@ export default function GlobeScene({
     let lastT = performance.now();
     let raf = 0;
     let reveal = 0;
-    let orbitT = reducedMotion ? 0.18 : 0;
     let spin = 0;
     const tmp = new THREE.Vector3();
 
@@ -400,6 +327,11 @@ export default function GlobeScene({
       const dt = Math.min((now - lastT) / 1000, 0.05);
       lastT = now;
       if (!activeRef.current || document.hidden) return;
+
+      sunSystem.update({
+        elapsedSeconds: now / 1000,
+        reducedMotion,
+      });
 
       reveal = Math.min(1, reveal + dt * 0.7);
       earthUniforms.reveal.value = reveal;
@@ -421,23 +353,24 @@ export default function GlobeScene({
         (m.halo.material as THREE.MeshBasicMaterial).opacity = local * (0.18 + pulse * 0.18 + (sel ? 0.28 : 0));
         m.halo.scale.setScalar(1 + pulse * 0.28 + (sel ? 0.35 : 0));
         m.core.scale.setScalar(sel ? 1.45 : hov ? 1.25 : 1);
-        const beacon = m.group.children[2] as THREE.Mesh;
-        (beacon.material as THREE.MeshBasicMaterial).opacity = local * (sel ? 0.55 : 0.22);
+        (m.beacon.material as THREE.MeshBasicMaterial).opacity =
+          local * (sel ? 0.55 : 0.22);
       });
 
-      // Orbit + spacecraft
-      const orbitReveal = THREE.MathUtils.clamp((reveal - 0.7) / 0.3, 0, 1);
-      pathMat.opacity = orbitReveal * 0.4;
-      if (!reducedMotion) orbitT = (orbitT + dt / ORBIT_PERIOD) % 1;
-      const E = solveKepler(orbitT * Math.PI * 2);
-      sat.position.copy(orbitPoint(E));
-      sat.lookAt(0, 0, 0);
-      const satSel = selectedRef.current === spaceNode.id;
-      const satHov = hoverId === spaceNode.id;
-      satBodyMat.opacity = orbitReveal;
-      panelMat.opacity = orbitReveal;
-      glowMat.opacity = orbitReveal * (satSel ? 0.34 : satHov ? 0.24 : 0.12);
-      satGlow.scale.setScalar(satSel ? 1.3 : 1);
+      // TESS orbit + spacecraft
+      const orbitReveal = THREE.MathUtils.clamp(
+        (reveal - 0.7) / 0.3,
+        0,
+        1,
+      );
+
+      tessSystem.update({
+        deltaSeconds: dt,
+        reveal,
+        reducedMotion,
+        selected: selectedRef.current === spaceNode.id,
+        hovered: hoverId === spaceNode.id,
+      });
 
       // Labels
       const rect = el.getBoundingClientRect();
@@ -446,7 +379,7 @@ export default function GlobeScene({
         obj: m.core,
         ground: true,
       }));
-      labelTargets.push({ id: spaceNode.id, obj: sat, ground: false });
+      labelTargets.push({ id: spaceNode.id, obj: tessSystem.spacecraft, ground: false });
       const compact = rect.width < 560;
       labelTargets.forEach((t) => {
         const lab = labelEls.get(t.id);
