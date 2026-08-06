@@ -12,10 +12,12 @@ export type AstraSunSystem = {
   root: THREE.Group;
   light: THREE.DirectionalLight;
   direction: THREE.Vector3;
+
   update(options?: {
     elapsedSeconds?: number;
     reducedMotion?: boolean;
   }): void;
+
   dispose(): void;
 };
 
@@ -26,6 +28,7 @@ function createSunDiskMaterial() {
   return new THREE.ShaderMaterial({
     transparent: true,
     depthWrite: false,
+    depthTest: false,
     toneMapped: false,
 
     uniforms: {
@@ -47,7 +50,10 @@ function createSunDiskMaterial() {
         gl_Position =
           projectionMatrix *
           modelViewMatrix *
-          vec4(position, 1.0);
+          vec4(
+            position,
+            1.0
+          );
       }
     `,
 
@@ -57,53 +63,131 @@ function createSunDiskMaterial() {
 
       varying vec2 vUv;
 
-      float hash(vec2 p) {
-        p = fract(
-          p *
-          vec2(
-            123.34,
-            456.21
-          )
-        );
+      float hash21(vec2 point) {
+        point =
+          fract(
+            point *
+            vec2(
+              123.34,
+              456.21
+            )
+          );
 
-        p += dot(
-          p,
-          p + 45.32
-        );
+        point +=
+          dot(
+            point,
+            point + 45.32
+          );
 
-        return fract(
-          p.x * p.y
-        );
+        return
+          fract(
+            point.x *
+            point.y
+          );
       }
 
-      float noise(vec2 p) {
-        vec2 i = floor(p);
-        vec2 f = fract(p);
+      float valueNoise(vec2 point) {
+        vec2 cell =
+          floor(point);
 
-        f =
-          f *
-          f *
+        vec2 local =
+          fract(point);
+
+        local =
+          local *
+          local *
           (
             3.0 -
             2.0 *
-            f
+            local
           );
 
-        return mix(
-          mix(
-            hash(i),
-            hash(i + vec2(1.0, 0.0)),
-            f.x
-          ),
+        float a =
+          hash21(cell);
 
-          mix(
-            hash(i + vec2(0.0, 1.0)),
-            hash(i + vec2(1.0, 1.0)),
-            f.x
-          ),
+        float b =
+          hash21(
+            cell +
+            vec2(
+              1.0,
+              0.0
+            )
+          );
 
-          f.y
-        );
+        float c =
+          hash21(
+            cell +
+            vec2(
+              0.0,
+              1.0
+            )
+          );
+
+        float d =
+          hash21(
+            cell +
+            vec2(
+              1.0,
+              1.0
+            )
+          );
+
+        return
+          mix(
+            mix(
+              a,
+              b,
+              local.x
+            ),
+
+            mix(
+              c,
+              d,
+              local.x
+            ),
+
+            local.y
+          );
+      }
+
+      float fbm(vec2 point) {
+        float total =
+          0.0;
+
+        float amplitude =
+          0.52;
+
+        mat2 rotation =
+          mat2(
+            0.82,
+            -0.57,
+            0.57,
+            0.82
+          );
+
+        for (
+          int octave = 0;
+          octave < 6;
+          octave += 1
+        ) {
+          total +=
+            amplitude *
+            valueNoise(point);
+
+          point =
+            rotation *
+            point *
+            2.03 +
+            vec2(
+              13.7,
+              8.4
+            );
+
+          amplitude *=
+            0.50;
+        }
+
+        return total;
       }
 
       void main() {
@@ -115,7 +199,10 @@ function createSunDiskMaterial() {
           length(centered) *
           2.0;
 
-        if (radius > 1.0) {
+        if (
+          radius >
+          1.0
+        ) {
           discard;
         }
 
@@ -129,72 +216,171 @@ function createSunDiskMaterial() {
             )
           );
 
-        vec2 surfaceUv =
+        vec2 animatedUv =
           centered *
-          7.0;
+          19.0;
 
         float granulation =
-          noise(
-            surfaceUv +
+          valueNoise(
+            animatedUv +
             vec2(
-              time * 0.012,
-              -time * 0.008
+              time * 0.022,
+              -time * 0.014
             )
           );
 
         granulation +=
-          0.5 *
-          noise(
-            surfaceUv *
-            2.2 -
+          0.58 *
+          valueNoise(
+            animatedUv *
+            2.45 +
             vec2(
-              time * 0.018,
-              time * 0.011
+              -time * 0.034,
+              time * 0.021
             )
           );
 
-        granulation /= 1.5;
+        granulation +=
+          0.30 *
+          valueNoise(
+            animatedUv *
+            5.10 +
+            vec2(
+              time * 0.064,
+              -time * 0.046
+            )
+          );
 
-        vec3 centerColor =
-          vec3(
-            1.0,
-            0.98,
-            0.82
+        granulation /=
+          1.88;
+
+        float largeCells =
+          fbm(
+            centered *
+            10.5 +
+            vec2(
+              time * 0.012,
+              -time * 0.009
+            )
+          );
+
+        float brightActiveRegions =
+          smoothstep(
+            0.62,
+            0.84,
+            largeCells
+          );
+
+        float darkConvection =
+          1.0 -
+          smoothstep(
+            0.38,
+            0.66,
+            granulation
           );
 
         vec3 edgeColor =
           vec3(
             1.0,
-            0.56,
-            0.12
+            0.20,
+            0.015
+          );
+
+        vec3 middleColor =
+          vec3(
+            1.0,
+            0.58,
+            0.065
+          );
+
+        vec3 centerColor =
+          vec3(
+            1.0,
+            0.96,
+            0.66
           );
 
         vec3 color =
           mix(
             edgeColor,
+            middleColor,
+            pow(
+              limb,
+              0.34
+            )
+          );
+
+        color =
+          mix(
+            color,
             centerColor,
             pow(
               limb,
-              0.55
+              1.45
             )
           );
 
         color *=
-          0.88 +
+          0.68 +
           granulation *
-          0.22;
+          0.72;
+
+        color -=
+          vec3(
+            0.18,
+            0.055,
+            0.012
+          ) *
+          darkConvection *
+          0.38;
+
+        color +=
+          vec3(
+            1.0,
+            0.62,
+            0.12
+          ) *
+          brightActiveRegions *
+          0.60;
+
+        float limbFire =
+          pow(
+            1.0 -
+            limb,
+            2.8
+          );
+
+        color +=
+          vec3(
+            1.0,
+            0.20,
+            0.012
+          ) *
+          limbFire *
+          0.68;
+
+        float pulse =
+          0.975 +
+          0.025 *
+          sin(
+            time *
+            0.82
+          );
+
+        color *=
+          pulse;
 
         float edgeSoftness =
           smoothstep(
             1.0,
-            0.94,
+            0.925,
             radius
           );
 
         gl_FragColor =
           vec4(
             color *
-            2.35,
+            3.45,
             edgeSoftness *
             opacity
           );
@@ -203,34 +389,45 @@ function createSunDiskMaterial() {
   });
 }
 
-function createCoronaMaterial(options: {
+type CoronaMaterialOptions = {
   color: THREE.ColorRepresentation;
   intensity: number;
-  falloff: number;
-}) {
-  const {
-    color,
-    intensity,
-    falloff,
-  } = options;
+  diskRatio: number;
+  layer: number;
+};
 
+function createCoronaMaterial({
+  color,
+  intensity,
+  diskRatio,
+  layer,
+}: CoronaMaterialOptions) {
   return new THREE.ShaderMaterial({
     transparent: true,
     depthWrite: false,
+    depthTest: false,
     blending: THREE.AdditiveBlending,
     toneMapped: false,
 
     uniforms: {
       color: {
-        value: new THREE.Color(color),
+        value:
+          new THREE.Color(color),
       },
 
       intensity: {
-        value: intensity,
+        value:
+          intensity,
       },
 
-      falloff: {
-        value: falloff,
+      diskRatio: {
+        value:
+          diskRatio,
+      },
+
+      layer: {
+        value:
+          layer,
       },
 
       time: {
@@ -247,14 +444,651 @@ function createCoronaMaterial(options: {
         gl_Position =
           projectionMatrix *
           modelViewMatrix *
-          vec4(position, 1.0);
+          vec4(
+            position,
+            1.0
+          );
       }
     `,
 
     fragmentShader: `
       uniform vec3 color;
       uniform float intensity;
-      uniform float falloff;
+      uniform float diskRatio;
+      uniform float layer;
+      uniform float time;
+
+      varying vec2 vUv;
+
+      float hash21(vec2 point) {
+        point =
+          fract(
+            point *
+            vec2(
+              123.34,
+              456.21
+            )
+          );
+
+        point +=
+          dot(
+            point,
+            point + 45.32
+          );
+
+        return
+          fract(
+            point.x *
+            point.y
+          );
+      }
+
+      float valueNoise(vec2 point) {
+        vec2 cell =
+          floor(point);
+
+        vec2 local =
+          fract(point);
+
+        local =
+          local *
+          local *
+          (
+            3.0 -
+            2.0 *
+            local
+          );
+
+        float a =
+          hash21(cell);
+
+        float b =
+          hash21(
+            cell +
+            vec2(
+              1.0,
+              0.0
+            )
+          );
+
+        float c =
+          hash21(
+            cell +
+            vec2(
+              0.0,
+              1.0
+            )
+          );
+
+        float d =
+          hash21(
+            cell +
+            vec2(
+              1.0,
+              1.0
+            )
+          );
+
+        return
+          mix(
+            mix(
+              a,
+              b,
+              local.x
+            ),
+
+            mix(
+              c,
+              d,
+              local.x
+            ),
+
+            local.y
+          );
+      }
+
+      float fbm(vec2 point) {
+        float total =
+          0.0;
+
+        float amplitude =
+          0.52;
+
+        mat2 rotation =
+          mat2(
+            0.80,
+            -0.60,
+            0.60,
+            0.80
+          );
+
+        for (
+          int octave = 0;
+          octave < 6;
+          octave += 1
+        ) {
+          total +=
+            amplitude *
+            valueNoise(point);
+
+          point =
+            rotation *
+            point *
+            2.03 +
+            vec2(
+              17.2,
+              9.1
+            );
+
+          amplitude *=
+            0.50;
+        }
+
+        return total;
+      }
+
+      float ridgeNoise(vec2 point) {
+        float value =
+          fbm(point);
+
+        return
+          1.0 -
+          abs(
+            value *
+            2.0 -
+            1.0
+          );
+      }
+
+      void main() {
+        vec2 centered =
+          vUv -
+          vec2(0.5);
+
+        float planeRadius =
+          length(centered) *
+          2.0;
+
+        if (
+          planeRadius >
+          1.0
+        ) {
+          discard;
+        }
+
+        float angle =
+          atan(
+            centered.y,
+            centered.x
+          );
+
+        /*
+         * Convert the plane radius into distance measured
+         * outward from the visible solar limb.
+         */
+        float limbDistance =
+          max(
+            0.0,
+            (
+              planeRadius -
+              diskRatio
+            ) /
+            max(
+              0.001,
+              1.0 -
+              diskRatio
+            )
+          );
+
+        float insideDisk =
+          1.0 -
+          smoothstep(
+            diskRatio *
+            0.72,
+            diskRatio,
+            planeRadius
+          );
+
+        float outsideDisk =
+          smoothstep(
+            diskRatio *
+            0.82,
+            diskRatio *
+            1.03,
+            planeRadius
+          );
+
+        float drift =
+          time *
+          (
+            0.020 +
+            layer *
+            0.008
+          );
+
+        vec2 polarCoordinates =
+          vec2(
+            angle *
+            (
+              2.8 +
+              layer *
+              0.7
+            ),
+
+            limbDistance *
+            (
+              8.0 +
+              layer *
+              2.0
+            )
+          );
+
+        float broadNoise =
+          fbm(
+            polarCoordinates +
+            vec2(
+              drift,
+              -drift *
+              0.44
+            )
+          );
+
+        float mediumNoise =
+          fbm(
+            polarCoordinates *
+            2.20 +
+            vec2(
+              -drift *
+              1.30,
+              drift *
+              0.70
+            )
+          );
+
+        float filamentNoise =
+          ridgeNoise(
+            polarCoordinates *
+            4.50 +
+            vec2(
+              drift *
+              2.10,
+              -drift *
+              0.86
+            )
+          );
+
+        float broadStreamers =
+          0.5 +
+          0.5 *
+          sin(
+            angle *
+            6.0 +
+            broadNoise *
+            6.5 +
+            limbDistance *
+            5.0 +
+            drift
+          );
+
+        broadStreamers =
+          pow(
+            broadStreamers,
+            3.0
+          );
+
+        float mediumStreamers =
+          0.5 +
+          0.5 *
+          sin(
+            angle *
+            13.0 -
+            limbDistance *
+            11.0 +
+            mediumNoise *
+            6.0 -
+            drift *
+            1.45
+          );
+
+        mediumStreamers =
+          pow(
+            mediumStreamers,
+            5.2
+          );
+
+        float fineStreamers =
+          0.5 +
+          0.5 *
+          sin(
+            angle *
+            31.0 +
+            limbDistance *
+            18.0 +
+            filamentNoise *
+            6.8 +
+            drift *
+            1.80
+          );
+
+        fineStreamers =
+          pow(
+            fineStreamers,
+            9.0
+          );
+
+        float streamerField =
+          0.20 +
+          broadStreamers *
+          0.88 +
+          mediumStreamers *
+          0.48 +
+          fineStreamers *
+          0.24;
+
+        streamerField *=
+          0.68 +
+          broadNoise *
+          0.56;
+
+        /*
+         * Long radial spikes.
+         */
+        float raySelection =
+          smoothstep(
+            0.48,
+            0.78,
+            broadNoise *
+            0.64 +
+            mediumNoise *
+            0.36
+          );
+
+        float longRays =
+          raySelection *
+          pow(
+            1.0 -
+            limbDistance,
+            0.44 +
+            layer *
+            0.18
+          );
+
+        /*
+         * Prominence loops concentrated close to the solar limb.
+         */
+        float prominenceWaveA =
+          abs(
+            sin(
+              angle *
+              4.0 +
+              limbDistance *
+              24.0 -
+              drift *
+              1.45 +
+              broadNoise *
+              3.8
+            )
+          );
+
+        prominenceWaveA =
+          1.0 -
+          smoothstep(
+            0.020,
+            0.105,
+            prominenceWaveA
+          );
+
+        float prominenceWaveB =
+          abs(
+            sin(
+              angle *
+              7.0 -
+              limbDistance *
+              31.0 +
+              drift *
+              1.10 +
+              mediumNoise *
+              4.2
+            )
+          );
+
+        prominenceWaveB =
+          1.0 -
+          smoothstep(
+            0.018,
+            0.090,
+            prominenceWaveB
+          );
+
+        float prominenceRadial =
+          smoothstep(
+            0.0,
+            0.025,
+            limbDistance
+          ) *
+          (
+            1.0 -
+            smoothstep(
+              0.16,
+              0.34,
+              limbDistance
+            )
+          );
+
+        float prominenceMask =
+          (
+            prominenceWaveA *
+            0.78 +
+            prominenceWaveB *
+            0.48
+          ) *
+          prominenceRadial *
+          smoothstep(
+            0.46,
+            0.76,
+            mediumNoise
+          );
+
+        /*
+         * Bright chromospheric ring directly outside the disk.
+         */
+        float chromosphereRing =
+          exp(
+            -limbDistance *
+            (
+              18.0 -
+              layer *
+              4.0
+            )
+          );
+
+        /*
+         * Wide atmospheric corona.
+         */
+        float diffuseCorona =
+          pow(
+            1.0 -
+            limbDistance,
+            1.25 +
+            layer *
+            0.55
+          );
+
+        float outerFade =
+          1.0 -
+          smoothstep(
+            0.72,
+            1.0,
+            limbDistance
+          );
+
+        float directionalAsymmetry =
+          0.76 +
+          0.15 *
+          cos(
+            angle -
+            0.58
+          ) +
+          0.09 *
+          sin(
+            angle *
+            2.0 +
+            1.15
+          );
+
+        float alpha =
+          (
+            chromosphereRing *
+            (
+              0.92 -
+              layer *
+              0.28
+            ) +
+            diffuseCorona *
+            streamerField *
+            (
+              0.56 +
+              layer *
+              0.34
+            ) +
+            longRays *
+            (
+              0.72 +
+              layer *
+              0.62
+            ) +
+            prominenceMask *
+            (
+              1.10 -
+              layer *
+              0.32
+            )
+          ) *
+          outsideDisk *
+          outerFade *
+          directionalAsymmetry *
+          intensity;
+
+        /*
+         * Faint central bloom remains behind the solar disk.
+         */
+        alpha +=
+          insideDisk *
+          (
+            0.10 +
+            layer *
+            0.04
+          ) *
+          intensity;
+
+        if (
+          alpha <
+          0.001
+        ) {
+          discard;
+        }
+
+        vec3 hotColor =
+          vec3(
+            1.35,
+            1.05,
+            0.52
+          );
+
+        vec3 orangeColor =
+          color *
+          vec3(
+            1.20,
+            0.77,
+            0.42
+          );
+
+        vec3 redOuterColor =
+          color *
+          vec3(
+            1.18,
+            0.38,
+            0.16
+          );
+
+        vec3 finalColor =
+          mix(
+            hotColor,
+            orangeColor,
+            smoothstep(
+              0.0,
+              0.22,
+              limbDistance
+            )
+          );
+
+        finalColor =
+          mix(
+            finalColor,
+            redOuterColor,
+            smoothstep(
+              0.20,
+              0.92,
+              limbDistance
+            ) *
+            (
+              0.44 +
+              layer *
+              0.28
+            )
+          );
+
+        finalColor +=
+          vec3(
+            1.28,
+            0.34,
+            0.025
+          ) *
+          prominenceMask *
+          0.82;
+
+        gl_FragColor =
+          vec4(
+            finalColor *
+            alpha,
+            alpha
+          );
+      }
+    `,
+  });
+}
+
+function createBloomMaterial() {
+  return new THREE.ShaderMaterial({
+    transparent: true,
+    depthWrite: false,
+    depthTest: false,
+    blending: THREE.AdditiveBlending,
+    toneMapped: false,
+
+    uniforms: {
+      time: {
+        value: 0,
+      },
+    },
+
+    vertexShader: `
+      varying vec2 vUv;
+
+      void main() {
+        vUv = uv;
+
+        gl_Position =
+          projectionMatrix *
+          modelViewMatrix *
+          vec4(
+            position,
+            1.0
+          );
+      }
+    `,
+
+    fragmentShader: `
       uniform float time;
 
       varying vec2 vUv;
@@ -268,44 +1102,70 @@ function createCoronaMaterial(options: {
           length(centered) *
           2.0;
 
-        if (radius > 1.0) {
+        if (
+          radius >
+          1.0
+        ) {
           discard;
         }
 
-        float radial =
+        float pulse =
+          0.96 +
+          0.04 *
+          sin(
+            time *
+            0.62
+          );
+
+        float innerBloom =
           pow(
             max(
               0.0,
               1.0 -
               radius
             ),
-            falloff
+            3.2
           );
 
-        float angle =
-          atan(
-            centered.y,
-            centered.x
-          );
-
-        float variation =
-          0.88 +
-          0.12 *
-          sin(
-            angle *
-            9.0 +
-            time *
-            0.08
+        float wideBloom =
+          pow(
+            max(
+              0.0,
+              1.0 -
+              radius
+            ),
+            1.15
           );
 
         float alpha =
-          radial *
-          variation *
-          intensity;
+          (
+            innerBloom *
+            0.52 +
+            wideBloom *
+            0.18
+          ) *
+          pulse;
+
+        vec3 bloomColor =
+          mix(
+            vec3(
+              1.0,
+              0.30,
+              0.025
+            ),
+
+            vec3(
+              1.0,
+              0.80,
+              0.32
+            ),
+
+            innerBloom
+          );
 
         gl_FragColor =
           vec4(
-            color *
+            bloomColor *
             alpha,
             alpha
           );
@@ -320,25 +1180,138 @@ export function createAstraSunSystem({
   reducedMotion,
 }: AstraSunSystemOptions): AstraSunSystem {
   const direction =
-    ASTRA_SUN_DIRECTION.clone().normalize();
+    ASTRA_SUN_DIRECTION
+      .clone()
+      .normalize();
 
   const root =
     new THREE.Group();
 
   root.position.copy(
-    direction.clone().multiplyScalar(
-      SUN_DISTANCE,
-    ),
+    direction
+      .clone()
+      .multiplyScalar(
+        SUN_DISTANCE,
+      ),
   );
 
   scene.add(root);
 
   /*
-   * The solar disk and corona are billboarded toward
-   * the camera so they remain visually circular while
-   * still occupying a fixed astronomical direction.
+   * Wide cinematic bloom behind every other solar layer.
    */
+  const bloomGeometry =
+    new THREE.PlaneGeometry(
+      SUN_DISK_RADIUS * 9.4,
+      SUN_DISK_RADIUS * 9.4,
+      1,
+      1,
+    );
 
+  const bloomMaterial =
+    createBloomMaterial();
+
+  const bloom =
+    new THREE.Mesh(
+      bloomGeometry,
+      bloomMaterial,
+    );
+
+  bloom.position.z =
+    -0.09;
+
+  bloom.renderOrder =
+    0;
+
+  root.add(bloom);
+
+  /*
+   * Outer corona with long irregular streamers.
+   */
+  const outerCoronaSize =
+    SUN_DISK_RADIUS *
+    12.5;
+
+  const outerCoronaGeometry =
+    new THREE.PlaneGeometry(
+      outerCoronaSize,
+      outerCoronaSize,
+      1,
+      1,
+    );
+
+  const outerCoronaMaterial =
+    createCoronaMaterial({
+      color: 0xff5b12,
+      intensity: 0.72,
+      diskRatio:
+        (
+          SUN_DISK_RADIUS *
+          2.0
+        ) /
+        outerCoronaSize,
+      layer: 1,
+    });
+
+  const outerCorona =
+    new THREE.Mesh(
+      outerCoronaGeometry,
+      outerCoronaMaterial,
+    );
+
+  outerCorona.position.z =
+    -0.065;
+
+  outerCorona.renderOrder =
+    1;
+
+  root.add(outerCorona);
+
+  /*
+   * Inner corona and visible prominence loops.
+   */
+  const innerCoronaSize =
+    SUN_DISK_RADIUS *
+    7.2;
+
+  const innerCoronaGeometry =
+    new THREE.PlaneGeometry(
+      innerCoronaSize,
+      innerCoronaSize,
+      1,
+      1,
+    );
+
+  const innerCoronaMaterial =
+    createCoronaMaterial({
+      color: 0xffa126,
+      intensity: 1.22,
+      diskRatio:
+        (
+          SUN_DISK_RADIUS *
+          2.0
+        ) /
+        innerCoronaSize,
+      layer: 0,
+    });
+
+  const innerCorona =
+    new THREE.Mesh(
+      innerCoronaGeometry,
+      innerCoronaMaterial,
+    );
+
+  innerCorona.position.z =
+    -0.035;
+
+  innerCorona.renderOrder =
+    2;
+
+  root.add(innerCorona);
+
+  /*
+   * Detailed solar photosphere.
+   */
   const diskGeometry =
     new THREE.PlaneGeometry(
       SUN_DISK_RADIUS * 2,
@@ -356,64 +1329,14 @@ export function createAstraSunSystem({
       diskMaterial,
     );
 
+  disk.renderOrder =
+    4;
+
   root.add(disk);
 
-  const innerCoronaGeometry =
-    new THREE.PlaneGeometry(
-      SUN_DISK_RADIUS * 4.8,
-      SUN_DISK_RADIUS * 4.8,
-      1,
-      1,
-    );
-
-  const innerCoronaMaterial =
-    createCoronaMaterial({
-      color: 0xffb347,
-      intensity: 0.5,
-      falloff: 3.2,
-    });
-
-  const innerCorona =
-    new THREE.Mesh(
-      innerCoronaGeometry,
-      innerCoronaMaterial,
-    );
-
-  innerCorona.position.z = -0.02;
-  root.add(innerCorona);
-
-  const outerCoronaGeometry =
-    new THREE.PlaneGeometry(
-      SUN_DISK_RADIUS * 8.4,
-      SUN_DISK_RADIUS * 8.4,
-      1,
-      1,
-    );
-
-  const outerCoronaMaterial =
-    createCoronaMaterial({
-      color: 0xff7a24,
-      intensity: 0.17,
-      falloff: 4.8,
-    });
-
-  const outerCorona =
-    new THREE.Mesh(
-      outerCoronaGeometry,
-      outerCoronaMaterial,
-    );
-
-  outerCorona.position.z = -0.04;
-  root.add(outerCorona);
-
   /*
-   * Directional sunlight.
-   *
-   * The light originates from the same shared direction
-   * used by the Earth day/night shader. Its target remains
-   * at the Earth origin.
+   * Shared directional light.
    */
-
   const light =
     new THREE.DirectionalLight(
       0xfff4d2,
@@ -421,7 +1344,9 @@ export function createAstraSunSystem({
     );
 
   light.position.copy(
-    direction.clone().multiplyScalar(12),
+    direction
+      .clone()
+      .multiplyScalar(12),
   );
 
   light.target.position.set(
@@ -435,18 +1360,15 @@ export function createAstraSunSystem({
     light.target,
   );
 
-  /*
-   * Very faint solar fill prevents metallic materials from
-   * losing all form without flattening the day/night contrast.
-   */
-
   const solarFill =
     new THREE.AmbientLight(
       0x314062,
       0.075,
     );
 
-  scene.add(solarFill);
+  scene.add(
+    solarFill,
+  );
 
   let currentReducedMotion =
     reducedMotion;
@@ -459,7 +1381,8 @@ export function createAstraSunSystem({
     update(options = {}) {
       const elapsedSeconds =
         options.elapsedSeconds ??
-        performance.now() / 1000;
+        performance.now() /
+        1000;
 
       currentReducedMotion =
         options.reducedMotion ??
@@ -469,32 +1392,63 @@ export function createAstraSunSystem({
         camera.quaternion,
       );
 
-      if (!currentReducedMotion) {
-        diskMaterial.uniforms.time.value =
+      if (
+        !currentReducedMotion
+      ) {
+        diskMaterial
+          .uniforms
+          .time
+          .value =
           elapsedSeconds;
 
-        innerCoronaMaterial.uniforms.time.value =
+        innerCoronaMaterial
+          .uniforms
+          .time
+          .value =
           elapsedSeconds;
 
-        outerCoronaMaterial.uniforms.time.value =
+        outerCoronaMaterial
+          .uniforms
+          .time
+          .value =
+          elapsedSeconds;
+
+        bloomMaterial
+          .uniforms
+          .time
+          .value =
           elapsedSeconds;
       }
     },
 
     dispose() {
       scene.remove(root);
+
       scene.remove(light);
-      scene.remove(light.target);
-      scene.remove(solarFill);
 
-      diskGeometry.dispose();
-      diskMaterial.dispose();
+      scene.remove(
+        light.target,
+      );
 
-      innerCoronaGeometry.dispose();
-      innerCoronaMaterial.dispose();
+      scene.remove(
+        solarFill,
+      );
+
+      bloomGeometry.dispose();
+
+      bloomMaterial.dispose();
 
       outerCoronaGeometry.dispose();
+
       outerCoronaMaterial.dispose();
+
+      innerCoronaGeometry.dispose();
+
+      innerCoronaMaterial.dispose();
+
+      diskGeometry.dispose();
+
+      diskMaterial.dispose();
 
       root.clear();
     },

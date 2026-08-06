@@ -49,6 +49,9 @@ export type EarthSystem = {
   atmosphereMaterial:
     THREE.ShaderMaterial;
 
+  cloudMaterial:
+    THREE.ShaderMaterial;
+
   dispose: () => void;
 };
 
@@ -283,11 +286,12 @@ export function createEarthSystem({
            * was verified during diagnostic QA.
            */
           vec3 dayColor =
-          dayTexture *
-          (
-            1.20 +
-           sunlight * 1.05
-          );
+            dayTexture *
+            (
+              1.20 +
+              sunlight *
+              1.05
+            );
 
           /*
            * Slightly warm direct sunlight.
@@ -392,6 +396,123 @@ export function createEarthSystem({
               0.64
             );
 
+                    /*
+           * Premium ocean specular response.
+           *
+           * The ocean mask is derived from the existing Blue Marble
+           * texture, so no additional texture asset is required.
+           */
+          float dominantLandChannel =
+            max(
+              dayTexture.r,
+              dayTexture.g
+            );
+
+          float oceanBlueDominance =
+            dayTexture.b -
+            dominantLandChannel *
+            0.72;
+
+          float oceanDarkness =
+            1.0 -
+            smoothstep(
+              0.30,
+              0.72,
+              dot(
+                dayTexture,
+                vec3(
+                  0.299,
+                  0.587,
+                  0.114
+                )
+              )
+            );
+
+          float oceanMask =
+            smoothstep(
+              0.015,
+              0.19,
+              oceanBlueDominance
+            ) *
+            oceanDarkness;
+
+          vec3 reflectedLight =
+            reflect(
+              -lightDirection,
+              normal
+            );
+
+          float reflectionAlignment =
+            max(
+              dot(
+                reflectedLight,
+                viewDirection
+              ),
+              0.0
+            );
+
+          float broadOceanSheen =
+            pow(
+              reflectionAlignment,
+              18.0
+            );
+
+          float focusedSunGlint =
+            pow(
+              reflectionAlignment,
+              72.0
+            );
+
+          float horizonFresnel =
+            pow(
+              1.0 -
+              viewDot,
+              3.2
+            );
+
+          float specularVisibility =
+            oceanMask *
+            sunlight *
+            dayMask;
+
+          vec3 oceanSpecularColor =
+            mix(
+              vec3(
+                0.18,
+                0.38,
+                0.72
+              ),
+
+              vec3(
+                1.0,
+                0.88,
+                0.68
+              ),
+
+              focusedSunGlint
+            );
+
+          color +=
+            oceanSpecularColor *
+            specularVisibility *
+            (
+              broadOceanSheen *
+              0.24 +
+              focusedSunGlint *
+              0.82
+            );
+
+          color +=
+            vec3(
+              0.08,
+              0.24,
+              0.52
+            ) *
+            oceanMask *
+            horizonFresnel *
+            dayMask *
+            0.12;
+
           /*
            * Restrained limb darkening.
            */
@@ -429,6 +550,517 @@ export function createEarthSystem({
   disposables.push(
     earthGeometry,
     earthMaterial,
+  );
+
+  /*
+   * Premium procedural cloud layer.
+   *
+   * This is intentionally independent from the stable Earth shader.
+   * It uses the same Sun direction and reveal uniform, but it does not
+   * require a new imageService asset or a third readiness dependency.
+   */
+  const cloudGeometry =
+    new THREE.SphereGeometry(
+      EARTH_RADIUS * 1.016,
+      96,
+      64,
+    );
+
+  const cloudMaterial =
+    new THREE.ShaderMaterial({
+      transparent: true,
+
+      depthWrite: false,
+
+      depthTest: true,
+
+      toneMapped: false,
+
+      side:
+        THREE.FrontSide,
+
+      uniforms: {
+        reveal:
+          uniforms.reveal,
+
+        sunDir:
+          uniforms.sunDir,
+
+        time: {
+          value: 0,
+        },
+      },
+
+      vertexShader: `
+        varying vec2 vUv;
+        varying vec3 vWorldNormal;
+        varying vec3 vWorldPosition;
+
+        void main() {
+          vUv = uv;
+
+          vec4 worldPosition =
+            modelMatrix *
+            vec4(
+              position,
+              1.0
+            );
+
+          vWorldPosition =
+            worldPosition.xyz;
+
+          vWorldNormal =
+            normalize(
+              mat3(modelMatrix) *
+              normal
+            );
+
+          gl_Position =
+            projectionMatrix *
+            viewMatrix *
+            worldPosition;
+        }
+      `,
+
+      fragmentShader: `
+        uniform vec3 sunDir;
+        uniform float reveal;
+        uniform float time;
+
+        varying vec2 vUv;
+        varying vec3 vWorldNormal;
+        varying vec3 vWorldPosition;
+
+        float hash21(
+          vec2 point
+        ) {
+          point =
+            fract(
+              point *
+              vec2(
+                123.34,
+                456.21
+              )
+            );
+
+          point +=
+            dot(
+              point,
+              point +
+              45.32
+            );
+
+          return
+            fract(
+              point.x *
+              point.y
+            );
+        }
+
+        float valueNoise(
+          vec2 point
+        ) {
+          vec2 cell =
+            floor(point);
+
+          vec2 local =
+            fract(point);
+
+          local =
+            local *
+            local *
+            (
+              3.0 -
+              2.0 *
+              local
+            );
+
+          float a =
+            hash21(
+              cell
+            );
+
+          float b =
+            hash21(
+              cell +
+              vec2(
+                1.0,
+                0.0
+              )
+            );
+
+          float c =
+            hash21(
+              cell +
+              vec2(
+                0.0,
+                1.0
+              )
+            );
+
+          float d =
+            hash21(
+              cell +
+              vec2(
+                1.0,
+                1.0
+              )
+            );
+
+          return
+            mix(
+              mix(
+                a,
+                b,
+                local.x
+              ),
+
+              mix(
+                c,
+                d,
+                local.x
+              ),
+
+              local.y
+            );
+        }
+
+        float fbm(
+          vec2 point
+        ) {
+          float value =
+            0.0;
+
+          float amplitude =
+            0.52;
+
+          mat2 rotation =
+            mat2(
+              0.82,
+              -0.57,
+              0.57,
+              0.82
+            );
+
+          for (
+            int octave = 0;
+            octave < 6;
+            octave += 1
+          ) {
+            value +=
+              amplitude *
+              valueNoise(
+                point
+              );
+
+            point =
+              rotation *
+              point *
+              2.03 +
+              vec2(
+                17.1,
+                9.2
+              );
+
+            amplitude *=
+              0.50;
+          }
+
+          return value;
+        }
+
+        void main() {
+          vec3 normal =
+            normalize(
+              vWorldNormal
+            );
+
+          vec3 lightDirection =
+            normalize(
+              sunDir
+            );
+
+          vec3 viewDirection =
+            normalize(
+              cameraPosition -
+              vWorldPosition
+            );
+
+          float solarDot =
+            dot(
+              normal,
+              lightDirection
+            );
+
+          float viewDot =
+            max(
+              dot(
+                normal,
+                viewDirection
+              ),
+              0.0
+            );
+
+          /*
+           * UV-space weather motion.
+           *
+           * Mesh rotation provides the large-scale drift while the
+           * animated offsets provide subtle internal cloud evolution.
+           */
+          vec2 cloudUv =
+            vec2(
+              vUv.x *
+              6.2 +
+              time *
+              0.0026,
+
+              vUv.y *
+              3.1
+            );
+
+          float broadWeather =
+            fbm(
+              cloudUv
+            );
+
+          float detailWeather =
+            fbm(
+              cloudUv *
+              2.35 +
+              vec2(
+                -time *
+                0.0042,
+
+                time *
+                0.0014
+              )
+            );
+
+          float cloudField =
+            broadWeather *
+            0.72 +
+            detailWeather *
+            0.28;
+
+          /*
+           * Higher threshold keeps large procedural weather systems
+           * transparent instead of creating a dense white shell.
+           */
+          float cloudMask =
+            smoothstep(
+              0.600,
+              0.765,
+              cloudField
+            );
+
+          /*
+           * Fine erosion breaks large opaque weather masses into layered,
+           * semi-transparent cloud systems with visible gaps.
+           */
+          float cloudErosion =
+            fbm(
+              cloudUv *
+              4.60 +
+              vec2(
+                time *
+                0.0012,
+                -time *
+                0.0007
+              )
+            );
+
+          cloudMask *=
+            smoothstep(
+              0.34,
+              0.70,
+              cloudErosion
+            );
+
+          cloudMask *=
+            smoothstep(
+              0.02,
+              0.12,
+              vUv.y
+            ) *
+            (
+              1.0 -
+              smoothstep(
+                0.88,
+                0.98,
+                vUv.y
+              )
+            );
+
+          float dayAmount =
+            smoothstep(
+              -0.20,
+              0.34,
+              solarDot
+            );
+
+          float directLight =
+            smoothstep(
+              -0.04,
+              0.86,
+              solarDot
+            );
+
+          float twilight =
+            smoothstep(
+              -0.24,
+              -0.01,
+              solarDot
+            ) *
+            (
+              1.0 -
+              smoothstep(
+                0.02,
+                0.24,
+                solarDot
+              )
+            );
+
+          float rim =
+            pow(
+              1.0 -
+              viewDot,
+              2.1
+            );
+
+          vec3 nightCloudColor =
+            vec3(
+              0.045,
+              0.075,
+              0.13
+            );
+
+          vec3 dayCloudColor =
+            mix(
+              vec3(
+                0.58,
+                0.66,
+                0.76
+              ),
+
+              vec3(
+                0.96,
+                0.98,
+                1.0
+              ),
+
+              directLight
+            );
+
+          vec3 cloudColor =
+            mix(
+              nightCloudColor,
+              dayCloudColor,
+              dayAmount
+            );
+
+          cloudColor +=
+            vec3(
+              0.88,
+              0.30,
+              0.08
+            ) *
+            twilight *
+            0.22;
+
+          cloudColor +=
+            vec3(
+              0.10,
+              0.22,
+              0.46
+            ) *
+            rim *
+            dayAmount *
+            0.14;
+
+          float nightVisibility =
+            mix(
+              0.055,
+              1.0,
+              dayAmount
+            );
+
+          /*
+           * Restrained opacity prevents the procedural clouds from
+           * obscuring the Earth surface and city-light system.
+           */
+          float alpha =
+            cloudMask *
+            nightVisibility *
+            (
+              0.12 +
+              directLight *
+              0.24
+            ) *
+            reveal;
+
+          alpha *=
+            smoothstep(
+              0.0,
+              0.22,
+              viewDot
+            );
+
+          if (
+            alpha <
+            0.006
+          ) {
+            discard;
+          }
+
+          gl_FragColor =
+            vec4(
+              cloudColor,
+              alpha
+            );
+        }
+      `,
+    });
+
+  const cloudMesh =
+    new THREE.Mesh(
+      cloudGeometry,
+      cloudMaterial,
+    );
+
+  cloudMesh.renderOrder =
+    1;
+
+  group.add(cloudMesh);
+
+  const cloudAnimationStart =
+    performance.now() *
+    0.001;
+
+  cloudMesh.onBeforeRender =
+    () => {
+      const elapsed =
+        performance.now() *
+        0.001 -
+        cloudAnimationStart;
+
+      cloudMaterial
+        .uniforms
+        .time
+        .value =
+        elapsed;
+
+      /*
+       * Independent atmospheric circulation.
+       * This remains intentionally slower than the visible Earth rotation.
+       */
+      cloudMesh.rotation.y =
+        elapsed *
+        0.0105;
+    };
+
+  disposables.push(
+    cloudGeometry,
+    cloudMaterial,
   );
 
   /*
@@ -562,44 +1194,60 @@ export function createEarthSystem({
             );
 
           vec3 daylightAtmosphere =
-            vec3(
-              0.16,
-              0.48,
-              1.0
-            );
+  vec3(
+    0.20,
+    0.56,
+    1.18
+  );
 
-          vec3 sunsetAtmosphere =
-            vec3(
-              1.0,
-              0.23,
-              0.04
-            );
+vec3 sunsetAtmosphere =
+  vec3(
+    1.18,
+    0.36,
+    0.08
+  );
 
-          vec3 atmosphereColor =
-            daylightAtmosphere *
-            (
-              0.12 +
-              dayAmount *
-              1.20
-            );
+float upperScattering =
+  pow(
+    dayAmount,
+    1.35
+  );
 
-          atmosphereColor +=
-            sunsetAtmosphere *
-            terminator *
-            0.64;
+vec3 atmosphereColor =
+  daylightAtmosphere *
+  (
+    0.10 +
+    upperScattering *
+    1.42
+  );
 
-          float nightSuppression =
-            mix(
-              0.08,
-              1.0,
-              dayAmount
-            );
+atmosphereColor +=
+  sunsetAtmosphere *
+  terminator *
+  0.78;
 
-          float alpha =
-            rim *
-            nightSuppression *
-            reveal *
-            0.82;
+atmosphereColor +=
+  vec3(
+    0.12,
+    0.26,
+    0.52
+  ) *
+  rim *
+  upperScattering *
+  0.18;
+
+float nightSuppression =
+  mix(
+    0.05,
+    1.0,
+    dayAmount
+  );
+
+float alpha =
+  rim *
+  nightSuppression *
+  reveal *
+  0.96;
 
           gl_FragColor =
             vec4(
@@ -616,6 +1264,9 @@ export function createEarthSystem({
       atmosphereGeometry,
       atmosphereMaterial,
     );
+
+  atmosphereMesh.renderOrder =
+    2;
 
   scene.add(atmosphereMesh);
 
@@ -737,8 +1388,14 @@ export function createEarthSystem({
     group,
     uniforms,
     atmosphereMaterial,
+    cloudMaterial,
 
     dispose() {
+      cloudMesh.onBeforeRender =
+        () => {};
+
+      group.remove(cloudMesh);
+
       group.remove(earthMesh);
 
       scene.remove(group);
