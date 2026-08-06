@@ -23,7 +23,7 @@ import {
 } from "./astra/tess-orbit-system";
 import {
   createAstraSunSystem,
-} from "./astra/sun-system";
+} from "./astra/sun";
 import {
   ASTRA_OVERVIEW_CAMERA,
 } from "./astra/composition";
