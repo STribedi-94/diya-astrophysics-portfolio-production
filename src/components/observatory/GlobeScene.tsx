@@ -22,9 +22,13 @@ import {
 import {
   createTessOrbitSystem,
 } from "./astra/tess-orbit-system";
+
 import {
   createAstraSunSystem,
 } from "./astra/sun";
+import {
+  createDeepSpaceSystem,
+} from "./astra/deep-space-system";
 import {
   ASTRA_OVERVIEW_CAMERA,
 } from "./astra/composition";
@@ -280,156 +284,24 @@ export default function GlobeScene({
 
 
     /*
-     * ------------------------------------------------------------
-     * Deep-space star foundation
-     * ------------------------------------------------------------
-     */
+ * ------------------------------------------------------------
+ * Project Diya Astra Deep-Space System
+ * ------------------------------------------------------------
+ */
 
-    let seed = 20260729;
+const deepSpaceSystem =
+  createDeepSpaceSystem({
+    scene,
 
-    const rnd = () => {
-      seed =
-        (
-          seed * 1664525 +
-          1013904223
-        ) %
-        4294967296;
+    compact:
+      host.clientWidth < 640,
 
-      return (
-        seed /
-        4294967296
-      );
-    };
+    reducedMotion,
+  });
 
-
-    const starCount =
-      host.clientWidth < 640
-        ? 600
-        : 1100;
-
-
-    const starPos =
-      new Float32Array(
-        starCount * 3,
-      );
-
-    const starCol =
-      new Float32Array(
-        starCount * 3,
-      );
-
-
-    for (
-      let index = 0;
-      index < starCount;
-      index++
-    ) {
-      const u =
-        rnd() * 2 - 1;
-
-      const theta =
-        rnd() *
-        Math.PI *
-        2;
-
-      const spherical =
-        Math.sqrt(
-          1 - u * u,
-        );
-
-      const radius =
-        40 +
-        rnd() * 20;
-
-
-      starPos.set(
-        [
-          radius *
-            spherical *
-            Math.cos(theta),
-
-          radius *
-            u,
-
-          radius *
-            spherical *
-            Math.sin(theta),
-        ],
-
-        index * 3,
-      );
-
-
-      const brightness =
-        0.35 +
-        rnd() * 0.65;
-
-
-      starCol.set(
-        [
-          brightness,
-
-          brightness,
-
-          brightness *
-            (
-              0.92 +
-              rnd() * 0.08
-            ),
-        ],
-
-        index * 3,
-      );
-    }
-
-
-    const starGeometry =
-      new THREE.BufferGeometry();
-
-
-    starGeometry.setAttribute(
-      "position",
-
-      new THREE.BufferAttribute(
-        starPos,
-        3,
-      ),
-    );
-
-
-    starGeometry.setAttribute(
-      "color",
-
-      new THREE.BufferAttribute(
-        starCol,
-        3,
-      ),
-    );
-
-
-    const starMaterial =
-      new THREE.PointsMaterial({
-        size: 0.22,
-        sizeAttenuation: true,
-        vertexColors: true,
-        transparent: true,
-        opacity: 0.85,
-      });
-
-
-    scene.add(
-      new THREE.Points(
-        starGeometry,
-        starMaterial,
-      ),
-    );
-
-
-    disposables.push(
-      starGeometry,
-      starMaterial,
-    );
-
+disposables.push(
+  deepSpaceSystem,
+);
 
     /*
      * ------------------------------------------------------------
@@ -1593,7 +1465,13 @@ export default function GlobeScene({
 
         reducedMotion,
       });
+      deepSpaceSystem.update({
+  elapsedSeconds:
+    now /
+    1000,
 
+  reducedMotion,
+});
 
       /*
        * ----------------------------------------------------------
