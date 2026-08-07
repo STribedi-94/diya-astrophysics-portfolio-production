@@ -18,6 +18,18 @@ export type AstraCameraMode =
   | "galleryFocus"
   | "returning";
 
+export type AstraInteractionState = {
+  mode: AstraCameraMode;
+  selectedId: string | null;
+  inputOwner: "earth" | "camera" | "guided";
+};
+
+export const ASTRA_INITIAL_INTERACTION_STATE: AstraInteractionState = {
+  mode: "overview",
+  selectedId: null,
+  inputOwner: "earth",
+};
+
 export type AstraCameraPose = {
   distance: number;
   azimuth: number;
@@ -42,13 +54,17 @@ export class AstraCameraController {
   private distance: number;
   private azimuth: number;
   private polar: number;
-  private mode: AstraCameraMode = "overview";
+
+  private interactionState: AstraInteractionState = {
+    ...ASTRA_INITIAL_INTERACTION_STATE,
+  };
 
   constructor(
     camera: THREE.PerspectiveCamera,
     options: AstraCameraControllerOptions = {},
   ) {
     this.camera = camera;
+
     this.distance =
       options.initialDistance ??
       ASTRA_OVERVIEW_CAMERA.distance;
@@ -69,15 +85,37 @@ export class AstraCameraController {
       options.maxDistance ??
       ASTRA_OVERVIEW_CAMERA.maxDistance;
 
+    this.target.copy(
+      createAstraOverviewTarget(),
+    );
+
     this.apply();
   }
 
   getMode() {
-    return this.mode;
+    return this.interactionState.mode;
+  }
+
+  getInteractionState(): AstraInteractionState {
+    return {
+      ...this.interactionState,
+    };
   }
 
   setMode(mode: AstraCameraMode) {
-    this.mode = mode;
+    this.interactionState = {
+      ...this.interactionState,
+      mode,
+    };
+  }
+
+  setInteractionState(
+    nextState: Partial<AstraInteractionState>,
+  ) {
+    this.interactionState = {
+      ...this.interactionState,
+      ...nextState,
+    };
   }
 
   getDistance() {
@@ -103,7 +141,10 @@ export class AstraCameraController {
     deltaY: number,
     sensitivity = 0.005,
   ) {
-    this.mode = "sceneOrbit";
+    this.setInteractionState({
+      mode: "sceneOrbit",
+      inputOwner: "camera",
+    });
 
     this.azimuth -= deltaX * sensitivity;
 
@@ -117,7 +158,10 @@ export class AstraCameraController {
   }
 
   zoomByScale(scale: number) {
-    if (!Number.isFinite(scale) || scale <= 0) {
+    if (
+      !Number.isFinite(scale) ||
+      scale <= 0
+    ) {
       return;
     }
 
@@ -151,11 +195,17 @@ export class AstraCameraController {
       return;
     }
 
-    this.zoomByScale(1 + direction * 0.08);
+    this.zoomByScale(
+      1 + direction * 0.08,
+    );
   }
 
   restoreOverview() {
-    this.mode = "returning";
+    this.setInteractionState({
+      mode: "returning",
+      selectedId: null,
+      inputOwner: "guided",
+    });
 
     this.distance =
       ASTRA_OVERVIEW_CAMERA.distance;
@@ -172,11 +222,16 @@ export class AstraCameraController {
 
     this.apply();
 
-    this.mode = "overview";
+    this.setInteractionState({
+      mode: "overview",
+      selectedId: null,
+      inputOwner: "earth",
+    });
   }
 
   apply() {
-    const sinPolar = Math.sin(this.polar);
+    const sinPolar =
+      Math.sin(this.polar);
 
     this.camera.position.set(
       this.target.x +
@@ -194,6 +249,8 @@ export class AstraCameraController {
           Math.cos(this.azimuth),
     );
 
-    this.camera.lookAt(this.target);
+    this.camera.lookAt(
+      this.target,
+    );
   }
 }
