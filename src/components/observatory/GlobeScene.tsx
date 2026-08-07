@@ -30,6 +30,9 @@ import {
   createDeepSpaceSystem,
 } from "./astra/deep-space-system";
 import {
+  createMoonSystem,
+} from "./astra/moon-system";
+import {
   ASTRA_OVERVIEW_CAMERA,
 } from "./astra/composition";
 
@@ -349,8 +352,26 @@ disposables.push(
       overviewEarthRotation;
 
 
-    disposables.push(
+        disposables.push(
       earthSystem,
+    );
+
+
+    /*
+     * ------------------------------------------------------------
+     * Project Diya Astra Moon System
+     * ------------------------------------------------------------
+     */
+
+    const moonSystem =
+      createMoonSystem({
+        scene,
+        reducedMotion,
+      });
+
+
+    disposables.push(
+      moonSystem,
     );
 
 
@@ -1466,6 +1487,13 @@ disposables.push(
         reducedMotion,
       });
       deepSpaceSystem.update({
+  elapsedSeconds:
+    now /
+    1000,
+
+  reducedMotion,
+});
+moonSystem.update({
   elapsedSeconds:
     now /
     1000,
