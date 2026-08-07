@@ -1,5 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -29,19 +33,108 @@ export function TessMissionPanel({
   const mission =
     TESS_MISSION_PRESENTATION;
 
-  const [researchOpen, setResearchOpen] =
-    useState(false);
+  const [
+    researchOpen,
+    setResearchOpen,
+  ] = useState(false);
+
+  const panelRef =
+    useRef<HTMLElement>(null);
+
+  const researchHeadingRef =
+    useRef<HTMLDivElement>(null);
+
+  const overviewHeadingRef =
+    useRef<HTMLHeadingElement>(null);
+
+  const openResearch = () => {
+    setResearchOpen(true);
+  };
+
+  const closeResearch = () => {
+    setResearchOpen(false);
+  };
+
+  /*
+   * Keep keyboard focus inside the visitor's current TESS context.
+   *
+   * Entering Research Mode moves focus to its heading.
+   * Returning to Mission Overview moves focus back to the overview heading.
+   * This avoids forcing keyboard and screen-reader users to rediscover the
+   * panel after the internal view changes.
+   */
+  useEffect(() => {
+    const frame =
+      window.requestAnimationFrame(
+        () => {
+          if (researchOpen) {
+            researchHeadingRef.current?.focus();
+          } else {
+            overviewHeadingRef.current?.focus();
+          }
+
+          panelRef.current?.scrollTo({
+            top: 0,
+            behavior: "auto",
+          });
+        },
+      );
+
+    return () =>
+      window.cancelAnimationFrame(
+        frame,
+      );
+  }, [researchOpen]);
+
+  /*
+   * Escape first leaves Research Mode and returns to the TESS Mission
+   * Overview. When the overview is already active, the parent Observatory
+   * continues to own its established panel-close / fullscreen behaviour.
+   */
+  useEffect(() => {
+    if (!researchOpen) {
+      return;
+    }
+
+    const handleKeyDown = (
+      event: KeyboardEvent,
+    ) => {
+      if (
+        event.key !== "Escape"
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      closeResearch();
+    };
+
+    window.addEventListener(
+      "keydown",
+      handleKeyDown,
+    );
+
+    return () =>
+      window.removeEventListener(
+        "keydown",
+        handleKeyDown,
+      );
+  }, [researchOpen]);
 
   return (
     <aside
+      ref={panelRef}
       className={cn(
-        "absolute z-20 overflow-y-auto rounded-2xl border border-white/10 bg-[oklch(0.085_0.035_275/0.91)] shadow-2xl backdrop-blur-xl",
-        "max-h-[calc(100%-5.5rem)]",
+        "absolute z-20 overflow-y-auto overscroll-contain rounded-2xl border border-white/10 bg-[oklch(0.085_0.035_275/0.91)] shadow-2xl backdrop-blur-xl",
+        "scrollbar-thin max-h-[calc(100%-5.5rem)]",
         isFullscreen
-          ? "bottom-16 left-3 right-3 sm:bottom-5 sm:left-5 sm:right-auto sm:w-[420px] sm:max-w-[calc(100vw-2.5rem)]"
-          : "bottom-3 left-3 right-3 sm:right-auto sm:w-[390px] sm:max-w-[calc(100%-1.5rem)]",
+          ? "bottom-16 left-3 right-3 sm:bottom-5 sm:left-5 sm:right-auto sm:w-[430px] sm:max-w-[calc(100vw-2.5rem)]"
+          : "bottom-3 left-3 right-3 sm:right-auto sm:w-[400px] sm:max-w-[calc(100%-1.5rem)]",
       )}
-      aria-label="TESS mission information"
+      aria-labelledby="tess-panel-title"
+      aria-describedby="tess-panel-description"
     >
       <div className="relative overflow-hidden border-b border-white/10 p-4">
         <div
@@ -56,10 +149,11 @@ export function TessMissionPanel({
         <div className="relative flex items-start justify-between gap-3">
           <div className="min-w-0">
             <div className="mb-2 flex flex-wrap items-center gap-2">
-              <span
-                className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[9px] font-medium uppercase tracking-[0.18em] text-primary"
-              >
-                <Satellite className="h-3 w-3" aria-hidden />
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[9px] font-medium uppercase tracking-[0.18em] text-primary">
+                <Satellite
+                  className="h-3 w-3"
+                  aria-hidden
+                />
                 {node.kindLabel}
               </span>
 
@@ -71,11 +165,19 @@ export function TessMissionPanel({
             <div className="flex items-center gap-2">
               <span
                 className="h-2.5 w-2.5 shrink-0 rounded-full shadow-[0_0_14px_currentColor]"
-                style={{ color: node.color, background: node.color }}
+                style={{
+                  color:
+                    node.color,
+                  background:
+                    node.color,
+                }}
                 aria-hidden
               />
 
-              <h3 className="font-display text-lg font-semibold tracking-tight text-foreground">
+              <h3
+                id="tess-panel-title"
+                className="font-display text-lg font-semibold tracking-tight text-foreground"
+              >
                 {node.shortName}
               </h3>
             </div>
@@ -91,11 +193,17 @@ export function TessMissionPanel({
             aria-label={`Close ${node.shortName} mission information`}
             className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/10 bg-white/[0.03] text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
           >
-            <X className="h-3.5 w-3.5" aria-hidden />
+            <X
+              className="h-3.5 w-3.5"
+              aria-hidden
+            />
           </button>
         </div>
 
-        <p className="relative mt-3 text-xs leading-relaxed text-muted-foreground">
+        <p
+          id="tess-panel-description"
+          className="relative mt-3 text-xs leading-relaxed text-muted-foreground"
+        >
           {mission.missionRole}
         </p>
       </div>
@@ -103,137 +211,213 @@ export function TessMissionPanel({
       <div className="space-y-4 p-4">
         {researchOpen ? (
           <>
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/8 pb-3">
               <button
                 type="button"
-                onClick={() => setResearchOpen(false)}
-                className="inline-flex items-center gap-1.5 text-[10px] font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                onClick={
+                  closeResearch
+                }
+                className="inline-flex min-h-8 items-center gap-1.5 rounded-lg px-1 text-[10px] font-medium text-primary transition-colors hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
               >
-                <ArrowLeft className="h-3 w-3" aria-hidden />
+                <ArrowLeft
+                  className="h-3 w-3"
+                  aria-hidden
+                />
                 Mission overview
               </button>
 
-              <span className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground/65">
+              <div
+                ref={
+                  researchHeadingRef
+                }
+                tabIndex={-1}
+                className="rounded text-[9px] uppercase tracking-[0.18em] text-muted-foreground/65 focus:outline-none"
+              >
                 TESS Research Mode
-              </span>
+              </div>
             </div>
 
-            <TessResearchMode />
+            <div
+              aria-live="polite"
+              aria-label="TESS Research Mode"
+            >
+              <TessResearchMode />
+            </div>
           </>
         ) : (
           <>
-        <section aria-labelledby="tess-orbit-heading">
-          <div className="mb-2 flex items-center gap-1.5">
-            <Orbit className="h-3.5 w-3.5 text-primary" aria-hidden />
-            <h4
-              id="tess-orbit-heading"
-              className="text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/80"
+            <section
+              aria-labelledby="tess-orbit-heading"
             >
-              Mission & Orbit
-            </h4>
-          </div>
+              <div className="mb-2 flex items-center gap-1.5">
+                <Orbit
+                  className="h-3.5 w-3.5 text-primary"
+                  aria-hidden
+                />
 
-          <div className="grid grid-cols-2 gap-2">
-            {mission.metrics.map((metric) => (
-              <div
-                key={metric.label}
-                className="rounded-xl border border-white/8 bg-white/[0.035] px-3 py-2.5"
-              >
-                <div className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground/75">
-                  {metric.label}
-                </div>
-                <div className="mt-1 text-[11px] font-medium leading-snug text-foreground/90">
-                  {metric.value}
-                </div>
+                <h4
+                  ref={
+                    overviewHeadingRef
+                  }
+                  id="tess-orbit-heading"
+                  tabIndex={-1}
+                  className="rounded text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/80 focus:outline-none"
+                >
+                  Mission & Orbit
+                </h4>
               </div>
-            ))}
-          </div>
 
-          <div className="mt-2 text-[10px] leading-relaxed text-muted-foreground">
-            {node.location}
-            {node.coordsLabel ? ` · ${node.coordsLabel}` : ""}
-          </div>
-        </section>
+              <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-2">
+                {mission.metrics.map(
+                  (metric) => (
+                    <div
+                      key={
+                        metric.label
+                      }
+                      className="rounded-xl border border-white/8 bg-white/[0.035] px-3 py-2.5"
+                    >
+                      <div className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground/75">
+                        {
+                          metric.label
+                        }
+                      </div>
 
-        <section
-          aria-labelledby="tess-research-heading"
-          className="rounded-xl border border-primary/15 bg-primary/[0.055] p-3"
-        >
-          <div className="text-[9px] font-medium uppercase tracking-[0.2em] text-primary/80">
-            Diya's TESS Research
-          </div>
+                      <div className="mt-1 text-[11px] font-medium leading-snug text-foreground/90">
+                        {
+                          metric.value
+                        }
+                      </div>
+                    </div>
+                  ),
+                )}
+              </div>
 
-          <h4
-            id="tess-research-heading"
-            className="mt-1 font-display text-sm font-semibold text-foreground"
-          >
-            Stellar activity through precision light curves
-          </h4>
+              <div className="mt-2 text-[10px] leading-relaxed text-muted-foreground">
+                {node.location}
 
-          <p className="mt-1.5 text-[11px] leading-relaxed text-muted-foreground">
-            {mission.researchConnection}
-          </p>
+                {node.coordsLabel
+                  ? ` · ${node.coordsLabel}`
+                  : ""}
+              </div>
+            </section>
 
-          <div className="mt-2.5 flex flex-wrap gap-1.5">
-            {mission.researchThemes.map((theme) => (
-              <span
-                key={theme}
-                className="rounded-full border border-white/10 bg-black/10 px-2 py-1 text-[9px] text-foreground/75"
+            <section
+              aria-labelledby="tess-research-heading"
+              className="rounded-xl border border-primary/15 bg-primary/[0.055] p-3"
+            >
+              <div className="text-[9px] font-medium uppercase tracking-[0.2em] text-primary/80">
+                Diya&apos;s TESS
+                Research
+              </div>
+
+              <h4
+                id="tess-research-heading"
+                className="mt-1 font-display text-sm font-semibold text-foreground"
               >
-                {theme}
+                Stellar activity
+                through precision
+                light curves
+              </h4>
+
+              <p className="mt-1.5 text-[11px] leading-relaxed text-muted-foreground">
+                {
+                  mission.researchConnection
+                }
+              </p>
+
+              <div className="mt-2.5 flex flex-wrap gap-1.5">
+                {mission.researchThemes.map(
+                  (theme) => (
+                    <span
+                      key={
+                        theme
+                      }
+                      className="rounded-full border border-white/10 bg-black/10 px-2 py-1 text-[9px] text-foreground/75"
+                    >
+                      {theme}
+                    </span>
+                  ),
+                )}
+              </div>
+            </section>
+
+            <section
+              aria-labelledby="tess-astra-heading"
+            >
+              <h4
+                id="tess-astra-heading"
+                className="text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/80"
+              >
+                Astra Research
+                Context
+              </h4>
+
+              <p className="mt-1.5 text-[11px] leading-relaxed text-muted-foreground">
+                {
+                  mission.researchContext
+                }
+              </p>
+            </section>
+
+            <button
+              type="button"
+              onClick={
+                openResearch
+              }
+              className="group flex w-full items-center justify-between gap-3 rounded-xl border border-primary/20 bg-primary/[0.07] px-3 py-2.5 text-left transition-colors hover:bg-primary/[0.11] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+              aria-describedby="tess-research-entry-description"
+            >
+              <span>
+                <span className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.18em] text-primary/85">
+                  <Sparkles
+                    className="h-3 w-3"
+                    aria-hidden
+                  />
+                  Explore TESS
+                  Research
+                </span>
+
+                <span
+                  id="tess-research-entry-description"
+                  className="mt-1 block text-[10px] leading-relaxed text-muted-foreground"
+                >
+                  Verified targets,
+                  sectors,
+                  multi-wavelength
+                  observing
+                  relationships and
+                  research timeline.
+                </span>
               </span>
-            ))}
-          </div>
-        </section>
 
-        <section aria-labelledby="tess-astra-heading">
-          <h4
-            id="tess-astra-heading"
-            className="text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/80"
-          >
-            Astra Research Context
-          </h4>
+              <ArrowRight
+                className="h-4 w-4 shrink-0 text-primary transition-transform group-hover:translate-x-0.5"
+                aria-hidden
+              />
+            </button>
 
-          <p className="mt-1.5 text-[11px] leading-relaxed text-muted-foreground">
-            {mission.researchContext}
-          </p>
-        </section>
+            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/8 pt-3">
+              <div className="text-[9px] uppercase tracking-[0.16em] text-muted-foreground/70">
+                TESS Mission
+                Presentation
+              </div>
 
-        <button
-          type="button"
-          onClick={() => setResearchOpen(true)}
-          className="group flex w-full items-center justify-between gap-3 rounded-xl border border-primary/20 bg-primary/[0.07] px-3 py-2.5 text-left transition-colors hover:bg-primary/[0.11] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
-        >
-          <span>
-            <span className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.18em] text-primary/85">
-              <Sparkles className="h-3 w-3" aria-hidden />
-              Explore TESS Research
-            </span>
-            <span className="mt-1 block text-[10px] leading-relaxed text-muted-foreground">
-              Verified targets, observing sectors and publication timeline.
-            </span>
-          </span>
+              <Link
+                to="/facilities/$slug"
+                params={{
+                  slug:
+                    node.slug,
+                }}
+                className="inline-flex items-center gap-1 rounded text-xs font-medium text-primary transition-colors hover:text-primary/80 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+              >
+                Facility profile
 
-          <ArrowRight
-            className="h-4 w-4 shrink-0 text-primary transition-transform group-hover:translate-x-0.5"
-            aria-hidden
-          />
-        </button>
-
-        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/8 pt-3">
-          <div className="text-[9px] uppercase tracking-[0.16em] text-muted-foreground/70">
-            TESS Mission Presentation
-          </div>
-
-          <Link
-            to="/facilities/$slug"
-            params={{ slug: node.slug }}
-            className="inline-flex items-center gap-1 text-xs font-medium text-primary transition-colors hover:text-primary/80 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
-          >
-            Facility profile
-            <ArrowRight className="h-3 w-3" aria-hidden />
-          </Link>
-        </div>
+                <ArrowRight
+                  className="h-3 w-3"
+                  aria-hidden
+                />
+              </Link>
+            </div>
           </>
         )}
       </div>

@@ -21,14 +21,18 @@ export type AstraCameraMode =
 export type AstraInteractionState = {
   mode: AstraCameraMode;
   selectedId: string | null;
-  inputOwner: "earth" | "camera" | "guided";
+  inputOwner:
+    | "earth"
+    | "camera"
+    | "guided";
 };
 
-export const ASTRA_INITIAL_INTERACTION_STATE: AstraInteractionState = {
-  mode: "overview",
-  selectedId: null,
-  inputOwner: "earth",
-};
+export const ASTRA_INITIAL_INTERACTION_STATE: AstraInteractionState =
+  {
+    mode: "overview",
+    selectedId: null,
+    inputOwner: "earth",
+  };
 
 export type AstraCameraPose = {
   distance: number;
@@ -61,42 +65,112 @@ type AstraCameraTransition = {
   onComplete?: () => void;
 };
 
-const DEFAULT_TRANSITION_DURATION = 1.15;
+const DEFAULT_TRANSITION_DURATION =
+  1.15;
 
-function easeInOutCubic(value: number) {
+/*
+ * Manual camera interaction must retain the established safe distance.
+ *
+ * Guided scientific focus states may move closer because the camera is
+ * deliberately targeting a known surface / scientific subject rather
+ * than allowing unrestricted visitor zoom.
+ */
+const GUIDED_OBSERVATORY_MIN_DISTANCE =
+  1.62;
+
+const GUIDED_TESS_MIN_DISTANCE =
+  2.35;
+
+function easeInOutCubic(
+  value: number,
+) {
   return value < 0.5
-    ? 4 * value * value * value
-    : 1 - Math.pow(-2 * value + 2, 3) / 2;
+    ? 4 *
+        value *
+        value *
+        value
+    : 1 -
+        Math.pow(
+          -2 * value + 2,
+          3,
+        ) /
+          2;
 }
 
-function shortestAngleDelta(from: number, to: number) {
+function shortestAngleDelta(
+  from: number,
+  to: number,
+) {
   return Math.atan2(
     Math.sin(to - from),
     Math.cos(to - from),
   );
 }
 
+function getGuidedMinimumDistance(
+  mode: AstraCameraMode,
+  defaultMinimum: number,
+) {
+  switch (mode) {
+    case "observatoryAlignment":
+    case "observatoryApproach":
+    case "observatoryFocus":
+    case "galleryFocus":
+      return Math.min(
+        defaultMinimum,
+        GUIDED_OBSERVATORY_MIN_DISTANCE,
+      );
+
+    case "tessOverview":
+    case "tessSectorFocus":
+    case "tessTargetFocus":
+      return Math.min(
+        defaultMinimum,
+        GUIDED_TESS_MIN_DISTANCE,
+      );
+
+    default:
+      return defaultMinimum;
+  }
+}
+
 export class AstraCameraController {
-  private readonly camera: THREE.PerspectiveCamera;
-  private readonly minDistance: number;
-  private readonly maxDistance: number;
-  private readonly target = new THREE.Vector3();
+  private readonly camera:
+    THREE.PerspectiveCamera;
+
+  private readonly minDistance:
+    number;
+
+  private readonly maxDistance:
+    number;
+
+  private readonly target =
+    new THREE.Vector3();
 
   private distance: number;
+
   private azimuth: number;
+
   private polar: number;
 
-  private interactionState: AstraInteractionState = {
-    ...ASTRA_INITIAL_INTERACTION_STATE,
-  };
+  private interactionState: AstraInteractionState =
+    {
+      ...ASTRA_INITIAL_INTERACTION_STATE,
+    };
 
-  private transition: AstraCameraTransition | null = null;
+  private transition:
+    | AstraCameraTransition
+    | null = null;
 
   constructor(
-    camera: THREE.PerspectiveCamera,
-    options: AstraCameraControllerOptions = {},
+    camera:
+      THREE.PerspectiveCamera,
+
+    options: AstraCameraControllerOptions =
+      {},
   ) {
-    this.camera = camera;
+    this.camera =
+      camera;
 
     this.distance =
       options.initialDistance ??
@@ -126,7 +200,9 @@ export class AstraCameraController {
   }
 
   getMode() {
-    return this.interactionState.mode;
+    return this
+      .interactionState
+      .mode;
   }
 
   getInteractionState(): AstraInteractionState {
@@ -135,20 +211,28 @@ export class AstraCameraController {
     };
   }
 
-  setMode(mode: AstraCameraMode) {
-    this.interactionState = {
-      ...this.interactionState,
-      mode,
-    };
+  setMode(
+    mode: AstraCameraMode,
+  ) {
+    this.interactionState =
+      {
+        ...this
+          .interactionState,
+
+        mode,
+      };
   }
 
   setInteractionState(
     nextState: Partial<AstraInteractionState>,
   ) {
-    this.interactionState = {
-      ...this.interactionState,
-      ...nextState,
-    };
+    this.interactionState =
+      {
+        ...this
+          .interactionState,
+
+        ...nextState,
+      };
   }
 
   getDistance() {
@@ -157,80 +241,148 @@ export class AstraCameraController {
 
   getPose(): AstraCameraPose {
     return {
-      distance: this.distance,
-      azimuth: this.azimuth,
-      polar: this.polar,
-      target: this.target.clone(),
+      distance:
+        this.distance,
+
+      azimuth:
+        this.azimuth,
+
+      polar:
+        this.polar,
+
+      target:
+        this.target.clone(),
     };
   }
 
   isTransitioning() {
-    return this.transition !== null;
+    return (
+      this.transition !==
+      null
+    );
   }
 
   cancelTransition(
     nextState?: Partial<AstraInteractionState>,
   ) {
-    if (!this.transition) {
-      if (nextState) {
-        this.setInteractionState(nextState);
+    if (
+      !this.transition
+    ) {
+      if (
+        nextState
+      ) {
+        this.setInteractionState(
+          nextState,
+        );
       }
 
       return;
     }
 
-    this.transition = null;
+    this.transition =
+      null;
 
-    if (nextState) {
-      this.setInteractionState(nextState);
+    if (
+      nextState
+    ) {
+      this.setInteractionState(
+        nextState,
+      );
     }
   }
 
   transitionTo(
     pose: AstraCameraPose,
-    options: AstraCameraTransitionOptions = {},
-  ) {
-    const duration = Math.max(
-      0,
-      options.duration ??
-        DEFAULT_TRANSITION_DURATION,
-    );
 
-    this.transition = null;
+    options: AstraCameraTransitionOptions =
+      {},
+  ) {
+    const duration =
+      Math.max(
+        0,
+
+        options.duration ??
+          DEFAULT_TRANSITION_DURATION,
+      );
+
+    this.transition =
+      null;
+
+    const transitionMode =
+      options.mode ??
+      this.interactionState
+        .mode;
 
     this.setInteractionState({
       mode:
-        options.mode ??
-        this.interactionState.mode,
+        transitionMode,
+
       inputOwner:
         options.inputOwner ??
         "guided",
+
       selectedId:
-        options.selectedId !== undefined
+        options.selectedId !==
+        undefined
           ? options.selectedId
-          : this.interactionState.selectedId,
+          : this
+              .interactionState
+              .selectedId,
     });
 
-    const endPose: AstraCameraPose = {
-      distance: THREE.MathUtils.clamp(
-        pose.distance,
+    /*
+     * Ordinary manual camera movement remains governed by the canonical
+     * overview minimum distance.
+     *
+     * Guided observatory / scientific modes receive their own controlled
+     * minimum. This allows ASTRA to approach a real surface coordinate
+     * closely without making unrestricted visitor zoom equally aggressive.
+     */
+    const transitionMinimum =
+      getGuidedMinimumDistance(
+        transitionMode,
         this.minDistance,
-        this.maxDistance,
-      ),
-      azimuth: pose.azimuth,
-      polar: THREE.MathUtils.clamp(
-        pose.polar,
-        0.55,
-        Math.PI - 0.55,
-      ),
-      target: pose.target.clone(),
-    };
+      );
 
-    if (duration === 0) {
-      this.distance = endPose.distance;
-      this.azimuth = endPose.azimuth;
-      this.polar = endPose.polar;
-      this.target.copy(endPose.target);
+    const endPose: AstraCameraPose =
+      {
+        distance:
+          THREE.MathUtils.clamp(
+            pose.distance,
+            transitionMinimum,
+            this.maxDistance,
+          ),
+
+        azimuth:
+          pose.azimuth,
+
+        polar:
+          THREE.MathUtils.clamp(
+            pose.polar,
+            0.55,
+            Math.PI -
+              0.55,
+          ),
+
+        target:
+          pose.target.clone(),
+      };
+
+    if (
+      duration === 0
+    ) {
+      this.distance =
+        endPose.distance;
+
+      this.azimuth =
+        endPose.azimuth;
+
+      this.polar =
+        endPose.polar;
+
+      this.target.copy(
+        endPose.target,
+      );
 
       this.apply();
 
@@ -239,122 +391,188 @@ export class AstraCameraController {
       return;
     }
 
-    this.transition = {
-      startPose: this.getPose(),
-      endPose,
-      elapsed: 0,
-      duration,
-      onComplete: options.onComplete,
-    };
+    this.transition =
+      {
+        startPose:
+          this.getPose(),
+
+        endPose,
+
+        elapsed: 0,
+
+        duration,
+
+        onComplete:
+          options.onComplete,
+      };
   }
 
-  update(deltaSeconds: number) {
+  update(
+    deltaSeconds: number,
+  ) {
     if (
       !this.transition ||
-      !Number.isFinite(deltaSeconds) ||
+      !Number.isFinite(
+        deltaSeconds,
+      ) ||
       deltaSeconds <= 0
     ) {
       return;
     }
 
-    const transition = this.transition;
+    const transition =
+      this.transition;
 
-    transition.elapsed = Math.min(
-      transition.elapsed + deltaSeconds,
-      transition.duration,
-    );
+    transition.elapsed =
+      Math.min(
+        transition.elapsed +
+          deltaSeconds,
+
+        transition.duration,
+      );
 
     const rawProgress =
-      transition.duration === 0
+      transition.duration ===
+      0
         ? 1
         : transition.elapsed /
           transition.duration;
 
-    const progress = easeInOutCubic(
-      THREE.MathUtils.clamp(
-        rawProgress,
-        0,
-        1,
-      ),
-    );
+    const progress =
+      easeInOutCubic(
+        THREE.MathUtils.clamp(
+          rawProgress,
+          0,
+          1,
+        ),
+      );
 
-    this.distance = THREE.MathUtils.lerp(
-      transition.startPose.distance,
-      transition.endPose.distance,
-      progress,
-    );
+    this.distance =
+      THREE.MathUtils.lerp(
+        transition
+          .startPose
+          .distance,
+
+        transition
+          .endPose
+          .distance,
+
+        progress,
+      );
 
     this.azimuth =
-      transition.startPose.azimuth +
+      transition
+        .startPose
+        .azimuth +
       shortestAngleDelta(
-        transition.startPose.azimuth,
-        transition.endPose.azimuth,
+        transition
+          .startPose
+          .azimuth,
+
+        transition
+          .endPose
+          .azimuth,
       ) *
         progress;
 
-    this.polar = THREE.MathUtils.lerp(
-      transition.startPose.polar,
-      transition.endPose.polar,
-      progress,
-    );
+    this.polar =
+      THREE.MathUtils.lerp(
+        transition
+          .startPose
+          .polar,
+
+        transition
+          .endPose
+          .polar,
+
+        progress,
+      );
 
     this.target.lerpVectors(
-      transition.startPose.target,
-      transition.endPose.target,
+      transition
+        .startPose
+        .target,
+
+      transition
+        .endPose
+        .target,
+
       progress,
     );
 
     this.apply();
 
-    if (rawProgress >= 1) {
+    if (
+      rawProgress >= 1
+    ) {
       this.distance =
-        transition.endPose.distance;
+        transition
+          .endPose
+          .distance;
 
       this.azimuth =
-        transition.endPose.azimuth;
+        transition
+          .endPose
+          .azimuth;
 
       this.polar =
-        transition.endPose.polar;
+        transition
+          .endPose
+          .polar;
 
       this.target.copy(
-        transition.endPose.target,
+        transition
+          .endPose
+          .target,
       );
 
       this.apply();
 
-      this.transition = null;
+      this.transition =
+        null;
 
-      transition.onComplete?.();
+      transition
+        .onComplete?.();
     }
   }
 
-  setTarget(target: THREE.Vector3) {
+  setTarget(
+    target:
+      THREE.Vector3,
+  ) {
     this.cancelTransition();
 
-    this.target.copy(target);
+    this.target.copy(
+      target,
+    );
+
     this.apply();
   }
-  trackGuidedTarget(target: THREE.Vector3) {
+
+  trackGuidedTarget(
+    target:
+      THREE.Vector3,
+  ) {
     /*
      * Guided moving-target tracking.
      *
-     * Unlike setTarget(), this deliberately does NOT cancel an
-     * active camera transition.
+     * Unlike setTarget(), this deliberately does NOT cancel an active
+     * camera transition.
      *
-     * During a guided approach the transition destination follows
-     * the latest world-space target position. After the transition
-     * completes, the camera target continues following that object
-     * while preserving the current Astra camera pose.
+     * During a guided approach the transition destination follows the
+     * latest world-space target position. After the transition completes,
+     * the camera target continues following that object while preserving
+     * the current ASTRA camera pose.
      *
-     * This is intended for moving scientific subjects such as TESS.
-     * Manual visitor interaction can still cancel guided ownership
-     * through the existing orbit / zoom interaction architecture.
+     * Intended for moving scientific subjects such as TESS.
      */
-
-    if (this.transition) {
-      this.transition.endPose.target.copy(
-        target,
-      );
+    if (
+      this.transition
+    ) {
+      this.transition
+        .endPose
+        .target
+        .copy(target);
 
       return;
     }
@@ -365,133 +583,209 @@ export class AstraCameraController {
 
     this.apply();
   }
+
   orbit(
     deltaX: number,
     deltaY: number,
     sensitivity = 0.005,
   ) {
     this.cancelTransition({
-      mode: "sceneOrbit",
-      inputOwner: "camera",
+      mode:
+        "sceneOrbit",
+
+      inputOwner:
+        "camera",
     });
 
     this.azimuth -=
-      deltaX * sensitivity;
+      deltaX *
+      sensitivity;
 
-    this.polar = THREE.MathUtils.clamp(
-      this.polar -
-        deltaY * sensitivity,
-      0.55,
-      Math.PI - 0.55,
-    );
+    this.polar =
+      THREE.MathUtils.clamp(
+        this.polar -
+          deltaY *
+            sensitivity,
+
+        0.55,
+
+        Math.PI -
+          0.55,
+      );
 
     this.apply();
   }
 
-  zoomByScale(scale: number) {
+  zoomByScale(
+    scale: number,
+  ) {
     if (
-      !Number.isFinite(scale) ||
+      !Number.isFinite(
+        scale,
+      ) ||
       scale <= 0
     ) {
       return;
     }
 
     this.cancelTransition({
-      mode: "sceneOrbit",
-      inputOwner: "camera",
+      mode:
+        "sceneOrbit",
+
+      inputOwner:
+        "camera",
     });
 
-    this.distance = THREE.MathUtils.clamp(
-      this.distance * scale,
-      this.minDistance,
-      this.maxDistance,
-    );
+    /*
+     * Manual zoom always returns to the canonical manual-safety range.
+     *
+     * If the visitor manually zooms after a guided close observatory
+     * approach, the next manual zoom is clamped back into the normal
+     * interaction envelope.
+     */
+    this.distance =
+      THREE.MathUtils.clamp(
+        this.distance *
+          scale,
+
+        this.minDistance,
+
+        this.maxDistance,
+      );
 
     this.apply();
   }
 
-  zoomToDistance(distance: number) {
-    if (!Number.isFinite(distance)) {
+  zoomToDistance(
+    distance: number,
+  ) {
+    if (
+      !Number.isFinite(
+        distance,
+      )
+    ) {
       return;
     }
 
     this.cancelTransition({
-      mode: "sceneOrbit",
-      inputOwner: "camera",
+      mode:
+        "sceneOrbit",
+
+      inputOwner:
+        "camera",
     });
 
-    this.distance = THREE.MathUtils.clamp(
-      distance,
-      this.minDistance,
-      this.maxDistance,
-    );
+    this.distance =
+      THREE.MathUtils.clamp(
+        distance,
+
+        this.minDistance,
+
+        this.maxDistance,
+      );
 
     this.apply();
   }
 
-  zoomByWheel(deltaY: number) {
-    const direction = Math.sign(deltaY);
+  zoomByWheel(
+    deltaY: number,
+  ) {
+    const direction =
+      Math.sign(
+        deltaY,
+      );
 
-    if (direction === 0) {
+    if (
+      direction === 0
+    ) {
       return;
     }
 
     this.zoomByScale(
-      1 + direction * 0.08,
+      1 +
+        direction *
+          0.08,
     );
   }
 
   restoreOverview(
-    duration = DEFAULT_TRANSITION_DURATION,
+    duration =
+      DEFAULT_TRANSITION_DURATION,
   ) {
-    const overviewPose: AstraCameraPose = {
-      distance:
-        ASTRA_OVERVIEW_CAMERA.distance,
-      azimuth:
-        ASTRA_OVERVIEW_CAMERA.azimuth,
-      polar:
-        ASTRA_OVERVIEW_CAMERA.polar,
-      target:
-        createAstraOverviewTarget(),
-    };
+    const overviewPose: AstraCameraPose =
+      {
+        distance:
+          ASTRA_OVERVIEW_CAMERA.distance,
+
+        azimuth:
+          ASTRA_OVERVIEW_CAMERA.azimuth,
+
+        polar:
+          ASTRA_OVERVIEW_CAMERA.polar,
+
+        target:
+          createAstraOverviewTarget(),
+      };
 
     this.transitionTo(
       overviewPose,
       {
         duration,
-        mode: "returning",
-        inputOwner: "guided",
-        selectedId: null,
 
-        onComplete: () => {
-          this.setInteractionState({
-            mode: "overview",
-            selectedId: null,
-            inputOwner: "earth",
-          });
-        },
+        mode:
+          "returning",
+
+        inputOwner:
+          "guided",
+
+        selectedId:
+          null,
+
+        onComplete:
+          () => {
+            this.setInteractionState(
+              {
+                mode:
+                  "overview",
+
+                selectedId:
+                  null,
+
+                inputOwner:
+                  "earth",
+              },
+            );
+          },
       },
     );
   }
 
   apply() {
     const sinPolar =
-      Math.sin(this.polar);
+      Math.sin(
+        this.polar,
+      );
 
     this.camera.position.set(
       this.target.x +
         this.distance *
           sinPolar *
-          Math.sin(this.azimuth),
+          Math.sin(
+            this.azimuth,
+          ),
 
       this.target.y +
         this.distance *
-          Math.cos(this.polar),
+          Math.cos(
+            this.polar,
+          ),
 
       this.target.z +
         this.distance *
           sinPolar *
-          Math.cos(this.azimuth),
+          Math.cos(
+            this.azimuth,
+          ),
     );
 
     this.camera.lookAt(

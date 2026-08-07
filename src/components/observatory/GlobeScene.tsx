@@ -603,6 +603,69 @@ disposables.push(
 
     /*
      * ------------------------------------------------------------
+     * Project Astra Ground-Observatory Guided Focus
+     * ------------------------------------------------------------
+     *
+     * One authoritative path is used for BOTH WebGL marker clicks and
+     * React/accessibility facility-card selection. The scientific anchor
+     * remains the marker generated directly from node.lat/node.lon.
+     */
+
+    const beginGroundObservatoryFocus =
+      (observatoryId: string) => {
+        const marker =
+          markers.find(
+            (candidate) =>
+              candidate.node.id ===
+              observatoryId,
+          );
+
+        if (!marker) {
+          return false;
+        }
+
+        /* Ground focus always releases moving-TESS ownership first. */
+        tessGuidedTracking = false;
+
+        const focusPose =
+          createObservatoryFocusPose(
+            marker,
+          );
+
+        cameraController.transitionTo(
+          focusPose,
+          {
+            duration: 1.25,
+            mode: "observatoryApproach",
+            inputOwner: "guided",
+            selectedId: observatoryId,
+            onComplete: () => {
+              const currentState =
+                cameraController
+                  .getInteractionState();
+
+              if (
+                currentState.selectedId ===
+                  observatoryId &&
+                currentState.inputOwner ===
+                  "guided"
+              ) {
+                cameraController
+                  .setInteractionState({
+                    mode: "observatoryFocus",
+                    inputOwner: "guided",
+                  });
+              }
+            },
+          },
+        );
+
+        return true;
+      };
+
+
+    /*
+     * ------------------------------------------------------------
      * DOM Labels
      * ------------------------------------------------------------
      */
@@ -1394,107 +1457,30 @@ disposables.push(
            * TESS camera stage.
            */
 
-          const selectedMarker =
+          const groundFocusStarted =
             nextSelectedId
-              ? markers.find(
-                  (marker) =>
-                    marker.node.id ===
-                    nextSelectedId,
-                )
-              : undefined;
-
-
-          if (selectedMarker) {
-            /*
-             * Selecting a ground Observatory exits any TESS
-             * tracking state before beginning the existing
-             * Observatory approach.
-             */
-
-            tessGuidedTracking =
-              false;
-
-
-            const focusPose =
-              createObservatoryFocusPose(
-                selectedMarker,
-              );
-
-
-            cameraController.transitionTo(
-              focusPose,
-              {
-                duration: 1.25,
-
-                mode:
-                  "observatoryApproach",
-
-                inputOwner:
-                  "guided",
-
-                selectedId:
+              ? beginGroundObservatoryFocus(
                   nextSelectedId,
+                )
+              : false;
 
-                onComplete: () => {
-                  const currentState =
-                    cameraController
-                      .getInteractionState();
-
-
-                  if (
-                    currentState
-                      .selectedId ===
-                    nextSelectedId &&
-                    currentState
-                      .inputOwner ===
-                    "guided"
-                  ) {
-                    cameraController
-                      .setInteractionState({
-                        mode:
-                          "observatoryFocus",
-
-                        inputOwner:
-                          "earth",
-                      });
-                  }
-                },
-              },
-            );
+          if (groundFocusStarted) {
+            // Common ground-observatory focus path already owns the camera.
           } else if (
             nextSelectedId ===
             spaceNode.id
           ) {
-            /*
-             * TESS uses its dedicated moving-target guided focus.
-             */
-
             beginTessGuidedFocus();
           } else {
-            /*
-             * Deselecting TESS stops moving-target ownership but
-             * deliberately leaves the camera at its current pose.
-             * Restore Overview remains the explicit canonical return.
-             */
+            tessGuidedTracking =
+              false;
 
-            if (tessGuidedTracking) {
-              tessGuidedTracking =
-                false;
-
-              cameraController
-                .cancelTransition({
-                  selectedId:
-                    nextSelectedId,
-                });
-            } else {
-              cameraController
-                .setInteractionState({
-                  selectedId:
-                    nextSelectedId,
-                });
-            }
+            cameraController
+              .cancelTransition({
+                selectedId:
+                  nextSelectedId,
+              });
           }
-
 
           onSelectRef.current(
             nextSelectedId,
@@ -1866,6 +1852,13 @@ moonSystem.update({
           spaceNode.id
         ) {
           beginTessGuidedFocus();
+        } else if (
+          selectedRef.current &&
+          beginGroundObservatoryFocus(
+            selectedRef.current,
+          )
+        ) {
+          /* Ground selection receives the same guided focus as WebGL clicks. */
         } else {
           if (
             runtimeSelection ===
@@ -1874,19 +1867,13 @@ moonSystem.update({
           ) {
             tessGuidedTracking =
               false;
-
-            cameraController
-              .cancelTransition({
-                selectedId:
-                  selectedRef.current,
-              });
-          } else {
-            cameraController
-              .setInteractionState({
-                selectedId:
-                  selectedRef.current,
-              });
           }
+
+          cameraController
+            .cancelTransition({
+              selectedId:
+                selectedRef.current,
+            });
         }
       }
 
@@ -2080,6 +2067,11 @@ moonSystem.update({
         }
       } else if (
         !earthDragActive &&
+        !groundNodes.some(
+          (node) =>
+            node.id ===
+            selectedRef.current,
+        ) &&
         reveal >
           0.6
       ) {
@@ -2419,6 +2411,25 @@ moonSystem.update({
           const selected =
             selectedRef.current ===
             target.id;
+
+          if (target.ground) {
+            const groundNode =
+              groundNodes.find(
+                (node) =>
+                  node.id ===
+                  target.id,
+              );
+
+            label.textContent =
+              selected &&
+              groundNode?.coordsLabel
+                ? `${groundNode.shortName} · ${groundNode.coordsLabel}`
+                : groundNode?.shortName ??
+                  target.id;
+          } else {
+            label.textContent =
+              spaceNode.shortName;
+          }
 
 
           const hovered =
