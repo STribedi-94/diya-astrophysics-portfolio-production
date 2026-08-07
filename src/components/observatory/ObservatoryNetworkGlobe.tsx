@@ -21,6 +21,7 @@ import {
 import { cn } from "@/lib/utils";
 import { groundNodes, networkNodes, spaceNode, type NetworkNode } from "@/data/observatory-network";
 import { usePerf } from "@/lib/performance";
+import { TessMissionPanel } from "./astra/tess/TessMissionPanel";
 
 const GlobeScene =
   lazy(
@@ -503,51 +504,58 @@ export function ObservatoryNetworkGlobe() {
               </div>
             )}
 
-            {/* Selected facility panel */}
-            {selected && (
-              <div
-                className={cn(
-                  "absolute left-3 rounded-xl border border-white/10 bg-[oklch(0.10_0.03_265/0.88)] p-3 backdrop-blur-md sm:max-w-xs",
-                  isFullscreen
-                    ? "bottom-16 right-3 sm:bottom-5 sm:left-5 sm:right-auto sm:max-w-sm"
-                    : "bottom-3 right-3",
-                )}
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="h-2 w-2 rounded-full" style={{ background: selected.color }} aria-hidden />
-                      <span className="font-display text-sm font-semibold">{selected.shortName}</span>
-                    </div>
-                    <div className="text-[11px] text-muted-foreground">{selected.fullName}</div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedId(null)}
-                    aria-label={`Close ${selected.shortName} information`}
-                    className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-white/10 text-muted-foreground hover:bg-white/10 hover:text-foreground"
-                  >
-                    <X className="h-3.5 w-3.5" aria-hidden />
-                  </button>
-                </div>
-                <div className="mt-2 flex flex-wrap gap-1.5 text-[10px]">
-                  <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5">{selected.kindLabel}</span>
-                  <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5">{selected.domain}</span>
-                </div>
-                <p className="mt-2 text-xs text-muted-foreground">{selected.description}</p>
-                <div className="mt-2 text-[10px] text-muted-foreground">
-                  {selected.location}
-                  {selected.coordsLabel ? ` · ${selected.coordsLabel}` : ""}
-                </div>
-                <Link
-                  to="/facilities/$slug"
-                  params={{ slug: selected.slug }}
-                  className="mt-2 inline-flex items-center gap-1 text-xs text-primary hover:underline"
+            {/* Selected facility / TESS mission panel */}
+            {selected &&
+              (selected.id === spaceNode.id ? (
+                <TessMissionPanel
+                  node={selected}
+                  isFullscreen={isFullscreen}
+                  onClose={() => setSelectedId(null)}
+                />
+              ) : (
+                <div
+                  className={cn(
+                    "absolute left-3 rounded-xl border border-white/10 bg-[oklch(0.10_0.03_265/0.88)] p-3 backdrop-blur-md sm:max-w-xs",
+                    isFullscreen
+                      ? "bottom-16 right-3 sm:bottom-5 sm:left-5 sm:right-auto sm:max-w-sm"
+                      : "bottom-3 right-3",
+                  )}
                 >
-                  Facility profile <ArrowRight className="h-3 w-3" aria-hidden />
-                </Link>
-              </div>
-            )}
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="h-2 w-2 rounded-full" style={{ background: selected.color }} aria-hidden />
+                        <span className="font-display text-sm font-semibold">{selected.shortName}</span>
+                      </div>
+                      <div className="text-[11px] text-muted-foreground">{selected.fullName}</div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedId(null)}
+                      aria-label={`Close ${selected.shortName} information`}
+                      className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-white/10 text-muted-foreground hover:bg-white/10 hover:text-foreground"
+                    >
+                      <X className="h-3.5 w-3.5" aria-hidden />
+                    </button>
+                  </div>
+                  <div className="mt-2 flex flex-wrap gap-1.5 text-[10px]">
+                    <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5">{selected.kindLabel}</span>
+                    <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5">{selected.domain}</span>
+                  </div>
+                  <p className="mt-2 text-xs text-muted-foreground">{selected.description}</p>
+                  <div className="mt-2 text-[10px] text-muted-foreground">
+                    {selected.location}
+                    {selected.coordsLabel ? ` · ${selected.coordsLabel}` : ""}
+                  </div>
+                  <Link
+                    to="/facilities/$slug"
+                    params={{ slug: selected.slug }}
+                    className="mt-2 inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                  >
+                    Facility profile <ArrowRight className="h-3 w-3" aria-hidden />
+                  </Link>
+                </div>
+              ))}
           </div>
         </div>
 
