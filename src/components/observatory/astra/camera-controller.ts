@@ -334,7 +334,37 @@ export class AstraCameraController {
     this.target.copy(target);
     this.apply();
   }
+  trackGuidedTarget(target: THREE.Vector3) {
+    /*
+     * Guided moving-target tracking.
+     *
+     * Unlike setTarget(), this deliberately does NOT cancel an
+     * active camera transition.
+     *
+     * During a guided approach the transition destination follows
+     * the latest world-space target position. After the transition
+     * completes, the camera target continues following that object
+     * while preserving the current Astra camera pose.
+     *
+     * This is intended for moving scientific subjects such as TESS.
+     * Manual visitor interaction can still cancel guided ownership
+     * through the existing orbit / zoom interaction architecture.
+     */
 
+    if (this.transition) {
+      this.transition.endPose.target.copy(
+        target,
+      );
+
+      return;
+    }
+
+    this.target.copy(
+      target,
+    );
+
+    this.apply();
+  }
   orbit(
     deltaX: number,
     deltaY: number,

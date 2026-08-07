@@ -436,6 +436,173 @@ disposables.push(
 
     /*
      * ------------------------------------------------------------
+     * Project Astra TESS Guided Focus
+     * ------------------------------------------------------------
+     *
+     * TESS remains in continuous scientifically meaningful orbital
+     * motion. Guided focus therefore follows the spacecraft's live
+     * world-space position instead of freezing or detaching it from
+     * the orbit system.
+     *
+     * The camera approaches from approximately its current viewing
+     * side so selection does not introduce an unnecessary large
+     * angular jump.
+     */
+
+    const tessWorldPosition =
+      new THREE.Vector3();
+
+    const tessCameraOffset =
+      new THREE.Vector3();
+
+    let tessGuidedTracking =
+      false;
+
+
+    const beginTessGuidedFocus =
+      () => {
+        tessSystem.spacecraft
+          .getWorldPosition(
+            tessWorldPosition,
+          );
+
+
+        /*
+         * Approach TESS from the camera's present side.
+         *
+         * This produces a continuous cinematic transition from
+         * overview, Orbit Scene or another valid camera pose while
+         * avoiding a hard-coded world direction.
+         */
+
+        tessCameraOffset
+          .copy(camera.position)
+          .sub(tessWorldPosition);
+
+
+        /*
+         * Defensive fallback. The camera should never normally occupy
+         * exactly the TESS position, but a stable radial direction
+         * prevents an undefined focus pose if that ever occurs.
+         */
+
+        if (
+          tessCameraOffset
+            .lengthSq() <
+          1e-6
+        ) {
+          tessCameraOffset
+            .copy(tessWorldPosition);
+
+          if (
+            tessCameraOffset
+              .lengthSq() <
+            1e-6
+          ) {
+            tessCameraOffset.set(
+              0,
+              0.2,
+              1,
+            );
+          }
+        }
+
+
+        tessCameraOffset
+          .normalize();
+
+
+        /*
+         * 3.35 remains inside the existing canonical Astra camera
+         * distance limits while giving TESS a strong readable scale.
+         */
+
+        const focusDistance =
+          3.35;
+
+
+        const focusAzimuth =
+          Math.atan2(
+            tessCameraOffset.x,
+            tessCameraOffset.z,
+          );
+
+
+        const focusPolar =
+          Math.acos(
+            THREE.MathUtils.clamp(
+              tessCameraOffset.y,
+              -1,
+              1,
+            ),
+          );
+
+
+        tessGuidedTracking =
+          true;
+
+
+        cameraController
+          .transitionTo(
+            {
+              distance:
+                focusDistance,
+
+              azimuth:
+                focusAzimuth,
+
+              polar:
+                focusPolar,
+
+              target:
+                tessWorldPosition,
+            },
+            {
+              duration:
+                1.35,
+
+              mode:
+                "tessOverview",
+
+              inputOwner:
+                "guided",
+
+              selectedId:
+                spaceNode.id,
+
+              onComplete:
+                () => {
+                  const currentState =
+                    cameraController
+                      .getInteractionState();
+
+
+                  if (
+                    tessGuidedTracking &&
+                    currentState
+                      .selectedId ===
+                      spaceNode.id &&
+                    currentState
+                      .inputOwner ===
+                      "guided"
+                  ) {
+                    cameraController
+                      .setInteractionState({
+                        mode:
+                          "tessTargetFocus",
+
+                        inputOwner:
+                          "guided",
+                      });
+                  }
+                },
+            },
+          );
+      };
+
+
+    /*
+     * ------------------------------------------------------------
      * DOM Labels
      * ------------------------------------------------------------
      */
@@ -829,6 +996,38 @@ disposables.push(
         earthRestoreActive =
           false;
 
+
+        /*
+         * Manual visitor input takes ownership away from the
+         * guided moving-TESS camera.
+         */
+
+        if (tessGuidedTracking) {
+          tessGuidedTracking =
+            false;
+
+          cameraController
+            .cancelTransition({
+              mode:
+                interactionModeRef
+                  .current ===
+                "earth"
+                  ? "earthInteraction"
+                  : "sceneOrbit",
+
+              selectedId:
+                selectedRef.current,
+
+              inputOwner:
+                interactionModeRef
+                  .current ===
+                "earth"
+                  ? "earth"
+                  : "camera",
+            });
+        }
+
+
         pointers.set(
           event.pointerId,
           {
@@ -1206,6 +1405,16 @@ disposables.push(
 
 
           if (selectedMarker) {
+            /*
+             * Selecting a ground Observatory exits any TESS
+             * tracking state before beginning the existing
+             * Observatory approach.
+             */
+
+            tessGuidedTracking =
+              false;
+
+
             const focusPose =
               createObservatoryFocusPose(
                 selectedMarker,
@@ -1252,12 +1461,38 @@ disposables.push(
                 },
               },
             );
+          } else if (
+            nextSelectedId ===
+            spaceNode.id
+          ) {
+            /*
+             * TESS uses its dedicated moving-target guided focus.
+             */
+
+            beginTessGuidedFocus();
           } else {
-            cameraController
-              .setInteractionState({
-                selectedId:
-                  nextSelectedId,
-              });
+            /*
+             * Deselecting TESS stops moving-target ownership but
+             * deliberately leaves the camera at its current pose.
+             * Restore Overview remains the explicit canonical return.
+             */
+
+            if (tessGuidedTracking) {
+              tessGuidedTracking =
+                false;
+
+              cameraController
+                .cancelTransition({
+                  selectedId:
+                    nextSelectedId,
+                });
+            } else {
+              cameraController
+                .setInteractionState({
+                  selectedId:
+                    nextSelectedId,
+                });
+            }
           }
 
 
@@ -1286,6 +1521,10 @@ disposables.push(
          * Earth Restore continue independently after the visitor intervenes.
          */
         earthRestoreActive =
+          false;
+
+
+        tessGuidedTracking =
           false;
 
 
@@ -1604,15 +1843,51 @@ moonSystem.update({
         selectedRef.current
       ) {
         /*
-         * React selection may also change through Escape,
-         * information-panel close or Restore.
+         * React selection may change through:
+         *
+         * - the accessible facility list;
+         * - Escape;
+         * - information-panel close;
+         * - Restore;
+         * - other React-owned controls.
+         *
+         * TESS selection from React receives the same guided focus
+         * as direct WebGL selection.
          */
 
-        cameraController
-          .setInteractionState({
-            selectedId:
-              selectedRef.current,
-          });
+        const runtimeSelection =
+          cameraController
+            .getInteractionState()
+            .selectedId;
+
+
+        if (
+          selectedRef.current ===
+          spaceNode.id
+        ) {
+          beginTessGuidedFocus();
+        } else {
+          if (
+            runtimeSelection ===
+              spaceNode.id ||
+            tessGuidedTracking
+          ) {
+            tessGuidedTracking =
+              false;
+
+            cameraController
+              .cancelTransition({
+                selectedId:
+                  selectedRef.current,
+              });
+          } else {
+            cameraController
+              .setInteractionState({
+                selectedId:
+                  selectedRef.current,
+              });
+          }
+        }
       }
 
 
@@ -1632,6 +1907,10 @@ moonSystem.update({
       ) {
         previousRestoreSignal =
           restoreSignalRef.current;
+
+
+        tessGuidedTracking =
+          false;
 
 
         cameraController
@@ -1981,6 +2260,34 @@ moonSystem.update({
           hoverId ===
           spaceNode.id,
       });
+
+
+      /*
+       * ----------------------------------------------------------
+       * Guided Moving-TESS Camera Tracking
+       * ----------------------------------------------------------
+       *
+       * TESS has now received its current absolute-time orbital
+       * position for this frame. Feed that fresh world-space
+       * position into the shared Astra camera controller.
+       */
+
+      if (
+        tessGuidedTracking &&
+        selectedRef.current ===
+          spaceNode.id
+      ) {
+        tessSystem.spacecraft
+          .getWorldPosition(
+            tessWorldPosition,
+          );
+
+
+        cameraController
+          .trackGuidedTarget(
+            tessWorldPosition,
+          );
+      }
 
 
       /*
