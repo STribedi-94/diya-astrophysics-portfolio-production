@@ -15,6 +15,16 @@ export type ObservatorySystem = {
   dispose(): void;
 };
 
+export type ObservatoryFocusPose = {
+  distance: number;
+  azimuth: number;
+  polar: number;
+  target: THREE.Vector3;
+};
+
+const OBSERVATORY_FOCUS_DISTANCE = 2.55;
+const OBSERVATORY_FOCUS_TARGET_RADIUS = EARTH_RADIUS * 0.28;
+
 export function latLonToVec3(
   lat: number,
   lon: number,
@@ -30,6 +40,53 @@ export function latLonToVec3(
   );
 }
 
+/**
+ * Creates a guided camera pose for a ground observatory.
+ *
+ * The marker's world-space direction determines the camera orbit
+ * angles, so this remains correct even while Earth has rotated.
+ *
+ * The camera target is biased slightly toward the selected
+ * observatory rather than targeting the Earth's exact centre.
+ * This keeps the planet visible while giving the selected
+ * facility a cinematic off-centre emphasis.
+ */
+export function createObservatoryFocusPose(
+  marker: ObservatoryMarker,
+): ObservatoryFocusPose {
+  const worldPosition = marker.group.getWorldPosition(
+    new THREE.Vector3(),
+  );
+
+  const radialDirection = worldPosition
+    .clone()
+    .normalize();
+
+  const azimuth = Math.atan2(
+    radialDirection.x,
+    radialDirection.z,
+  );
+
+  const polar = Math.acos(
+    THREE.MathUtils.clamp(
+      radialDirection.y,
+      -1,
+      1,
+    ),
+  );
+
+  const target = radialDirection.multiplyScalar(
+    OBSERVATORY_FOCUS_TARGET_RADIUS,
+  );
+
+  return {
+    distance: OBSERVATORY_FOCUS_DISTANCE,
+    azimuth,
+    polar,
+    target,
+  };
+}
+
 export function createObservatorySystem(options: {
   earthGroup: THREE.Group;
   nodes: NetworkNode[];
@@ -39,8 +96,18 @@ export function createObservatorySystem(options: {
 
   const markers: ObservatoryMarker[] = [];
 
-  const coreGeometry = new THREE.SphereGeometry(0.022, 16, 12);
-  const haloGeometry = new THREE.RingGeometry(0.035, 0.055, 24);
+  const coreGeometry = new THREE.SphereGeometry(
+    0.022,
+    16,
+    12,
+  );
+
+  const haloGeometry = new THREE.RingGeometry(
+    0.035,
+    0.055,
+    24,
+  );
+
   const beaconGeometry = new THREE.CylinderGeometry(
     0.0035,
     0.0035,
@@ -48,7 +115,11 @@ export function createObservatorySystem(options: {
     6,
   );
 
-  disposables.push(coreGeometry, haloGeometry, beaconGeometry);
+  disposables.push(
+    coreGeometry,
+    haloGeometry,
+    beaconGeometry,
+  );
 
   for (const node of nodes) {
     const position = latLonToVec3(
@@ -60,9 +131,14 @@ export function createObservatorySystem(options: {
     const group = new THREE.Group();
 
     group.position.copy(position);
-    group.lookAt(position.clone().multiplyScalar(2));
 
-    const color = new THREE.Color(node.color);
+    group.lookAt(
+      position.clone().multiplyScalar(2),
+    );
+
+    const color = new THREE.Color(
+      node.color,
+    );
 
     const coreMaterial = new THREE.MeshBasicMaterial({
       color,
@@ -84,10 +160,18 @@ export function createObservatorySystem(options: {
       opacity: 0,
     });
 
-    const core = new THREE.Mesh(coreGeometry, coreMaterial);
+    const core = new THREE.Mesh(
+      coreGeometry,
+      coreMaterial,
+    );
+
     core.position.z = 0.03;
 
-    const halo = new THREE.Mesh(haloGeometry, haloMaterial);
+    const halo = new THREE.Mesh(
+      haloGeometry,
+      haloMaterial,
+    );
+
     halo.position.z = 0.004;
 
     const beacon = new THREE.Mesh(
@@ -98,9 +182,11 @@ export function createObservatorySystem(options: {
     beacon.rotation.x = Math.PI / 2;
     beacon.position.z = 0.055;
 
-    group.add(core);
-    group.add(halo);
-    group.add(beacon);
+    group.add(
+      core,
+      halo,
+      beacon,
+    );
 
     earthGroup.add(group);
 

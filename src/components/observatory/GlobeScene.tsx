@@ -15,6 +15,7 @@ import {
   EARTH_RADIUS,
 } from "./astra/earth-system";
 import {
+  createObservatoryFocusPose,
   createObservatorySystem,
   latLonToVec3,
 } from "./astra/observatory-system";
@@ -888,10 +889,9 @@ export default function GlobeScene({
       }
 
 
-      return (
-        best?.id ??
-        null
-      );
+            return best
+        ? (best as { id: string; d: number }).id
+        : null;
     }
 
 
@@ -1258,11 +1258,84 @@ export default function GlobeScene({
            * for the visible information panel.
            */
 
-          cameraController
-            .setInteractionState({
-              selectedId:
-                nextSelectedId,
-            });
+                    /*
+           * --------------------------------------------------------
+           * Guided Ground-Observatory Focus
+           * --------------------------------------------------------
+           *
+           * Selecting uGMRT, HCT or DOT now creates a live
+           * world-space camera pose from the marker's current
+           * position on the rotating Earth.
+           *
+           * TESS remains untouched here because its guided
+           * spacecraft/sector navigation belongs to the dedicated
+           * TESS camera stage.
+           */
+
+          const selectedMarker =
+            nextSelectedId
+              ? markers.find(
+                  (marker) =>
+                    marker.node.id ===
+                    nextSelectedId,
+                )
+              : undefined;
+
+
+          if (selectedMarker) {
+            const focusPose =
+              createObservatoryFocusPose(
+                selectedMarker,
+              );
+
+
+            cameraController.transitionTo(
+              focusPose,
+              {
+                duration: 1.25,
+
+                mode:
+                  "observatoryApproach",
+
+                inputOwner:
+                  "guided",
+
+                selectedId:
+                  nextSelectedId,
+
+                onComplete: () => {
+                  const currentState =
+                    cameraController
+                      .getInteractionState();
+
+
+                  if (
+                    currentState
+                      .selectedId ===
+                    nextSelectedId &&
+                    currentState
+                      .inputOwner ===
+                    "guided"
+                  ) {
+                    cameraController
+                      .setInteractionState({
+                        mode:
+                          "observatoryFocus",
+
+                        inputOwner:
+                          "earth",
+                      });
+                  }
+                },
+              },
+            );
+          } else {
+            cameraController
+              .setInteractionState({
+                selectedId:
+                  nextSelectedId,
+              });
+          }
 
 
           onSelectRef.current(
