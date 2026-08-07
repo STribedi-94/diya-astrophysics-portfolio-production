@@ -39,6 +39,28 @@ import {
 
 const SPIN_PERIOD = 240; // seconds per full Earth rotation
 
+/*
+ * Keep Earth Restore synchronized with AstraCameraController's canonical
+ * DEFAULT_TRANSITION_DURATION.
+ */
+const EARTH_RESTORE_DURATION = 1.15;
+
+function easeInOutCubic(value: number) {
+  return value < 0.5
+    ? 4 * value * value * value
+    : 1 - Math.pow(-2 * value + 2, 3) / 2;
+}
+
+function shortestAngleDelta(
+  from: number,
+  to: number,
+) {
+  return Math.atan2(
+    Math.sin(to - from),
+    Math.cos(to - from),
+  );
+}
+
 /** Earth spin offset that puts the given longitude in front of the camera (+Z). */
 function facingRotation(lon: number) {
   const v = latLonToVec3(0, lon, 1);
@@ -799,6 +821,14 @@ disposables.push(
         event:
           PointerEvent,
       ) => {
+        /*
+         * Manual input always wins over the guided Earth Restore.
+         * The current interpolated Earth angle is preserved, so there is
+         * no snap when the visitor interrupts the return animation.
+         */
+        earthRestoreActive =
+          false;
+
         pointers.set(
           event.pointerId,
           {
@@ -1251,6 +1281,13 @@ disposables.push(
       ) => {
         event.preventDefault();
 
+        /*
+         * Wheel zoom is explicit manual camera ownership. Do not let an
+         * Earth Restore continue independently after the visitor intervenes.
+         */
+        earthRestoreActive =
+          false;
+
 
         cameraController
           .setInteractionState({
@@ -1390,6 +1427,31 @@ disposables.push(
      */
 
     let earthDragRotation =
+      0;
+
+
+    /*
+     * ------------------------------------------------------------
+     * Smooth Earth Restore State
+     * ------------------------------------------------------------
+     *
+     * Camera Restore already uses AstraCameraController's cubic transition.
+     * Earth orientation now follows an equivalent runtime interpolation
+     * instead of resetting spin and drag offsets in one frame.
+     *
+     * The interpolation travels along the shortest angular path back to the
+     * canonical India-first overview orientation.
+     */
+    let earthRestoreActive =
+      false;
+
+    let earthRestoreElapsed =
+      0;
+
+    let earthRestoreStartOffset =
+      0;
+
+    let earthRestoreDelta =
       0;
 
 
@@ -1573,14 +1635,47 @@ moonSystem.update({
 
 
         cameraController
-          .restoreOverview();
+          .restoreOverview(
+            EARTH_RESTORE_DURATION,
+          );
 
 
-        spin =
+        /*
+         * Preserve the currently displayed Earth orientation and return from
+         * it smoothly. `spin` and `earthDragRotation` are combined because
+         * both contribute to the visible Y rotation.
+         */
+        const currentEarthOffset =
+          earthDragRotation +
+          spin;
+
+        earthRestoreStartOffset =
+          currentEarthOffset;
+
+        earthRestoreDelta =
+          shortestAngleDelta(
+            currentEarthOffset,
+            0,
+          );
+
+        earthRestoreElapsed =
           0;
 
+        earthRestoreActive =
+          Math.abs(
+            earthRestoreDelta,
+          ) >
+          1e-6;
 
+        /*
+         * From this point the interpolated offset is owned by
+         * earthDragRotation. Automatic spin remains paused until Restore
+         * completes, preventing competing motion during the cinematic return.
+         */
         earthDragRotation =
+          currentEarthOffset;
+
+        spin =
           0;
 
 
@@ -1650,7 +1745,61 @@ moonSystem.update({
           "earth";
 
 
-      if (
+      /*
+       * Guided Earth Restore uses the same 1.15-second cubic timing as the
+       * canonical camera Restore. Normal scientific spin is suspended while
+       * this interpolation owns the Earth orientation.
+       */
+      if (earthRestoreActive) {
+        earthRestoreElapsed =
+          Math.min(
+            EARTH_RESTORE_DURATION,
+            earthRestoreElapsed +
+              deltaSeconds,
+          );
+
+        const restoreProgress =
+          EARTH_RESTORE_DURATION >
+          0
+            ? earthRestoreElapsed /
+              EARTH_RESTORE_DURATION
+            : 1;
+
+        const easedRestoreProgress =
+          easeInOutCubic(
+            THREE.MathUtils.clamp(
+              restoreProgress,
+              0,
+              1,
+            ),
+          );
+
+        earthDragRotation =
+          earthRestoreStartOffset +
+          earthRestoreDelta *
+            easedRestoreProgress;
+
+        spin =
+          0;
+
+        if (
+          restoreProgress >=
+          1
+        ) {
+          /*
+           * The interpolated terminal value is angularly equivalent to zero.
+           * Normalizing the bookkeeping here does not create a visual jump.
+           */
+          earthRestoreActive =
+            false;
+
+          earthDragRotation =
+            0;
+
+          spin =
+            0;
+        }
+      } else if (
         !earthDragActive &&
         reveal >
           0.6
