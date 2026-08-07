@@ -37,6 +37,14 @@ export type AstraCameraPose = {
   target: THREE.Vector3;
 };
 
+export type AstraCameraTransitionOptions = {
+  duration?: number;
+  mode?: AstraCameraMode;
+  inputOwner?: AstraInteractionState["inputOwner"];
+  selectedId?: string | null;
+  onComplete?: () => void;
+};
+
 export type AstraCameraControllerOptions = {
   initialDistance?: number;
   initialAzimuth?: number;
@@ -44,6 +52,29 @@ export type AstraCameraControllerOptions = {
   minDistance?: number;
   maxDistance?: number;
 };
+
+type AstraCameraTransition = {
+  startPose: AstraCameraPose;
+  endPose: AstraCameraPose;
+  elapsed: number;
+  duration: number;
+  onComplete?: () => void;
+};
+
+const DEFAULT_TRANSITION_DURATION = 1.15;
+
+function easeInOutCubic(value: number) {
+  return value < 0.5
+    ? 4 * value * value * value
+    : 1 - Math.pow(-2 * value + 2, 3) / 2;
+}
+
+function shortestAngleDelta(from: number, to: number) {
+  return Math.atan2(
+    Math.sin(to - from),
+    Math.cos(to - from),
+  );
+}
 
 export class AstraCameraController {
   private readonly camera: THREE.PerspectiveCamera;
@@ -58,6 +89,8 @@ export class AstraCameraController {
   private interactionState: AstraInteractionState = {
     ...ASTRA_INITIAL_INTERACTION_STATE,
   };
+
+  private transition: AstraCameraTransition | null = null;
 
   constructor(
     camera: THREE.PerspectiveCamera,
@@ -131,7 +164,173 @@ export class AstraCameraController {
     };
   }
 
+  isTransitioning() {
+    return this.transition !== null;
+  }
+
+  cancelTransition(
+    nextState?: Partial<AstraInteractionState>,
+  ) {
+    if (!this.transition) {
+      if (nextState) {
+        this.setInteractionState(nextState);
+      }
+
+      return;
+    }
+
+    this.transition = null;
+
+    if (nextState) {
+      this.setInteractionState(nextState);
+    }
+  }
+
+  transitionTo(
+    pose: AstraCameraPose,
+    options: AstraCameraTransitionOptions = {},
+  ) {
+    const duration = Math.max(
+      0,
+      options.duration ??
+        DEFAULT_TRANSITION_DURATION,
+    );
+
+    this.transition = null;
+
+    this.setInteractionState({
+      mode:
+        options.mode ??
+        this.interactionState.mode,
+      inputOwner:
+        options.inputOwner ??
+        "guided",
+      selectedId:
+        options.selectedId !== undefined
+          ? options.selectedId
+          : this.interactionState.selectedId,
+    });
+
+    const endPose: AstraCameraPose = {
+      distance: THREE.MathUtils.clamp(
+        pose.distance,
+        this.minDistance,
+        this.maxDistance,
+      ),
+      azimuth: pose.azimuth,
+      polar: THREE.MathUtils.clamp(
+        pose.polar,
+        0.55,
+        Math.PI - 0.55,
+      ),
+      target: pose.target.clone(),
+    };
+
+    if (duration === 0) {
+      this.distance = endPose.distance;
+      this.azimuth = endPose.azimuth;
+      this.polar = endPose.polar;
+      this.target.copy(endPose.target);
+
+      this.apply();
+
+      options.onComplete?.();
+
+      return;
+    }
+
+    this.transition = {
+      startPose: this.getPose(),
+      endPose,
+      elapsed: 0,
+      duration,
+      onComplete: options.onComplete,
+    };
+  }
+
+  update(deltaSeconds: number) {
+    if (
+      !this.transition ||
+      !Number.isFinite(deltaSeconds) ||
+      deltaSeconds <= 0
+    ) {
+      return;
+    }
+
+    const transition = this.transition;
+
+    transition.elapsed = Math.min(
+      transition.elapsed + deltaSeconds,
+      transition.duration,
+    );
+
+    const rawProgress =
+      transition.duration === 0
+        ? 1
+        : transition.elapsed /
+          transition.duration;
+
+    const progress = easeInOutCubic(
+      THREE.MathUtils.clamp(
+        rawProgress,
+        0,
+        1,
+      ),
+    );
+
+    this.distance = THREE.MathUtils.lerp(
+      transition.startPose.distance,
+      transition.endPose.distance,
+      progress,
+    );
+
+    this.azimuth =
+      transition.startPose.azimuth +
+      shortestAngleDelta(
+        transition.startPose.azimuth,
+        transition.endPose.azimuth,
+      ) *
+        progress;
+
+    this.polar = THREE.MathUtils.lerp(
+      transition.startPose.polar,
+      transition.endPose.polar,
+      progress,
+    );
+
+    this.target.lerpVectors(
+      transition.startPose.target,
+      transition.endPose.target,
+      progress,
+    );
+
+    this.apply();
+
+    if (rawProgress >= 1) {
+      this.distance =
+        transition.endPose.distance;
+
+      this.azimuth =
+        transition.endPose.azimuth;
+
+      this.polar =
+        transition.endPose.polar;
+
+      this.target.copy(
+        transition.endPose.target,
+      );
+
+      this.apply();
+
+      this.transition = null;
+
+      transition.onComplete?.();
+    }
+  }
+
   setTarget(target: THREE.Vector3) {
+    this.cancelTransition();
+
     this.target.copy(target);
     this.apply();
   }
@@ -141,15 +340,17 @@ export class AstraCameraController {
     deltaY: number,
     sensitivity = 0.005,
   ) {
-    this.setInteractionState({
+    this.cancelTransition({
       mode: "sceneOrbit",
       inputOwner: "camera",
     });
 
-    this.azimuth -= deltaX * sensitivity;
+    this.azimuth -=
+      deltaX * sensitivity;
 
     this.polar = THREE.MathUtils.clamp(
-      this.polar - deltaY * sensitivity,
+      this.polar -
+        deltaY * sensitivity,
       0.55,
       Math.PI - 0.55,
     );
@@ -165,6 +366,11 @@ export class AstraCameraController {
       return;
     }
 
+    this.cancelTransition({
+      mode: "sceneOrbit",
+      inputOwner: "camera",
+    });
+
     this.distance = THREE.MathUtils.clamp(
       this.distance * scale,
       this.minDistance,
@@ -178,6 +384,11 @@ export class AstraCameraController {
     if (!Number.isFinite(distance)) {
       return;
     }
+
+    this.cancelTransition({
+      mode: "sceneOrbit",
+      inputOwner: "camera",
+    });
 
     this.distance = THREE.MathUtils.clamp(
       distance,
@@ -200,33 +411,37 @@ export class AstraCameraController {
     );
   }
 
-  restoreOverview() {
-    this.setInteractionState({
-      mode: "returning",
-      selectedId: null,
-      inputOwner: "guided",
-    });
+  restoreOverview(
+    duration = DEFAULT_TRANSITION_DURATION,
+  ) {
+    const overviewPose: AstraCameraPose = {
+      distance:
+        ASTRA_OVERVIEW_CAMERA.distance,
+      azimuth:
+        ASTRA_OVERVIEW_CAMERA.azimuth,
+      polar:
+        ASTRA_OVERVIEW_CAMERA.polar,
+      target:
+        createAstraOverviewTarget(),
+    };
 
-    this.distance =
-      ASTRA_OVERVIEW_CAMERA.distance;
+    this.transitionTo(
+      overviewPose,
+      {
+        duration,
+        mode: "returning",
+        inputOwner: "guided",
+        selectedId: null,
 
-    this.azimuth =
-      ASTRA_OVERVIEW_CAMERA.azimuth;
-
-    this.polar =
-      ASTRA_OVERVIEW_CAMERA.polar;
-
-    this.target.copy(
-      createAstraOverviewTarget(),
+        onComplete: () => {
+          this.setInteractionState({
+            mode: "overview",
+            selectedId: null,
+            inputOwner: "earth",
+          });
+        },
+      },
     );
-
-    this.apply();
-
-    this.setInteractionState({
-      mode: "overview",
-      selectedId: null,
-      inputOwner: "earth",
-    });
   }
 
   apply() {

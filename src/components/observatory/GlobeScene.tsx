@@ -1480,7 +1480,7 @@ export default function GlobeScene({
         );
 
 
-      lastTime =
+            lastTime =
         now;
 
 
@@ -1490,6 +1490,23 @@ export default function GlobeScene({
       ) {
         return;
       }
+
+
+      /*
+       * ----------------------------------------------------------
+       * Project Astra Camera Transition Runtime
+       * ----------------------------------------------------------
+       *
+       * Guided camera transitions are advanced from the same
+       * canonical animation clock as the rest of the scene.
+       *
+       * Manual orbit, wheel zoom and pinch zoom can cancel an
+       * active transition through AstraCameraController.
+       */
+
+      cameraController.update(
+        deltaSeconds,
+      );
 
 
       /*
