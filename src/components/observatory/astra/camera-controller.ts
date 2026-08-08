@@ -255,6 +255,86 @@ export class AstraCameraController {
     };
   }
 
+
+  /*
+   * Synchronize the controller's internal spherical representation with
+   * the camera's actual world transform.
+   *
+   * This is required after Project Astra systems that temporarily move
+   * the same PerspectiveCamera directly (for example the premium
+   * Observatory journey). Without this synchronization Restore would
+   * interpolate from stale controller state and could require a second
+   * click to reach the canonical overview.
+   */
+  syncFromCamera(
+    lookDistance = 5,
+  ) {
+    this.transition =
+      null;
+
+    const direction =
+      new THREE.Vector3();
+
+    this.camera.getWorldDirection(
+      direction,
+    );
+
+    const safeLookDistance =
+      Number.isFinite(
+        lookDistance,
+      ) &&
+      lookDistance > 0
+        ? lookDistance
+        : 5;
+
+    this.target.copy(
+      this.camera.position
+        .clone()
+        .add(
+          direction.multiplyScalar(
+            safeLookDistance,
+          ),
+        ),
+    );
+
+    const offset =
+      this.camera.position
+        .clone()
+        .sub(
+          this.target,
+        );
+
+    const distance =
+      Math.max(
+        1e-5,
+        offset.length(),
+      );
+
+    this.distance =
+      distance;
+
+    this.polar =
+      THREE.MathUtils.clamp(
+        Math.acos(
+          THREE.MathUtils.clamp(
+            offset.y /
+              distance,
+            -1,
+            1,
+          ),
+        ),
+        0.001,
+        Math.PI -
+          0.001,
+      );
+
+    this.azimuth =
+      Math.atan2(
+        offset.x,
+        offset.z,
+      );
+  }
+
   isTransitioning() {
     return (
       this.transition !==

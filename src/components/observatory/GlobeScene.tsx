@@ -20,6 +20,24 @@ import {
   latLonToVec3,
 } from "./astra/observatory-system";
 import {
+  createObservatoryEnvironmentSystem,
+} from "./astra/observatory-environment-system";
+import {
+  createObservatoryJourneyController,
+} from "./astra/observatory-journey-controller";
+import {
+  createObservatoryDestinationTransitionSystem,
+} from "./astra/observatory-destination-transition";
+import {
+  createObservatorySceneHandoff,
+} from "./astra/observatory-scene-handoff";
+import {
+  createObservatoryDescentVeilSystem,
+} from "./astra/observatory-descent-veil";
+import {
+  isGroundObservatoryId,
+} from "./astra/observatory-registry";
+import {
   createTessOrbitSystem,
 } from "./astra/tess-orbit-system";
 
@@ -103,6 +121,10 @@ export default function GlobeScene({
   const labelRef =
     useRef<HTMLDivElement>(null);
 
+
+  const cinematicRef =
+    useRef<HTMLDivElement>(null);
+
   const selectedRef =
     useRef<string | null>(
       selectedId,
@@ -146,9 +168,13 @@ export default function GlobeScene({
     const labelHost =
       labelRef.current;
 
+    const cinematicHost =
+      cinematicRef.current;
+
     if (
       !host ||
-      !labelHost
+      !labelHost ||
+      !cinematicHost
     ) {
       return;
     }
@@ -417,6 +443,115 @@ disposables.push(
 
     /*
      * ------------------------------------------------------------
+     * Project Diya Astra
+     * Ground Observatory Procedural Environment Systems
+     * ------------------------------------------------------------
+     *
+     * The three local Observatory destination worlds are created once
+     * with the persistent WebGL scene. They remain hidden until the
+     * Journey Controller explicitly activates one in a later cinematic
+     * stage. This preserves the accepted Earth/TESS/Sun/Moon scene.
+     */
+
+    const ugmrtEnvironmentSystem =
+      createObservatoryEnvironmentSystem({
+        scene,
+        observatoryId: "ugmrt",
+      });
+
+    const hctEnvironmentSystem =
+      createObservatoryEnvironmentSystem({
+        scene,
+        observatoryId: "hct",
+      });
+
+    const dotEnvironmentSystem =
+      createObservatoryEnvironmentSystem({
+        scene,
+        observatoryId: "dot",
+      });
+
+
+    ugmrtEnvironmentSystem.setVisible(false);
+    hctEnvironmentSystem.setVisible(false);
+    dotEnvironmentSystem.setVisible(false);
+
+
+    disposables.push(
+      ugmrtEnvironmentSystem,
+      hctEnvironmentSystem,
+      dotEnvironmentSystem,
+    );
+
+
+    /*
+     * ------------------------------------------------------------
+     * Project Diya Astra Ground Observatory Journey Controller
+     * ------------------------------------------------------------
+     */
+
+    const observatoryJourneyController =
+      createObservatoryJourneyController({
+        ugmrt: ugmrtEnvironmentSystem,
+        hct: hctEnvironmentSystem,
+        dot: dotEnvironmentSystem,
+      });
+
+
+    disposables.push(
+      observatoryJourneyController,
+    );
+
+
+    /*
+     * ------------------------------------------------------------
+     * Project Diya Astra Local Destination Camera + Scene Handoff
+     * ------------------------------------------------------------
+     */
+
+    const observatoryDestinationTransition =
+      createObservatoryDestinationTransitionSystem({
+        camera,
+      });
+
+
+    const observatoryDescentVeil =
+      createObservatoryDescentVeilSystem({
+        host:
+          cinematicHost,
+        reducedMotion,
+      });
+
+
+    const observatorySceneHandoff =
+      createObservatorySceneHandoff({
+        transitionSystem:
+          observatoryDestinationTransition,
+        journeyController:
+          observatoryJourneyController,
+        veilSystem:
+          observatoryDescentVeil,
+        environments: {
+          ugmrt:
+            ugmrtEnvironmentSystem,
+          hct:
+            hctEnvironmentSystem,
+          dot:
+            dotEnvironmentSystem,
+        },
+        reducedMotion,
+      });
+
+
+    disposables.push(
+      observatoryDestinationTransition,
+      observatoryDescentVeil,
+      observatorySceneHandoff,
+    );
+
+
+    /*
+     * ------------------------------------------------------------
      * Project Diya Astra TESS Orbit System
      * ------------------------------------------------------------
      */
@@ -613,6 +748,15 @@ disposables.push(
 
     const beginGroundObservatoryFocus =
       (observatoryId: string) => {
+        if (
+          !isGroundObservatoryId(
+            observatoryId,
+          )
+        ) {
+          return false;
+        }
+
+
         const marker =
           markers.find(
             (candidate) =>
@@ -620,45 +764,333 @@ disposables.push(
               observatoryId,
           );
 
+
         if (!marker) {
+          observatoryJourneyController
+            .reset();
+
+          observatoryDescentVeil
+            .cancel();
+
           return false;
         }
 
-        /* Ground focus always releases moving-TESS ownership first. */
-        tessGuidedTracking = false;
+
+        if (
+          !observatorySceneHandoff
+            .isDestinationActive()
+        ) {
+          observatoryDestinationTransition
+            .cancel();
+
+          observatoryDescentVeil
+            .cancel();
+        }
+
+
+        observatoryJourneyController
+          .beginEarthFocus(
+            observatoryId,
+          );
+
+
+        tessGuidedTracking =
+          false;
+
 
         const focusPose =
           createObservatoryFocusPose(
             marker,
           );
 
-        cameraController.transitionTo(
-          focusPose,
-          {
-            duration: 1.25,
-            mode: "observatoryApproach",
-            inputOwner: "guided",
-            selectedId: observatoryId,
-            onComplete: () => {
-              const currentState =
-                cameraController
-                  .getInteractionState();
 
-              if (
-                currentState.selectedId ===
-                  observatoryId &&
-                currentState.inputOwner ===
-                  "guided"
-              ) {
+        const {
+          lat,
+          lon,
+        } =
+          marker.node;
+
+
+        if (
+          lat == null ||
+          lon == null
+        ) {
+          return false;
+        }
+
+
+        earthGroup
+          .updateWorldMatrix(
+            true,
+            false,
+          );
+
+
+        const exactSurface =
+          earthGroup
+            .localToWorld(
+              latLonToVec3(
+                lat,
+                lon,
+                EARTH_RADIUS,
+              ),
+            );
+
+
+        const radial =
+          exactSurface
+            .clone()
+            .normalize();
+
+
+        let tangent =
+          new THREE.Vector3(
+            0,
+            1,
+            0,
+          )
+            .cross(
+              radial,
+            );
+
+
+        if (
+          tangent.lengthSq() <
+          1e-4
+        ) {
+          tangent =
+            new THREE.Vector3(
+              1,
+              0,
+              0,
+            )
+              .cross(
+                radial,
+              );
+        }
+
+
+        tangent.normalize();
+
+
+        const crossTangent =
+          radial
+            .clone()
+            .cross(
+              tangent,
+            )
+            .normalize();
+
+
+        const focusSin =
+          Math.sin(
+            focusPose.polar,
+          );
+
+
+        const focusExplicit = {
+          position:
+            new THREE.Vector3(
+              focusPose.target.x +
+                focusPose.distance *
+                  focusSin *
+                  Math.sin(
+                    focusPose.azimuth,
+                  ),
+
+              focusPose.target.y +
+                focusPose.distance *
+                  Math.cos(
+                    focusPose.polar,
+                  ),
+
+              focusPose.target.z +
+                focusPose.distance *
+                  focusSin *
+                  Math.cos(
+                    focusPose.azimuth,
+                  ),
+            ),
+
+          target:
+            focusPose.target
+              .clone(),
+
+          fov:
+            camera.fov,
+        };
+
+
+        const regionalPose = {
+          position:
+            radial
+              .clone()
+              .multiplyScalar(
+                EARTH_RADIUS *
+                  1.52,
+              )
+              .addScaledVector(
+                tangent,
+                0.36,
+              )
+              .addScaledVector(
+                crossTangent,
+                0.14,
+              ),
+
+          target:
+            radial
+              .clone()
+              .multiplyScalar(
+                EARTH_RADIUS *
+                  0.995,
+              ),
+
+          fov:
+            43,
+        };
+
+
+        const atmosphericPose = {
+          position:
+            radial
+              .clone()
+              .multiplyScalar(
+                EARTH_RADIUS *
+                  1.20,
+              )
+              .addScaledVector(
+                tangent,
+                0.18,
+              )
+              .addScaledVector(
+                crossTangent,
+                0.06,
+              ),
+
+          target:
+            radial
+              .clone()
+              .multiplyScalar(
+                EARTH_RADIUS *
+                  1.006,
+              ),
+
+          fov:
+            49,
+        };
+
+
+        cameraController
+          .cancelTransition({
+            mode:
+              "observatoryApproach",
+
+            inputOwner:
+              "guided",
+
+            selectedId:
+              observatoryId,
+          });
+
+
+        observatoryDescentVeil
+          .beginEarthDive(
+            observatoryId,
+          );
+
+
+        /*
+         * One continuous Earth-space spline eliminates the old stop/start
+         * sequence. The first waypoint preserves the accepted geographic
+         * focus framing, then the same motion continues toward the
+         * atmosphere and the exact scientific surface coordinate.
+         */
+
+        observatoryDestinationTransition
+          .transitionAlongPoses({
+            observatoryId,
+
+            poses: [
+              focusExplicit,
+              regionalPose,
+              atmosphericPose,
+            ],
+
+            duration:
+              reducedMotion
+                ? 0.7
+                : 5.2,
+
+            onProgress:
+              (
+                progress,
+              ) => {
+                observatoryDescentVeil
+                  .setDiveProgress(
+                    progress,
+                  );
+              },
+
+            onComplete:
+              () => {
+                if (
+                  selectedRef
+                    .current !==
+                    observatoryId
+                ) {
+                  observatoryDescentVeil
+                    .cancel();
+
+                  return;
+                }
+
+
                 cameraController
                   .setInteractionState({
-                    mode: "observatoryFocus",
-                    inputOwner: "guided",
+                    mode:
+                      "observatoryFocus",
+
+                    inputOwner:
+                      "guided",
+
+                    selectedId:
+                      observatoryId,
                   });
-              }
-            },
-          },
-        );
+
+
+                observatoryJourneyController
+                  .markDestinationReady(
+                    observatoryId,
+                  );
+
+
+                /*
+                 * setDiveProgress() reaches near-full neutral atmospheric
+                 * occlusion at the end of the same continuous Earth spline.
+                 * Handoff immediately; do not stop the camera for a separate
+                 * seal animation.
+                 */
+
+                if (
+                  selectedRef
+                    .current !==
+                    observatoryId
+                ) {
+                  observatoryDescentVeil
+                    .cancel();
+
+                  return;
+                }
+
+
+                observatorySceneHandoff
+                  .enter(
+                    observatoryId,
+                  );
+              },
+          });
+
 
         return true;
       };
@@ -1051,6 +1483,13 @@ disposables.push(
         event:
           PointerEvent,
       ) => {
+        if (
+          observatorySceneHandoff
+            .isDestinationActive()
+        ) {
+          return;
+        }
+
         /*
          * Manual input always wins over the guided Earth Restore.
          * The current interpolated Earth angle is preserved, so there is
@@ -1470,8 +1909,14 @@ disposables.push(
             nextSelectedId ===
             spaceNode.id
           ) {
+            observatoryJourneyController
+              .reset();
+
             beginTessGuidedFocus();
           } else {
+            observatoryJourneyController
+              .reset();
+
             tessGuidedTracking =
               false;
 
@@ -1501,6 +1946,13 @@ disposables.push(
           WheelEvent,
       ) => {
         event.preventDefault();
+
+        if (
+          observatorySceneHandoff
+            .isDestinationActive()
+        ) {
+          return;
+        }
 
         /*
          * Wheel zoom is explicit manual camera ownership. Do not let an
@@ -1700,6 +2152,55 @@ disposables.push(
       interactionModeRef.current;
 
 
+    let pendingOverviewRestore =
+      false;
+
+
+    const beginOverviewRestore =
+      () => {
+        cameraController
+          .restoreOverview(
+            EARTH_RESTORE_DURATION,
+          );
+
+        const currentEarthOffset =
+          earthDragRotation +
+          spin;
+
+        earthRestoreStartOffset =
+          currentEarthOffset;
+
+        earthRestoreDelta =
+          shortestAngleDelta(
+            currentEarthOffset,
+            0,
+          );
+
+        earthRestoreElapsed =
+          0;
+
+        earthRestoreActive =
+          Math.abs(
+            earthRestoreDelta,
+          ) >
+          1e-6;
+
+        earthDragRotation =
+          currentEarthOffset;
+
+        spin =
+          0;
+
+        dragging =
+          false;
+
+        didDrag =
+          false;
+
+        pointers.clear();
+      };
+
+
     const temporaryVector =
       new THREE.Vector3();
 
@@ -1760,6 +2261,12 @@ disposables.push(
       cameraController.update(
         deltaSeconds,
       );
+
+
+      observatoryDestinationTransition
+        .update(
+          deltaSeconds,
+        );
 
 
       /*
@@ -1848,9 +2355,45 @@ moonSystem.update({
 
 
         if (
+          observatorySceneHandoff
+            .isDestinationActive()
+        ) {
+          observatorySceneHandoff
+            .returnToEarth(
+              () => {
+                cameraController
+                  .syncFromCamera();
+
+                cameraController
+                  .cancelTransition({
+                    selectedId:
+                      selectedRef.current,
+                  });
+
+                if (
+                  selectedRef.current ===
+                  spaceNode.id
+                ) {
+                  beginTessGuidedFocus();
+                } else if (
+                  selectedRef.current &&
+                  isGroundObservatoryId(
+                    selectedRef.current,
+                  )
+                ) {
+                  beginGroundObservatoryFocus(
+                    selectedRef.current,
+                  );
+                }
+              },
+            );
+        } else if (
           selectedRef.current ===
           spaceNode.id
         ) {
+          observatoryJourneyController
+            .reset();
+
           beginTessGuidedFocus();
         } else if (
           selectedRef.current &&
@@ -1860,6 +2403,9 @@ moonSystem.update({
         ) {
           /* Ground selection receives the same guided focus as WebGL clicks. */
         } else {
+          observatoryJourneyController
+            .reset();
+
           if (
             runtimeSelection ===
               spaceNode.id ||
@@ -1900,60 +2446,46 @@ moonSystem.update({
           false;
 
 
+        if (
+          observatorySceneHandoff
+            .isDestinationActive()
+        ) {
+          pendingOverviewRestore =
+            true;
+
+          observatorySceneHandoff
+            .returnToEarth(
+              () => {
+                cameraController
+                  .syncFromCamera();
+
+                cameraController
+                  .cancelTransition({
+                    selectedId:
+                      null,
+                  });
+              },
+            );
+        } else {
+          beginOverviewRestore();
+        }
+      }
+
+
+      if (
+        pendingOverviewRestore &&
+        !observatorySceneHandoff
+          .isDestinationActive() &&
+        !observatoryDestinationTransition
+          .isActive()
+      ) {
+        pendingOverviewRestore =
+          false;
+
         cameraController
-          .restoreOverview(
-            EARTH_RESTORE_DURATION,
-          );
+          .syncFromCamera();
 
-
-        /*
-         * Preserve the currently displayed Earth orientation and return from
-         * it smoothly. `spin` and `earthDragRotation` are combined because
-         * both contribute to the visible Y rotation.
-         */
-        const currentEarthOffset =
-          earthDragRotation +
-          spin;
-
-        earthRestoreStartOffset =
-          currentEarthOffset;
-
-        earthRestoreDelta =
-          shortestAngleDelta(
-            currentEarthOffset,
-            0,
-          );
-
-        earthRestoreElapsed =
-          0;
-
-        earthRestoreActive =
-          Math.abs(
-            earthRestoreDelta,
-          ) >
-          1e-6;
-
-        /*
-         * From this point the interpolated offset is owned by
-         * earthDragRotation. Automatic spin remains paused until Restore
-         * completes, preventing competing motion during the cinematic return.
-         */
-        earthDragRotation =
-          currentEarthOffset;
-
-        spin =
-          0;
-
-
-        dragging =
-          false;
-
-
-        didDrag =
-          false;
-
-
-        pointers.clear();
+        beginOverviewRestore();
       }
 
 
@@ -2613,8 +3145,14 @@ moonSystem.update({
       />
 
       <div
+        ref={cinematicRef}
+        className="pointer-events-none absolute inset-0 z-10 overflow-hidden"
+        aria-hidden
+      />
+
+      <div
         ref={labelRef}
-        className="pointer-events-none absolute inset-0 overflow-hidden"
+        className="pointer-events-none absolute inset-0 z-20 overflow-hidden"
         aria-hidden
       />
     </div>

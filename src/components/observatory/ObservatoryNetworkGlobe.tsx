@@ -327,7 +327,7 @@ export function ObservatoryNetworkGlobe() {
             {ready && !failed && fullscreenSupported && (
               <div
                 className={cn(
-                  "absolute right-3 top-3 z-30",
+                  "absolute right-3 top-3 z-[70]",
                   isFullscreen && "right-4 top-4 sm:right-5 sm:top-5",
                 )}
               >
@@ -360,7 +360,7 @@ export function ObservatoryNetworkGlobe() {
             {ready && !failed && (
               <div
                 className={cn(
-                  "absolute left-1/2 z-20 flex max-w-[calc(100%-1rem)] -translate-x-1/2 items-center gap-1 overflow-x-auto rounded-xl border border-white/10 bg-[oklch(0.10_0.03_265/0.82)] p-1 text-[10px] shadow-lg backdrop-blur-md",
+                  "absolute left-1/2 z-[60] flex max-w-[calc(100%-1rem)] -translate-x-1/2 items-center gap-1 overflow-x-auto rounded-xl border border-white/10 bg-[oklch(0.10_0.03_265/0.82)] p-1 text-[10px] shadow-lg backdrop-blur-md",
                   isFullscreen ? "bottom-4 sm:bottom-5" : "bottom-3",
                 )}
                 role="toolbar"
