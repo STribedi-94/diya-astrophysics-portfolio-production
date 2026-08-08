@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "project": "Diya Astrophysics Portfolio",
+  "system": "Project Astra",
+  "observatory": "uGMRT",
+  "sourceFoundation": {
+    "totalImages": 6,
+    "userSuppliedImages": 4,
+    "officialNcraGmrtImages": 2,
+    "sourceOriginalsModified": false,
+    "semanticPreparedCopiesCreated": true,
+    "byteIntegrityVerified": true
+  },
+  "classificationSummary": {
+    "reconstructionReferences": 6,
+    "cinematicCandidates": 5,
+    "publicCandidates": 4,
+    "galleryCandidates": 3
+  },
+  "scientificStory": {
+    "facility": "upgraded Giant Metrewave Radio Telescope",
+    "shortName": "uGMRT",
+    "institution": "National Centre for Radio Astrophysics, TIFR",
+    "arrayArchitecture": [
+      "30 fully steerable antennas",
+      "45-m diameter antennas",
+      "Hybrid compact central array plus three-arm configuration",
+      "Maximum interferometric baseline approximately 25 km"
+    ],
+    "astraVisualFlow": [
+      "Array environment",
+      "45-m antenna structure",
+      "Radio signal reception",
+      "Receiver / signal chain",
+      "GMRT Wideband Backend",
+      "Correlation and visibility generation",
+      "Calibration and imaging",
+      "Scientific analysis"
+    ],
+    "backendVisualizationPolicy": "Create a sourced procedural GWB/backend visualization during Project Astra implementation instead of depending on a copied backend hardware photograph.",
+    "diyaResearchLayer": {
+      "category": "Radio observations of magnetically active M-dwarfs",
+      "reductionEnvironment": [
+        "AIPS",
+        "CASA"
+      ],
+      "workflow": [
+        "RFI flagging",
+        "Calibration",
+        "Imaging",
+        "Self-calibration",
+        "Flux-density / source analysis"
+      ],
+      "researchConnections": [
+        "GJ 1151",
+        "GJ 398",
+        "AD Leo"
+      ]
+    }
+  },
+  "records": [
+    {
+      "provenance": "USER_SUPPLIED",
+      "sourceFile": "GMRT_antenna_through_the_fields.jpg",
+      "preparedFile": "ugmrt-antenna-through-fields-day-01.jpg",
+      "role": "ENVIRONMENTAL_ANTENNA_REFERENCE",
+      "reconstructionReference": true,
+      "cinematicCandidate": false,
+      "publicCandidate": false,
+      "galleryCandidate": false,
+      "notes": "Low-resolution environmental reference showing a GMRT antenna within surrounding fields.",
+      "sourcePath": "asset-preparation/observatories/ugmrt/source/user-originals/GMRT_antenna_through_the_fields.jpg",
+      "preparedPath": "asset-preparation/observatories/ugmrt/prepared/images/ugmrt-antenna-through-fields-day-01.jpg",
+      "sourceBytes": 25568,
+      "preparedBytes": 25568,
+      "sourceSha256": "c1fe5d0448f747901815f248015dcb0cf03fbdd0f93870bfd578823c31888fd3",
+      "preparedSha256": "c1fe5d0448f747901815f248015dcb0cf03fbdd0f93870bfd578823c31888fd3",
+      "byteIdenticalPreparedCopy": true,
+      "sourceOriginalModified": false,
+      "preparationState": "SEMANTIC_COPY_VERIFIED"
+    },
+    {
+      "provenance": "USER_SUPPLIED",
+      "sourceFile": "gmrt.jpg",
+      "preparedFile": "ugmrt-single-antenna-road-approach-day-01.jpg",
+      "role": "SINGLE_ANTENNA_APPROACH",
+      "reconstructionReference": true,
+      "cinematicCandidate": true,
+      "publicCandidate": true,
+      "galleryCandidate": false,
+      "notes": "Useful close physical approach view of an individual GMRT antenna.",
+      "sourcePath": "asset-preparation/observatories/ugmrt/source/user-originals/gmrt.jpg",
+      "preparedPath": "asset-preparation/observatories/ugmrt/prepared/images/ugmrt-single-antenna-road-approach-day-01.jpg",
+      "sourceBytes": 51714,
+      "preparedBytes": 51714,
+      "sourceSha256": "1fa4b284a25542510546776bd69601afc716ed2634fc7e6bb57e7552eae3e419",
+      "preparedSha256": "1fa4b284a25542510546776bd69601afc716ed2634fc7e6bb57e7552eae3e419",
+      "byteIdenticalPreparedCopy": true,
+      "sourceOriginalModified": false,
+      "preparationState": "SEMANTIC_COPY_VERIFIED"
+    },
+    {
+      "provenance": "USER_SUPPLIED",
+      "sourceFile": "gmrt12.jpg",
+      "preparedFile": "ugmrt-multiple-antennas-landscape-day-01.jpg",
+      "role": "MULTI_ANTENNA_ARRAY_VIEW",
+      "reconstructionReference": true,
+      "cinematicCandidate": true,
+      "publicCandidate": true,
+      "galleryCandidate": true,
+      "notes": "Strong user-supplied multi-antenna view suitable for array-scale visual storytelling.",
+      "sourcePath": "asset-preparation/observatories/ugmrt/source/user-originals/gmrt12.jpg",
+      "preparedPath": "asset-preparation/observatories/ugmrt/prepared/images/ugmrt-multiple-antennas-landscape-day-01.jpg",
+      "sourceBytes": 133407,
+      "preparedBytes": 133407,
+      "sourceSha256": "343e926e3388f8acb1f5f071c6745f70f2370c5e34df8f777e4b02a75496c71a",
+      "preparedSha256": "343e926e3388f8acb1f5f071c6745f70f2370c5e34df8f777e4b02a75496c71a",
+      "byteIdenticalPreparedCopy": true,
+      "sourceOriginalModified": false,
+      "preparationState": "SEMANTIC_COPY_VERIFIED"
+    },
+    {
+      "provenance": "USER_SUPPLIED",
+      "sourceFile": "images.jpg",
+      "preparedFile": "ugmrt-multiple-antennas-secondary-day-01.jpg",
+      "role": "SECONDARY_ARRAY_REFERENCE",
+      "reconstructionReference": true,
+      "cinematicCandidate": true,
+      "publicCandidate": false,
+      "galleryCandidate": false,
+      "notes": "Secondary multi-antenna reference retained primarily for reconstruction and visual comparison.",
+      "sourcePath": "asset-preparation/observatories/ugmrt/source/user-originals/images.jpg",
+      "preparedPath": "asset-preparation/observatories/ugmrt/prepared/images/ugmrt-multiple-antennas-secondary-day-01.jpg",
+      "sourceBytes": 28251,
+      "preparedBytes": 28251,
+      "sourceSha256": "2c1dbb993b09d3d2a2f98deaa3cb01f57027bcf00a227fe7a4d187c51d16dbec",
+      "preparedSha256": "2c1dbb993b09d3d2a2f98deaa3cb01f57027bcf00a227fe7a4d187c51d16dbec",
+      "byteIdenticalPreparedCopy": true,
+      "sourceOriginalModified": false,
+      "preparationState": "SEMANTIC_COPY_VERIFIED"
+    },
+    {
+      "provenance": "OFFICIAL_NCRA_GMRT",
+      "sourceFile": "blue-sky2-h.jpg",
+      "preparedFile": "ugmrt-three-antennas-blue-twilight-01.jpg",
+      "role": "PRIMARY_ANTENNA_CINEMATIC_REVEAL",
+      "reconstructionReference": true,
+      "cinematicCandidate": true,
+      "publicCandidate": true,
+      "galleryCandidate": true,
+      "notes": "Official GMRT/NCRA supplementary photograph selected as the primary structural/cinematic antenna reveal.",
+      "sourcePath": "asset-preparation/observatories/ugmrt/source/official-web/blue-sky2-h.jpg",
+      "preparedPath": "asset-preparation/observatories/ugmrt/prepared/images/ugmrt-three-antennas-blue-twilight-01.jpg",
+      "sourceBytes": 2044831,
+      "preparedBytes": 2044831,
+      "sourceSha256": "04909855a5d0de16c6f9319674d2a6bb4cfc1d34fc5fed8d2c015816aeddf4a5",
+      "preparedSha256": "04909855a5d0de16c6f9319674d2a6bb4cfc1d34fc5fed8d2c015816aeddf4a5",
+      "byteIdenticalPreparedCopy": true,
+      "sourceOriginalModified": false,
+      "preparationState": "SEMANTIC_COPY_VERIFIED"
+    },
+    {
+      "provenance": "OFFICIAL_NCRA_GMRT",
+      "sourceFile": "gmrt_lake.jpg",
+      "preparedFile": "ugmrt-array-water-reflection-day-01.jpg",
+      "role": "PRIMARY_ARRAY_ENVIRONMENT",
+      "reconstructionReference": true,
+      "cinematicCandidate": true,
+      "publicCandidate": true,
+      "galleryCandidate": true,
+      "notes": "Official GMRT/NCRA supplementary environmental photograph showing antenna reflection and multiple-array context.",
+      "sourcePath": "asset-preparation/observatories/ugmrt/source/official-web/gmrt_lake.jpg",
+      "preparedPath": "asset-preparation/observatories/ugmrt/prepared/images/ugmrt-array-water-reflection-day-01.jpg",
+      "sourceBytes": 565880,
+      "preparedBytes": 565880,
+      "sourceSha256": "81c072e58158702bc295adc6164d6e3620b327311474ca68a11ba429289124f5",
+      "preparedSha256": "81c072e58158702bc295adc6164d6e3620b327311474ca68a11ba429289124f5",
+      "byteIdenticalPreparedCopy": true,
+      "sourceOriginalModified": false,
+      "preparationState": "SEMANTIC_COPY_VERIFIED"
+    }
+  ]
+}

@@ -1,0 +1,757 @@
+{
+  "schemaVersion": 1,
+  "project": "Diya Astrophysics Portfolio",
+  "system": "Project Astra",
+  "observatory": "uGMRT",
+  "status": {
+    "implementationAssetPlanningComplete": true,
+    "majorAssetClassificationDecisionsRemaining": false,
+    "sourceOriginalsProtected": true,
+    "totalPreparedAssets": 6,
+    "selectedNewV1Assets": 4,
+    "referenceOnlyAssets": 2,
+    "galleryStoryAssets": 3,
+    "cinematicSequenceLocked": true,
+    "scientificPipelineLocked": true,
+    "GWBVisualizationLocked": true,
+    "webOptimizationStillRequired": false,
+    "productionDerivativesGenerated": true,
+    "productionDerivativeCount": 8,
+    "ugmrtAssetFoundationReady": true
+  },
+  "selectedAssets": [
+    {
+      "file": "ugmrt-array-water-reflection-day-01.jpg",
+      "provenance": "OFFICIAL_NCRA_GMRT",
+      "role": "ARRAY_ENVIRONMENT_HERO",
+      "order": 1,
+      "gallerySelected": true,
+      "usage": "Primary wide-array environmental establishing image"
+    },
+    {
+      "file": "ugmrt-single-antenna-road-approach-day-01.jpg",
+      "provenance": "USER_SUPPLIED",
+      "role": "SINGLE_ANTENNA_APPROACH",
+      "order": 2,
+      "gallerySelected": false,
+      "usage": "Physical approach toward an individual 45-m antenna"
+    },
+    {
+      "file": "ugmrt-three-antennas-blue-twilight-01.jpg",
+      "provenance": "OFFICIAL_NCRA_GMRT",
+      "role": "PRIMARY_ANTENNA_REVEAL",
+      "order": 3,
+      "gallerySelected": true,
+      "usage": "Primary structural/cinematic antenna reveal"
+    },
+    {
+      "file": "ugmrt-multiple-antennas-landscape-day-01.jpg",
+      "provenance": "USER_SUPPLIED",
+      "role": "INTERFEROMETRIC_ARRAY_CONTEXT",
+      "order": 4,
+      "gallerySelected": true,
+      "usage": "Multi-antenna interferometric-array context"
+    }
+  ],
+  "referenceOnly": [
+    "ugmrt-antenna-through-fields-day-01.jpg",
+    "ugmrt-multiple-antennas-secondary-day-01.jpg"
+  ],
+  "cinematicSequence": [
+    {
+      "order": 1,
+      "type": "REAL_IMAGE",
+      "asset": "ugmrt-array-water-reflection-day-01.jpg",
+      "stage": "uGMRT Array Environment"
+    },
+    {
+      "order": 2,
+      "type": "SCIENTIFIC_LAYER",
+      "stage": "Interferometer Architecture",
+      "content": [
+        "30 fully steerable antennas",
+        "45-m antenna diameter",
+        "Compact central array",
+        "Three Y-shaped arms",
+        "Maximum baseline approximately 25 km"
+      ]
+    },
+    {
+      "order": 3,
+      "type": "REAL_IMAGE",
+      "asset": "ugmrt-single-antenna-road-approach-day-01.jpg",
+      "stage": "Approaching a 45-m Antenna"
+    },
+    {
+      "order": 4,
+      "type": "REAL_IMAGE",
+      "asset": "ugmrt-three-antennas-blue-twilight-01.jpg",
+      "stage": "Antenna Structural Reveal"
+    },
+    {
+      "order": 5,
+      "type": "SIGNAL_LAYER",
+      "stage": "Radio Signal Reception",
+      "content": [
+        "Parabolic reflector",
+        "Feed and receiver chain",
+        "Broadband radio-frequency signal",
+        "Signal transport toward central processing"
+      ]
+    },
+    {
+      "order": 6,
+      "type": "PROCEDURAL_VISUALIZATION",
+      "stage": "GMRT Wideband Backend",
+      "shortName": "GWB",
+      "content": [
+        "Digitized antenna signals",
+        "Wideband digital processing",
+        "Interferometric correlation",
+        "Visibility generation"
+      ],
+      "rule": "Create as sourced procedural visualization during Project Astra implementation."
+    },
+    {
+      "order": 7,
+      "type": "DATA_LAYER",
+      "stage": "Raw Interferometric Visibilities",
+      "content": [
+        "Time-frequency visibility data",
+        "Radio-frequency interference",
+        "Calibrator and target observations"
+      ]
+    },
+    {
+      "order": 8,
+      "type": "PIPELINE_LAYER",
+      "stage": "Common Reduction Workflow",
+      "content": [
+        "RFI flagging",
+        "Flux calibration",
+        "Bandpass calibration",
+        "Delay calibration",
+        "Complex gain calibration",
+        "Wide-field imaging",
+        "Self-calibration"
+      ]
+    },
+    {
+      "order": 9,
+      "type": "PIPELINE_SPLIT",
+      "stage": "Independent AIPS + CASA Verification",
+      "AIPS": [
+        "Bad-data / closure inspection",
+        "Flux-scale calibration",
+        "Phase self-calibration",
+        "Amplitude + phase self-calibration",
+        "IMAGR",
+        "Final radio image"
+      ],
+      "CASA": [
+        "FLAGDATA",
+        "SETJY",
+        "GAINCAL",
+        "BANDPASS",
+        "FLUXSCALE",
+        "APPLYCAL",
+        "MSTRANSFORM",
+        "TCLEAN",
+        "Self-calibration"
+      ],
+      "scientificReason": "Independent reduction paths strengthen reliability, especially for marginal detections and non-detections."
+    },
+    {
+      "order": 10,
+      "type": "REAL_IMAGE",
+      "asset": "ugmrt-multiple-antennas-landscape-day-01.jpg",
+      "stage": "Array Science Context"
+    },
+    {
+      "order": 11,
+      "type": "RESEARCH_CONNECTION",
+      "stage": "Diya's Radio Astronomy Research",
+      "content": [
+        "GJ 1151",
+        "GJ 398",
+        "AD Leo",
+        "Radio magnetic activity",
+        "Coherent-emission searches",
+        "Star-planet interaction constraints"
+      ]
+    }
+  ],
+  "galleryStory": [
+    {
+      "order": 1,
+      "asset": "ugmrt-array-water-reflection-day-01.jpg",
+      "provenance": "OFFICIAL_NCRA_GMRT",
+      "role": "Wide uGMRT array environment"
+    },
+    {
+      "order": 2,
+      "asset": "ugmrt-three-antennas-blue-twilight-01.jpg",
+      "provenance": "OFFICIAL_NCRA_GMRT",
+      "role": "45-m antenna structural portrait"
+    },
+    {
+      "order": 3,
+      "asset": "ugmrt-multiple-antennas-landscape-day-01.jpg",
+      "provenance": "USER_SUPPLIED",
+      "role": "Interferometric multi-antenna context"
+    }
+  ],
+  "scientificImplementation": {
+    "facility": "upgraded Giant Metrewave Radio Telescope",
+    "shortName": "uGMRT",
+    "institution": "National Centre for Radio Astrophysics, TIFR",
+    "array": {
+      "numberOfAntennas": 30,
+      "antennaDiameter": "45 m",
+      "layout": "Compact central array plus three Y-shaped arms",
+      "maximumBaseline": "approximately 25 km"
+    },
+    "backend": {
+      "name": "GMRT Wideband Backend",
+      "shortName": "GWB",
+      "presentation": "Procedural scientific visualization",
+      "purpose": [
+        "Wideband digital processing",
+        "Correlation",
+        "Visibility generation"
+      ]
+    },
+    "diyaPipeline": {
+      "commonSteps": [
+        "RFI flagging",
+        "Flux calibration",
+        "Bandpass calibration",
+        "Delay calibration",
+        "Complex gain calibration",
+        "Wide-field imaging",
+        "Self-calibration"
+      ],
+      "AIPS": [
+        "Flagging and bad-data inspection",
+        "Flux-scale calibration",
+        "Phase self-calibration",
+        "Amplitude + phase self-calibration",
+        "IMAGR"
+      ],
+      "CASA": [
+        "FLAGDATA",
+        "SETJY",
+        "GAINCAL",
+        "BANDPASS",
+        "FLUXSCALE",
+        "APPLYCAL",
+        "MSTRANSFORM",
+        "TCLEAN",
+        "Self-calibration"
+      ]
+    },
+    "researchConnections": [
+      "GJ 1151",
+      "GJ 398",
+      "AD Leo"
+    ],
+    "implementationRules": [
+      "Use this manifest as the authoritative uGMRT Astra v1 asset plan.",
+      "Do not reopen uGMRT image-selection planning during implementation.",
+      "Preserve OFFICIAL_NCRA_GMRT provenance.",
+      "Do not portray an antenna photograph as GWB hardware.",
+      "Construct the GWB layer procedurally from sourced technical information.",
+      "Keep AIPS and CASA as explicit independent reduction branches.",
+      "Existing src/assets/facility-ugmrt.jpg remains reusable for existing facility UI where required.",
+      "Publication PDFs, previews and thumbnails are research-document assets and must not be treated as duplicate facility imagery."
+    ]
+  },
+  "existingFacilityAsset": {
+    "path": "src/assets/facility-ugmrt.jpg",
+    "exists": true,
+    "decision": "KEEP_AND_REUSE_FOR_EXISTING_UI_WHERE_REQUIRED",
+    "replacementRequiredNow": false,
+    "role": "Existing website facility thumbnail / legacy facility representation",
+    "bytes": 62440,
+    "sha256": "b9f02b640bb2671a1421cbe3acb3981558f0e8f422f80536457fe420a89a40e6"
+  },
+  "records": [
+    {
+      "provenance": "USER_SUPPLIED",
+      "sourceFile": "GMRT_antenna_through_the_fields.jpg",
+      "preparedFile": "ugmrt-antenna-through-fields-day-01.jpg",
+      "role": "ENVIRONMENTAL_ANTENNA_REFERENCE",
+      "reconstructionReference": true,
+      "cinematicCandidate": false,
+      "publicCandidate": false,
+      "galleryCandidate": false,
+      "notes": "Low-resolution environmental reference showing a GMRT antenna within surrounding fields.",
+      "sourcePath": "asset-preparation/observatories/ugmrt/source/user-originals/GMRT_antenna_through_the_fields.jpg",
+      "preparedPath": "asset-preparation/observatories/ugmrt/prepared/images/ugmrt-antenna-through-fields-day-01.jpg",
+      "sourceBytes": 25568,
+      "preparedBytes": 25568,
+      "sourceSha256": "c1fe5d0448f747901815f248015dcb0cf03fbdd0f93870bfd578823c31888fd3",
+      "preparedSha256": "c1fe5d0448f747901815f248015dcb0cf03fbdd0f93870bfd578823c31888fd3",
+      "byteIdenticalPreparedCopy": true,
+      "sourceOriginalModified": false,
+      "preparationState": "SEMANTIC_COPY_VERIFIED",
+      "finalClassification": {
+        "class": "REFERENCE_ONLY",
+        "productionSelected": false,
+        "gallerySelected": false,
+        "reconstructionReference": true,
+        "role": "Low-resolution rural antenna/environment reference"
+      },
+      "finalClassificationLocked": true,
+      "implementationState": "REFERENCE_ONLY",
+      "productionSelected": false,
+      "implementationRole": "RECONSTRUCTION_REFERENCE",
+      "implementationOrder": null,
+      "gallerySelected": false,
+      "optimizationState": "NOT_REQUIRED_FOR_V1_PUBLIC_DELIVERY",
+      "finalSelectionLocked": true
+    },
+    {
+      "provenance": "USER_SUPPLIED",
+      "sourceFile": "gmrt.jpg",
+      "preparedFile": "ugmrt-single-antenna-road-approach-day-01.jpg",
+      "role": "SINGLE_ANTENNA_APPROACH",
+      "reconstructionReference": true,
+      "cinematicCandidate": true,
+      "publicCandidate": true,
+      "galleryCandidate": false,
+      "notes": "Useful close physical approach view of an individual GMRT antenna.",
+      "sourcePath": "asset-preparation/observatories/ugmrt/source/user-originals/gmrt.jpg",
+      "preparedPath": "asset-preparation/observatories/ugmrt/prepared/images/ugmrt-single-antenna-road-approach-day-01.jpg",
+      "sourceBytes": 51714,
+      "preparedBytes": 51714,
+      "sourceSha256": "1fa4b284a25542510546776bd69601afc716ed2634fc7e6bb57e7552eae3e419",
+      "preparedSha256": "1fa4b284a25542510546776bd69601afc716ed2634fc7e6bb57e7552eae3e419",
+      "byteIdenticalPreparedCopy": true,
+      "sourceOriginalModified": false,
+      "preparationState": "SEMANTIC_COPY_VERIFIED",
+      "finalClassification": {
+        "class": "PUBLIC_CINEMATIC",
+        "productionSelected": true,
+        "gallerySelected": false,
+        "reconstructionReference": true,
+        "role": "Physical approach toward an individual 45-m antenna"
+      },
+      "finalClassificationLocked": true,
+      "implementationState": "SELECTED_FOR_UGMRT_V1",
+      "productionSelected": true,
+      "implementationRole": "SINGLE_ANTENNA_APPROACH",
+      "implementationOrder": 2,
+      "gallerySelected": false,
+      "optimizationState": "REQUIRED",
+      "finalSelectionLocked": true
+    },
+    {
+      "provenance": "USER_SUPPLIED",
+      "sourceFile": "gmrt12.jpg",
+      "preparedFile": "ugmrt-multiple-antennas-landscape-day-01.jpg",
+      "role": "MULTI_ANTENNA_ARRAY_VIEW",
+      "reconstructionReference": true,
+      "cinematicCandidate": true,
+      "publicCandidate": true,
+      "galleryCandidate": true,
+      "notes": "Strong user-supplied multi-antenna view suitable for array-scale visual storytelling.",
+      "sourcePath": "asset-preparation/observatories/ugmrt/source/user-originals/gmrt12.jpg",
+      "preparedPath": "asset-preparation/observatories/ugmrt/prepared/images/ugmrt-multiple-antennas-landscape-day-01.jpg",
+      "sourceBytes": 133407,
+      "preparedBytes": 133407,
+      "sourceSha256": "343e926e3388f8acb1f5f071c6745f70f2370c5e34df8f777e4b02a75496c71a",
+      "preparedSha256": "343e926e3388f8acb1f5f071c6745f70f2370c5e34df8f777e4b02a75496c71a",
+      "byteIdenticalPreparedCopy": true,
+      "sourceOriginalModified": false,
+      "preparationState": "SEMANTIC_COPY_VERIFIED",
+      "finalClassification": {
+        "class": "PUBLIC_CINEMATIC_AND_GALLERY",
+        "productionSelected": true,
+        "gallerySelected": true,
+        "reconstructionReference": true,
+        "role": "User-supplied multi-antenna array view"
+      },
+      "finalClassificationLocked": true,
+      "implementationState": "SELECTED_FOR_UGMRT_V1",
+      "productionSelected": true,
+      "implementationRole": "INTERFEROMETRIC_ARRAY_CONTEXT",
+      "implementationOrder": 4,
+      "gallerySelected": true,
+      "optimizationState": "REQUIRED",
+      "finalSelectionLocked": true
+    },
+    {
+      "provenance": "USER_SUPPLIED",
+      "sourceFile": "images.jpg",
+      "preparedFile": "ugmrt-multiple-antennas-secondary-day-01.jpg",
+      "role": "SECONDARY_ARRAY_REFERENCE",
+      "reconstructionReference": true,
+      "cinematicCandidate": true,
+      "publicCandidate": false,
+      "galleryCandidate": false,
+      "notes": "Secondary multi-antenna reference retained primarily for reconstruction and visual comparison.",
+      "sourcePath": "asset-preparation/observatories/ugmrt/source/user-originals/images.jpg",
+      "preparedPath": "asset-preparation/observatories/ugmrt/prepared/images/ugmrt-multiple-antennas-secondary-day-01.jpg",
+      "sourceBytes": 28251,
+      "preparedBytes": 28251,
+      "sourceSha256": "2c1dbb993b09d3d2a2f98deaa3cb01f57027bcf00a227fe7a4d187c51d16dbec",
+      "preparedSha256": "2c1dbb993b09d3d2a2f98deaa3cb01f57027bcf00a227fe7a4d187c51d16dbec",
+      "byteIdenticalPreparedCopy": true,
+      "sourceOriginalModified": false,
+      "preparationState": "SEMANTIC_COPY_VERIFIED",
+      "finalClassification": {
+        "class": "REFERENCE_ONLY",
+        "productionSelected": false,
+        "gallerySelected": false,
+        "reconstructionReference": true,
+        "role": "Secondary multi-antenna reconstruction reference"
+      },
+      "finalClassificationLocked": true,
+      "implementationState": "REFERENCE_ONLY",
+      "productionSelected": false,
+      "implementationRole": "RECONSTRUCTION_REFERENCE",
+      "implementationOrder": null,
+      "gallerySelected": false,
+      "optimizationState": "NOT_REQUIRED_FOR_V1_PUBLIC_DELIVERY",
+      "finalSelectionLocked": true
+    },
+    {
+      "provenance": "OFFICIAL_NCRA_GMRT",
+      "sourceFile": "blue-sky2-h.jpg",
+      "preparedFile": "ugmrt-three-antennas-blue-twilight-01.jpg",
+      "role": "PRIMARY_ANTENNA_CINEMATIC_REVEAL",
+      "reconstructionReference": true,
+      "cinematicCandidate": true,
+      "publicCandidate": true,
+      "galleryCandidate": true,
+      "notes": "Official GMRT/NCRA supplementary photograph selected as the primary structural/cinematic antenna reveal.",
+      "sourcePath": "asset-preparation/observatories/ugmrt/source/official-web/blue-sky2-h.jpg",
+      "preparedPath": "asset-preparation/observatories/ugmrt/prepared/images/ugmrt-three-antennas-blue-twilight-01.jpg",
+      "sourceBytes": 2044831,
+      "preparedBytes": 2044831,
+      "sourceSha256": "04909855a5d0de16c6f9319674d2a6bb4cfc1d34fc5fed8d2c015816aeddf4a5",
+      "preparedSha256": "04909855a5d0de16c6f9319674d2a6bb4cfc1d34fc5fed8d2c015816aeddf4a5",
+      "byteIdenticalPreparedCopy": true,
+      "sourceOriginalModified": false,
+      "preparationState": "SEMANTIC_COPY_VERIFIED",
+      "finalClassification": {
+        "class": "PRIMARY_PUBLIC_HERO",
+        "productionSelected": true,
+        "gallerySelected": true,
+        "reconstructionReference": true,
+        "role": "Primary official antenna structural/cinematic reveal"
+      },
+      "finalClassificationLocked": true,
+      "implementationState": "SELECTED_FOR_UGMRT_V1",
+      "productionSelected": true,
+      "implementationRole": "PRIMARY_ANTENNA_REVEAL",
+      "implementationOrder": 3,
+      "gallerySelected": true,
+      "optimizationState": "REQUIRED",
+      "finalSelectionLocked": true
+    },
+    {
+      "provenance": "OFFICIAL_NCRA_GMRT",
+      "sourceFile": "gmrt_lake.jpg",
+      "preparedFile": "ugmrt-array-water-reflection-day-01.jpg",
+      "role": "PRIMARY_ARRAY_ENVIRONMENT",
+      "reconstructionReference": true,
+      "cinematicCandidate": true,
+      "publicCandidate": true,
+      "galleryCandidate": true,
+      "notes": "Official GMRT/NCRA supplementary environmental photograph showing antenna reflection and multiple-array context.",
+      "sourcePath": "asset-preparation/observatories/ugmrt/source/official-web/gmrt_lake.jpg",
+      "preparedPath": "asset-preparation/observatories/ugmrt/prepared/images/ugmrt-array-water-reflection-day-01.jpg",
+      "sourceBytes": 565880,
+      "preparedBytes": 565880,
+      "sourceSha256": "81c072e58158702bc295adc6164d6e3620b327311474ca68a11ba429289124f5",
+      "preparedSha256": "81c072e58158702bc295adc6164d6e3620b327311474ca68a11ba429289124f5",
+      "byteIdenticalPreparedCopy": true,
+      "sourceOriginalModified": false,
+      "preparationState": "SEMANTIC_COPY_VERIFIED",
+      "finalClassification": {
+        "class": "PRIMARY_PUBLIC_ENVIRONMENT",
+        "productionSelected": true,
+        "gallerySelected": true,
+        "reconstructionReference": true,
+        "role": "Primary official wide-array environmental image"
+      },
+      "finalClassificationLocked": true,
+      "implementationState": "SELECTED_FOR_UGMRT_V1",
+      "productionSelected": true,
+      "implementationRole": "ARRAY_ENVIRONMENT_HERO",
+      "implementationOrder": 1,
+      "gallerySelected": true,
+      "optimizationState": "REQUIRED",
+      "finalSelectionLocked": true
+    }
+  ],
+  "derivativePolicy": {
+    "format": "JPEG",
+    "large": {
+      "maxLongEdge": 1920,
+      "quality": 90
+    },
+    "standard": {
+      "maxLongEdge": 1280,
+      "quality": 88
+    },
+    "preserveAspectRatio": true,
+    "noUpscaling": true,
+    "sourceOriginalsModified": false,
+    "preparedReferencesModified": false
+  },
+  "productionAssets": [
+    {
+      "file": "ugmrt-array-water-reflection-day-01.jpg",
+      "provenance": "OFFICIAL_NCRA_GMRT",
+      "role": "ARRAY_ENVIRONMENT_HERO",
+      "order": 1,
+      "gallerySelected": true,
+      "usage": "Primary wide-array environmental establishing image",
+      "productionState": "READY_FOR_IMPLEMENTATION",
+      "derivatives": {
+        "large": {
+          "sourceFile": "ugmrt-array-water-reflection-day-01.jpg",
+          "variant": "large",
+          "format": "JPEG",
+          "maxLongEdge": 1920,
+          "quality": 90,
+          "relativePath": "asset-preparation/observatories/ugmrt/production-ready/images/large/ugmrt-array-water-reflection-day-01.jpg",
+          "bytes": 485780,
+          "sha256": "158ad00337683866170ef1f42f312f295854b382b16cf44e773df6b9a6b1cd4b",
+          "transformation": "RESIZED_OR_REENCODED_JPEG"
+        },
+        "standard": {
+          "sourceFile": "ugmrt-array-water-reflection-day-01.jpg",
+          "variant": "standard",
+          "format": "JPEG",
+          "maxLongEdge": 1280,
+          "quality": 88,
+          "relativePath": "asset-preparation/observatories/ugmrt/production-ready/images/standard/ugmrt-array-water-reflection-day-01.jpg",
+          "bytes": 183807,
+          "sha256": "94f75a60ef0b5c5a63aa006046ee59c4d2344a676fd70c40c193d56a9bc012e5",
+          "transformation": "RESIZED_OR_REENCODED_JPEG"
+        }
+      },
+      "recommendedDelivery": {
+        "cinematicDesktop": "large",
+        "fullscreen": "large",
+        "galleryDesktop": "standard",
+        "tablet": "standard",
+        "mobile": "standard"
+      }
+    },
+    {
+      "file": "ugmrt-single-antenna-road-approach-day-01.jpg",
+      "provenance": "USER_SUPPLIED",
+      "role": "SINGLE_ANTENNA_APPROACH",
+      "order": 2,
+      "gallerySelected": false,
+      "usage": "Physical approach toward an individual 45-m antenna",
+      "productionState": "READY_FOR_IMPLEMENTATION",
+      "derivatives": {
+        "large": {
+          "sourceFile": "ugmrt-single-antenna-road-approach-day-01.jpg",
+          "variant": "large",
+          "format": "JPEG",
+          "maxLongEdge": 1920,
+          "quality": 90,
+          "relativePath": "asset-preparation/observatories/ugmrt/production-ready/images/large/ugmrt-single-antenna-road-approach-day-01.jpg",
+          "bytes": 74160,
+          "sha256": "d8ae3a0c7e4d88c33e9a2b2dc381ad52560a37bf9e28e46236ba1c393591e7bc",
+          "transformation": "RESIZED_OR_REENCODED_JPEG"
+        },
+        "standard": {
+          "sourceFile": "ugmrt-single-antenna-road-approach-day-01.jpg",
+          "variant": "standard",
+          "format": "JPEG",
+          "maxLongEdge": 1280,
+          "quality": 88,
+          "relativePath": "asset-preparation/observatories/ugmrt/production-ready/images/standard/ugmrt-single-antenna-road-approach-day-01.jpg",
+          "bytes": 68972,
+          "sha256": "6072879b3d6b0704bb080e81a3cbca0a14bd3b34d6346509314c9631eacf02fe",
+          "transformation": "RESIZED_OR_REENCODED_JPEG"
+        }
+      },
+      "recommendedDelivery": {
+        "cinematicDesktop": "large",
+        "fullscreen": "large",
+        "galleryDesktop": "standard",
+        "tablet": "standard",
+        "mobile": "standard"
+      }
+    },
+    {
+      "file": "ugmrt-three-antennas-blue-twilight-01.jpg",
+      "provenance": "OFFICIAL_NCRA_GMRT",
+      "role": "PRIMARY_ANTENNA_REVEAL",
+      "order": 3,
+      "gallerySelected": true,
+      "usage": "Primary structural/cinematic antenna reveal",
+      "productionState": "READY_FOR_IMPLEMENTATION",
+      "derivatives": {
+        "large": {
+          "sourceFile": "ugmrt-three-antennas-blue-twilight-01.jpg",
+          "variant": "large",
+          "format": "JPEG",
+          "maxLongEdge": 1920,
+          "quality": 90,
+          "relativePath": "asset-preparation/observatories/ugmrt/production-ready/images/large/ugmrt-three-antennas-blue-twilight-01.jpg",
+          "bytes": 663395,
+          "sha256": "2ba9cd968c112bc733081b683aa9d05ba928f803d68336ed319d2262a3397896",
+          "transformation": "RESIZED_OR_REENCODED_JPEG"
+        },
+        "standard": {
+          "sourceFile": "ugmrt-three-antennas-blue-twilight-01.jpg",
+          "variant": "standard",
+          "format": "JPEG",
+          "maxLongEdge": 1280,
+          "quality": 88,
+          "relativePath": "asset-preparation/observatories/ugmrt/production-ready/images/standard/ugmrt-three-antennas-blue-twilight-01.jpg",
+          "bytes": 271822,
+          "sha256": "e60184b92554684dbb6d867b8f115178136a113ddac08050209d3c734157b52d",
+          "transformation": "RESIZED_OR_REENCODED_JPEG"
+        }
+      },
+      "recommendedDelivery": {
+        "cinematicDesktop": "large",
+        "fullscreen": "large",
+        "galleryDesktop": "standard",
+        "tablet": "standard",
+        "mobile": "standard"
+      }
+    },
+    {
+      "file": "ugmrt-multiple-antennas-landscape-day-01.jpg",
+      "provenance": "USER_SUPPLIED",
+      "role": "INTERFEROMETRIC_ARRAY_CONTEXT",
+      "order": 4,
+      "gallerySelected": true,
+      "usage": "Multi-antenna interferometric-array context",
+      "productionState": "READY_FOR_IMPLEMENTATION",
+      "derivatives": {
+        "large": {
+          "sourceFile": "ugmrt-multiple-antennas-landscape-day-01.jpg",
+          "variant": "large",
+          "format": "JPEG",
+          "maxLongEdge": 1920,
+          "quality": 90,
+          "relativePath": "asset-preparation/observatories/ugmrt/production-ready/images/large/ugmrt-multiple-antennas-landscape-day-01.jpg",
+          "bytes": 116934,
+          "sha256": "9bbfe38d25a3246f247efc47d3c2aa006353f86d893f69acfcaff180003f1070",
+          "transformation": "RESIZED_OR_REENCODED_JPEG"
+        },
+        "standard": {
+          "sourceFile": "ugmrt-multiple-antennas-landscape-day-01.jpg",
+          "variant": "standard",
+          "format": "JPEG",
+          "maxLongEdge": 1280,
+          "quality": 88,
+          "relativePath": "asset-preparation/observatories/ugmrt/production-ready/images/standard/ugmrt-multiple-antennas-landscape-day-01.jpg",
+          "bytes": 109260,
+          "sha256": "bf86b6b117df9be2a72f9de2a4e1bc36c513926ada1b8a883ec29ef27a12ac97",
+          "transformation": "RESIZED_OR_REENCODED_JPEG"
+        }
+      },
+      "recommendedDelivery": {
+        "cinematicDesktop": "large",
+        "fullscreen": "large",
+        "galleryDesktop": "standard",
+        "tablet": "standard",
+        "mobile": "standard"
+      }
+    }
+  ],
+  "productionDerivatives": [
+    {
+      "sourceFile": "ugmrt-array-water-reflection-day-01.jpg",
+      "variant": "large",
+      "format": "JPEG",
+      "maxLongEdge": 1920,
+      "quality": 90,
+      "relativePath": "asset-preparation/observatories/ugmrt/production-ready/images/large/ugmrt-array-water-reflection-day-01.jpg",
+      "bytes": 485780,
+      "sha256": "158ad00337683866170ef1f42f312f295854b382b16cf44e773df6b9a6b1cd4b",
+      "transformation": "RESIZED_OR_REENCODED_JPEG"
+    },
+    {
+      "sourceFile": "ugmrt-array-water-reflection-day-01.jpg",
+      "variant": "standard",
+      "format": "JPEG",
+      "maxLongEdge": 1280,
+      "quality": 88,
+      "relativePath": "asset-preparation/observatories/ugmrt/production-ready/images/standard/ugmrt-array-water-reflection-day-01.jpg",
+      "bytes": 183807,
+      "sha256": "94f75a60ef0b5c5a63aa006046ee59c4d2344a676fd70c40c193d56a9bc012e5",
+      "transformation": "RESIZED_OR_REENCODED_JPEG"
+    },
+    {
+      "sourceFile": "ugmrt-single-antenna-road-approach-day-01.jpg",
+      "variant": "large",
+      "format": "JPEG",
+      "maxLongEdge": 1920,
+      "quality": 90,
+      "relativePath": "asset-preparation/observatories/ugmrt/production-ready/images/large/ugmrt-single-antenna-road-approach-day-01.jpg",
+      "bytes": 74160,
+      "sha256": "d8ae3a0c7e4d88c33e9a2b2dc381ad52560a37bf9e28e46236ba1c393591e7bc",
+      "transformation": "RESIZED_OR_REENCODED_JPEG"
+    },
+    {
+      "sourceFile": "ugmrt-single-antenna-road-approach-day-01.jpg",
+      "variant": "standard",
+      "format": "JPEG",
+      "maxLongEdge": 1280,
+      "quality": 88,
+      "relativePath": "asset-preparation/observatories/ugmrt/production-ready/images/standard/ugmrt-single-antenna-road-approach-day-01.jpg",
+      "bytes": 68972,
+      "sha256": "6072879b3d6b0704bb080e81a3cbca0a14bd3b34d6346509314c9631eacf02fe",
+      "transformation": "RESIZED_OR_REENCODED_JPEG"
+    },
+    {
+      "sourceFile": "ugmrt-three-antennas-blue-twilight-01.jpg",
+      "variant": "large",
+      "format": "JPEG",
+      "maxLongEdge": 1920,
+      "quality": 90,
+      "relativePath": "asset-preparation/observatories/ugmrt/production-ready/images/large/ugmrt-three-antennas-blue-twilight-01.jpg",
+      "bytes": 663395,
+      "sha256": "2ba9cd968c112bc733081b683aa9d05ba928f803d68336ed319d2262a3397896",
+      "transformation": "RESIZED_OR_REENCODED_JPEG"
+    },
+    {
+      "sourceFile": "ugmrt-three-antennas-blue-twilight-01.jpg",
+      "variant": "standard",
+      "format": "JPEG",
+      "maxLongEdge": 1280,
+      "quality": 88,
+      "relativePath": "asset-preparation/observatories/ugmrt/production-ready/images/standard/ugmrt-three-antennas-blue-twilight-01.jpg",
+      "bytes": 271822,
+      "sha256": "e60184b92554684dbb6d867b8f115178136a113ddac08050209d3c734157b52d",
+      "transformation": "RESIZED_OR_REENCODED_JPEG"
+    },
+    {
+      "sourceFile": "ugmrt-multiple-antennas-landscape-day-01.jpg",
+      "variant": "large",
+      "format": "JPEG",
+      "maxLongEdge": 1920,
+      "quality": 90,
+      "relativePath": "asset-preparation/observatories/ugmrt/production-ready/images/large/ugmrt-multiple-antennas-landscape-day-01.jpg",
+      "bytes": 116934,
+      "sha256": "9bbfe38d25a3246f247efc47d3c2aa006353f86d893f69acfcaff180003f1070",
+      "transformation": "RESIZED_OR_REENCODED_JPEG"
+    },
+    {
+      "sourceFile": "ugmrt-multiple-antennas-landscape-day-01.jpg",
+      "variant": "standard",
+      "format": "JPEG",
+      "maxLongEdge": 1280,
+      "quality": 88,
+      "relativePath": "asset-preparation/observatories/ugmrt/production-ready/images/standard/ugmrt-multiple-antennas-landscape-day-01.jpg",
+      "bytes": 109260,
+      "sha256": "bf86b6b117df9be2a72f9de2a4e1bc36c513926ada1b8a883ec29ef27a12ac97",
+      "transformation": "RESIZED_OR_REENCODED_JPEG"
+    }
+  ]
+}

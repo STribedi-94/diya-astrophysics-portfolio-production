@@ -1,0 +1,119 @@
+============================================================
+DIYA ASTRA - EXISTING uGMRT / GMRT ASSET AUDIT
+============================================================
+
+PRODUCTION ROOT:
+E:\Diya Portfolio Website\02 - Production\diya-astrophysics-portfolio-production\diya-astrophysics-portfolio-production
+
+============================================================
+TECHNICAL / ORIENTATION STATUS
+============================================================
+
+Prepared source images visually reviewed: 6
+Visually incorrect orientation detected: NO
+Orientation transformation required now: NO
+Source originals modified: NO
+
+============================================================
+SRC MATCHES
+============================================================
+
+MATCH COUNT: 2
+
+src/assets/facility-ugmrt.jpg
+SIZE BYTES: 62440
+SHA-256: b9f02b640bb2671a1421cbe3acb3981558f0e8f422f80536457fe420a89a40e6
+
+------------------------------------------------------------
+
+src/components/ui/radio-group.tsx
+SIZE BYTES: 1441
+SHA-256: 2e71f118a77c7adf6c5cc35923576632d0db62c1db4a4aa2b16acad7a841a43d
+
+------------------------------------------------------------
+
+============================================================
+PUBLIC MATCHES
+============================================================
+
+MATCH COUNT: 7
+
+public/assets/documents/first-author/Magnetic Activities of GJ 1151 Flares in TESS Data and Radio Observation in uGMRT.pdf
+SIZE BYTES: 2491329
+SHA-256: 494abf7bf70580973356ac14900b438c95569cd48b6e8539b3c8ce94004b3d1c
+
+public/assets/documents/first-author/Probing the Magnetic Activity of GJ 398 through TESS Flare Detection and uGMRT Radio Observations.pdf
+SIZE BYTES: 11316791
+SHA-256: 0b906f6b7508a94faea02df4ded50c5768023ec678edf4e486f127eec864c9e7
+
+public/assets/previews/first-author/Magnetic Activities of GJ 1151 Flares in TESS Data and Radio Observation in uGMRT.jpg
+SIZE BYTES: 889146
+SHA-256: 840cf3c2c84e08b78a1ac74a0f01ff46a3d811268af0562201b885741b41fe4b
+
+public/assets/previews/first-author/Probing the Magnetic Activity of GJ 398 through TESS Flare Detection and uGMRT Radio Observations.jpg
+SIZE BYTES: 706857
+SHA-256: d54aeb1f8dec30d1bf70a3463a3d6276ff59ab2b58a0d4483fb8eb90e5068469
+
+public/assets/thumbnails/first-author/Magnetic Activities of GJ 1151 Flares in TESS Data and Radio Observation in uGMRT.webp
+SIZE BYTES: 220158
+SHA-256: dae9827dad915444ca972f95c5ed13b0425faa67810e90038aebb3c5b4058f28
+
+public/assets/thumbnails/first-author/Probing the Magnetic Activity of GJ 398 through TESS Flare Detection and uGMRT Radio Observations.webp
+SIZE BYTES: 168970
+SHA-256: e9d8f2d692f25a694679d5f2363af201f87ade3429ffd4428bced2c9b84c91c0
+
+public/news-demo/radio-array.jpg
+SIZE BYTES: 48720
+SHA-256: d3fcebd2886be39bd1dbcf809d824fca2155ff982cf609da72f35fff846f7e77
+
+============================================================
+uGMRT PREPARED ASSET INVENTORY
+============================================================
+
+PREPARED IMAGE COUNT: 6
+
+ugmrt-antenna-through-fields-day-01.jpg
+ugmrt-array-water-reflection-day-01.jpg
+ugmrt-multiple-antennas-landscape-day-01.jpg
+ugmrt-multiple-antennas-secondary-day-01.jpg
+ugmrt-single-antenna-road-approach-day-01.jpg
+ugmrt-three-antennas-blue-twilight-01.jpg
+
+============================================================
+SCIENTIFIC INTEGRATION LOCK
+============================================================
+
+Facility:
+upgraded Giant Metrewave Radio Telescope (uGMRT)
+
+Institution:
+National Centre for Radio Astrophysics, TIFR
+
+Array architecture:
+30 fully steerable 45-m antennas
+Hybrid compact-central plus Y-arm configuration
+Maximum interferometric baseline approximately 25 km
+
+Scientific backend layer:
+GMRT Wideband Backend (GWB)
+Correlation and visibility generation
+
+Diya reduction layer:
+AIPS + CASA independent workflows
+RFI flagging -> calibration -> imaging -> self-calibration
+
+Research connections:
+GJ 1151
+GJ 398
+AD Leo
+
+Important implementation rule:
+Generic antenna photographs must not be represented as photographs
+of GWB hardware or Diya's reduction pipeline.
+
+The GWB/backend and AIPS/CASA pipeline will be presented as a
+separate scientifically sourced procedural visualization layer.
+
+============================================================
+END OF uGMRT EXISTING-ASSET AUDIT
+============================================================

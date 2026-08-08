@@ -1,0 +1,27 @@
+============================================================
+DIYA ASTRA - uGMRT FINAL CLASSIFICATION REPORT
+============================================================
+
+Prepared assets          : 6
+Selected new V1 assets   : 4
+Reference-only assets    : 2
+Gallery story assets     : 3
+Reconstruction refs      : 6
+
+Existing facility mapped : 1
+
+Orientation normalization required: NO
+Source originals modified: NO
+
+Cinematic sequence locked: YES
+Gallery story locked: YES
+GWB scientific layer locked: YES
+AIPS + CASA pipeline locked: YES
+Research connections locked: YES
+
+NEXT:
+Implementation-ready lock, then optimized production derivatives.
+
+============================================================
+uGMRT FINAL CLASSIFICATION COMPLETE
+============================================================

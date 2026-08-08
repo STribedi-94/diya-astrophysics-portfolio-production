@@ -1,0 +1,33 @@
+============================================================
+DIYA ASTRA - HCT PREPARATION STAGE 1 REPORT
+============================================================
+
+Source images verified       : 9
+Prepared copies created      : 9
+Public candidates            : 7
+Gallery candidates           : 5
+Reconstruction references    : 8
+Illustrative/composite refs  : 1
+
+Original files modified      : NO
+Original files renamed       : NO
+Original files moved         : NO
+Prepared copies recompressed : NO
+SHA-256 integrity check      : PASSED
+
+IMPORTANT SCIENTIFIC RULE:
+HCT facility photographs must not be presented as photographs
+of HFOSC, Grism 7, Grism 8 or Diya's reduction pipeline unless
+a future asset explicitly depicts that instrumentation.
+
+HFOSC / IRAF / Specutils / DER SNR / Monte Carlo information
+will be integrated as a separate scientifically sourced layer.
+
+NEXT:
+Orientation/technical normalization check, existing-production
+asset audit, final classification, implementation lock and
+optimized production derivatives.
+
+============================================================
+HCT PREPARATION STAGE 1 COMPLETE
+============================================================

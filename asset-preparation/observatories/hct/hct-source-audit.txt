@@ -1,0 +1,104 @@
+============================================================
+DIYA ASTRA - HCT / HANLE SOURCE ASSET AUDIT
+============================================================
+
+PRODUCTION ROOT:
+E:\Diya Portfolio Website\02 - Production\diya-astrophysics-portfolio-production\diya-astrophysics-portfolio-production
+
+SOURCE DIRECTORY:
+E:\Diya Portfolio Website\02 - Production\diya-astrophysics-portfolio-production\diya-astrophysics-portfolio-production\asset-preparation\observatories\hct\source\images
+
+------------------------------------------------------------
+SOURCE SUMMARY
+------------------------------------------------------------
+
+Total files in source folder : 9
+Recognized image files       : 9
+Non-image files              : 0
+Total image bytes            : 1699383
+Total image size             : 1.62 MB
+Exact duplicate groups       : 0
+
+============================================================
+SOURCE IMAGE INVENTORY
+============================================================
+
+01. 1667467205.jpeg
+Extension : .jpeg
+Size      : 635.25 KB (650494 bytes)
+SHA-256   : a030dca8b87e774cb56b27f76e409849896ef4763c56a8387473f49b0e1314cc
+Path      : asset-preparation/observatories/hct/source/images/1667467205.jpeg
+
+02. dome image.jpg
+Extension : .jpg
+Size      : 70.98 KB (72679 bytes)
+SHA-256   : a501c66d8532411bae93a3763a7cdd55772834a8eabeee4299941cb62978e4de
+Path      : asset-preparation/observatories/hct/source/images/dome image.jpg
+
+03. Hanle-dark-sky-reserve.webp
+Extension : .webp
+Size      : 536.13 KB (549000 bytes)
+SHA-256   : e1cddfbd011c4f80c04dda0c4a8c59e95e177ed8cedd8f6edb654a339bf701f7
+Path      : asset-preparation/observatories/hct/source/images/Hanle-dark-sky-reserve.webp
+
+04. Himalayan-Chandra-Telescope-dome-at-Indian-Astronomical-Observatory-during-daytime.webp
+Extension : .webp
+Size      : 199.08 KB (203862 bytes)
+SHA-256   : 2d1c2b9c7f7b650a2122cfc962a59be4b07031e256ac5fd4f468cfe4d05c3800
+Path      : asset-preparation/observatories/hct/source/images/Himalayan-Chandra-Telescope-dome-at-Indian-Astronomical-Observatory-during-daytime.webp
+
+05. images (1)_road.jpg
+Extension : .jpg
+Size      : 85.97 KB (88034 bytes)
+SHA-256   : 6a47bf499c3fb04bf71d7df5dd9f33234efe5c6eb72b0d7c3b6dae1bef069c0f
+Path      : asset-preparation/observatories/hct/source/images/images (1)_road.jpg
+
+06. images (1).jpg
+Extension : .jpg
+Size      : 45.24 KB (46324 bytes)
+SHA-256   : d86dfc4646e55a1413e423d3dd07601e744701771c9b0baa45afa49db6dfb619
+Path      : asset-preparation/observatories/hct/source/images/images (1).jpg
+
+07. images (2).jpg
+Extension : .jpg
+Size      : 26.82 KB (27468 bytes)
+SHA-256   : f0a381b65757211b6b4673c7951baef7a3dffc8d92081ae37172040bad36ad3e
+Path      : asset-preparation/observatories/hct/source/images/images (2).jpg
+
+08. images.jpg
+Extension : .jpg
+Size      : 28.90 KB (29593 bytes)
+SHA-256   : cdfdb242db0524f5655b9cd4286436b7df016814cf8d09ac070466fd3620e30a
+Path      : asset-preparation/observatories/hct/source/images/images.jpg
+
+09. indian-astronomical-observator.jpg
+Extension : .jpg
+Size      : 31.18 KB (31929 bytes)
+SHA-256   : 7b09941e71f86c33c50a5aa6ab5c6f9a66c57933dadb83f3ba7b68393f0b7e3a
+Path      : asset-preparation/observatories/hct/source/images/indian-astronomical-observator.jpg
+
+============================================================
+EXACT DUPLICATE CHECK
+============================================================
+
+No byte-identical duplicate source images detected.
+
+============================================================
+NON-IMAGE FILE CHECK
+============================================================
+
+No non-image files detected in source folder.
+
+============================================================
+SOURCE PROTECTION STATUS
+============================================================
+
+This audit is READ-ONLY.
+Source images modified: NO
+Source images renamed : NO
+Source images moved   : NO
+Prepared copies made  : NO
+
+============================================================
+HCT SOURCE AUDIT COMPLETE
+============================================================

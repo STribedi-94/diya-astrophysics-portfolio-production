@@ -1,0 +1,274 @@
+============================================================
+DIYA ASTRA - DOT ASSET MANIFEST
+============================================================
+
+01. dot-site-approach-visit-01.jpg
+    Source: IMG_20221119_110751.jpg
+    Priority: medium
+    Roles: site, approach-road, vegetation, visit-story
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: YES
+    Public approved: NO
+    SHA-256: 9ac95ab3558b281525d19ca8e7f0446ce074c3df184cc655dc4fe30433589aef
+
+02. dot-visit-mountain-overlook-01.jpg
+    Source: IMG_20221119_113343.jpg
+    Priority: medium
+    Roles: visit-story, terrain, mountain-overlook
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: YES
+    Public approved: NO
+    SHA-256: 5c2969e1f22cb0f061b06fdff24c45c7365a9d65ee9c2c96ce936e23faca3285
+
+03. dot-visit-mountain-overlook-02.jpg
+    Source: IMG_20221119_113413.jpg
+    Priority: high
+    Roles: visit-story, terrain, mountain-overlook
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: YES
+    Public approved: NO
+    SHA-256: 073b4301737b44c39f4dbad0f53d92d8e85f440960cdc6331175ba3ed889a82b
+
+04. dot-terrain-forested-ridges-day-01.jpg
+    Source: IMG_20221119_114544.jpg
+    Priority: very-high
+    Roles: terrain, forested-ridges, atmospheric-depth, cinematic-reference
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: NO
+    Public approved: NO
+    SHA-256: 30e6065dba79413e376138f14c9aa5558885fd38b6ed46825cf25530c7a5f575
+
+05. dot-terrain-forested-ridges-day-02.jpg
+    Source: IMG_20221119_130336.jpg
+    Priority: high
+    Roles: terrain, forest, ridge-depth, cinematic-reference
+    EXIF orientation: 3
+    Orientation normalization required: YES
+    Public candidate: NO
+    Public approved: NO
+    SHA-256: 954b5468ac432245bfe23868ceb3e8d196ced30c295fdbb4fc78820e7832182a
+
+06. dot-lighting-sunset-ridges-01.jpg
+    Source: IMG_20221119_170857.jpg
+    Priority: very-high
+    Roles: lighting, sunset, terrain, cinematic-reference
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: YES
+    Public approved: NO
+    SHA-256: af2372c80fc7a1ed24e9e994571a86191827ee8fe48817da57bf361abec7051d
+
+07. dot-lighting-sunset-ridges-02.jpg
+    Source: IMG_20221119_170911.jpg
+    Priority: medium
+    Roles: lighting, sunset, terrain
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: NO
+    Public approved: NO
+    SHA-256: de00c46352b310b3bc3454020fad22a4e8557ceb49506c4b228bcc35f39da94c
+
+08. dot-lighting-sunset-ridges-03.jpg
+    Source: IMG_20221119_170915.jpg
+    Priority: high
+    Roles: lighting, sunset-to-dusk, terrain, cinematic-reference
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: NO
+    Public approved: NO
+    SHA-256: a51c64ebf1ed92b4df4cb0c32e16e22ee9d09071112aadc11d9586cf2ca5e65c
+
+09. dot-lighting-blue-hour-site-01.jpg
+    Source: IMG_20221119_174144.jpg
+    Priority: medium
+    Roles: lighting, blue-hour, site
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: NO
+    Public approved: NO
+    SHA-256: 35d6cf12c24dce33e37586ad9abbb1cc1440d80bdac0b1de44c60065701409f5
+
+10. dot-lighting-twilight-ridges-01.jpg
+    Source: IMG_20221119_174204.jpg
+    Priority: very-high
+    Roles: lighting, twilight, terrain, mountain-silhouette, cinematic-reference
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: YES
+    Public approved: NO
+    SHA-256: 3908bb3333326816e6f92dd318b285b2241684753f0794a60f974e85a4b03e92
+
+11. dot-site-dusk-detail-01.jpg
+    Source: IMG_20221119_174240.jpg
+    Priority: medium
+    Roles: site, dusk, architectural-detail
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: NO
+    Public approved: NO
+    SHA-256: 3907d5f36ab88ddc45f77ed32fa4b4eeeead05a303cd8aeb2aa69ee9e1a628e6
+
+12. dot-facility-dome-blue-hour-01.jpg
+    Source: IMG_20221119_174248.jpg
+    Priority: very-high
+    Roles: facility, dome, blue-hour, cinematic-reference, gallery-candidate
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: YES
+    Public approved: NO
+    SHA-256: 950aba19d722f0fa5c85f68d41c4af6c4a97ee9d9adc55ce3bb8f4974e3d3f1a
+
+13. dot-facility-blue-hour-02.jpg
+    Source: IMG_20221119_174252.jpg
+    Priority: high
+    Roles: facility, dome, blue-hour, cinematic-reference
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: YES
+    Public approved: NO
+    SHA-256: 597f20ebee74620aa95dbbefa85d6e651bc2dd39a8a4e0bb9c58cdc72c8acb72
+
+14. dot-site-blue-hour-layout-01.jpg
+    Source: IMG_20221119_174255.jpg
+    Priority: medium
+    Roles: site, support-building, blue-hour
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: NO
+    Public approved: NO
+    SHA-256: 6f1520e441645e87b6380d146c0e05f60f19e2f558c5b877f03a72de4388238d
+
+15. dot-site-entrance-dusk-01.jpg
+    Source: IMG_20221119_174449.jpg
+    Priority: medium
+    Roles: site, entrance, dusk, architectural-detail
+    EXIF orientation: 6
+    Orientation normalization required: YES
+    Public candidate: NO
+    Public approved: NO
+    SHA-256: 8fd5c12a465a595257da3bbed127d0c52732a25a6905e3f314fb5ce8aa092afb
+
+16. dot-lighting-night-ridges-01.jpg
+    Source: IMG_20221119_175833.jpg
+    Priority: medium
+    Roles: lighting, night, terrain
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: NO
+    Public approved: NO
+    SHA-256: 13a4d3c629ce4c205e2bb7f12267f11dde58225354848f0cf48c781bd7e7c38e
+
+17. dot-site-road-forest-day-01.jpg
+    Source: IMG_20230510_115704.jpg
+    Priority: very-high
+    Roles: site, road, forest, terrain, cinematic-reference
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: NO
+    Public approved: NO
+    SHA-256: b2cefefa2c84675615e65b0982882dfd47db3cd85752b0313e586a180d585ecf
+
+18. dot-terrain-ridge-depth-day-03.jpg
+    Source: IMG_20230510_122540.jpg
+    Priority: very-high
+    Roles: terrain, ridge-depth, forest, atmospheric-depth, cinematic-reference
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: NO
+    Public approved: NO
+    SHA-256: 7233cadc5e036a4131cec19f072e1b4904ef38763af864e92a25bc0f74a90e64
+
+19. dot-terrain-ridge-depth-day-04.jpg
+    Source: IMG_20230510_122550.jpg
+    Priority: very-high
+    Roles: terrain, ridge-depth, vegetation, cinematic-reference
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: NO
+    Public approved: NO
+    SHA-256: f3caec70bc48e501bdeb34c0af5f24defb3d3f03c23d56f8a5cdfc42a17f1882
+
+20. dot-site-approach-visit-02.jpg
+    Source: IMG_20230510_122600.jpg
+    Priority: medium
+    Roles: site, facility-approach, visit-story
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: NO
+    Public approved: NO
+    SHA-256: 95fd63a0c98dcaefa09d8b941b5066b4327178308a4fbbcfb6014cf96c424ab2
+
+21. dot-site-approach-visit-03.jpg
+    Source: IMG_20230510_122603.jpg
+    Priority: high
+    Roles: site, facility-approach, visit-story, gallery-candidate
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: YES
+    Public approved: NO
+    SHA-256: 74d42b4a98e039d0d4de2dd9c6043865ab1e96475d717fd1c31d33efd8ac8fdc
+
+22. dot-facility-exterior-day-01.jpg
+    Source: IMG_20230510_122955.jpg
+    Priority: critical
+    Roles: facility, daylight, geometry-reference, cinematic-reference
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: YES
+    Public approved: NO
+    SHA-256: a606388f8104a723f07b56e6b8d506246044ef501af64a69a3aeffc8afd0381a
+
+23. dot-facility-exterior-day-02.jpg
+    Source: IMG_20230510_122959.jpg
+    Priority: critical
+    Roles: facility, daylight, geometry-reference, site-relationship, cinematic-reference
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: YES
+    Public approved: NO
+    SHA-256: ac759c0d85208b4f17358a7368b1d6ed4dfc753617a5cd7856d9951499ff637e
+
+24. dot-terrain-valley-ridges-day-01.jpg
+    Source: IMG_20230510_123718.jpg
+    Priority: high
+    Roles: terrain, valley, ridge-depth, regional-context
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: NO
+    Public approved: NO
+    SHA-256: f5add0555b267699e5b6dee9a8705935284fbdd1c51a4e878c54c2010da2e0dd
+
+25. dot-terrain-panoramic-ridges-day-01.jpg
+    Source: IMG_20230510_124917.jpg
+    Priority: very-high
+    Roles: terrain, panorama, ridge-depth, atmospheric-depth, cinematic-reference
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: YES
+    Public approved: NO
+    SHA-256: bb46209efd877d9f7f308afe74c00a6c539478a926eee07e852d9cde743f9ad6
+
+26. dot-lighting-golden-hour-ridges-01.jpg
+    Source: IMG_20230510_175908.jpg
+    Priority: very-high
+    Roles: lighting, golden-hour, terrain, vegetation, cinematic-reference
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: YES
+    Public approved: NO
+    SHA-256: 5050a827d369b0b00eee216f02269c168bbdd43b816d0a7f5dc132f98145c9f3
+
+27. dot-lighting-golden-hour-ridges-02.jpg
+    Source: IMG_20230510_175916.jpg
+    Priority: very-high
+    Roles: lighting, golden-hour, terrain, cinematic-reference, gallery-candidate
+    EXIF orientation: 1
+    Orientation normalization required: NO
+    Public candidate: YES
+    Public approved: NO
+    SHA-256: 8b9326bb95096bd7b77e587fbc8050f3825b948fdff9537ba34d7e54ca481b85
+

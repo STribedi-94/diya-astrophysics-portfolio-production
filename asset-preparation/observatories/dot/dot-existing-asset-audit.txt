@@ -1,0 +1,142 @@
+============================================================
+DIYA ASTRA - EXISTING DOT / DEVASTHAL ASSET AUDIT
+============================================================
+
+PRODUCTION ROOT:
+E:\Diya Portfolio Website\02 - Production\diya-astrophysics-portfolio-production\diya-astrophysics-portfolio-production
+
+============================================================
+KNOWN RELEVANT SRC ASSETS
+============================================================
+
+PATH: src/assets/facility-dot.jpg
+EXISTS: YES
+SIZE BYTES: 89198
+SHA-256: 843e228d6ba010f01380d61735ad1c89eb3c932c09823dc3d5b16f0c41d134cf
+
+------------------------------------------------------------
+
+PATH: src/assets/gallery/research_facility_aries_devasthal_dfot_13m_visit_01.jpg.asset.json
+EXISTS: YES
+SIZE BYTES: 584
+SHA-256: 0389f947f75568744c345d3911b47b10f861bf4f3450c933945a1decc557d670
+JSON CONTENT:
+{
+  "version": 1,
+  "asset_id": "ced9f62e-194f-41da-ba3c-7115be7817cd",
+  "project_id": "a7c6db72-f67d-49e1-8b0d-3e4ee77ec4c2",
+  "url": "/__l5e/assets-v1/ced9f62e-194f-41da-ba3c-7115be7817cd/research_facility_aries_devasthal_dfot_13m_visit_01.jpg",
+  "r2_key": "a/v1/a7c6db72-f67d-49e1-8b0d-3e4ee77ec4c2/ced9f62e-194f-41da-ba3c-7115be7817cd/research_facility_aries_devasthal_dfot_13m_visit_01.jpg",
+  "original_filename": "research_facility_aries_devasthal_dfot_13m_visit_01.jpg",
+  "size": 459662,
+  "content_type": "image/jpeg",
+  "created_at": "2026-07-25T13:20:49Z"
+}
+
+------------------------------------------------------------
+
+PATH: src/assets/gallery/research_facility_aries_devasthal_dot_36m_observing_team_03.jpg.asset.json
+EXISTS: YES
+SIZE BYTES: 608
+SHA-256: 4ec135ce474cd3f5acd18565d1c83b094f7bd41408e02914fb24def150f356b1
+JSON CONTENT:
+{
+  "version": 1,
+  "asset_id": "028ac639-8894-4716-9bff-3fedba5abc27",
+  "project_id": "a7c6db72-f67d-49e1-8b0d-3e4ee77ec4c2",
+  "url": "/__l5e/assets-v1/028ac639-8894-4716-9bff-3fedba5abc27/research_facility_aries_devasthal_dot_36m_observing_team_03.jpg",
+  "r2_key": "a/v1/a7c6db72-f67d-49e1-8b0d-3e4ee77ec4c2/028ac639-8894-4716-9bff-3fedba5abc27/research_facility_aries_devasthal_dot_36m_observing_team_03.jpg",
+  "original_filename": "research_facility_aries_devasthal_dot_36m_observing_team_03.jpg",
+  "size": 558513,
+  "content_type": "image/jpeg",
+  "created_at": "2026-07-25T13:20:52Z"
+}
+
+------------------------------------------------------------
+
+PATH: src/assets/gallery/research_facility_aries_devasthal_dot_36m_visit_02.jpg.asset.json
+EXISTS: YES
+SIZE BYTES: 581
+SHA-256: 76568cf47f21f6745732486953059884ef47b8cc5330d6416dd58d5d67d3736d
+JSON CONTENT:
+{
+  "version": 1,
+  "asset_id": "7e80fe86-bb11-4ad4-b588-16c2eaf270b3",
+  "project_id": "a7c6db72-f67d-49e1-8b0d-3e4ee77ec4c2",
+  "url": "/__l5e/assets-v1/7e80fe86-bb11-4ad4-b588-16c2eaf270b3/research_facility_aries_devasthal_dot_36m_visit_02.jpg",
+  "r2_key": "a/v1/a7c6db72-f67d-49e1-8b0d-3e4ee77ec4c2/7e80fe86-bb11-4ad4-b588-16c2eaf270b3/research_facility_aries_devasthal_dot_36m_visit_02.jpg",
+  "original_filename": "research_facility_aries_devasthal_dot_36m_visit_02.jpg",
+  "size": 523124,
+  "content_type": "image/jpeg",
+  "created_at": "2026-07-25T13:20:55Z"
+}
+
+------------------------------------------------------------
+
+============================================================
+ALL DOT / DEVASTHAL / ARIES / DFOT MATCHES IN SRC ASSETS
+============================================================
+
+MATCH COUNT: 4
+
+src/assets/facility-dot.jpg
+src/assets/gallery/research_facility_aries_devasthal_dfot_13m_visit_01.jpg.asset.json
+src/assets/gallery/research_facility_aries_devasthal_dot_36m_observing_team_03.jpg.asset.json
+src/assets/gallery/research_facility_aries_devasthal_dot_36m_visit_02.jpg.asset.json
+
+============================================================
+ALL DOT / DEVASTHAL / ARIES / DFOT MATCHES IN PUBLIC ASSETS
+============================================================
+
+MATCH COUNT: 3
+
+public/assets/images/gallery/research_facility_aries_devasthal_dfot_13m_visit_01.jpg
+  SIZE BYTES: 2357273
+  SHA-256: d252f23c6969393518e405b5b5a756689e3980fc70a441d6b04b7c17a9ead743
+
+public/assets/images/gallery/research_facility_aries_devasthal_dot_36m_observing_team_03.jpg
+  SIZE BYTES: 2640541
+  SHA-256: 0fcadb987838333d75dfa9998eb47acecdd18a7717d8ebfabfd06fe4e45085c5
+
+public/assets/images/gallery/research_facility_aries_devasthal_dot_36m_visit_02.jpg
+  SIZE BYTES: 2566952
+  SHA-256: bbba9665ed4bfc9d896b9993755f60963911b82432057ac9f8da3db6ec287a89
+
+============================================================
+DOT PREPARED ASSET STATUS
+============================================================
+
+PREPARED IMAGE COUNT: 27
+
+dot-facility-blue-hour-02.jpg
+dot-facility-dome-blue-hour-01.jpg
+dot-facility-exterior-day-01.jpg
+dot-facility-exterior-day-02.jpg
+dot-lighting-blue-hour-site-01.jpg
+dot-lighting-golden-hour-ridges-01.jpg
+dot-lighting-golden-hour-ridges-02.jpg
+dot-lighting-night-ridges-01.jpg
+dot-lighting-sunset-ridges-01.jpg
+dot-lighting-sunset-ridges-02.jpg
+dot-lighting-sunset-ridges-03.jpg
+dot-lighting-twilight-ridges-01.jpg
+dot-site-approach-visit-01.jpg
+dot-site-approach-visit-02.jpg
+dot-site-approach-visit-03.jpg
+dot-site-blue-hour-layout-01.jpg
+dot-site-dusk-detail-01.jpg
+dot-site-entrance-dusk-01.jpg
+dot-site-road-forest-day-01.jpg
+dot-terrain-forested-ridges-day-01.jpg
+dot-terrain-forested-ridges-day-02.jpg
+dot-terrain-panoramic-ridges-day-01.jpg
+dot-terrain-ridge-depth-day-03.jpg
+dot-terrain-ridge-depth-day-04.jpg
+dot-terrain-valley-ridges-day-01.jpg
+dot-visit-mountain-overlook-01.jpg
+dot-visit-mountain-overlook-02.jpg
+
+
+============================================================
+END OF EXISTING DOT ASSET AUDIT
+============================================================

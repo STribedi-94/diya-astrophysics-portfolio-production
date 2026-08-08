@@ -1,0 +1,29 @@
+============================================================
+DIYA ASTRA - uGMRT PREPARATION REPORT
+============================================================
+
+Source images verified : 6
+Prepared copies created: 6
+
+User-supplied          : 4
+Official NCRA/GMRT     : 2
+
+Reconstruction refs    : 6
+Cinematic candidates   : 5
+Public candidates      : 4
+Gallery candidates     : 3
+
+Original files modified: NO
+SHA-256 integrity check: PASSED
+Semantic prepared names: YES
+Provenance preserved   : YES
+
+Prepared directory:
+E:\Diya Portfolio Website\02 - Production\diya-astrophysics-portfolio-production\diya-astrophysics-portfolio-production\asset-preparation\observatories\ugmrt\prepared\images
+
+NEXT:
+Audit existing uGMRT/GMRT production assets, then lock final cinematic and Gallery classification.
+
+============================================================
+uGMRT PREPARATION STAGE 1 COMPLETE
+============================================================

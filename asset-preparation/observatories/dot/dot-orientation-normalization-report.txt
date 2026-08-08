@@ -1,0 +1,43 @@
+============================================================
+DIYA ASTRA - DOT ORIENTATION NORMALIZATION REPORT
+============================================================
+
+SOURCE ORIGINALS MODIFIED:
+NO
+
+PREPARED DERIVATIVES NORMALIZED:
+2
+
+dot-terrain-forested-ridges-day-02.jpg
+Source original: IMG_20221119_130336.jpg
+Original EXIF orientation: 3
+Applied rotation: 180 degrees clockwise
+Before bytes: 4369566
+After bytes: 7487920
+Before SHA-256: 954b5468ac432245bfe23868ceb3e8d196ced30c295fdbb4fc78820e7832182a
+After SHA-256: 0e7a3c543c890f8f8582488440d8ccc4398f2c93fa369fd7f634ff8c3684ecbf
+
+dot-site-entrance-dusk-01.jpg
+Source original: IMG_20221119_174449.jpg
+Original EXIF orientation: 6
+Applied rotation: 90 degrees clockwise
+Before bytes: 446736
+After bytes: 1092748
+Before SHA-256: 8fd5c12a465a595257da3bbed127d0c52732a25a6905e3f314fb5ce8aa092afb
+After SHA-256: 03ad9ece50528c2717b5a111af15c4d6327d7186cfea118c9325ff1b4fa61d14
+
+MANIFEST UPDATED:
+YES
+
+ORIENTATION NORMALIZATION REMAINING:
+0
+
+PUBLIC-ASSET APPROVAL:
+NOT YET PERFORMED
+
+WEB OPTIMIZATION:
+NOT YET PERFORMED
+
+============================================================
+DOT PREPARATION STAGE 2 COMPLETE
+============================================================

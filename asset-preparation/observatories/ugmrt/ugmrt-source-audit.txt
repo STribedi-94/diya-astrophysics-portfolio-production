@@ -1,0 +1,74 @@
+============================================================
+DIYA ASTRA - uGMRT USER SOURCE ASSET AUDIT
+============================================================
+
+PRODUCTION ROOT:
+E:\Diya Portfolio Website\02 - Production\diya-astrophysics-portfolio-production\diya-astrophysics-portfolio-production
+
+SOURCE DIRECTORY:
+E:\Diya Portfolio Website\02 - Production\diya-astrophysics-portfolio-production\diya-astrophysics-portfolio-production\asset-preparation\observatories\ugmrt\source\user-originals
+
+------------------------------------------------------------
+SOURCE SUMMARY
+------------------------------------------------------------
+
+Total files in source folder : 4
+Recognized image files       : 4
+Non-image files              : 0
+Total image bytes            : 238940
+Total image size             : 233.34 KB
+Exact duplicate groups       : 0
+
+============================================================
+SOURCE IMAGE INVENTORY
+============================================================
+
+01. GMRT_antenna_through_the_fields.jpg
+Extension : .jpg
+Size      : 24.97 KB (25568 bytes)
+SHA-256   : c1fe5d0448f747901815f248015dcb0cf03fbdd0f93870bfd578823c31888fd3
+Path      : asset-preparation/observatories/ugmrt/source/user-originals/GMRT_antenna_through_the_fields.jpg
+
+02. gmrt.jpg
+Extension : .jpg
+Size      : 50.50 KB (51714 bytes)
+SHA-256   : 1fa4b284a25542510546776bd69601afc716ed2634fc7e6bb57e7552eae3e419
+Path      : asset-preparation/observatories/ugmrt/source/user-originals/gmrt.jpg
+
+03. gmrt12.jpg
+Extension : .jpg
+Size      : 130.28 KB (133407 bytes)
+SHA-256   : 343e926e3388f8acb1f5f071c6745f70f2370c5e34df8f777e4b02a75496c71a
+Path      : asset-preparation/observatories/ugmrt/source/user-originals/gmrt12.jpg
+
+04. images.jpg
+Extension : .jpg
+Size      : 27.59 KB (28251 bytes)
+SHA-256   : 2c1dbb993b09d3d2a2f98deaa3cb01f57027bcf00a227fe7a4d187c51d16dbec
+Path      : asset-preparation/observatories/ugmrt/source/user-originals/images.jpg
+
+============================================================
+EXACT DUPLICATE CHECK
+============================================================
+
+No byte-identical duplicate source images detected.
+
+============================================================
+NON-IMAGE FILE CHECK
+============================================================
+
+No non-image files detected in source folder.
+
+============================================================
+SOURCE PROTECTION STATUS
+============================================================
+
+This audit is READ-ONLY.
+Source images modified: NO
+Source images renamed : NO
+Source images moved   : NO
+Prepared copies made  : NO
+
+============================================================
+uGMRT USER SOURCE AUDIT COMPLETE
+============================================================

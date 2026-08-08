@@ -1,0 +1,346 @@
+============================================================
+DIYA ASTRA - HCT / HANLE PREPARED ASSET MANIFEST
+============================================================
+
+TOTAL SOURCE IMAGES   : 9
+TOTAL PREPARED COPIES : 9
+SOURCE ORIGINALS MODIFIED: NO
+SHA-256 INTEGRITY CHECK   : PASSED
+FINAL IMPLEMENTATION LOCK : NOT YET
+
+------------------------------------------------------------
+HCT-01
+
+SOURCE:
+1667467205.jpeg
+
+PREPARED:
+hct-hanle-observatory-plateau-day-01.jpg
+
+CATEGORY:
+site-environment
+
+SUBJECT:
+Wide rocky Hanle observatory plateau with multiple observatory structures
+
+PRIMARY ROLE:
+hanle-site-establishing-shot
+
+CINEMATIC USE:
+Wide environmental introduction before approaching HCT
+
+SCIENTIFIC USE:
+Hanle high-altitude observatory-site context
+
+DOCUMENTARY CLASS:
+documentary-site-reference
+
+PUBLIC CANDIDATE: YES
+GALLERY CANDIDATE: YES
+RECONSTRUCTION REFERENCE: YES
+
+SHA-256:
+a030dca8b87e774cb56b27f76e409849896ef4763c56a8387473f49b0e1314cc
+
+NOTES:
+Strong daylight establishing image with rocky high-altitude terrain.
+
+------------------------------------------------------------
+HCT-02
+
+SOURCE:
+dome image.jpg
+
+PREPARED:
+hct-dome-communications-infrastructure-day-01.jpg
+
+CATEGORY:
+facility-infrastructure
+
+SUBJECT:
+Close HCT dome and facility structure with foreground communication dish
+
+PRIMARY ROLE:
+hct-infrastructure-close-view
+
+CINEMATIC USE:
+Facility approach and infrastructure detail
+
+SCIENTIFIC USE:
+HCT facility and remote-observatory infrastructure context
+
+DOCUMENTARY CLASS:
+documentary-facility-reference
+
+PUBLIC CANDIDATE: YES
+GALLERY CANDIDATE: NO
+RECONSTRUCTION REFERENCE: YES
+
+SHA-256:
+a501c66d8532411bae93a3763a7cdd55772834a8eabeee4299941cb62978e4de
+
+NOTES:
+Useful structural reference; foreground dish should not be presented as HFOSC instrumentation.
+
+------------------------------------------------------------
+HCT-03
+
+SOURCE:
+Hanle-dark-sky-reserve.webp
+
+PREPARED:
+hct-hanle-dark-sky-milky-way-01.webp
+
+CATEGORY:
+dark-sky-context
+
+SUBJECT:
+Milky Way / dark-sky composition above Hanle observatory structures
+
+PRIMARY ROLE:
+hanle-night-transition
+
+CINEMATIC USE:
+Day-to-night or dark-sky cinematic transition
+
+SCIENTIFIC USE:
+Illustrative dark-sky observing-environment context
+
+DOCUMENTARY CLASS:
+illustrative-or-composite-reference
+
+PUBLIC CANDIDATE: YES
+GALLERY CANDIDATE: YES
+RECONSTRUCTION REFERENCE: NO
+
+SHA-256:
+e1cddfbd011c4f80c04dda0c4a8c59e95e177ed8cedd8f6edb654a339bf701f7
+
+NOTES:
+Treat as illustrative/promotional dark-sky imagery unless provenance later establishes documentary status.
+
+------------------------------------------------------------
+HCT-04
+
+SOURCE:
+Himalayan-Chandra-Telescope-dome-at-Indian-Astronomical-Observatory-during-daytime.webp
+
+PREPARED:
+hct-himalayan-chandra-telescope-hero-day-01.webp
+
+CATEGORY:
+facility-hero
+
+SUBJECT:
+Himalayan Chandra Telescope dome in broad Ladakh mountain landscape
+
+PRIMARY ROLE:
+primary-hct-hero
+
+CINEMATIC USE:
+Primary HCT reveal during Hanle cinematic tour
+
+SCIENTIFIC USE:
+Primary visual identity for the 2.01-m Himalayan Chandra Telescope
+
+DOCUMENTARY CLASS:
+documentary-facility-reference
+
+PUBLIC CANDIDATE: YES
+GALLERY CANDIDATE: YES
+RECONSTRUCTION REFERENCE: YES
+
+SHA-256:
+2d1c2b9c7f7b650a2122cfc962a59be4b07031e256ac5fd4f468cfe4d05c3800
+
+NOTES:
+Strongest primary HCT facility image in current source set.
+
+------------------------------------------------------------
+HCT-05
+
+SOURCE:
+images (1)_road.jpg
+
+PREPARED:
+hct-hanle-observatory-approach-road-01.jpg
+
+CATEGORY:
+site-approach
+
+SUBJECT:
+Road approaching observatory structures across Hanle landscape
+
+PRIMARY ROLE:
+observatory-arrival-shot
+
+CINEMATIC USE:
+Approach-road transition before HCT reveal
+
+SCIENTIFIC USE:
+Physical site and observatory-access context
+
+DOCUMENTARY CLASS:
+documentary-site-reference
+
+PUBLIC CANDIDATE: YES
+GALLERY CANDIDATE: NO
+RECONSTRUCTION REFERENCE: YES
+
+SHA-256:
+6a47bf499c3fb04bf71d7df5dd9f33234efe5c6eb72b0d7c3b6dae1bef069c0f
+
+NOTES:
+Useful for creating geographic continuity in the cinematic tour.
+
+------------------------------------------------------------
+HCT-06
+
+SOURCE:
+images (1).jpg
+
+PREPARED:
+hct-dome-rocky-terrain-low-angle-01.jpg
+
+CATEGORY:
+facility-secondary
+
+SUBJECT:
+HCT dome viewed from below across rocky foreground
+
+PRIMARY ROLE:
+terrain-to-dome-reveal
+
+CINEMATIC USE:
+Secondary low-angle telescope reveal
+
+SCIENTIFIC USE:
+HCT dome and local terrain reference
+
+DOCUMENTARY CLASS:
+documentary-facility-reference
+
+PUBLIC CANDIDATE: NO
+GALLERY CANDIDATE: NO
+RECONSTRUCTION REFERENCE: YES
+
+SHA-256:
+d86dfc4646e55a1413e423d3dd07601e744701771c9b0baa45afa49db6dfb619
+
+NOTES:
+Better suited to reconstruction/reference than primary public presentation.
+
+------------------------------------------------------------
+HCT-07
+
+SOURCE:
+images (2).jpg
+
+PREPARED:
+hct-hanle-mountain-road-landscape-01.jpg
+
+CATEGORY:
+site-environment
+
+SUBJECT:
+Hanle mountain road and broad high-altitude landscape
+
+PRIMARY ROLE:
+hanle-landscape-context
+
+CINEMATIC USE:
+Environmental travel/approach sequence
+
+SCIENTIFIC USE:
+High-altitude Ladakh observing-site environment
+
+DOCUMENTARY CLASS:
+documentary-site-reference
+
+PUBLIC CANDIDATE: YES
+GALLERY CANDIDATE: YES
+RECONSTRUCTION REFERENCE: YES
+
+SHA-256:
+f0a381b65757211b6b4673c7951baef7a3dffc8d92081ae37172040bad36ad3e
+
+NOTES:
+Useful broad environmental context rather than telescope-specific detail.
+
+------------------------------------------------------------
+HCT-08
+
+SOURCE:
+images.jpg
+
+PREPARED:
+hct-facility-dome-close-day-01.jpg
+
+CATEGORY:
+facility-detail
+
+SUBJECT:
+Close frontal/side view of HCT building and dome
+
+PRIMARY ROLE:
+hct-structural-detail
+
+CINEMATIC USE:
+Close facility inspection after primary reveal
+
+SCIENTIFIC USE:
+HCT dome/building reconstruction reference
+
+DOCUMENTARY CLASS:
+documentary-facility-reference
+
+PUBLIC CANDIDATE: NO
+GALLERY CANDIDATE: NO
+RECONSTRUCTION REFERENCE: YES
+
+SHA-256:
+cdfdb242db0524f5655b9cd4286436b7df016814cf8d09ac070466fd3620e30a
+
+NOTES:
+Strong structural reference but lower presentation quality than primary hero views.
+
+------------------------------------------------------------
+HCT-09
+
+SOURCE:
+indian-astronomical-observator.jpg
+
+PREPARED:
+hct-himalayan-chandra-telescope-overview-day-02.jpg
+
+CATEGORY:
+facility-hero
+
+SUBJECT:
+Wide frontal HCT facility view with access road and surrounding mountains
+
+PRIMARY ROLE:
+secondary-hct-hero
+
+CINEMATIC USE:
+Secondary facility overview / transition into instrumentation story
+
+SCIENTIFIC USE:
+HCT facility overview in Hanle environment
+
+DOCUMENTARY CLASS:
+documentary-facility-reference
+
+PUBLIC CANDIDATE: YES
+GALLERY CANDIDATE: YES
+RECONSTRUCTION REFERENCE: YES
+
+SHA-256:
+7b09941e71f86c33c50a5aa6ab5c6f9a66c57933dadb83f3ba7b68393f0b7e3a
+
+NOTES:
+Strong secondary HCT overview complementing the primary hero image.
+
+============================================================
+END OF HCT PREPARED ASSET MANIFEST
+============================================================

@@ -1,0 +1,74 @@
+============================================================
+DIYA ASTRA - HCT IMPLEMENTATION READY LOCK
+============================================================
+
+HCT ASSET PLANNING REMAINING: NO
+HCT SCIENTIFIC-STORY PLANNING REMAINING: NO
+SOURCE ORIGINALS PROTECTED: YES
+
+TOTAL PREPARED ASSETS: 9
+SELECTED NEW HCT V1 ASSETS: 6
+REFERENCE-ONLY ASSETS: 3
+GALLERY STORY ASSETS: 5
+
+============================================================
+SELECTED NEW HCT V1 ASSETS
+============================================================
+
+1. hct-hanle-mountain-road-landscape-01.jpg
+   ROLE: HANLE_ENVIRONMENT_INTRODUCTION
+   GALLERY: YES
+   USE: Opening environmental context for the high-altitude Hanle journey
+
+2. hct-hanle-observatory-plateau-day-01.jpg
+   ROLE: OBSERVATORY_SITE_ESTABLISHING
+   GALLERY: YES
+   USE: Transition from regional Hanle terrain to the Indian Astronomical Observatory site
+
+3. hct-hanle-observatory-approach-road-01.jpg
+   ROLE: HCT_PHYSICAL_APPROACH
+   GALLERY: NO
+   USE: Arrival sequence leading toward the HCT facility
+
+4. hct-himalayan-chandra-telescope-hero-day-01.webp
+   ROLE: PRIMARY_HCT_REVEAL
+   GALLERY: YES
+   USE: Primary visual identity and telescope reveal
+
+5. hct-himalayan-chandra-telescope-overview-day-02.jpg
+   ROLE: SECONDARY_HCT_OVERVIEW
+   GALLERY: YES
+   USE: Facility overview before instrumentation and scientific-workflow overlays
+
+6. hct-hanle-dark-sky-milky-way-01.webp
+   ROLE: HANLE_DARK_SKY_TRANSITION
+   GALLERY: YES
+   USE: Closing dark-sky / astronomical-observing transition
+
+============================================================
+REFERENCE-ONLY ASSETS
+============================================================
+
+hct-dome-communications-infrastructure-day-01.jpg
+hct-dome-rocky-terrain-low-angle-01.jpg
+hct-facility-dome-close-day-01.jpg
+
+============================================================
+SCIENTIFIC STORY
+============================================================
+
+Hanle
+-> 2.01-m HCT
+-> HFOSC
+-> Grism 7 / Grism 8
+-> optical spectroscopy
+-> IRAF reduction
+-> Specutils / equivalent width
+-> DER SNR
+-> Monte Carlo uncertainty analysis
+-> chromospheric diagnostics
+-> AD Leo magnetic-activity science
+
+============================================================
+HCT IMPLEMENTATION ASSET PLAN LOCKED
+============================================================

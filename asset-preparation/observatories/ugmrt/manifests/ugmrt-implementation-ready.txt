@@ -1,0 +1,49 @@
+============================================================
+DIYA ASTRA - uGMRT IMPLEMENTATION READY LOCK
+============================================================
+
+MAJOR uGMRT ASSET DECISIONS REMAINING: NO
+SCIENTIFIC STORY DECISIONS REMAINING: NO
+SOURCE ORIGINALS PROTECTED: YES
+
+TOTAL PREPARED ASSETS: 6
+SELECTED NEW V1 ASSETS: 4
+REFERENCE-ONLY ASSETS: 2
+GALLERY STORY ASSETS: 3
+
+SELECTED ASSETS
+------------------------------------------------------------
+1. ugmrt-array-water-reflection-day-01.jpg
+   ARRAY_ENVIRONMENT_HERO
+   Provenance: OFFICIAL_NCRA_GMRT
+   Gallery: YES
+
+2. ugmrt-single-antenna-road-approach-day-01.jpg
+   SINGLE_ANTENNA_APPROACH
+   Provenance: USER_SUPPLIED
+   Gallery: NO
+
+3. ugmrt-three-antennas-blue-twilight-01.jpg
+   PRIMARY_ANTENNA_REVEAL
+   Provenance: OFFICIAL_NCRA_GMRT
+   Gallery: YES
+
+4. ugmrt-multiple-antennas-landscape-day-01.jpg
+   INTERFEROMETRIC_ARRAY_CONTEXT
+   Provenance: USER_SUPPLIED
+   Gallery: YES
+
+SCIENTIFIC JOURNEY
+------------------------------------------------------------
+ARRAY ENVIRONMENT
+-> 30 x 45-m ANTENNAS
+-> RECEIVER / SIGNAL CHAIN
+-> GWB
+-> CORRELATION / VISIBILITIES
+-> AIPS + CASA
+-> RFI FLAGGING / CALIBRATION / IMAGING / SELF-CAL
+-> GJ 1151 / GJ 398 / AD LEO
+
+============================================================
+uGMRT IMPLEMENTATION PLAN LOCKED
+============================================================

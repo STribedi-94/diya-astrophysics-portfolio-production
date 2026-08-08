@@ -1,0 +1,128 @@
+============================================================
+DIYA ASTRA - DOT IMPLEMENTATION READY ASSET LOCK
+============================================================
+
+STATUS
+------------------------------------------------------------
+Major DOT asset planning decisions remaining: NO
+Source originals protected: YES
+DOT implementation asset plan locked: YES
+
+COUNTS
+------------------------------------------------------------
+Prepared assets: 27
+Selected new implementation assets: 8
+Reference-only assets: 19
+New Gallery-selected assets: 4
+Existing Gallery assets reused: 3
+
+CINEMATIC SEQUENCE
+------------------------------------------------------------
+1. dot-terrain-panoramic-ridges-day-01.jpg
+2. dot-lighting-golden-hour-ridges-02.jpg
+3. dot-lighting-sunset-ridges-01.jpg
+4. dot-lighting-twilight-ridges-01.jpg
+5. dot-facility-exterior-day-01.jpg
+6. dot-facility-dome-blue-hour-01.jpg
+
+FINAL GALLERY STORY
+------------------------------------------------------------
+1. ENVIRONMENT_ESTABLISHING_SHOT
+   dot-terrain-panoramic-ridges-day-01.jpg
+   Source: NEW_PREPARED
+
+2. ARRIVAL_AND_APPROACH
+   dot-site-approach-visit-03.jpg
+   Source: NEW_PREPARED
+
+3. DIYA_AT_DEVASTHAL
+   dot-visit-mountain-overlook-02.jpg
+   Source: NEW_PREPARED
+
+4. DFOT_CONTEXT
+   public/assets/images/gallery/research_facility_aries_devasthal_dfot_13m_visit_01.jpg
+   Source: EXISTING_GALLERY
+
+5. DOT_VISIT
+   public/assets/images/gallery/research_facility_aries_devasthal_dot_36m_visit_02.jpg
+   Source: EXISTING_GALLERY
+
+6. OBSERVING_TEAM
+   public/assets/images/gallery/research_facility_aries_devasthal_dot_36m_observing_team_03.jpg
+   Source: EXISTING_GALLERY
+
+7. BLUE_HOUR_FACILITY_HANDOFF
+   dot-facility-dome-blue-hour-01.jpg
+   Source: NEW_PREPARED
+
+8. CINEMATIC_CLOSING_FRAME
+   dot-lighting-golden-hour-ridges-02.jpg
+   Source: NEW_PREPARED
+
+SELECTED NEW V1 PUBLIC ASSETS
+------------------------------------------------------------
+1. dot-terrain-panoramic-ridges-day-01.jpg
+   Role: CINEMATIC_LANDSCAPE_HANDOFF
+   Section: DOT_CINEMATIC_JOURNEY
+   Gallery selected: NO
+
+2. dot-lighting-golden-hour-ridges-02.jpg
+   Role: GOLDEN_HOUR_TRANSITION
+   Section: DOT_CINEMATIC_JOURNEY
+   Gallery selected: YES
+
+3. dot-lighting-sunset-ridges-01.jpg
+   Role: SUNSET_TRANSITION
+   Section: DOT_CINEMATIC_JOURNEY
+   Gallery selected: NO
+
+4. dot-lighting-twilight-ridges-01.jpg
+   Role: TWILIGHT_TRANSITION
+   Section: DOT_CINEMATIC_JOURNEY
+   Gallery selected: NO
+
+5. dot-facility-exterior-day-01.jpg
+   Role: FACILITY_DAYLIGHT_REVEAL
+   Section: DOT_CINEMATIC_JOURNEY
+   Gallery selected: NO
+
+6. dot-facility-dome-blue-hour-01.jpg
+   Role: FACILITY_BLUE_HOUR_REVEAL
+   Section: DOT_CINEMATIC_JOURNEY
+   Gallery selected: YES
+
+7. dot-visit-mountain-overlook-02.jpg
+   Role: DIYA_VISIT_STORY
+   Section: DOT_GALLERY_STORY
+   Gallery selected: YES
+
+8. dot-site-approach-visit-03.jpg
+   Role: DIYA_FACILITY_APPROACH_STORY
+   Section: DOT_GALLERY_STORY
+   Gallery selected: YES
+
+REFERENCE-ONLY DOT ASSETS
+------------------------------------------------------------
+dot-site-approach-visit-01.jpg
+dot-visit-mountain-overlook-01.jpg
+dot-terrain-forested-ridges-day-01.jpg
+dot-terrain-forested-ridges-day-02.jpg
+dot-lighting-sunset-ridges-02.jpg
+dot-lighting-sunset-ridges-03.jpg
+dot-lighting-blue-hour-site-01.jpg
+dot-site-dusk-detail-01.jpg
+dot-facility-blue-hour-02.jpg
+dot-site-blue-hour-layout-01.jpg
+dot-site-entrance-dusk-01.jpg
+dot-lighting-night-ridges-01.jpg
+dot-site-road-forest-day-01.jpg
+dot-terrain-ridge-depth-day-03.jpg
+dot-terrain-ridge-depth-day-04.jpg
+dot-site-approach-visit-02.jpg
+dot-facility-exterior-day-02.jpg
+dot-terrain-valley-ridges-day-01.jpg
+dot-lighting-golden-hour-ridges-01.jpg
+
+============================================================
+DOT IMPLEMENTATION ASSET PLANNING COMPLETE
+============================================================

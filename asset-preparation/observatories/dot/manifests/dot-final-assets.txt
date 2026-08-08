@@ -1,0 +1,260 @@
+============================================================
+DIYA ASTRA - DOT FINAL ASSET MANIFEST
+============================================================
+
+OBSERVATORY:
+3.6-m Devasthal Optical Telescope (DOT)
+
+ENVIRONMENT:
+Forested Himalayan
+
+SOURCE ORIGINALS:
+27 - PRESERVED / UNTOUCHED
+
+PREPARED ASSETS:
+27
+
+CLASS SUMMARY
+------------------------------------------------------------
+reconstructionReference: 27
+cinematicReference: 20
+publicCandidate: 12
+galleryCandidate: 4
+visitStory: 5
+
+EXISTING WEBSITE ASSETS
+------------------------------------------------------------
+src/assets/facility-dot.jpg -> KEEP
+
+public/assets/images/gallery/research_facility_aries_devasthal_dfot_13m_visit_01.jpg
+Action: KEEP_AND_REUSE
+
+public/assets/images/gallery/research_facility_aries_devasthal_dot_36m_observing_team_03.jpg
+Action: KEEP_AND_REUSE
+
+public/assets/images/gallery/research_facility_aries_devasthal_dot_36m_visit_02.jpg
+Action: KEEP_AND_REUSE
+
+============================================================
+27 PREPARED DOT ASSETS
+============================================================
+
+01. dot-site-approach-visit-01.jpg
+Source: IMG_20221119_110751.jpg
+Classes: RECONSTRUCTION_REFERENCE, VISIT_STORY
+Priority: medium
+Primary use: Site approach, fencing, vegetation and visit context
+Public state: REFERENCE_ONLY
+Gallery state: NOT_SELECTED
+
+02. dot-visit-mountain-overlook-01.jpg
+Source: IMG_20221119_113343.jpg
+Classes: RECONSTRUCTION_REFERENCE, VISIT_STORY, PUBLIC_CANDIDATE
+Priority: medium
+Primary use: Personal Devasthal visit and mountain-overlook context
+Public state: CANDIDATE_NOT_APPROVED
+Gallery state: NOT_SELECTED
+
+03. dot-visit-mountain-overlook-02.jpg
+Source: IMG_20221119_113413.jpg
+Classes: RECONSTRUCTION_REFERENCE, VISIT_STORY, PUBLIC_CANDIDATE, GALLERY_CANDIDATE
+Priority: high
+Primary use: Preferred personal mountain-overlook storytelling frame
+Public state: CANDIDATE_NOT_APPROVED
+Gallery state: CANDIDATE_NOT_APPROVED
+
+04. dot-terrain-forested-ridges-day-01.jpg
+Source: IMG_20221119_114544.jpg
+Classes: RECONSTRUCTION_REFERENCE, CINEMATIC_REFERENCE
+Priority: very-high
+Primary use: Forested Himalayan terrain and atmospheric ridge depth
+Public state: REFERENCE_ONLY
+Gallery state: NOT_SELECTED
+
+05. dot-terrain-forested-ridges-day-02.jpg
+Source: IMG_20221119_130336.jpg
+Classes: RECONSTRUCTION_REFERENCE, CINEMATIC_REFERENCE
+Priority: high
+Primary use: Forest mass, ridge depth and terrain reconstruction
+Public state: REFERENCE_ONLY
+Gallery state: NOT_SELECTED
+
+06. dot-lighting-sunset-ridges-01.jpg
+Source: IMG_20221119_170857.jpg
+Classes: RECONSTRUCTION_REFERENCE, CINEMATIC_REFERENCE, PUBLIC_CANDIDATE
+Priority: very-high
+Primary use: Primary DOT sunset lighting reference
+Public state: CANDIDATE_NOT_APPROVED
+Gallery state: NOT_SELECTED
+
+07. dot-lighting-sunset-ridges-02.jpg
+Source: IMG_20221119_170911.jpg
+Classes: RECONSTRUCTION_REFERENCE, CINEMATIC_REFERENCE
+Priority: medium
+Primary use: Secondary sunset progression reference
+Public state: REFERENCE_ONLY
+Gallery state: NOT_SELECTED
+
+08. dot-lighting-sunset-ridges-03.jpg
+Source: IMG_20221119_170915.jpg
+Classes: RECONSTRUCTION_REFERENCE, CINEMATIC_REFERENCE
+Priority: high
+Primary use: Sunset-to-dusk transition reference
+Public state: REFERENCE_ONLY
+Gallery state: NOT_SELECTED
+
+09. dot-lighting-blue-hour-site-01.jpg
+Source: IMG_20221119_174144.jpg
+Classes: RECONSTRUCTION_REFERENCE, CINEMATIC_REFERENCE
+Priority: medium
+Primary use: Blue-hour site ambience
+Public state: REFERENCE_ONLY
+Gallery state: NOT_SELECTED
+
+10. dot-lighting-twilight-ridges-01.jpg
+Source: IMG_20221119_174204.jpg
+Classes: RECONSTRUCTION_REFERENCE, CINEMATIC_REFERENCE, PUBLIC_CANDIDATE
+Priority: very-high
+Primary use: Twilight mountain silhouette and horizon
+Public state: CANDIDATE_NOT_APPROVED
+Gallery state: NOT_SELECTED
+
+11. dot-site-dusk-detail-01.jpg
+Source: IMG_20221119_174240.jpg
+Classes: RECONSTRUCTION_REFERENCE
+Priority: medium
+Primary use: Dusk site and architectural-detail reconstruction
+Public state: REFERENCE_ONLY
+Gallery state: NOT_SELECTED
+
+12. dot-facility-dome-blue-hour-01.jpg
+Source: IMG_20221119_174248.jpg
+Classes: RECONSTRUCTION_REFERENCE, CINEMATIC_REFERENCE, PUBLIC_CANDIDATE, GALLERY_CANDIDATE
+Priority: very-high
+Primary use: Primary blue-hour DOT dome reference
+Public state: CANDIDATE_NOT_APPROVED
+Gallery state: CANDIDATE_NOT_APPROVED
+
+13. dot-facility-blue-hour-02.jpg
+Source: IMG_20221119_174252.jpg
+Classes: RECONSTRUCTION_REFERENCE, CINEMATIC_REFERENCE, PUBLIC_CANDIDATE
+Priority: high
+Primary use: Secondary DOT blue-hour facility angle
+Public state: CANDIDATE_NOT_APPROVED
+Gallery state: NOT_SELECTED
+
+14. dot-site-blue-hour-layout-01.jpg
+Source: IMG_20221119_174255.jpg
+Classes: RECONSTRUCTION_REFERENCE, CINEMATIC_REFERENCE
+Priority: medium
+Primary use: Support-building and blue-hour site layout
+Public state: REFERENCE_ONLY
+Gallery state: NOT_SELECTED
+
+15. dot-site-entrance-dusk-01.jpg
+Source: IMG_20221119_174449.jpg
+Classes: RECONSTRUCTION_REFERENCE
+Priority: medium
+Primary use: Entrance and dusk architectural-detail reference
+Public state: REFERENCE_ONLY
+Gallery state: NOT_SELECTED
+
+16. dot-lighting-night-ridges-01.jpg
+Source: IMG_20221119_175833.jpg
+Classes: RECONSTRUCTION_REFERENCE, CINEMATIC_REFERENCE
+Priority: medium
+Primary use: Late twilight and night terrain reference
+Public state: REFERENCE_ONLY
+Gallery state: NOT_SELECTED
+
+17. dot-site-road-forest-day-01.jpg
+Source: IMG_20230510_115704.jpg
+Classes: RECONSTRUCTION_REFERENCE, CINEMATIC_REFERENCE
+Priority: very-high
+Primary use: Site road, slope, retaining structure and forest layout
+Public state: REFERENCE_ONLY
+Gallery state: NOT_SELECTED
+
+18. dot-terrain-ridge-depth-day-03.jpg
+Source: IMG_20230510_122540.jpg
+Classes: RECONSTRUCTION_REFERENCE, CINEMATIC_REFERENCE
+Priority: very-high
+Primary use: Primary multi-layer Himalayan ridge-depth reference
+Public state: REFERENCE_ONLY
+Gallery state: NOT_SELECTED
+
+19. dot-terrain-ridge-depth-day-04.jpg
+Source: IMG_20230510_122550.jpg
+Classes: RECONSTRUCTION_REFERENCE, CINEMATIC_REFERENCE
+Priority: very-high
+Primary use: Terrain layering and vegetation distribution
+Public state: REFERENCE_ONLY
+Gallery state: NOT_SELECTED
+
+20. dot-site-approach-visit-02.jpg
+Source: IMG_20230510_122600.jpg
+Classes: RECONSTRUCTION_REFERENCE, VISIT_STORY
+Priority: medium
+Primary use: Facility approach and visit-story context
+Public state: REFERENCE_ONLY
+Gallery state: NOT_SELECTED
+
+21. dot-site-approach-visit-03.jpg
+Source: IMG_20230510_122603.jpg
+Classes: RECONSTRUCTION_REFERENCE, VISIT_STORY, PUBLIC_CANDIDATE, GALLERY_CANDIDATE
+Priority: high
+Primary use: Preferred facility-approach visit-story frame
+Public state: CANDIDATE_NOT_APPROVED
+Gallery state: CANDIDATE_NOT_APPROVED
+
+22. dot-facility-exterior-day-01.jpg
+Source: IMG_20230510_122955.jpg
+Classes: RECONSTRUCTION_REFERENCE, CINEMATIC_REFERENCE, PUBLIC_CANDIDATE
+Priority: critical
+Primary use: Primary daylight DOT facility geometry reference
+Public state: CANDIDATE_NOT_APPROVED
+Gallery state: NOT_SELECTED
+
+23. dot-facility-exterior-day-02.jpg
+Source: IMG_20230510_122959.jpg
+Classes: RECONSTRUCTION_REFERENCE, CINEMATIC_REFERENCE, PUBLIC_CANDIDATE
+Priority: critical
+Primary use: Secondary facility geometry and terrain relationship
+Public state: CANDIDATE_NOT_APPROVED
+Gallery state: NOT_SELECTED
+
+24. dot-terrain-valley-ridges-day-01.jpg
+Source: IMG_20230510_123718.jpg
+Classes: RECONSTRUCTION_REFERENCE, CINEMATIC_REFERENCE
+Priority: high
+Primary use: Valley morphology, settlement context and ridge depth
+Public state: REFERENCE_ONLY
+Gallery state: NOT_SELECTED
+
+25. dot-terrain-panoramic-ridges-day-01.jpg
+Source: IMG_20230510_124917.jpg
+Classes: RECONSTRUCTION_REFERENCE, CINEMATIC_REFERENCE, PUBLIC_CANDIDATE
+Priority: very-high
+Primary use: Wide Himalayan terrain composition and atmospheric depth
+Public state: CANDIDATE_NOT_APPROVED
+Gallery state: NOT_SELECTED
+
+26. dot-lighting-golden-hour-ridges-01.jpg
+Source: IMG_20230510_175908.jpg
+Classes: RECONSTRUCTION_REFERENCE, CINEMATIC_REFERENCE, PUBLIC_CANDIDATE
+Priority: very-high
+Primary use: Primary golden-hour terrain and vegetation lighting
+Public state: CANDIDATE_NOT_APPROVED
+Gallery state: NOT_SELECTED
+
+27. dot-lighting-golden-hour-ridges-02.jpg
+Source: IMG_20230510_175916.jpg
+Classes: RECONSTRUCTION_REFERENCE, CINEMATIC_REFERENCE, PUBLIC_CANDIDATE, GALLERY_CANDIDATE
+Priority: very-high
+Primary use: Preferred golden-hour cinematic and Gallery candidate
+Public state: CANDIDATE_NOT_APPROVED
+Gallery state: CANDIDATE_NOT_APPROVED
+
+============================================================
+DOT FINAL CLASSIFICATION LOCKED
+============================================================

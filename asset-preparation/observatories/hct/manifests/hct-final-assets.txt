@@ -1,0 +1,113 @@
+============================================================
+DIYA ASTRA - HCT FINAL ASSET CLASSIFICATION
+============================================================
+
+Prepared assets           : 9
+Public candidates         : 6
+Gallery story assets      : 5
+Reconstruction references : 8
+Reference-only assets     : 2
+Cinematic real images     : 7
+
+ORIENTATION CORRECTIONS REQUIRED: NO
+SOURCE ORIGINALS MODIFIED: NO
+
+============================================================
+LOCKED CINEMATIC SEQUENCE
+============================================================
+
+01. Hanle High-Altitude Environment
+    ASSET: hct-hanle-mountain-road-landscape-01.jpg
+
+02. Indian Astronomical Observatory Site
+    ASSET: hct-hanle-observatory-plateau-day-01.jpg
+
+03. Approaching HCT
+    ASSET: hct-hanle-observatory-approach-road-01.jpg
+
+04. 2.01-m Himalayan Chandra Telescope Reveal
+    ASSET: hct-himalayan-chandra-telescope-hero-day-01.webp
+
+05. Facility Overview
+    ASSET: hct-himalayan-chandra-telescope-overview-day-02.jpg
+
+06. Observatory Infrastructure
+    ASSET: hct-dome-communications-infrastructure-day-01.jpg
+
+07. HFOSC Instrumentation
+    - Hanle Faint Object Spectrograph and Camera
+    - Optical imaging and spectroscopy
+    - Grism 7
+    - Grism 8
+    - 350-900 nm instrument context
+
+08. Diya's Spectroscopic Observation
+    - M-dwarf optical spectroscopy
+    - HCT / HFOSC
+    - Chromospheric activity diagnostics
+
+09. Reduction Pipeline
+    - Bias subtraction
+    - Cosmic-ray removal
+    - 1-D spectral extraction
+    - Fe-Ar wavelength calibration
+    - Spectrophotometric flux calibration
+    - Spectrum combination
+    - IRAF
+
+10. Diya's Analysis
+    - Specutils
+    - Equivalent-width measurements
+    - DER SNR
+    - Monte Carlo uncertainty estimation
+
+11. Chromospheric Diagnostics
+    - Ca II H & K
+    - H-alpha
+    - H-beta
+    - H-gamma
+    - H-delta
+
+12. Research Connection
+    - AD Leo
+    - Time-series optical spectroscopy
+    - Flare and magnetic-activity diagnostics
+
+13. Hanle Dark-Sky Transition
+    ASSET: hct-hanle-dark-sky-milky-way-01.webp
+
+============================================================
+LOCKED GALLERY STORY
+============================================================
+
+1. hct-himalayan-chandra-telescope-hero-day-01.webp
+   Primary HCT facility portrait
+
+2. hct-hanle-mountain-road-landscape-01.jpg
+   Hanle high-altitude environment
+
+3. hct-hanle-observatory-plateau-day-01.jpg
+   Observatory-site context
+
+4. hct-hanle-dark-sky-milky-way-01.webp
+   Illustrative dark-sky context
+
+5. hct-himalayan-chandra-telescope-overview-day-02.jpg
+   Secondary facility overview
+
+============================================================
+SCIENTIFIC STORY LOCK
+============================================================
+
+HCT -> HFOSC -> Grism 7 / Grism 8
+-> optical spectroscopy
+-> IRAF reduction
+-> Specutils / EW
+-> DER SNR
+-> Monte Carlo uncertainty analysis
+-> chromospheric diagnostics
+-> AD Leo / magnetic activity science
+
+============================================================
+END OF HCT FINAL CLASSIFICATION
+============================================================

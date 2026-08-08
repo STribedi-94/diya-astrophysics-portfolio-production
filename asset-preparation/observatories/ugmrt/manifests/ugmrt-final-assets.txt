@@ -1,0 +1,31 @@
+============================================================
+DIYA ASTRA - uGMRT FINAL CLASSIFICATION
+============================================================
+
+TOTAL PREPARED ASSETS      : 6
+SELECTED NEW V1 ASSETS     : 4
+REFERENCE-ONLY ASSETS      : 2
+GALLERY STORY ASSETS       : 3
+RECONSTRUCTION REFERENCES  : 6
+
+EXISTING FACILITY ASSET:
+src/assets/facility-ugmrt.jpg
+Decision: KEEP_AND_REUSE_FOR_EXISTING_UI_WHERE_REQUIRED
+
+CINEMATIC STORY:
+ARRAY ENVIRONMENT
+-> ARRAY ARCHITECTURE
+-> 45-m ANTENNA
+-> RECEIVER / SIGNAL CHAIN
+-> GWB
+-> CORRELATION / VISIBILITIES
+-> AIPS + CASA
+-> CALIBRATION / IMAGING / SELF-CAL
+-> GJ 1151 / GJ 398 / AD Leo
+
+SOURCE ORIGINALS MODIFIED: NO
+ORIENTATION CORRECTION REQUIRED: NO
+
+============================================================
+uGMRT FINAL CLASSIFICATION COMPLETE
+============================================================

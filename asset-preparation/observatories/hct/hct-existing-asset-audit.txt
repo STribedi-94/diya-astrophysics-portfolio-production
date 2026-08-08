@@ -1,0 +1,73 @@
+============================================================
+DIYA ASTRA - EXISTING HCT / HANLE ASSET AUDIT
+============================================================
+
+PRODUCTION ROOT:
+E:\Diya Portfolio Website\02 - Production\diya-astrophysics-portfolio-production\diya-astrophysics-portfolio-production
+
+============================================================
+TECHNICAL / ORIENTATION STATUS
+============================================================
+
+Prepared source images visually reviewed: 9
+Visually incorrect orientation detected: NO
+Orientation transformation required now: NO
+Source originals modified: NO
+
+============================================================
+SRC MATCHES
+============================================================
+
+MATCH COUNT: 1
+
+src/assets/facility-hct.jpg
+SIZE BYTES: 149028
+SHA-256: ef39f053498497be3c8d9ea6bc8371c553e5dae5ff05e5e6df629c9548e0cf7e
+
+------------------------------------------------------------
+
+============================================================
+PUBLIC MATCHES
+============================================================
+
+MATCH COUNT: 0
+
+============================================================
+HCT PREPARED ASSET INVENTORY
+============================================================
+
+PREPARED IMAGE COUNT: 9
+
+hct-dome-communications-infrastructure-day-01.jpg
+hct-dome-rocky-terrain-low-angle-01.jpg
+hct-facility-dome-close-day-01.jpg
+hct-hanle-dark-sky-milky-way-01.webp
+hct-hanle-mountain-road-landscape-01.jpg
+hct-hanle-observatory-approach-road-01.jpg
+hct-hanle-observatory-plateau-day-01.jpg
+hct-himalayan-chandra-telescope-hero-day-01.webp
+hct-himalayan-chandra-telescope-overview-day-02.jpg
+
+============================================================
+SCIENTIFIC INTEGRATION LOCK
+============================================================
+
+Telescope:
+2.01-m Himalayan Chandra Telescope (HCT)
+
+Instrument:
+HFOSC - Hanle Faint Object Spectrograph and Camera
+
+Diya observing configuration:
+Optical spectroscopy; Grism 7 and Grism 8
+
+Analysis/reduction layer:
+IRAF; Specutils; DER SNR; Monte Carlo EW uncertainty analysis
+
+Important rule:
+Generic facility photographs must NOT be represented as photographs
+of HFOSC or the spectroscopic reduction pipeline.
+
+============================================================
+END OF HCT EXISTING-ASSET AUDIT
+============================================================

@@ -1,0 +1,100 @@
+============================================================
+DIYA ASTRA - uGMRT COMBINED SOURCE AUDIT
+============================================================
+
+PRODUCTION ROOT:
+E:\Diya Portfolio Website\02 - Production\diya-astrophysics-portfolio-production\diya-astrophysics-portfolio-production
+
+============================================================
+SOURCE FOUNDATION SUMMARY
+============================================================
+
+User-supplied images      : 4
+Official NCRA/GMRT images : 2
+Combined image count      : 6
+Non-image files           : 0
+Duplicate groups          : 0
+Combined image size       : 2.72 MB
+
+============================================================
+USER-SUPPLIED ORIGINALS
+============================================================
+
+01. GMRT_antenna_through_the_fields.jpg
+TYPE       : IMAGE
+SIZE       : 24.97 KB (25568 bytes)
+SHA-256    : c1fe5d0448f747901815f248015dcb0cf03fbdd0f93870bfd578823c31888fd3
+PROVENANCE : USER_SUPPLIED
+PATH       : asset-preparation/observatories/ugmrt/source/user-originals/GMRT_antenna_through_the_fields.jpg
+
+02. gmrt.jpg
+TYPE       : IMAGE
+SIZE       : 50.50 KB (51714 bytes)
+SHA-256    : 1fa4b284a25542510546776bd69601afc716ed2634fc7e6bb57e7552eae3e419
+PROVENANCE : USER_SUPPLIED
+PATH       : asset-preparation/observatories/ugmrt/source/user-originals/gmrt.jpg
+
+03. gmrt12.jpg
+TYPE       : IMAGE
+SIZE       : 130.28 KB (133407 bytes)
+SHA-256    : 343e926e3388f8acb1f5f071c6745f70f2370c5e34df8f777e4b02a75496c71a
+PROVENANCE : USER_SUPPLIED
+PATH       : asset-preparation/observatories/ugmrt/source/user-originals/gmrt12.jpg
+
+04. images.jpg
+TYPE       : IMAGE
+SIZE       : 27.59 KB (28251 bytes)
+SHA-256    : 2c1dbb993b09d3d2a2f98deaa3cb01f57027bcf00a227fe7a4d187c51d16dbec
+PROVENANCE : USER_SUPPLIED
+PATH       : asset-preparation/observatories/ugmrt/source/user-originals/images.jpg
+
+============================================================
+OFFICIAL NCRA / GMRT SUPPLEMENTARY SOURCES
+============================================================
+
+01. blue-sky2-h.jpg
+TYPE       : IMAGE
+SIZE       : 1.95 MB (2044831 bytes)
+SHA-256    : 04909855a5d0de16c6f9319674d2a6bb4cfc1d34fc5fed8d2c015816aeddf4a5
+PROVENANCE : OFFICIAL_NCRA_GMRT
+PATH       : asset-preparation/observatories/ugmrt/source/official-web/blue-sky2-h.jpg
+
+02. gmrt_lake.jpg
+TYPE       : IMAGE
+SIZE       : 552.62 KB (565880 bytes)
+SHA-256    : 81c072e58158702bc295adc6164d6e3620b327311474ca68a11ba429289124f5
+PROVENANCE : OFFICIAL_NCRA_GMRT
+PATH       : asset-preparation/observatories/ugmrt/source/official-web/gmrt_lake.jpg
+
+============================================================
+BYTE-IDENTICAL DUPLICATE CHECK
+============================================================
+
+No byte-identical duplicates detected across the combined source set.
+
+============================================================
+PROVENANCE / SOURCE POLICY
+============================================================
+
+USER_SUPPLIED:
+Images supplied directly for the Diya portfolio project.
+
+OFFICIAL_NCRA_GMRT:
+Supplementary reference imagery selected from the official
+GMRT / NCRA-TIFR photo-gallery resources.
+
+The two provenance classes remain separately traceable even
+after semantic prepared derivatives are created.
+
+============================================================
+SOURCE PROTECTION STATUS
+============================================================
+
+Source images modified : NO
+Source images renamed  : NO
+Source images moved    : NO
+Source images converted: NO
+
+============================================================
+uGMRT COMBINED SOURCE FOUNDATION VERIFIED
+============================================================

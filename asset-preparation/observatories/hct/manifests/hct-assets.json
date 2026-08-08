@@ -1,0 +1,311 @@
+{
+  "project": "Diya Astrophysics Portfolio",
+  "system": "Project Astra",
+  "observatory": "Himalayan Chandra Telescope / Hanle",
+  "stage": "HCT Asset Preparation Stage 1",
+  "status": "PREPARED_AND_INTEGRITY_VERIFIED",
+  "sourceProtection": {
+    "originalCount": 9,
+    "originalsRenamed": false,
+    "originalsModified": false,
+    "originalsMoved": false,
+    "recompressionPerformed": false
+  },
+  "preparation": {
+    "preparedCount": 9,
+    "semanticNamingApplied": true,
+    "byteIdenticalCopies": true,
+    "sha256IntegrityVerified": true,
+    "finalImplementationSelectionLocked": false
+  },
+  "scientificContext": {
+    "telescope": "2.01-m Himalayan Chandra Telescope",
+    "site": "Indian Astronomical Observatory, Hanle, Ladakh",
+    "instrument": "HFOSC",
+    "instrumentExpanded": "Hanle Faint Object Spectrograph and Camera",
+    "observingModesRelevantToDiya": [
+      "Optical spectroscopy",
+      "Grism 7",
+      "Grism 8"
+    ],
+    "reductionAndAnalysisContext": [
+      "IRAF",
+      "Specutils",
+      "DER SNR",
+      "Monte Carlo equivalent-width uncertainty analysis"
+    ],
+    "integrationRule": "Facility photographs provide real site/telescope context. HFOSC, grisms, spectra and reduction pipeline must be presented as a separate scientifically sourced information layer and must not be falsely attributed to objects visible in generic facility photographs."
+  },
+  "records": [
+    {
+      "id": "HCT-01",
+      "sourceFile": "1667467205.jpeg",
+      "preparedFile": "hct-hanle-observatory-plateau-day-01.jpg",
+      "sourcePath": "asset-preparation/observatories/hct/source/images/1667467205.jpeg",
+      "preparedPath": "asset-preparation/observatories/hct/prepared/images/hct-hanle-observatory-plateau-day-01.jpg",
+      "sourceExtension": ".jpeg",
+      "preparedExtension": ".jpg",
+      "sourceBytes": 650494,
+      "preparedBytes": 650494,
+      "sha256": "a030dca8b87e774cb56b27f76e409849896ef4763c56a8387473f49b0e1314cc",
+      "integrityVerified": true,
+      "sourceModified": false,
+      "visualClassification": {
+        "subject": "Wide rocky Hanle observatory plateau with multiple observatory structures",
+        "category": "site-environment",
+        "primaryRole": "hanle-site-establishing-shot",
+        "cinematicUse": "Wide environmental introduction before approaching HCT",
+        "scientificUse": "Hanle high-altitude observatory-site context",
+        "documentaryClass": "documentary-site-reference",
+        "notes": "Strong daylight establishing image with rocky high-altitude terrain."
+      },
+      "preliminarySelection": {
+        "publicCandidate": true,
+        "galleryCandidate": true,
+        "reconstructionReference": true
+      },
+      "implementationStatus": "PREPARED_REFERENCE_ONLY",
+      "finalSelectionLocked": false
+    },
+    {
+      "id": "HCT-02",
+      "sourceFile": "dome image.jpg",
+      "preparedFile": "hct-dome-communications-infrastructure-day-01.jpg",
+      "sourcePath": "asset-preparation/observatories/hct/source/images/dome image.jpg",
+      "preparedPath": "asset-preparation/observatories/hct/prepared/images/hct-dome-communications-infrastructure-day-01.jpg",
+      "sourceExtension": ".jpg",
+      "preparedExtension": ".jpg",
+      "sourceBytes": 72679,
+      "preparedBytes": 72679,
+      "sha256": "a501c66d8532411bae93a3763a7cdd55772834a8eabeee4299941cb62978e4de",
+      "integrityVerified": true,
+      "sourceModified": false,
+      "visualClassification": {
+        "subject": "Close HCT dome and facility structure with foreground communication dish",
+        "category": "facility-infrastructure",
+        "primaryRole": "hct-infrastructure-close-view",
+        "cinematicUse": "Facility approach and infrastructure detail",
+        "scientificUse": "HCT facility and remote-observatory infrastructure context",
+        "documentaryClass": "documentary-facility-reference",
+        "notes": "Useful structural reference; foreground dish should not be presented as HFOSC instrumentation."
+      },
+      "preliminarySelection": {
+        "publicCandidate": true,
+        "galleryCandidate": false,
+        "reconstructionReference": true
+      },
+      "implementationStatus": "PREPARED_REFERENCE_ONLY",
+      "finalSelectionLocked": false
+    },
+    {
+      "id": "HCT-03",
+      "sourceFile": "Hanle-dark-sky-reserve.webp",
+      "preparedFile": "hct-hanle-dark-sky-milky-way-01.webp",
+      "sourcePath": "asset-preparation/observatories/hct/source/images/Hanle-dark-sky-reserve.webp",
+      "preparedPath": "asset-preparation/observatories/hct/prepared/images/hct-hanle-dark-sky-milky-way-01.webp",
+      "sourceExtension": ".webp",
+      "preparedExtension": ".webp",
+      "sourceBytes": 549000,
+      "preparedBytes": 549000,
+      "sha256": "e1cddfbd011c4f80c04dda0c4a8c59e95e177ed8cedd8f6edb654a339bf701f7",
+      "integrityVerified": true,
+      "sourceModified": false,
+      "visualClassification": {
+        "subject": "Milky Way / dark-sky composition above Hanle observatory structures",
+        "category": "dark-sky-context",
+        "primaryRole": "hanle-night-transition",
+        "cinematicUse": "Day-to-night or dark-sky cinematic transition",
+        "scientificUse": "Illustrative dark-sky observing-environment context",
+        "documentaryClass": "illustrative-or-composite-reference",
+        "notes": "Treat as illustrative/promotional dark-sky imagery unless provenance later establishes documentary status."
+      },
+      "preliminarySelection": {
+        "publicCandidate": true,
+        "galleryCandidate": true,
+        "reconstructionReference": false
+      },
+      "implementationStatus": "PREPARED_REFERENCE_ONLY",
+      "finalSelectionLocked": false
+    },
+    {
+      "id": "HCT-04",
+      "sourceFile": "Himalayan-Chandra-Telescope-dome-at-Indian-Astronomical-Observatory-during-daytime.webp",
+      "preparedFile": "hct-himalayan-chandra-telescope-hero-day-01.webp",
+      "sourcePath": "asset-preparation/observatories/hct/source/images/Himalayan-Chandra-Telescope-dome-at-Indian-Astronomical-Observatory-during-daytime.webp",
+      "preparedPath": "asset-preparation/observatories/hct/prepared/images/hct-himalayan-chandra-telescope-hero-day-01.webp",
+      "sourceExtension": ".webp",
+      "preparedExtension": ".webp",
+      "sourceBytes": 203862,
+      "preparedBytes": 203862,
+      "sha256": "2d1c2b9c7f7b650a2122cfc962a59be4b07031e256ac5fd4f468cfe4d05c3800",
+      "integrityVerified": true,
+      "sourceModified": false,
+      "visualClassification": {
+        "subject": "Himalayan Chandra Telescope dome in broad Ladakh mountain landscape",
+        "category": "facility-hero",
+        "primaryRole": "primary-hct-hero",
+        "cinematicUse": "Primary HCT reveal during Hanle cinematic tour",
+        "scientificUse": "Primary visual identity for the 2.01-m Himalayan Chandra Telescope",
+        "documentaryClass": "documentary-facility-reference",
+        "notes": "Strongest primary HCT facility image in current source set."
+      },
+      "preliminarySelection": {
+        "publicCandidate": true,
+        "galleryCandidate": true,
+        "reconstructionReference": true
+      },
+      "implementationStatus": "PREPARED_REFERENCE_ONLY",
+      "finalSelectionLocked": false
+    },
+    {
+      "id": "HCT-05",
+      "sourceFile": "images (1)_road.jpg",
+      "preparedFile": "hct-hanle-observatory-approach-road-01.jpg",
+      "sourcePath": "asset-preparation/observatories/hct/source/images/images (1)_road.jpg",
+      "preparedPath": "asset-preparation/observatories/hct/prepared/images/hct-hanle-observatory-approach-road-01.jpg",
+      "sourceExtension": ".jpg",
+      "preparedExtension": ".jpg",
+      "sourceBytes": 88034,
+      "preparedBytes": 88034,
+      "sha256": "6a47bf499c3fb04bf71d7df5dd9f33234efe5c6eb72b0d7c3b6dae1bef069c0f",
+      "integrityVerified": true,
+      "sourceModified": false,
+      "visualClassification": {
+        "subject": "Road approaching observatory structures across Hanle landscape",
+        "category": "site-approach",
+        "primaryRole": "observatory-arrival-shot",
+        "cinematicUse": "Approach-road transition before HCT reveal",
+        "scientificUse": "Physical site and observatory-access context",
+        "documentaryClass": "documentary-site-reference",
+        "notes": "Useful for creating geographic continuity in the cinematic tour."
+      },
+      "preliminarySelection": {
+        "publicCandidate": true,
+        "galleryCandidate": false,
+        "reconstructionReference": true
+      },
+      "implementationStatus": "PREPARED_REFERENCE_ONLY",
+      "finalSelectionLocked": false
+    },
+    {
+      "id": "HCT-06",
+      "sourceFile": "images (1).jpg",
+      "preparedFile": "hct-dome-rocky-terrain-low-angle-01.jpg",
+      "sourcePath": "asset-preparation/observatories/hct/source/images/images (1).jpg",
+      "preparedPath": "asset-preparation/observatories/hct/prepared/images/hct-dome-rocky-terrain-low-angle-01.jpg",
+      "sourceExtension": ".jpg",
+      "preparedExtension": ".jpg",
+      "sourceBytes": 46324,
+      "preparedBytes": 46324,
+      "sha256": "d86dfc4646e55a1413e423d3dd07601e744701771c9b0baa45afa49db6dfb619",
+      "integrityVerified": true,
+      "sourceModified": false,
+      "visualClassification": {
+        "subject": "HCT dome viewed from below across rocky foreground",
+        "category": "facility-secondary",
+        "primaryRole": "terrain-to-dome-reveal",
+        "cinematicUse": "Secondary low-angle telescope reveal",
+        "scientificUse": "HCT dome and local terrain reference",
+        "documentaryClass": "documentary-facility-reference",
+        "notes": "Better suited to reconstruction/reference than primary public presentation."
+      },
+      "preliminarySelection": {
+        "publicCandidate": false,
+        "galleryCandidate": false,
+        "reconstructionReference": true
+      },
+      "implementationStatus": "PREPARED_REFERENCE_ONLY",
+      "finalSelectionLocked": false
+    },
+    {
+      "id": "HCT-07",
+      "sourceFile": "images (2).jpg",
+      "preparedFile": "hct-hanle-mountain-road-landscape-01.jpg",
+      "sourcePath": "asset-preparation/observatories/hct/source/images/images (2).jpg",
+      "preparedPath": "asset-preparation/observatories/hct/prepared/images/hct-hanle-mountain-road-landscape-01.jpg",
+      "sourceExtension": ".jpg",
+      "preparedExtension": ".jpg",
+      "sourceBytes": 27468,
+      "preparedBytes": 27468,
+      "sha256": "f0a381b65757211b6b4673c7951baef7a3dffc8d92081ae37172040bad36ad3e",
+      "integrityVerified": true,
+      "sourceModified": false,
+      "visualClassification": {
+        "subject": "Hanle mountain road and broad high-altitude landscape",
+        "category": "site-environment",
+        "primaryRole": "hanle-landscape-context",
+        "cinematicUse": "Environmental travel/approach sequence",
+        "scientificUse": "High-altitude Ladakh observing-site environment",
+        "documentaryClass": "documentary-site-reference",
+        "notes": "Useful broad environmental context rather than telescope-specific detail."
+      },
+      "preliminarySelection": {
+        "publicCandidate": true,
+        "galleryCandidate": true,
+        "reconstructionReference": true
+      },
+      "implementationStatus": "PREPARED_REFERENCE_ONLY",
+      "finalSelectionLocked": false
+    },
+    {
+      "id": "HCT-08",
+      "sourceFile": "images.jpg",
+      "preparedFile": "hct-facility-dome-close-day-01.jpg",
+      "sourcePath": "asset-preparation/observatories/hct/source/images/images.jpg",
+      "preparedPath": "asset-preparation/observatories/hct/prepared/images/hct-facility-dome-close-day-01.jpg",
+      "sourceExtension": ".jpg",
+      "preparedExtension": ".jpg",
+      "sourceBytes": 29593,
+      "preparedBytes": 29593,
+      "sha256": "cdfdb242db0524f5655b9cd4286436b7df016814cf8d09ac070466fd3620e30a",
+      "integrityVerified": true,
+      "sourceModified": false,
+      "visualClassification": {
+        "subject": "Close frontal/side view of HCT building and dome",
+        "category": "facility-detail",
+        "primaryRole": "hct-structural-detail",
+        "cinematicUse": "Close facility inspection after primary reveal",
+        "scientificUse": "HCT dome/building reconstruction reference",
+        "documentaryClass": "documentary-facility-reference",
+        "notes": "Strong structural reference but lower presentation quality than primary hero views."
+      },
+      "preliminarySelection": {
+        "publicCandidate": false,
+        "galleryCandidate": false,
+        "reconstructionReference": true
+      },
+      "implementationStatus": "PREPARED_REFERENCE_ONLY",
+      "finalSelectionLocked": false
+    },
+    {
+      "id": "HCT-09",
+      "sourceFile": "indian-astronomical-observator.jpg",
+      "preparedFile": "hct-himalayan-chandra-telescope-overview-day-02.jpg",
+      "sourcePath": "asset-preparation/observatories/hct/source/images/indian-astronomical-observator.jpg",
+      "preparedPath": "asset-preparation/observatories/hct/prepared/images/hct-himalayan-chandra-telescope-overview-day-02.jpg",
+      "sourceExtension": ".jpg",
+      "preparedExtension": ".jpg",
+      "sourceBytes": 31929,
+      "preparedBytes": 31929,
+      "sha256": "7b09941e71f86c33c50a5aa6ab5c6f9a66c57933dadb83f3ba7b68393f0b7e3a",
+      "integrityVerified": true,
+      "sourceModified": false,
+      "visualClassification": {
+        "subject": "Wide frontal HCT facility view with access road and surrounding mountains",
+        "category": "facility-hero",
+        "primaryRole": "secondary-hct-hero",
+        "cinematicUse": "Secondary facility overview / transition into instrumentation story",
+        "scientificUse": "HCT facility overview in Hanle environment",
+        "documentaryClass": "documentary-facility-reference",
+        "notes": "Strong secondary HCT overview complementing the primary hero image."
+      },
+      "preliminarySelection": {
+        "publicCandidate": true,
+        "galleryCandidate": true,
+        "reconstructionReference": true
+      },
+      "implementationStatus": "PREPARED_REFERENCE_ONLY",
+      "finalSelectionLocked": false
+    }
+  ]
+}

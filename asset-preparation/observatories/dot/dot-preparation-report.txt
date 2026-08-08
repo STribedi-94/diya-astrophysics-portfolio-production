@@ -1,0 +1,42 @@
+============================================================
+DIYA ASTRA - DOT PREPARATION REPORT
+============================================================
+
+Production Root:
+E:\Diya Portfolio Website\02 - Production\diya-astrophysics-portfolio-production\diya-astrophysics-portfolio-production
+
+DOT Root:
+E:\Diya Portfolio Website\02 - Production\diya-astrophysics-portfolio-production\diya-astrophysics-portfolio-production\asset-preparation\observatories\dot
+
+Source Directory:
+E:\Diya Portfolio Website\02 - Production\diya-astrophysics-portfolio-production\diya-astrophysics-portfolio-production\asset-preparation\observatories\dot\source-originals
+
+Prepared Directory:
+E:\Diya Portfolio Website\02 - Production\diya-astrophysics-portfolio-production\diya-astrophysics-portfolio-production\asset-preparation\observatories\dot\prepared\images
+
+Expected source images: 27
+Verified source images: 27
+Prepared copies created: 27
+
+SOURCE ORIGINAL MODIFICATION:
+NONE
+
+BYTE-FOR-BYTE COPY INTEGRITY:
+VERIFIED USING SHA-256
+
+ORIENTATION NORMALIZATION REQUIRED LATER:
+IMG_20221119_130336.jpg -> EXIF orientation 3
+IMG_20221119_174449.jpg -> EXIF orientation 6
+
+PUBLIC ASSET APPROVAL:
+NOT YET PERFORMED
+
+IMAGE OPTIMIZATION:
+NOT YET PERFORMED
+
+FINAL PRODUCTION ASSET MIGRATION:
+NOT YET PERFORMED
+
+============================================================
+DOT PREPARATION STAGE 1 COMPLETE
+============================================================

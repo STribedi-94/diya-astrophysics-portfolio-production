@@ -1,0 +1,64 @@
+============================================================
+DIYA ASTRA - uGMRT OFFICIAL SUPPLEMENTARY SOURCE REGISTER
+============================================================
+
+AUTHORITATIVE SOURCE DOMAIN:
+gmrt.ncra.tifr.res.in
+
+INSTITUTION:
+National Centre for Radio Astrophysics (NCRA-TIFR)
+
+FACILITY:
+Giant Metrewave Radio Telescope / upgraded GMRT
+
+============================================================
+SUPPLEMENTARY ASSET PLAN
+============================================================
+
+OFFICIAL-01
+Required visual class: WIDE ARRAY / MULTIPLE ANTENNAS
+Purpose: interferometer scale, central/arm-array context,
+cinematic environmental establishment.
+
+OFFICIAL-02
+Required visual class: INDIVIDUAL 45-M ANTENNA STRUCTURE
+Purpose: mesh reflector, support structure, feed geometry,
+procedural reconstruction reference.
+
+OFFICIAL-03
+Required visual class: RECEIVER / BACKEND / TECHNICAL SYSTEM
+Purpose: scientific transition from received radio signal
+to receiver chain, backend processing and interferometric data.
+
+============================================================
+LOCKED FACILITY FACTS FOR ASTRA
+============================================================
+
+30 fully steerable parabolic antennas
+45-m diameter each
+Hybrid compact-central + Y-arm configuration
+Maximum interferometric baseline approximately 25 km
+uGMRT broadband receiver system
+GMRT Wideband Backend (GWB)
+
+DIYA SCIENTIFIC LAYER:
+uGMRT / GMRT radio observations of active M-dwarfs
+AIPS + CASA independent reduction workflows
+RFI flagging -> calibration -> imaging -> self-calibration
+GJ 1151 / GJ 398 / AD Leo research connections
+
+============================================================
+SOURCE GOVERNANCE
+============================================================
+
+1. Prefer official NCRA/GMRT material.
+2. Preserve downloaded official files unchanged in source/official-web.
+3. Record original URL/source page before semantic preparation.
+4. Do not imply that a generic equipment photograph depicts the GWB
+   unless the authoritative source explicitly identifies it as such.
+5. Scientific diagrams may be recreated for Astra rather than copied
+   directly if copyright/provenance is not suitable for public delivery.
+
+============================================================
+OFFICIAL SUPPLEMENTARY SOURCE REGISTER READY
+============================================================

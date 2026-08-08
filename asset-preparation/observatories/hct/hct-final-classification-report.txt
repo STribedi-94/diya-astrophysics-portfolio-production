@@ -1,0 +1,29 @@
+============================================================
+DIYA ASTRA - HCT FINAL CLASSIFICATION REPORT
+============================================================
+
+Prepared assets          : 9
+Reconstruction refs      : 8
+Cinematic real images    : 7
+Public candidates        : 6
+Gallery candidates       : 5
+Reference-only assets    : 2
+
+Existing facility mapped : 1
+Existing public matches  : 0
+
+Orientation normalization required: NO
+Source originals modified: NO
+Public migration performed: NO
+
+Cinematic sequence defined: YES
+Gallery story defined: YES
+HFOSC scientific layer defined: YES
+IRAF/analysis pipeline defined: YES
+
+NEXT:
+Implementation-ready lock followed by optimized production derivatives.
+
+============================================================
+HCT FINAL CLASSIFICATION COMPLETE
+============================================================

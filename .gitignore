@@ -32,3 +32,18 @@ dist-ssr
 *.sw?
 # Local production assets (Cloudflare R2 source)
 public/assets/
+# Project Astra observatory asset-preparation binaries
+asset-preparation/observatories/dot/source-originals/
+asset-preparation/observatories/dot/prepared/images/
+asset-preparation/observatories/dot/production-ready/images/
+asset-preparation/observatories/hct/source/images/
+asset-preparation/observatories/hct/prepared/images/
+asset-preparation/observatories/hct/production-ready/images/
+asset-preparation/observatories/hct/hct-contact-sheet.jpg
+asset-preparation/observatories/hct/hct-contact-sheet.html
+asset-preparation/observatories/ugmrt/source/user-originals/
+asset-preparation/observatories/ugmrt/source/official-web/
+asset-preparation/observatories/ugmrt/prepared/images/
+asset-preparation/observatories/ugmrt/production-ready/images/
+dot-asset-path-audit.txt
+dot-source-originals-verification.txt

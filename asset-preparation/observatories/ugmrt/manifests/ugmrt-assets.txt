@@ -1,0 +1,98 @@
+============================================================
+DIYA ASTRA - uGMRT PREPARED ASSET MANIFEST
+============================================================
+
+TOTAL PREPARED ASSETS: 6
+USER-SUPPLIED: 4
+OFFICIAL NCRA/GMRT: 2
+RECONSTRUCTION REFERENCES: 6
+CINEMATIC CANDIDATES: 5
+PUBLIC CANDIDATES: 4
+GALLERY CANDIDATES: 3
+
+------------------------------------------------------------
+SOURCE FILE   : GMRT_antenna_through_the_fields.jpg
+PREPARED FILE : ugmrt-antenna-through-fields-day-01.jpg
+PROVENANCE    : USER_SUPPLIED
+ROLE          : ENVIRONMENTAL_ANTENNA_REFERENCE
+SOURCE SHA256 : c1fe5d0448f747901815f248015dcb0cf03fbdd0f93870bfd578823c31888fd3
+PREPARED SHA  : c1fe5d0448f747901815f248015dcb0cf03fbdd0f93870bfd578823c31888fd3
+BYTE IDENTICAL: YES
+SOURCE MODIFIED: NO
+NOTES         : Low-resolution environmental reference showing a GMRT antenna within surrounding fields.
+
+------------------------------------------------------------
+SOURCE FILE   : gmrt.jpg
+PREPARED FILE : ugmrt-single-antenna-road-approach-day-01.jpg
+PROVENANCE    : USER_SUPPLIED
+ROLE          : SINGLE_ANTENNA_APPROACH
+SOURCE SHA256 : 1fa4b284a25542510546776bd69601afc716ed2634fc7e6bb57e7552eae3e419
+PREPARED SHA  : 1fa4b284a25542510546776bd69601afc716ed2634fc7e6bb57e7552eae3e419
+BYTE IDENTICAL: YES
+SOURCE MODIFIED: NO
+NOTES         : Useful close physical approach view of an individual GMRT antenna.
+
+------------------------------------------------------------
+SOURCE FILE   : gmrt12.jpg
+PREPARED FILE : ugmrt-multiple-antennas-landscape-day-01.jpg
+PROVENANCE    : USER_SUPPLIED
+ROLE          : MULTI_ANTENNA_ARRAY_VIEW
+SOURCE SHA256 : 343e926e3388f8acb1f5f071c6745f70f2370c5e34df8f777e4b02a75496c71a
+PREPARED SHA  : 343e926e3388f8acb1f5f071c6745f70f2370c5e34df8f777e4b02a75496c71a
+BYTE IDENTICAL: YES
+SOURCE MODIFIED: NO
+NOTES         : Strong user-supplied multi-antenna view suitable for array-scale visual storytelling.
+
+------------------------------------------------------------
+SOURCE FILE   : images.jpg
+PREPARED FILE : ugmrt-multiple-antennas-secondary-day-01.jpg
+PROVENANCE    : USER_SUPPLIED
+ROLE          : SECONDARY_ARRAY_REFERENCE
+SOURCE SHA256 : 2c1dbb993b09d3d2a2f98deaa3cb01f57027bcf00a227fe7a4d187c51d16dbec
+PREPARED SHA  : 2c1dbb993b09d3d2a2f98deaa3cb01f57027bcf00a227fe7a4d187c51d16dbec
+BYTE IDENTICAL: YES
+SOURCE MODIFIED: NO
+NOTES         : Secondary multi-antenna reference retained primarily for reconstruction and visual comparison.
+
+------------------------------------------------------------
+SOURCE FILE   : blue-sky2-h.jpg
+PREPARED FILE : ugmrt-three-antennas-blue-twilight-01.jpg
+PROVENANCE    : OFFICIAL_NCRA_GMRT
+ROLE          : PRIMARY_ANTENNA_CINEMATIC_REVEAL
+SOURCE SHA256 : 04909855a5d0de16c6f9319674d2a6bb4cfc1d34fc5fed8d2c015816aeddf4a5
+PREPARED SHA  : 04909855a5d0de16c6f9319674d2a6bb4cfc1d34fc5fed8d2c015816aeddf4a5
+BYTE IDENTICAL: YES
+SOURCE MODIFIED: NO
+NOTES         : Official GMRT/NCRA supplementary photograph selected as the primary structural/cinematic antenna reveal.
+
+------------------------------------------------------------
+SOURCE FILE   : gmrt_lake.jpg
+PREPARED FILE : ugmrt-array-water-reflection-day-01.jpg
+PROVENANCE    : OFFICIAL_NCRA_GMRT
+ROLE          : PRIMARY_ARRAY_ENVIRONMENT
+SOURCE SHA256 : 81c072e58158702bc295adc6164d6e3620b327311474ca68a11ba429289124f5
+PREPARED SHA  : 81c072e58158702bc295adc6164d6e3620b327311474ca68a11ba429289124f5
+BYTE IDENTICAL: YES
+SOURCE MODIFIED: NO
+NOTES         : Official GMRT/NCRA supplementary environmental photograph showing antenna reflection and multiple-array context.
+
+============================================================
+uGMRT SCIENTIFIC STORY FOUNDATION
+============================================================
+
+ARRAY
+-> 45-m ANTENNAS
+-> RECEIVER / SIGNAL CHAIN
+-> GWB
+-> CORRELATION / VISIBILITIES
+-> CALIBRATION
+-> IMAGING / SELF-CALIBRATION
+-> SCIENTIFIC ANALYSIS
+
+BACKEND POLICY:
+Use a sourced procedural GWB visualization during Astra implementation.
+Do not require a copied backend hardware photograph.
+
+============================================================
+uGMRT PREPARATION STAGE 1 COMPLETE
+============================================================
