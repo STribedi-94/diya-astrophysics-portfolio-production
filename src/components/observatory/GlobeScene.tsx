@@ -36,6 +36,7 @@ import {
 } from "./astra/observatory-descent-veil";
 import {
   isGroundObservatoryId,
+  type GroundObservatoryId,
 } from "./astra/observatory-registry";
 import {
   createTessOrbitSystem,
@@ -101,6 +102,18 @@ export type GlobeSceneProps = {
   active: boolean;
   interactionMode: AstraInteractionMode;
   restoreSignal: number;
+
+  /*
+   * Explicit local-observatory exploration ownership.
+   *
+   * React decides whether the visitor has pressed Explore / Exit Explore.
+   * GlobeScene owns the Three.js camera implementation and reports when the
+   * cinematic arrival has actually settled enough for the control to appear.
+   */
+  localExploreEnabled: boolean;
+  onLocalDestinationChange: (
+    observatoryId: GroundObservatoryId | null,
+  ) => void;
 };
 
 
@@ -113,6 +126,8 @@ export default function GlobeScene({
   active,
   interactionMode,
   restoreSignal,
+  localExploreEnabled,
+  onLocalDestinationChange,
 }: GlobeSceneProps) {
   const { maxPixelRatio } = usePerf();
 
@@ -145,6 +160,12 @@ export default function GlobeScene({
   const restoreSignalRef =
     useRef(restoreSignal);
 
+  const localExploreEnabledRef =
+    useRef(localExploreEnabled);
+
+  const onLocalDestinationChangeRef =
+    useRef(onLocalDestinationChange);
+
 
   selectedRef.current =
     selectedId;
@@ -160,6 +181,12 @@ export default function GlobeScene({
 
   restoreSignalRef.current =
     restoreSignal;
+
+  localExploreEnabledRef.current =
+    localExploreEnabled;
+
+  onLocalDestinationChangeRef.current =
+    onLocalDestinationChange;
 
 
   useEffect(() => {
@@ -1147,6 +1174,281 @@ disposables.push(
 
     /*
      * ------------------------------------------------------------
+     * Local Observatory Exploration
+     * ------------------------------------------------------------
+     *
+     * The Earth/TESS camera controller deliberately remains the owner of the
+     * global scene. Local exploration uses a small independent spherical camera
+     * state centred on the active facility. This avoids contaminating the
+     * canonical Project Astra overview distance limits with Observatory-scale
+     * distances.
+     */
+
+    let localExploreActive =
+      false;
+
+    let localExploreHomePose:
+      ReturnType<
+        typeof observatoryDestinationTransition.captureCurrentPose
+      > | null =
+      null;
+
+    const localExploreTarget =
+      new THREE.Vector3();
+
+    let localExploreDistance =
+      7;
+
+    let localExploreAzimuth =
+      0;
+
+    let localExplorePolar =
+      1.0;
+
+    let reportedLocalDestinationId:
+      GroundObservatoryId | null =
+      null;
+
+
+    const getEnvironmentForObservatory =
+      (
+        observatoryId:
+          GroundObservatoryId,
+      ) => {
+        switch (observatoryId) {
+          case "ugmrt":
+            return ugmrtEnvironmentSystem;
+
+          case "hct":
+            return hctEnvironmentSystem;
+
+          case "dot":
+            return dotEnvironmentSystem;
+        }
+      };
+
+
+    const getLocalExploreLimits =
+      (
+        observatoryId:
+          GroundObservatoryId,
+      ) => {
+        switch (observatoryId) {
+          case "ugmrt":
+            return {
+              minDistance: 3.4,
+              maxDistance: 24,
+              targetLift: 1.0,
+            };
+
+          case "hct":
+            return {
+              minDistance: 2.8,
+              maxDistance: 16,
+              targetLift: 1.0,
+            };
+
+          case "dot":
+            return {
+              minDistance: 3.0,
+              maxDistance: 20,
+              targetLift: 1.45,
+            };
+        }
+      };
+
+
+    const applyLocalExplorePose =
+      () => {
+        const sinPolar =
+          Math.sin(
+            localExplorePolar,
+          );
+
+        camera.position.set(
+          localExploreTarget.x +
+            localExploreDistance *
+              sinPolar *
+              Math.sin(
+                localExploreAzimuth,
+              ),
+
+          localExploreTarget.y +
+            localExploreDistance *
+              Math.cos(
+                localExplorePolar,
+              ),
+
+          localExploreTarget.z +
+            localExploreDistance *
+              sinPolar *
+              Math.cos(
+                localExploreAzimuth,
+              ),
+        );
+
+        camera.lookAt(
+          localExploreTarget,
+        );
+      };
+
+
+    const beginLocalExplore =
+      (
+        observatoryId:
+          GroundObservatoryId,
+      ) => {
+        if (
+          localExploreActive
+        ) {
+          return;
+        }
+
+        const environment =
+          getEnvironmentForObservatory(
+            observatoryId,
+          );
+
+        const limits =
+          getLocalExploreLimits(
+            observatoryId,
+          );
+
+        /*
+         * Exit Explore returns to exactly the settled cinematic pose that was
+         * visible when Explore was entered, rather than to a guessed camera.
+         */
+        localExploreHomePose =
+          observatoryDestinationTransition
+            .captureCurrentPose();
+
+        environment
+          .facilityAnchor
+          .getWorldPosition(
+            localExploreTarget,
+          );
+
+        localExploreTarget.y +=
+          limits.targetLift;
+
+        const offset =
+          camera.position
+            .clone()
+            .sub(
+              localExploreTarget,
+            );
+
+        localExploreDistance =
+          THREE.MathUtils.clamp(
+            Math.max(
+              1e-5,
+              offset.length(),
+            ),
+            limits.minDistance,
+            limits.maxDistance,
+          );
+
+        localExploreAzimuth =
+          Math.atan2(
+            offset.x,
+            offset.z,
+          );
+
+        localExplorePolar =
+          THREE.MathUtils.clamp(
+            Math.acos(
+              THREE.MathUtils.clamp(
+                offset.y /
+                  Math.max(
+                    1e-5,
+                    offset.length(),
+                  ),
+                -1,
+                1,
+              ),
+            ),
+            0.38,
+            1.42,
+          );
+
+        observatoryDestinationTransition
+          .cancel();
+
+        localExploreActive =
+          true;
+
+        dragging =
+          false;
+
+        didDrag =
+          false;
+
+        pointers.clear();
+
+        canvas.style.touchAction =
+          "none";
+
+        canvas.style.cursor =
+          "grab";
+
+        applyLocalExplorePose();
+      };
+
+
+    const endLocalExplore =
+      (
+        returnHome:
+          boolean,
+      ) => {
+        if (
+          !localExploreActive
+        ) {
+          return;
+        }
+
+        localExploreActive =
+          false;
+
+        dragging =
+          false;
+
+        didDrag =
+          false;
+
+        pointers.clear();
+
+        pinchDistance =
+          0;
+
+        canvas.style.touchAction =
+          "pan-y";
+
+        canvas.style.cursor =
+          "grab";
+
+        if (
+          returnHome &&
+          localExploreHomePose
+        ) {
+          observatoryDestinationTransition
+            .transitionToPose({
+              pose:
+                localExploreHomePose,
+
+              duration:
+                reducedMotion
+                  ? 0.35
+                  : 0.8,
+            });
+        }
+
+        localExploreHomePose =
+          null;
+      };
+
+
+    /*
+     * ------------------------------------------------------------
      * Picking
      * ------------------------------------------------------------
      */
@@ -1413,7 +1715,8 @@ disposables.push(
       ) => {
         if (
           observatorySceneHandoff
-            .isDestinationActive()
+            .isDestinationActive() &&
+          !localExploreActive
         ) {
           return;
         }
@@ -1476,18 +1779,22 @@ disposables.push(
          * controller synchronized.
          */
 
-        cameraController
-          .setInteractionState({
-            selectedId:
-              selectedRef.current,
+        if (
+          !localExploreActive
+        ) {
+          cameraController
+            .setInteractionState({
+              selectedId:
+                selectedRef.current,
 
-            inputOwner:
-              interactionModeRef
-                .current ===
-              "earth"
-                ? "earth"
-                : "camera",
-          });
+              inputOwner:
+                interactionModeRef
+                  .current ===
+                "earth"
+                  ? "earth"
+                  : "camera",
+            });
+        }
 
 
         if (
@@ -1514,8 +1821,10 @@ disposables.push(
 
 
           pinchStart =
-            cameraController
-              .getDistance();
+            localExploreActive
+              ? localExploreDistance
+              : cameraController
+                  .getDistance();
         }
 
 
@@ -1596,27 +1905,57 @@ disposables.push(
             pinchDistance >
             0
           ) {
-            cameraController
-              .setInteractionState({
-                mode:
-                  "sceneOrbit",
+            if (
+              localExploreActive
+            ) {
+              const activeObservatoryId =
+                observatorySceneHandoff
+                  .getActiveObservatoryId();
 
-                selectedId:
-                  selectedRef.current,
+              if (
+                activeObservatoryId
+              ) {
+                const limits =
+                  getLocalExploreLimits(
+                    activeObservatoryId,
+                  );
 
-                inputOwner:
-                  "camera",
-              });
+                localExploreDistance =
+                  THREE.MathUtils.clamp(
+                    pinchStart *
+                      (
+                        pinchDistance /
+                        distance
+                      ),
+                    limits.minDistance,
+                    limits.maxDistance,
+                  );
+
+                applyLocalExplorePose();
+              }
+            } else {
+              cameraController
+                .setInteractionState({
+                  mode:
+                    "sceneOrbit",
+
+                  selectedId:
+                    selectedRef.current,
+
+                  inputOwner:
+                    "camera",
+                });
 
 
-            cameraController
-              .zoomToDistance(
-                pinchStart *
-                  (
-                    pinchDistance /
-                    distance
-                  ),
-              );
+              cameraController
+                .zoomToDistance(
+                  pinchStart *
+                    (
+                      pinchDistance /
+                      distance
+                    ),
+                );
+            }
           }
 
 
@@ -1661,6 +2000,30 @@ disposables.push(
 
 
           if (
+            localExploreActive
+          ) {
+            /*
+             * Local Observatory exploration:
+             * full horizontal orbit, restrained elevation, no below-ground flip.
+             */
+            localExploreAzimuth -=
+              deltaX *
+              0.006;
+
+            localExplorePolar =
+              THREE.MathUtils.clamp(
+                localExplorePolar -
+                  deltaY *
+                    0.005,
+                0.38,
+                1.42,
+              );
+
+            applyLocalExplorePose();
+
+            canvas.style.cursor =
+              "grabbing";
+          } else if (
             interactionModeRef
               .current ===
             "earth"
@@ -1776,6 +2139,29 @@ disposables.push(
           observatorySceneHandoff
             .isDestinationActive()
         ) {
+          pointers.delete(
+            event.pointerId,
+          );
+
+          if (
+            pointers.size < 2
+          ) {
+            pinchDistance =
+              0;
+          }
+
+          if (
+            pointers.size === 0
+          ) {
+            dragging =
+              false;
+
+            canvas.style.cursor =
+              localExploreActive
+                ? "grab"
+                : "default";
+          }
+
           return;
         }
 
@@ -1899,6 +2285,51 @@ disposables.push(
           observatorySceneHandoff
             .isDestinationActive()
         ) {
+          if (
+            !localExploreActive
+          ) {
+            return;
+          }
+
+          const activeObservatoryId =
+            observatorySceneHandoff
+              .getActiveObservatoryId();
+
+          if (
+            !activeObservatoryId
+          ) {
+            return;
+          }
+
+          const limits =
+            getLocalExploreLimits(
+              activeObservatoryId,
+            );
+
+          const direction =
+            Math.sign(
+              event.deltaY,
+            );
+
+          if (
+            direction !==
+            0
+          ) {
+            localExploreDistance =
+              THREE.MathUtils.clamp(
+                localExploreDistance *
+                  (
+                    1 +
+                    direction *
+                      0.08
+                  ),
+                limits.minDistance,
+                limits.maxDistance,
+              );
+
+            applyLocalExplorePose();
+          }
+
           return;
         }
 
@@ -2558,10 +2989,91 @@ moonSystem.update({
        * continuous when the global scene becomes visible again.
        */
 
-      const observatoryJourneyPhase =
+      const observatoryJourneyState =
         observatoryJourneyController
-          .getState()
+          .getState();
+
+      const observatoryJourneyPhase =
+        observatoryJourneyState
           .phase;
+
+      /*
+       * Report a local destination only after the protected cinematic camera
+       * path has fully settled. This prevents the Explore button appearing
+       * halfway through the Earth-to-Observatory descent.
+       */
+      const settledLocalDestinationId =
+        observatoryJourneyPhase ===
+          "destination-active" &&
+        !observatoryDestinationTransition
+          .isActive()
+          ? observatoryJourneyState
+              .observatoryId
+          : reportedLocalDestinationId;
+
+      if (
+        observatoryJourneyPhase !==
+          "destination-active" &&
+        reportedLocalDestinationId !==
+          null
+      ) {
+        reportedLocalDestinationId =
+          null;
+
+        onLocalDestinationChangeRef
+          .current(
+            null,
+          );
+      } else if (
+        settledLocalDestinationId &&
+        reportedLocalDestinationId !==
+          settledLocalDestinationId
+      ) {
+        reportedLocalDestinationId =
+          settledLocalDestinationId;
+
+        onLocalDestinationChangeRef
+          .current(
+            settledLocalDestinationId,
+          );
+      }
+
+
+      if (
+        observatoryJourneyPhase ===
+          "destination-active" &&
+        reportedLocalDestinationId &&
+        localExploreEnabledRef
+          .current &&
+        !localExploreActive &&
+        !observatoryDestinationTransition
+          .isActive()
+      ) {
+        beginLocalExplore(
+          reportedLocalDestinationId,
+        );
+      } else if (
+        localExploreActive &&
+        (
+          !localExploreEnabledRef
+            .current ||
+          observatoryJourneyPhase !==
+            "destination-active"
+        )
+      ) {
+        /*
+         * Exit Explore returns to the settled cinematic pose only while the
+         * visitor is staying at the Observatory. Return-to-space / Restore
+         * keeps the current exploration camera as the departure start pose.
+         */
+        endLocalExplore(
+          observatoryJourneyPhase ===
+            "destination-active" &&
+          selectedRef.current !==
+            null,
+        );
+      }
+
 
       const localObservatoryOwnsView =
         observatoryJourneyPhase ===
@@ -2582,6 +3094,14 @@ moonSystem.update({
        * so no camera/transition timing is changed.
        */
       moonSystem.root.visible =
+        !localObservatoryOwnsView;
+
+      /*
+       * Deep-space stars / nebulae belong to the global Astra composition.
+       * A local mountain sky must never reveal the galactic background through
+       * its atmosphere. The local Observatory sky/horizon system owns that view.
+       */
+      deepSpaceSystem.group.visible =
         !localObservatoryOwnsView;
 
 
@@ -3189,6 +3709,12 @@ moonSystem.update({
         "webglcontextlost",
         onContextLost,
       );
+
+
+      onLocalDestinationChangeRef
+        .current(
+          null,
+        );
 
 
       labelEls.forEach(

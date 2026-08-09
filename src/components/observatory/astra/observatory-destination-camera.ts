@@ -329,94 +329,108 @@ const DOT_CAMERA:
   observatoryId:
     "dot",
 
+  /*
+   * Premium DOT / Devasthal framing.
+   *
+   * Preserve the accepted six-stage journey contract while allowing the
+   * expanded Himalayan environment to read in layers:
+   *
+   * regionalHigh     → distant ridge system + valley scale
+   * terrainAcquire   → forested approach + observatory-site elevation
+   * establishing     → terrace + road + telescope context
+   * approach         → facility becomes dominant
+   * facility         → architectural reveal
+   * science          → alternate close scientific presentation angle
+   */
+
   regionalHigh:
     createPose(
       [
-        2,
-        31,
-        36,
+        3,
+        32,
+        38,
       ],
       [
         0,
-        0,
-        -8,
+        1,
+        -13,
       ],
-      50,
+      52,
     ),
 
   terrainAcquire:
     createPose(
       [
-        15,
-        20,
-        26,
+        16,
+        19,
+        27,
       ],
       [
         0,
-        1.2,
-        -8,
+        1.15,
+        -10,
       ],
-      47,
+      48,
     ),
 
   establishing:
     createPose(
       [
-        12,
-        11.5,
-        16,
+        12.5,
+        10.8,
+        15.5,
       ],
       [
         0,
-        1.2,
-        -3,
+        1.15,
+        -2.8,
       ],
-      44,
+      43,
     ),
 
   approach:
     createPose(
       [
-        6.5,
-        6.0,
-        8.8,
+        7.2,
+        5.8,
+        9.4,
       ],
       [
         0,
-        1.25,
-        0,
+        1.35,
+        0.1,
       ],
-      40,
+      39,
     ),
 
   facility:
     createPose(
       [
-        3.2,
-        3.0,
-        4.2,
+        4.0,
+        3.1,
+        4.9,
       ],
       [
         0,
-        1.25,
+        1.42,
         0,
       ],
-      37,
+      36,
     ),
 
   science:
     createPose(
       [
-        -3.8,
-        2.8,
-        3.2,
+        -4.3,
+        2.9,
+        3.8,
       ],
       [
         0,
-        1.25,
+        1.46,
         0,
       ],
-      38,
+      37,
     ),
 };
 

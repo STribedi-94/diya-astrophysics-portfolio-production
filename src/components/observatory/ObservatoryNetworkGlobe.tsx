@@ -128,6 +128,20 @@ export function ObservatoryNetworkGlobe() {
   ] =
     useState(0);
 
+  const [
+    localDestinationId,
+    setLocalDestinationId,
+  ] =
+    useState<string | null>(
+      null,
+    );
+
+  const [
+    localExploreEnabled,
+    setLocalExploreEnabled,
+  ] =
+    useState(false);
+
   const [hintDismissed, setHintDismissed] = useState(false);
 
   // Fullscreen belongs to this React wrapper rather than the Three.js camera
@@ -136,6 +150,21 @@ export function ObservatoryNetworkGlobe() {
   const [fullscreenSupported, setFullscreenSupported] = useState(false);
 
   const selected = networkNodes.find((n) => n.id === selectedId) ?? null;
+
+  useEffect(() => {
+    if (
+      localDestinationId &&
+      selectedId !==
+        localDestinationId
+    ) {
+      setLocalExploreEnabled(
+        false,
+      );
+    }
+  }, [
+    localDestinationId,
+    selectedId,
+  ]);
 
   useEffect(() => {
     setMounted(true);
@@ -299,6 +328,9 @@ export function ObservatoryNetworkGlobe() {
                     selectedId={selectedId}
                     onSelect={(id) => {
                       setSelectedId(id);
+                      setLocalExploreEnabled(
+                        false,
+                      );
                       setHintDismissed(true);
                     }}
                     onReady={() => setReady(true)}
@@ -313,6 +345,25 @@ export function ObservatoryNetworkGlobe() {
                     restoreSignal={
                       restoreSignal
                     }
+                    localExploreEnabled={
+                      localExploreEnabled
+                    }
+                    onLocalDestinationChange={(
+                      observatoryId,
+                    ) => {
+                      setLocalDestinationId(
+                        observatoryId,
+                      );
+
+                      if (
+                        observatoryId ===
+                        null
+                      ) {
+                        setLocalExploreEnabled(
+                          false,
+                        );
+                      }
+                    }}
                   />
                 </Suspense>
               </SceneBoundary>
@@ -377,78 +428,157 @@ export function ObservatoryNetworkGlobe() {
                 role="toolbar"
                 aria-label="Observatory interaction controls"
               >
-                <button
-                  type="button"
-                  onClick={() => {
-                    setInteractionMode(
-                      "earth",
-                    );
-                    setHintDismissed(
-                      true,
-                    );
-                  }}
-                  className={cn(
-                    "flex shrink-0 items-center gap-1 rounded-lg px-2 py-1.5 transition-colors",
-                    interactionMode ===
-                      "earth"
-                      ? "bg-primary/20 text-primary"
-                      : "text-muted-foreground hover:bg-white/5 hover:text-foreground",
-                  )}
-                  aria-pressed={
-                    interactionMode ===
-                    "earth"
-                  }
-                  title="Drag to rotate Earth independently"
-                >
-                  <Rotate3d
-                    className="h-3 w-3"
-                    aria-hidden
-                  />
-                  <span className="whitespace-nowrap">
-                    Rotate Earth
-                  </span>
-                </button>
+                {localDestinationId ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setLocalExploreEnabled(
+                          (value) =>
+                            !value,
+                        );
+                        setHintDismissed(
+                          true,
+                        );
+                      }}
+                      className={cn(
+                        "flex shrink-0 items-center gap-1 rounded-lg px-2 py-1.5 transition-colors",
+                        localExploreEnabled
+                          ? "bg-primary/20 text-primary"
+                          : "text-muted-foreground hover:bg-white/5 hover:text-foreground",
+                      )}
+                      aria-pressed={
+                        localExploreEnabled
+                      }
+                      title={
+                        localExploreEnabled
+                          ? "Exit free Observatory exploration and return to the cinematic view"
+                          : "Explore the Observatory with 360-degree mouse orbit and zoom"
+                      }
+                    >
+                      <Move3d
+                        className="h-3 w-3"
+                        aria-hidden
+                      />
+                      <span className="whitespace-nowrap">
+                        {localExploreEnabled
+                          ? "Exit Explore"
+                          : "Explore Observatory"}
+                      </span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setLocalExploreEnabled(
+                          false,
+                        );
+                        setSelectedId(
+                          null,
+                        );
+                        setInteractionMode(
+                          "earth",
+                        );
+                        setHintDismissed(
+                          true,
+                        );
+                      }}
+                      className="flex shrink-0 items-center gap-1 rounded-lg px-2 py-1.5 text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground"
+                      title="Leave the local Observatory and follow the cinematic return to Earth-space"
+                    >
+                      <Satellite
+                        className="h-3 w-3"
+                        aria-hidden
+                      />
+                      <span className="whitespace-nowrap">
+                        Return to Space
+                      </span>
+                    </button>
+
+                    <span
+                      className="mx-0.5 h-4 w-px shrink-0 bg-white/10"
+                      aria-hidden
+                    />
+                  </>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setInteractionMode(
+                          "earth",
+                        );
+                        setHintDismissed(
+                          true,
+                        );
+                      }}
+                      className={cn(
+                        "flex shrink-0 items-center gap-1 rounded-lg px-2 py-1.5 transition-colors",
+                        interactionMode ===
+                          "earth"
+                          ? "bg-primary/20 text-primary"
+                          : "text-muted-foreground hover:bg-white/5 hover:text-foreground",
+                      )}
+                      aria-pressed={
+                        interactionMode ===
+                        "earth"
+                      }
+                      title="Drag to rotate Earth independently"
+                    >
+                      <Rotate3d
+                        className="h-3 w-3"
+                        aria-hidden
+                      />
+                      <span className="whitespace-nowrap">
+                        Rotate Earth
+                      </span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setInteractionMode(
+                          "scene",
+                        );
+                        setHintDismissed(
+                          true,
+                        );
+                      }}
+                      className={cn(
+                        "flex shrink-0 items-center gap-1 rounded-lg px-2 py-1.5 transition-colors",
+                        interactionMode ===
+                          "scene"
+                          ? "bg-primary/20 text-primary"
+                          : "text-muted-foreground hover:bg-white/5 hover:text-foreground",
+                      )}
+                      aria-pressed={
+                        interactionMode ===
+                        "scene"
+                      }
+                      title="Drag to orbit the complete astronomical scene"
+                    >
+                      <Orbit
+                        className="h-3 w-3"
+                        aria-hidden
+                      />
+                      <span className="whitespace-nowrap">
+                        Orbit Scene
+                      </span>
+                    </button>
+
+                    <span
+                      className="mx-0.5 h-4 w-px shrink-0 bg-white/10"
+                      aria-hidden
+                    />
+                  </>
+                )}
 
                 <button
                   type="button"
                   onClick={() => {
-                    setInteractionMode(
-                      "scene",
+                    setLocalExploreEnabled(
+                      false,
                     );
-                    setHintDismissed(
-                      true,
-                    );
-                  }}
-                  className={cn(
-                    "flex shrink-0 items-center gap-1 rounded-lg px-2 py-1.5 transition-colors",
-                    interactionMode ===
-                      "scene"
-                      ? "bg-primary/20 text-primary"
-                      : "text-muted-foreground hover:bg-white/5 hover:text-foreground",
-                  )}
-                  aria-pressed={
-                    interactionMode ===
-                    "scene"
-                  }
-                  title="Drag to orbit the complete astronomical scene"
-                >
-                  <Orbit
-                    className="h-3 w-3"
-                    aria-hidden
-                  />
-                  <span className="whitespace-nowrap">
-                    Orbit Scene
-                  </span>
-                </button>
-
-                <span
-                  className="mx-0.5 h-4 w-px shrink-0 bg-white/10"
-                  aria-hidden
-                />
-
-                <button
-                  type="button"
-                  onClick={() => {
                     setSelectedId(null);
                     setInteractionMode(
                       "earth",
