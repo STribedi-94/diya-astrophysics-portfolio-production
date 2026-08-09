@@ -225,7 +225,7 @@ export function createMoonSystem({
         true,
 
       opacity:
-        0.24,
+        0.13,
 
       depthWrite:
         false,

@@ -127,10 +127,21 @@ export function createObservatoryDescentVeilSystem({
   haze.style.opacity =
     "0";
 
+  /*
+   * Stage 1.15F — atmospheric veil visual polish only.
+   *
+   * Keep the masking envelope and all cinematic timing untouched, but replace
+   * the flat near-white wash with layered blue-grey atmospheric scattering.
+   * The centre stays optically dense enough to hide the scale/origin crossover,
+   * while the edges retain depth and a sense of forward motion.
+   */
   haze.style.background =
     [
-      "radial-gradient(ellipse at 50% 58%, rgba(250,252,253,0.72) 0%, rgba(226,236,241,0.46) 28%, rgba(190,208,219,0.20) 52%, rgba(86,110,127,0.06) 72%, transparent 88%)",
-      "linear-gradient(180deg, rgba(210,229,239,0.02) 0%, rgba(239,246,248,0.12) 48%, rgba(174,194,207,0.08) 72%, rgba(28,40,53,0.05) 100%)",
+      "radial-gradient(ellipse at 52% 58%, rgba(202,216,225,0.54) 0%, rgba(176,196,208,0.40) 22%, rgba(132,157,174,0.25) 46%, rgba(82,108,128,0.12) 68%, rgba(39,57,75,0.04) 84%, transparent 94%)",
+      "radial-gradient(ellipse at 24% 30%, rgba(226,234,239,0.22) 0%, rgba(174,195,208,0.11) 28%, transparent 58%)",
+      "radial-gradient(ellipse at 78% 68%, rgba(119,146,165,0.16) 0%, rgba(75,101,122,0.08) 34%, transparent 62%)",
+      "radial-gradient(ellipse at 62% 36%, rgba(214,224,230,0.13) 0%, rgba(139,162,177,0.07) 26%, transparent 54%)",
+      "linear-gradient(180deg, rgba(128,158,177,0.04) 0%, rgba(184,204,216,0.10) 44%, rgba(111,137,156,0.08) 72%, rgba(31,46,62,0.06) 100%)",
     ].join(",");
 
   haze.style.transition =
@@ -149,10 +160,15 @@ export function createObservatoryDescentVeilSystem({
     "0";
 
   cloud.style.background =
-    "radial-gradient(ellipse at 48% 57%, rgba(253,254,255,0.98) 0%, rgba(239,245,248,0.92) 27%, rgba(211,224,231,0.72) 49%, rgba(165,184,196,0.32) 68%, transparent 84%)";
+    [
+      "radial-gradient(ellipse at 44% 54%, rgba(220,230,235,0.58) 0%, rgba(187,204,214,0.44) 24%, rgba(145,167,182,0.30) 46%, rgba(98,125,145,0.15) 66%, transparent 82%)",
+      "radial-gradient(ellipse at 28% 42%, rgba(232,238,241,0.26) 0%, rgba(177,197,209,0.16) 28%, transparent 56%)",
+      "radial-gradient(ellipse at 72% 58%, rgba(181,198,209,0.22) 0%, rgba(112,139,157,0.13) 32%, transparent 60%)",
+      "radial-gradient(ellipse at 56% 30%, rgba(218,228,233,0.16) 0%, rgba(144,166,181,0.09) 26%, transparent 52%)",
+    ].join(",");
 
   cloud.style.filter =
-    "blur(24px)";
+    "blur(18px)";
 
   cloud.style.transform =
     "scale(1.08)";
@@ -238,13 +254,13 @@ export function createObservatoryDescentVeilSystem({
       haze.style.opacity =
         String(
           hazeAmount *
-            0.92,
+            0.82,
         );
 
       haze.style.backdropFilter =
         `blur(${(
           hazeAmount *
-          4.5
+          3.0
         ).toFixed(
           2,
         )}px) saturate(${(
@@ -258,7 +274,7 @@ export function createObservatoryDescentVeilSystem({
       cloud.style.opacity =
         String(
           cloudAmount *
-            0.94,
+            0.72,
         );
 
       cloud.style.transform =
@@ -288,7 +304,7 @@ export function createObservatoryDescentVeilSystem({
         "0.92";
 
       haze.style.backdropFilter =
-        "blur(10px) saturate(0.94)";
+        "blur(5.5px) saturate(0.97)";
 
       cloud.style.opacity =
         "0.98";
@@ -386,13 +402,13 @@ export function createObservatoryDescentVeilSystem({
       haze.style.opacity =
         String(
           amount *
-            0.92,
+            0.82,
         );
 
       haze.style.backdropFilter =
         `blur(${(
           amount *
-          5
+          3.4
         ).toFixed(
           2,
         )}px) saturate(${(
@@ -410,7 +426,7 @@ export function createObservatoryDescentVeilSystem({
             1,
             progress,
           ) *
-            0.94,
+            0.72,
         );
     },
 

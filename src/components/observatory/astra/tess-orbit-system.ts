@@ -593,7 +593,7 @@ export function createTessOrbitSystem(options: {
         );
 
       pathMaterial.opacity =
-        orbitReveal * 0.4;
+        orbitReveal * 0.22;
 
            /*
        * The orbital position always follows the absolute simulation

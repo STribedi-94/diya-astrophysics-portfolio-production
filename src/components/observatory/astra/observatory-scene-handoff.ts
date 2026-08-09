@@ -47,6 +47,30 @@ export type ObservatorySceneHandoffOptions = {
 };
 
 
+export type ObservatorySceneEntryRequest = {
+  observatoryId:
+    GroundObservatoryId;
+
+  earthPoses:
+    ObservatoryDestinationCameraPose[];
+};
+
+
+export type ObservatorySceneReturnRequest = {
+  finalPose?:
+    ObservatoryDestinationCameraPose;
+
+  onProgress?:
+    (
+      progress:
+        number,
+    ) => void;
+
+  onComplete?:
+    () => void;
+};
+
+
 export type ObservatorySceneHandoff = {
   isDestinationActive():
     boolean;
@@ -55,13 +79,13 @@ export type ObservatorySceneHandoff = {
     GroundObservatoryId | null;
 
   enter(
-    observatoryId:
-      GroundObservatoryId,
+    request:
+      ObservatorySceneEntryRequest,
   ): void;
 
   returnToEarth(
-    onComplete?:
-      () => void,
+    request?:
+      ObservatorySceneReturnRequest,
   ): boolean;
 
   cancelAndReset(): void;
@@ -76,6 +100,51 @@ const LOCAL_WORLD_ORIGIN =
     -18,
     0,
   );
+
+
+const ENTRY_LOCAL_ACTIVATE_PROGRESS =
+  0.45;
+
+const ENTRY_LOCAL_REVEAL_PROGRESS =
+  0.72;
+
+const RETURN_LOCAL_HIDE_PROGRESS =
+  0.60;
+
+const RETURN_EARTH_REVEAL_PROGRESS =
+  0.72;
+
+/*
+ * Stage 1.15C masking envelope:
+ *
+ * Stage 1.15B correctly gave revealLocal()/revealEarth() sole opacity
+ * ownership once a reveal begins, eliminating the persistent white-screen
+ * race. The earlier Stage 1.15A felt slower/smoother because the competing
+ * progress writer unintentionally kept the veil opaque much longer across
+ * the global/local scale transition.
+ *
+ * Preserve the Stage 1.15B ownership fix, but deliberately hold the veil
+ * opaque across that high-motion handoff and reveal only after the camera
+ * has progressed well into the destination/Earth side. Restore also keeps
+ * the local environment visible longer before it is parked.
+ */
+
+
+function clonePose(
+  pose:
+    ObservatoryDestinationCameraPose,
+): ObservatoryDestinationCameraPose {
+  return {
+    position:
+      pose.position.clone(),
+
+    target:
+      pose.target.clone(),
+
+    fov:
+      pose.fov,
+  };
+}
 
 
 function withOffset(
@@ -117,9 +186,13 @@ export function createObservatorySceneHandoff({
     GroundObservatoryId | null =
     null;
 
-  let earthReturnPose:
+  let entryStartPose:
     ObservatoryDestinationCameraPose | null =
     null;
+
+  let entryEarthPoses:
+    ObservatoryDestinationCameraPose[] =
+    [];
 
   let returning =
     false;
@@ -128,7 +201,7 @@ export function createObservatorySceneHandoff({
     0;
 
 
-  const parkAll =
+  const parkAllPositions =
     () => {
       for (
         const environment of
@@ -136,11 +209,6 @@ export function createObservatorySceneHandoff({
           environments,
         )
       ) {
-        environment
-          .setVisible(
-            false,
-          );
-
         environment
           .group
           .position
@@ -153,12 +221,12 @@ export function createObservatorySceneHandoff({
     };
 
 
-  const prepare =
+  const positionDestination =
     (
       observatoryId:
         GroundObservatoryId,
     ) => {
-      parkAll();
+      parkAllPositions();
 
       const environment =
         environments[
@@ -170,16 +238,6 @@ export function createObservatorySceneHandoff({
         .position
         .copy(
           LOCAL_WORLD_ORIGIN,
-        );
-
-      environment
-        .setVisible(
-          true,
-        );
-
-      journeyController
-        .activateDestination(
-          observatoryId,
         );
 
       journeyController
@@ -207,7 +265,7 @@ export function createObservatorySceneHandoff({
       );
 
 
-  parkAll();
+  parkAllPositions();
 
 
   return {
@@ -225,11 +283,14 @@ export function createObservatorySceneHandoff({
     },
 
 
-    enter(
+    enter({
       observatoryId,
-    ) {
+      earthPoses,
+    }) {
       if (
-        disposed
+        disposed ||
+        earthPoses.length ===
+          0
       ) {
         return;
       }
@@ -243,33 +304,147 @@ export function createObservatorySceneHandoff({
       returning =
         false;
 
-      earthReturnPose =
+      entryStartPose =
         transitionSystem
           .captureCurrentPose();
+
+      entryEarthPoses =
+        earthPoses.map(
+          clonePose,
+        );
 
       activeObservatoryId =
         observatoryId;
 
-      prepare(
+      positionDestination(
         observatoryId,
       );
 
-      /*
-       * The coordinate-space switch happens only while the veil is sealed.
-       * Snap to the high regional local pose, then start one continuous
-       * spline through the terrain acquisition and facility approach.
-       */
+      veilSystem
+        .beginEarthDive(
+          observatoryId,
+        );
 
+      let localActivated =
+        false;
+
+      let localRevealStarted =
+        false;
+
+      /*
+       * Stage 1.15:
+       *
+       * One transition system owns the complete perceived journey.
+       * The same Catmull-Rom path now contains both Earth-space and
+       * local-destination poses. The unavoidable scale/origin change
+       * therefore happens inside the already-moving path while the
+       * atmospheric veil is opaque, rather than between two animations.
+       */
       transitionSystem
-        .transitionToPose({
-          pose:
+        .transitionAlongPoses({
+          observatoryId,
+
+          stage:
+            "approach",
+
+          poses: [
+            ...entryEarthPoses
+              .map(
+                clonePose,
+              ),
+
             localPose(
               observatoryId,
               "regionalHigh",
             ),
 
+            localPose(
+              observatoryId,
+              "terrainAcquire",
+            ),
+
+            localPose(
+              observatoryId,
+              "establishing",
+            ),
+
+            localPose(
+              observatoryId,
+              "approach",
+            ),
+          ],
+
           duration:
-            0,
+            reducedMotion
+              ? 1.15
+              : 9.2,
+
+          onProgress:
+            (
+              progress,
+            ) => {
+              if (
+                disposed ||
+                currentToken !==
+                  token
+              ) {
+                return;
+              }
+
+              /*
+               * Stage 1.15B veil ownership:
+               *
+               * Once revealLocal() begins, it becomes the sole writer of the
+               * veil opacity. Continuing to call setDiveProgress() afterwards
+               * would force the haze/clouds back toward full white every frame
+               * and can leave the viewport permanently washed out.
+               */
+              if (!localRevealStarted) {
+                const veilProgress =
+                  THREE.MathUtils.clamp(
+                    progress /
+                      ENTRY_LOCAL_ACTIVATE_PROGRESS,
+                    0,
+                    1,
+                  );
+
+                observatoryDescentProgress(
+                  veilSystem,
+                  veilProgress,
+                );
+              }
+
+              if (
+                !localActivated &&
+                progress >=
+                  ENTRY_LOCAL_ACTIVATE_PROGRESS
+              ) {
+                localActivated =
+                  true;
+
+                journeyController
+                  .markDestinationReady(
+                    observatoryId,
+                  );
+
+                journeyController
+                  .activateDestination(
+                    observatoryId,
+                  );
+              }
+
+              if (
+                !localRevealStarted &&
+                progress >=
+                  ENTRY_LOCAL_REVEAL_PROGRESS
+              ) {
+                localRevealStarted =
+                  true;
+
+                void veilSystem
+                  .revealLocal();
+              }
+            },
 
           onComplete:
             () => {
@@ -281,50 +456,41 @@ export function createObservatorySceneHandoff({
                 return;
               }
 
+              if (
+                !localActivated
+              ) {
+                journeyController
+                  .markDestinationReady(
+                    observatoryId,
+                  );
+
+                journeyController
+                  .activateDestination(
+                    observatoryId,
+                  );
+              }
+
+              /*
+               * Reassert the clear terminal state at completion. This is safe
+               * even when the reveal already started and makes the final frame
+               * deterministic across refresh/HMR timing differences.
+               */
               void veilSystem
                 .revealLocal();
-
-              transitionSystem
-                .transitionAlongPoses({
-                  observatoryId,
-
-                  stage:
-                    "approach",
-
-                  poses: [
-                    localPose(
-                      observatoryId,
-                      "terrainAcquire",
-                    ),
-
-                    localPose(
-                      observatoryId,
-                      "establishing",
-                    ),
-
-                    localPose(
-                      observatoryId,
-                      "approach",
-                    ),
-                  ],
-
-                  duration:
-                    reducedMotion
-                      ? 0.55
-                      : 6.0,
-                });
             },
         });
     },
 
 
     returnToEarth(
-      onComplete,
+      request = {},
     ) {
       if (
         disposed ||
         !activeObservatoryId ||
-        !earthReturnPose ||
+        !entryStartPose ||
+        entryEarthPoses.length ===
+          0 ||
         returning
       ) {
         return false;
@@ -345,23 +511,35 @@ export function createObservatorySceneHandoff({
       const observatoryId =
         activeObservatoryId;
 
-      const returnPose = {
-        position:
-          earthReturnPose
-            .position
-            .clone(),
+      const finalPose =
+        request.finalPose
+          ? clonePose(
+              request.finalPose,
+            )
+          : clonePose(
+              entryStartPose,
+            );
 
-        target:
-          earthReturnPose
-            .target
-            .clone(),
+      const reversedEarthPoses =
+        entryEarthPoses
+          .slice()
+          .reverse()
+          .map(
+            clonePose,
+          );
 
-        fov:
-          earthReturnPose
-            .fov,
-      };
+      let localHidden =
+        false;
 
+      let earthRevealStarted =
+        false;
 
+      /*
+       * The return is the same ownership model in reverse: local ascent,
+       * atmospheric cross-space transit, Earth reacquisition, then the final
+       * requested global pose. No zero-duration camera snap and no second
+       * camera-controller Restore are required.
+       */
       transitionSystem
         .transitionAlongPoses({
           observatoryId,
@@ -384,21 +562,82 @@ export function createObservatorySceneHandoff({
               observatoryId,
               "regionalHigh",
             ),
+
+            ...reversedEarthPoses,
+
+            finalPose,
           ],
 
           duration:
             reducedMotion
-              ? 0.45
-              : 4.8,
+              ? 1.0
+              : 8.4,
 
           onProgress:
             (
               progress,
             ) => {
-              veilSystem
-                .setReturnProgress(
+              if (
+                disposed ||
+                currentToken !==
+                  token
+              ) {
+                return;
+              }
+
+              /*
+               * Stage 1.15B veil ownership:
+               *
+               * revealEarth() must become the only opacity writer after the
+               * Earth-reveal threshold. Otherwise subsequent return-progress
+               * frames immediately overwrite the fade-to-clear with opaque
+               * haze again, which caused the persistent white-splash state.
+               */
+              if (!earthRevealStarted) {
+                const veilProgress =
+                  THREE.MathUtils.clamp(
+                    progress /
+                      RETURN_LOCAL_HIDE_PROGRESS,
+                    0,
+                    1,
+                  );
+
+                veilSystem
+                  .setReturnProgress(
+                    veilProgress,
+                  );
+              }
+
+              request
+                .onProgress?.(
                   progress,
                 );
+
+              if (
+                !localHidden &&
+                progress >=
+                  RETURN_LOCAL_HIDE_PROGRESS
+              ) {
+                localHidden =
+                  true;
+
+                journeyController
+                  .reset();
+
+                parkAllPositions();
+              }
+
+              if (
+                !earthRevealStarted &&
+                progress >=
+                  RETURN_EARTH_REVEAL_PROGRESS
+              ) {
+                earthRevealStarted =
+                  true;
+
+                void veilSystem
+                  .revealEarth();
+              }
             },
 
           onComplete:
@@ -411,56 +650,41 @@ export function createObservatorySceneHandoff({
                 return;
               }
 
+              if (
+                !localHidden
+              ) {
+                journeyController
+                  .reset();
+
+                parkAllPositions();
+              }
+
               /*
-               * setReturnProgress() has already made the veil essentially
-               * opaque by the end of the continuous ascent. Therefore the
-               * coordinate switch can happen immediately with no stationary
-               * "seal" pause.
+               * Reassert the clear Earth terminal state so no stale haze can
+               * survive the journey after reloads or different frame timing.
                */
+              void veilSystem
+                .revealEarth();
 
-              transitionSystem
-                .transitionToPose({
-                  pose:
-                    returnPose,
+              activeObservatoryId =
+                null;
 
-                  duration:
-                    0,
+              entryStartPose =
+                null;
 
-                  onComplete:
-                    () => {
-                      if (
-                        disposed ||
-                        currentToken !==
-                          token
-                      ) {
-                        return;
-                      }
+              entryEarthPoses =
+                [];
 
-                      journeyController
-                        .reset();
+              returning =
+                false;
 
-                      parkAll();
+              request
+                .onProgress?.(
+                  1,
+                );
 
-                      activeObservatoryId =
-                        null;
-
-                      earthReturnPose =
-                        null;
-
-                      returning =
-                        false;
-
-                      /*
-                       * Start canonical Earth Restore immediately while the
-                       * neutral haze is already clearing.
-                       */
-
-                      onComplete?.();
-
-                      void veilSystem
-                        .revealEarth();
-                    },
-                });
+              request
+                .onComplete?.();
             },
         });
 
@@ -487,13 +711,16 @@ export function createObservatorySceneHandoff({
       journeyController
         .reset();
 
-      parkAll();
+      parkAllPositions();
 
       activeObservatoryId =
         null;
 
-      earthReturnPose =
+      entryStartPose =
         null;
+
+      entryEarthPoses =
+        [];
 
       returning =
         false;
@@ -519,13 +746,16 @@ export function createObservatorySceneHandoff({
       journeyController
         .reset();
 
-      parkAll();
+      parkAllPositions();
 
       activeObservatoryId =
         null;
 
-      earthReturnPose =
+      entryStartPose =
         null;
+
+      entryEarthPoses =
+        [];
 
       returning =
         false;
@@ -534,4 +764,17 @@ export function createObservatorySceneHandoff({
         true;
     },
   };
+}
+
+
+function observatoryDescentProgress(
+  veilSystem:
+    ObservatoryDescentVeilSystem,
+  progress:
+    number,
+) {
+  veilSystem
+    .setDiveProgress(
+      progress,
+    );
 }

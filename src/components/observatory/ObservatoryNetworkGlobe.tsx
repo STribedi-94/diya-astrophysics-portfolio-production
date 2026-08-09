@@ -252,7 +252,18 @@ export function ObservatoryNetworkGlobe() {
     }
   };
 
-  const lowPower = reduced || mode === "reduced-motion" || mode === "performance";
+  /*
+   * Stage 1.15E:
+   * Performance mode must NOT be treated as reduced motion.
+   *
+   * `performance` already lowers rendering cost through usePerf()
+   * (pixel ratio/effects). Mapping it to reducedMotion also switches the
+   * Observatory journey to its ~1-second accessibility fallback and makes
+   * the intended 12s/11s cinematic durations impossible to observe.
+   */
+  const reducedMotion =
+    reduced ||
+    mode === "reduced-motion";
   const showScene = mounted && allowWebGL && !failed;
   const sceneActive = isFullscreen || inView;
 
@@ -293,7 +304,7 @@ export function ObservatoryNetworkGlobe() {
                     onReady={() => setReady(true)}
                     onError={() => setFailed(true)}
                     reducedMotion={
-                      lowPower
+                      reducedMotion
                     }
                     active={sceneActive}
                     interactionMode={

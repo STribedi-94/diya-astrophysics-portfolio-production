@@ -362,9 +362,14 @@ export function createObservatoryJourneyController({
       }
 
 
-      hideAllDestinations();
-
-
+      /*
+       * Stage 1.15:
+       *
+       * Returning is now a real moving local-observatory state.
+       * Keep the active destination visible while the camera climbs away.
+       * The scene-handoff layer will reset / hide the destination only after
+       * the atmospheric cross-space transit has safely completed.
+       */
       state = {
         phase:
           "returning",

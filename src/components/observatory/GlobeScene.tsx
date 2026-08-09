@@ -52,6 +52,7 @@ import {
 } from "./astra/moon-system";
 import {
   ASTRA_OVERVIEW_CAMERA,
+  createAstraOverviewTarget,
 } from "./astra/composition";
 
 
@@ -266,6 +267,10 @@ export default function GlobeScene({
         0.1,
         100,
       );
+
+
+    const canonicalOverviewFov =
+      camera.fov;
 
 
     /*
@@ -994,101 +999,24 @@ disposables.push(
           });
 
 
-        observatoryDescentVeil
-          .beginEarthDive(
-            observatoryId,
-          );
-
-
         /*
-         * One continuous Earth-space spline eliminates the old stop/start
-         * sequence. The first waypoint preserves the accepted geographic
-         * focus framing, then the same motion continues toward the
-         * atmosphere and the exact scientific surface coordinate.
+         * Stage 1.15 unified Observatory journey.
+         *
+         * GlobeScene still owns the scientifically exact live Earth-space
+         * waypoints because they depend on the rotating Earth and the real
+         * latitude/longitude. From this point onward, however, ONE
+         * Observatory transition owner drives the complete Earth-to-local
+         * camera path without an onComplete handoff between two splines.
          */
-
-        observatoryDestinationTransition
-          .transitionAlongPoses({
+        observatorySceneHandoff
+          .enter({
             observatoryId,
 
-            poses: [
+            earthPoses: [
               focusExplicit,
               regionalPose,
               atmosphericPose,
             ],
-
-            duration:
-              reducedMotion
-                ? 0.7
-                : 5.2,
-
-            onProgress:
-              (
-                progress,
-              ) => {
-                observatoryDescentVeil
-                  .setDiveProgress(
-                    progress,
-                  );
-              },
-
-            onComplete:
-              () => {
-                if (
-                  selectedRef
-                    .current !==
-                    observatoryId
-                ) {
-                  observatoryDescentVeil
-                    .cancel();
-
-                  return;
-                }
-
-
-                cameraController
-                  .setInteractionState({
-                    mode:
-                      "observatoryFocus",
-
-                    inputOwner:
-                      "guided",
-
-                    selectedId:
-                      observatoryId,
-                  });
-
-
-                observatoryJourneyController
-                  .markDestinationReady(
-                    observatoryId,
-                  );
-
-
-                /*
-                 * setDiveProgress() reaches near-full neutral atmospheric
-                 * occlusion at the end of the same continuous Earth spline.
-                 * Handoff immediately; do not stop the camera for a separate
-                 * seal animation.
-                 */
-
-                if (
-                  selectedRef
-                    .current !==
-                    observatoryId
-                ) {
-                  observatoryDescentVeil
-                    .cancel();
-
-                  return;
-                }
-
-
-                observatorySceneHandoff
-                  .enter(
-                    observatoryId,
-                  );
-              },
           });
 
 
@@ -1831,6 +1759,26 @@ disposables.push(
         event:
           PointerEvent,
       ) => {
+        /*
+         * Stage 1.15I — local Observatory input guard.
+         *
+         * onPointerDown already ignores canvas interaction while the premium
+         * local Observatory journey owns the view. Pointer-up must obey the
+         * same ownership rule; otherwise an empty local-sky/terrain click is
+         * interpreted as `nextSelectedId = null`, which resets the Journey
+         * Controller and hides the active local environment while the camera
+         * is still in local coordinates.
+         *
+         * Restore and facility-card selection remain the authoritative ways
+         * to leave/switch a local Observatory.
+         */
+        if (
+          observatorySceneHandoff
+            .isDestinationActive()
+        ) {
+          return;
+        }
+
         const wasDrag =
           didDrag;
 
@@ -2152,8 +2100,102 @@ disposables.push(
       interactionModeRef.current;
 
 
-    let pendingOverviewRestore =
-      false;
+    const createOverviewExplicitPose =
+      () => {
+        const target =
+          createAstraOverviewTarget();
+
+        const sinPolar =
+          Math.sin(
+            ASTRA_OVERVIEW_CAMERA.polar,
+          );
+
+        return {
+          position:
+            new THREE.Vector3(
+              target.x +
+                ASTRA_OVERVIEW_CAMERA.distance *
+                  sinPolar *
+                  Math.sin(
+                    ASTRA_OVERVIEW_CAMERA.azimuth,
+                  ),
+
+              target.y +
+                ASTRA_OVERVIEW_CAMERA.distance *
+                  Math.cos(
+                    ASTRA_OVERVIEW_CAMERA.polar,
+                  ),
+
+              target.z +
+                ASTRA_OVERVIEW_CAMERA.distance *
+                  sinPolar *
+                  Math.cos(
+                    ASTRA_OVERVIEW_CAMERA.azimuth,
+                  ),
+            ),
+
+          target,
+
+          fov:
+            canonicalOverviewFov,
+        };
+      };
+
+
+    const createJourneyEarthReturnProgress =
+      () => {
+        const startOffset =
+          earthDragRotation +
+          spin;
+
+        const delta =
+          shortestAngleDelta(
+            startOffset,
+            0,
+          );
+
+        earthRestoreActive =
+          false;
+
+        earthDragRotation =
+          startOffset;
+
+        spin =
+          0;
+
+        return (
+          progress:
+            number,
+        ) => {
+          const eased =
+            easeInOutCubic(
+              THREE.MathUtils.clamp(
+                progress,
+                0,
+                1,
+              ),
+            );
+
+          earthDragRotation =
+            startOffset +
+            delta *
+              eased;
+
+          spin =
+            0;
+
+          if (
+            progress >=
+            1
+          ) {
+            earthDragRotation =
+              0;
+
+            spin =
+              0;
+          }
+        };
+      };
 
 
     const beginOverviewRestore =
@@ -2359,34 +2401,35 @@ moonSystem.update({
             .isDestinationActive()
         ) {
           observatorySceneHandoff
-            .returnToEarth(
-              () => {
-                cameraController
-                  .syncFromCamera();
+            .returnToEarth({
+              onComplete:
+                () => {
+                  cameraController
+                    .syncFromCamera();
 
-                cameraController
-                  .cancelTransition({
-                    selectedId:
+                  cameraController
+                    .cancelTransition({
+                      selectedId:
+                        selectedRef.current,
+                    });
+
+                  if (
+                    selectedRef.current ===
+                    spaceNode.id
+                  ) {
+                    beginTessGuidedFocus();
+                  } else if (
+                    selectedRef.current &&
+                    isGroundObservatoryId(
                       selectedRef.current,
-                  });
-
-                if (
-                  selectedRef.current ===
-                  spaceNode.id
-                ) {
-                  beginTessGuidedFocus();
-                } else if (
-                  selectedRef.current &&
-                  isGroundObservatoryId(
-                    selectedRef.current,
-                  )
-                ) {
-                  beginGroundObservatoryFocus(
-                    selectedRef.current,
-                  );
-                }
-              },
-            );
+                    )
+                  ) {
+                    beginGroundObservatoryFocus(
+                      selectedRef.current,
+                    );
+                  }
+                },
+            });
         } else if (
           selectedRef.current ===
           spaceNode.id
@@ -2450,43 +2493,96 @@ moonSystem.update({
           observatorySceneHandoff
             .isDestinationActive()
         ) {
-          pendingOverviewRestore =
-            true;
+          const updateEarthReturn =
+            createJourneyEarthReturnProgress();
 
           observatorySceneHandoff
-            .returnToEarth(
-              () => {
-                cameraController
-                  .syncFromCamera();
+            .returnToEarth({
+              finalPose:
+                createOverviewExplicitPose(),
 
-                cameraController
-                  .cancelTransition({
-                    selectedId:
-                      null,
-                  });
-              },
-            );
+              onProgress:
+                updateEarthReturn,
+
+              onComplete:
+                () => {
+                  updateEarthReturn(
+                    1,
+                  );
+
+                  cameraController
+                    .syncFromCamera();
+
+                  cameraController
+                    .cancelTransition({
+                      mode:
+                        "overview",
+
+                      selectedId:
+                        null,
+
+                      inputOwner:
+                        "earth",
+                    });
+                },
+            });
         } else {
           beginOverviewRestore();
         }
       }
 
 
-      if (
-        pendingOverviewRestore &&
-        !observatorySceneHandoff
-          .isDestinationActive() &&
-        !observatoryDestinationTransition
-          .isActive()
-      ) {
-        pendingOverviewRestore =
-          false;
+      /*
+       * ----------------------------------------------------------
+       * Stage 1.15H — Global / Local Observatory Visibility Gate
+       * ----------------------------------------------------------
+       *
+       * VISUAL-STATE FIX ONLY.
+       *
+       * Do not alter the approved Observatory camera trajectory, journey
+       * duration, Catmull-Rom easing, veil thresholds, veil appearance,
+       * Restore timing, or performance-mode behaviour.
+       *
+       * The local Observatory world shares this same Three.js scene with
+       * Earth and TESS. Once the Journey Controller has actually activated
+       * the local destination, Earth + the complete TESS hierarchy must stop
+       * rendering so they cannot appear above the mountain/local sky.
+       *
+       * On Restore, beginReturn() deliberately keeps the local environment
+       * active while the camera climbs away. The global layer therefore
+       * remains hidden during "returning" and automatically becomes visible
+       * again when the existing handoff resets the Journey Controller after
+       * the protected veil crossover.
+       *
+       * TESS continues updating while hidden so its orbital phase remains
+       * continuous when the global scene becomes visible again.
+       */
 
-        cameraController
-          .syncFromCamera();
+      const observatoryJourneyPhase =
+        observatoryJourneyController
+          .getState()
+          .phase;
 
-        beginOverviewRestore();
-      }
+      const localObservatoryOwnsView =
+        observatoryJourneyPhase ===
+          "destination-active" ||
+        observatoryJourneyPhase ===
+          "returning";
+
+      earthGroup.visible =
+        !localObservatoryOwnsView;
+
+      tessSystem.group.visible =
+        !localObservatoryOwnsView;
+
+      /*
+       * The Moon is also part of the global Earth-space composition.
+       * Keep it out of the local Observatory sky using the same already-
+       * approved ownership boundary. The atmospheric veil masks this switch,
+       * so no camera/transition timing is changed.
+       */
+      moonSystem.root.visible =
+        !localObservatoryOwnsView;
 
 
       /*
@@ -2970,6 +3066,7 @@ moonSystem.update({
 
 
           const show =
+            !localObservatoryOwnsView &&
             facing &&
             orbitReveal >
               0.2 &&
