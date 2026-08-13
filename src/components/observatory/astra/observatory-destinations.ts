@@ -1,4 +1,9 @@
 import {
+  ASTRA_OBSERVATORY_SIMULATION_PROVENANCE,
+  type ProvenanceRecord,
+} from "@/data/provenance";
+
+import {
   GROUND_OBSERVATORY_IDS,
   getGroundObservatoryEntry,
   type GroundObservatoryId,
@@ -29,6 +34,22 @@ import {
  *
  * It tells later environment builders WHAT each destination must feel
  * like and WHAT scientific/facility identity must remain visible.
+ *
+ * PROVENANCE RULE:
+ *
+ * The observatories represented here are real scientific facilities.
+ *
+ * The Project Astra destination environments are reconstructed
+ * scientific visualisations.
+ *
+ * Therefore every destination carries explicit representation
+ * provenance so visitor-facing systems can clearly distinguish:
+ *
+ * REAL FACILITY
+ *
+ * from:
+ *
+ * AI-ASSISTED / COMPUTER-GENERATED VISUAL REPRESENTATION.
  */
 
 
@@ -104,6 +125,13 @@ export type ObservatoryEnvironmentProfile = {
 
   informationHeadline:
     string;
+
+  /*
+   * Provenance belongs to the generated / reconstructed representation,
+   * not to the real Observatory itself.
+   */
+  provenance:
+    ProvenanceRecord;
 };
 
 
@@ -174,6 +202,9 @@ const UGMRT_DESTINATION:
 
   informationHeadline:
     "30-antenna low-frequency radio interferometer",
+
+  provenance:
+    ASTRA_OBSERVATORY_SIMULATION_PROVENANCE,
 };
 
 
@@ -245,6 +276,9 @@ const HCT_DESTINATION:
 
   informationHeadline:
     "2.01-m optical telescope at Hanle",
+
+  provenance:
+    ASTRA_OBSERVATORY_SIMULATION_PROVENANCE,
 };
 
 
@@ -319,6 +353,9 @@ const DOT_DESTINATION:
 
   informationHeadline:
     "3.6-m optical / near-infrared telescope at Devasthal",
+
+  provenance:
+    ASTRA_OBSERVATORY_SIMULATION_PROVENANCE,
 };
 
 
@@ -372,10 +409,11 @@ export function getObservatoryDestination(
  * - geographic identity;
  * - scientific identity;
  * - visitor information;
- * - procedural-environment contract.
+ * - procedural-environment contract;
+ * - representation provenance.
  *
- * Later Three.js environment builders can consume this without
- * reaching directly into multiple unrelated datasets.
+ * Later Three.js / React visitor-facing systems can consume this
+ * without reaching directly into multiple unrelated datasets.
  */
 
 export function getCompleteObservatoryDestination(
@@ -416,6 +454,9 @@ export function getCompleteObservatoryDestination(
     information,
 
     destination,
+
+    provenance:
+      destination.provenance,
   };
 }
 
@@ -424,6 +465,11 @@ export function getCompleteObservatoryDestination(
  * ------------------------------------------------------------------
  * VALIDATION
  * ------------------------------------------------------------------
+ *
+ * Validation now includes representation provenance.
+ *
+ * This protects Project Astra from silently introducing a generated
+ * Observatory destination without the required transparency metadata.
  */
 
 export function validateObservatoryDestinations() {
@@ -443,7 +489,8 @@ export function validateObservatoryDestinations() {
           Boolean(
             complete.networkNode &&
             complete.destination &&
-            complete.information,
+            complete.information &&
+            complete.provenance,
           ),
 
         terrainClass:
@@ -459,6 +506,14 @@ export function validateObservatoryDestinations() {
         scientificAnchor:
           complete.destination
             .scientificAnchor,
+
+        provenanceId:
+          complete.provenance
+            .id,
+
+        provenanceLabel:
+          complete.provenance
+            .label,
       };
     },
   );
