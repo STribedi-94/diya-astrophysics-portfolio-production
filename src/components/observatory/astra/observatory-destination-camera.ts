@@ -8,23 +8,37 @@ import type {
 /*
  * ==================================================================
  * PROJECT DIYA ASTRA
- * Ground Observatory Destination Camera Contract — Premium Arrival
+ * Accepted-GLB Observatory Destination Camera Contract
+ * FINAL CINEMATIC ARRIVAL CALIBRATION
  * ==================================================================
  *
- * Stage 1.13B expands the old four-pose local camera contract into a
- * genuine arrival path:
+ * The accepted DOT / HCT / uGMRT GLBs are normalized by
+ * observatory-environment-system.ts so their measured focal target becomes
+ * LOCAL (0, 0, 0).
+ *
+ * These poses are therefore stable local-space camera poses,
+ * not raw Blender coordinates and not the old procedural-world coordinates.
+ *
+ * Earth-space descent remains owned by GlobeScene + scene handoff.
+ *
+ * IMPORTANT RUNTIME CONTRACT
+ * --------------------------
+ * The current Observatory entry handoff terminates at "approach".
+ *
+ * Therefore:
  *
  * regionalHigh
  *   → terrainAcquire
  *   → establishing
  *   → approach
- *   → facility
- *   → science
  *
- * These are LOCAL destination coordinates only. Earth-space descent is
- * still owned separately and will be connected in Stage 1.13C.
+ * is the currently active Earth-to-Observatory cinematic route.
+ *
+ * "approach" is consequently the authoritative settled arrival pose.
+ *
+ * facility / science remain retained for future extended local cinematic
+ * choreography, but they are not currently used as the terminal arrival.
  */
-
 
 export type ObservatoryDestinationCameraPose = {
   position: THREE.Vector3;
@@ -99,13 +113,24 @@ function createPose(
 
 
 /*
- * ------------------------------------------------------------------
+ * ==================================================================
  * uGMRT
- * ------------------------------------------------------------------
+ * ==================================================================
  *
- * The first two poses are deliberately very wide. The visitor must
- * understand the array's physical scale before an individual antenna
- * becomes visually dominant.
+ * Scientific focal identity:
+ * COMPLETE 30 × 45-m antenna array.
+ *
+ * uGMRT requires much wider terminal framing than DOT/HCT because the
+ * scientific subject is the distributed array rather than a single building.
+ *
+ * The previous accepted-GLB pass successfully reached the array, but nearby
+ * reflectors remained visually dominant.
+ *
+ * FINAL POLICY:
+ * - preserve regionalHigh / terrainAcquire / establishing;
+ * - move the terminal approach substantially farther outward;
+ * - slightly widen FOV;
+ * - retain Explore Observatory for visitor-controlled close inspection.
  */
 
 const UGMRT_CAMERA:
@@ -117,13 +142,13 @@ const UGMRT_CAMERA:
   regionalHigh:
     createPose(
       [
-        0,
-        28,
-        31,
+        48,
+        38,
+        62,
       ],
       [
         0,
-        0,
+        -1.5,
         0,
       ],
       50,
@@ -132,14 +157,14 @@ const UGMRT_CAMERA:
   terrainAcquire:
     createPose(
       [
-        13,
-        17,
-        24,
+        34,
+        27,
+        46,
       ],
       [
         0,
-        0.8,
-        -1,
+        -0.8,
+        0,
       ],
       47,
     ),
@@ -147,72 +172,97 @@ const UGMRT_CAMERA:
   establishing:
     createPose(
       [
-        11.5,
-        8.8,
-        14.5,
+        27,
+        20,
+        35,
+      ],
+      [
+        0,
+        0,
+        0,
+      ],
+      44,
+    ),
+
+  /*
+   * FINAL LOCKED CINEMATIC ARRIVAL
+   *
+   * Previous calibrated pass:
+   *   position = [27, 18.5, 34]
+   *   target   = [0, 0.45, 0]
+   *   fov      = 43
+   *
+   * Final:
+   * substantially farther out so multiple antennas and array geometry
+   * establish the scene before the visitor chooses Explore/zoom.
+   */
+  approach:
+    createPose(
+      [
+        38,
+        26,
+        48,
+      ],
+      [
+        0,
+        0.6,
+        0,
+      ],
+      45,
+    ),
+
+  /*
+   * Reserved for future local cinematic choreography.
+   */
+  facility:
+    createPose(
+      [
+        22,
+        14,
+        27,
       ],
       [
         0,
         0.7,
         0,
       ],
-      44,
-    ),
-
-  approach:
-    createPose(
-      [
-        7.2,
-        4.6,
-        8.4,
-      ],
-      [
-        0.5,
-        1.0,
-        0,
-      ],
       41,
     ),
 
-  facility:
-    createPose(
-      [
-        3.6,
-        2.45,
-        4.1,
-      ],
-      [
-        0,
-        1.05,
-        0,
-      ],
-      38,
-    ),
-
+  /*
+   * Reserved for future alternate scientific presentation.
+   */
   science:
     createPose(
       [
-        5.5,
-        3.1,
-        2.6,
+        -18.5,
+        12,
+        22,
       ],
       [
         0,
-        1.05,
+        0.85,
         0,
       ],
-      39,
+      40,
     ),
 };
 
 
 /*
- * ------------------------------------------------------------------
+ * ==================================================================
  * HCT / HANLE
- * ------------------------------------------------------------------
+ * ==================================================================
  *
- * Arrival begins above the huge barren valley. The dome stays small
- * until the establishing / approach stages.
+ * Scientific focal identity:
+ * HCT main building + telescope dome.
+ *
+ * The previous calibrated pass already produces a strong readable scene.
+ *
+ * Final change is intentionally modest:
+ * - slightly more site/terrain context;
+ * - telescope remains dominant;
+ * - close inspection belongs to Explore Observatory.
  */
 
 const HCT_CAMERA:
@@ -224,13 +274,13 @@ const HCT_CAMERA:
   regionalHigh:
     createPose(
       [
-        -5,
-        29,
-        34,
+        -24,
+        20,
+        32,
       ],
       [
         0,
-        0.5,
+        -1.5,
         -5,
       ],
       50,
@@ -239,14 +289,14 @@ const HCT_CAMERA:
   terrainAcquire:
     createPose(
       [
-        -12,
-        18,
-        25,
+        -18,
+        14,
+        24,
       ],
       [
         0,
-        0.6,
-        -5,
+        -0.7,
+        -3.5,
       ],
       47,
     ),
@@ -254,73 +304,95 @@ const HCT_CAMERA:
   establishing:
     createPose(
       [
-        -9,
-        10.5,
-        15,
+        -12,
+        9,
+        16,
+      ],
+      [
+        0,
+        0,
+        -1.2,
+      ],
+      43,
+    ),
+
+  /*
+   * FINAL LOCKED CINEMATIC ARRIVAL
+   *
+   * Previous calibrated pass:
+   *   position = [-10.5, 7.4, 13.5]
+   *   target   = [0, 0.65, 0]
+   *   fov      = 42
+   *
+   * Final:
+   * modest additional retreat.
+   */
+  approach:
+    createPose(
+      [
+        -12.5,
+        8.8,
+        16,
+      ],
+      [
+        0,
+        0.75,
+        0,
+      ],
+      43,
+    ),
+
+  /*
+   * Reserved for future local cinematic choreography.
+   */
+  facility:
+    createPose(
+      [
+        -7.5,
+        5.4,
+        9.5,
+      ],
+      [
+        0,
+        0.65,
+        0,
+      ],
+      39,
+    ),
+
+  /*
+   * Reserved for future alternate scientific presentation.
+   */
+  science:
+    createPose(
+      [
+        7.2,
+        5.0,
+        8.5,
       ],
       [
         0,
         0.8,
-        -1,
-      ],
-      44,
-    ),
-
-  approach:
-    createPose(
-      [
-        -5.5,
-        5.4,
-        8.2,
-      ],
-      [
-        0,
-        1.0,
         0,
       ],
       40,
-    ),
-
-  facility:
-    createPose(
-      [
-        -3.0,
-        2.8,
-        4.1,
-      ],
-      [
-        0,
-        1.05,
-        0,
-      ],
-      37,
-    ),
-
-  science:
-    createPose(
-      [
-        3.8,
-        2.7,
-        3.2,
-      ],
-      [
-        0,
-        1.05,
-        0,
-      ],
-      38,
     ),
 };
 
 
 /*
- * ------------------------------------------------------------------
+ * ==================================================================
  * DOT / DEVASTHAL
- * ------------------------------------------------------------------
+ * ==================================================================
  *
- * DOT gets the deepest "mountain acquisition" route. The camera first
- * reads the ridge system and forested valley, then descends toward the
- * observatory clearing.
+ * Scientific focal identity:
+ * 3.6-m telescope enclosure / dome.
+ *
+ * The previous calibrated pass already produces a strong cinematic
+ * architectural view.
+ *
+ * Final change is intentionally modest so the dome/building remain prominent
+ * while revealing slightly more road, vegetation and Himalayan site context.
  */
 
 const DOT_CAMERA:
@@ -329,30 +401,16 @@ const DOT_CAMERA:
   observatoryId:
     "dot",
 
-  /*
-   * Premium DOT / Devasthal framing.
-   *
-   * Preserve the accepted six-stage journey contract while allowing the
-   * expanded Himalayan environment to read in layers:
-   *
-   * regionalHigh     → distant ridge system + valley scale
-   * terrainAcquire   → forested approach + observatory-site elevation
-   * establishing     → terrace + road + telescope context
-   * approach         → facility becomes dominant
-   * facility         → architectural reveal
-   * science          → alternate close scientific presentation angle
-   */
-
   regionalHigh:
     createPose(
       [
-        3,
-        32,
         38,
+        30,
+        54,
       ],
       [
         0,
-        1,
+        -2.5,
         -13,
       ],
       52,
@@ -361,14 +419,14 @@ const DOT_CAMERA:
   terrainAcquire:
     createPose(
       [
-        16,
-        19,
-        27,
+        28,
+        21,
+        38,
       ],
       [
         0,
-        1.15,
-        -10,
+        -1.5,
+        -8,
       ],
       48,
     ),
@@ -376,61 +434,78 @@ const DOT_CAMERA:
   establishing:
     createPose(
       [
-        12.5,
-        10.8,
-        15.5,
+        17,
+        12,
+        22,
       ],
       [
         0,
-        1.15,
-        -2.8,
+        -0.25,
+        -3,
       ],
       43,
     ),
 
+  /*
+   * FINAL LOCKED CINEMATIC ARRIVAL
+   *
+   * Previous calibrated pass:
+   *   position = [11.8, 8.0, 15.0]
+   *   target   = [0, 0.65, 0]
+   *   fov      = 41
+   *
+   * Final:
+   * modest additional retreat.
+   */
   approach:
     createPose(
       [
-        7.2,
-        5.8,
-        9.4,
+        14,
+        9.5,
+        18,
       ],
       [
         0,
-        1.35,
-        0.1,
+        0.75,
+        0,
       ],
-      39,
+      42,
     ),
 
+  /*
+   * Reserved for future local cinematic choreography.
+   */
   facility:
     createPose(
       [
-        4.0,
-        3.1,
-        4.9,
+        7.2,
+        4.8,
+        9.3,
       ],
       [
         0,
-        1.42,
+        0.65,
         0,
       ],
-      36,
+      38,
     ),
 
+  /*
+   * Reserved for future alternate scientific presentation.
+   */
   science:
     createPose(
       [
-        -4.3,
-        2.9,
-        3.8,
+        -7.0,
+        4.7,
+        8.4,
       ],
       [
         0,
-        1.46,
+        0.72,
         0,
       ],
-      37,
+      39,
     ),
 };
 
@@ -476,12 +551,10 @@ export function getObservatoryDestinationPose(
 
   return {
     position:
-      canonical.position
-        .clone(),
+      canonical.position.clone(),
 
     target:
-      canonical.target
-        .clone(),
+      canonical.target.clone(),
 
     fov:
       canonical.fov,

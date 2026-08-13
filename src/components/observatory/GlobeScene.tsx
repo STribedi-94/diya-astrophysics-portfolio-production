@@ -292,7 +292,7 @@ export default function GlobeScene({
         38,
         1,
         0.1,
-        100,
+        1600,
       );
 
 
@@ -476,13 +476,14 @@ disposables.push(
     /*
      * ------------------------------------------------------------
      * Project Diya Astra
-     * Ground Observatory Procedural Environment Systems
+     * Ground Observatory Accepted-GLB Environment Systems
      * ------------------------------------------------------------
      *
-     * The three local Observatory destination worlds are created once
-     * with the persistent WebGL scene. They remain hidden until the
+     * The three accepted web-safe Observatory GLBs are loaded once into
+     * normalized local destination worlds. They remain hidden until the
      * Journey Controller explicitly activates one in a later cinematic
-     * stage. This preserves the accepted Earth/TESS/Sun/Moon scene.
+     * stage. This preserves the accepted Earth/TESS/Sun/Moon scene while
+     * replacing the former procedural stand-ins with the audited assets.
      */
 
     const ugmrtEnvironmentSystem =
@@ -1236,23 +1237,23 @@ disposables.push(
         switch (observatoryId) {
           case "ugmrt":
             return {
-              minDistance: 3.4,
-              maxDistance: 24,
-              targetLift: 1.0,
+              minDistance: 12,
+              maxDistance: 95,
+              targetLift: 0.75,
             };
 
           case "hct":
             return {
-              minDistance: 2.8,
-              maxDistance: 16,
-              targetLift: 1.0,
+              minDistance: 3.6,
+              maxDistance: 42,
+              targetLift: 0.55,
             };
 
           case "dot":
             return {
-              minDistance: 3.0,
-              maxDistance: 20,
-              targetLift: 1.45,
+              minDistance: 3.2,
+              maxDistance: 48,
+              targetLift: 0.55,
             };
         }
       };
@@ -3085,6 +3086,15 @@ moonSystem.update({
         !localObservatoryOwnsView;
 
       tessSystem.group.visible =
+        !localObservatoryOwnsView;
+
+      /*
+       * The Sun belongs to the global Earth-space composition.
+       * Keep it out of the local Observatory sky using the same already-
+       * approved ownership boundary. The atmospheric veil masks this switch,
+       * so no camera/transition timing is changed.
+       */
+      sunSystem.root.visible =
         !localObservatoryOwnsView;
 
       /*
