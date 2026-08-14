@@ -64,39 +64,6 @@ export const Route = createFileRoute("/gallery")({
 
 // ---------- helpers ----------
 
-function useReducedMotion() {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    const m = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(m.matches);
-    const on = () => setReduced(m.matches);
-    m.addEventListener("change", on);
-    return () => m.removeEventListener("change", on);
-  }, []);
-  return reduced;
-}
-
-function useSessionFlag(key: string) {
-  const [flagged, setFlagged] = useState(true);
-  useEffect(() => {
-    try {
-      const v = sessionStorage.getItem(key);
-      setFlagged(v === "1");
-    } catch {
-      setFlagged(true);
-    }
-  }, [key]);
-  const mark = useCallback(() => {
-    try {
-      sessionStorage.setItem(key, "1");
-    } catch {
-      /* ignore */
-    }
-    setFlagged(true);
-  }, [key]);
-  return [flagged, mark] as const;
-}
-
 const NAV_SECTIONS: { id: string; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: "overview", label: "Mission Overview", icon: Compass },
   { id: "featured", label: "Featured Records", icon: Star },
@@ -113,31 +80,8 @@ const NAV_SECTIONS: { id: string; label: string; icon: React.ComponentType<{ cla
 // ---------- page ----------
 
 function GalleryPage() {
-  const reduced = useReducedMotion();
-  const [visited, markVisited] = useSessionFlag("gallery-visited");
-  const [showIntro, setShowIntro] = useState(false);
-
-  useEffect(() => {
-    if (reduced || visited) return;
-    setShowIntro(true);
-    const t = setTimeout(() => {
-      setShowIntro(false);
-      markVisited();
-    }, 2200);
-    return () => clearTimeout(t);
-  }, [reduced, visited, markVisited]);
-
   return (
     <>
-      {showIntro && (
-        <IntroSequence
-          onSkip={() => {
-            setShowIntro(false);
-            markVisited();
-          }}
-        />
-      )}
-
       <Breadcrumbs />
       <ArchiveHero />
       <SideNavigator />
@@ -151,54 +95,6 @@ function GalleryPage() {
       <RelatedSection />
       <EndOfArchive />
     </>
-  );
-}
-
-// ---------- intro sequence ----------
-
-function IntroSequence({ onSkip }: { onSkip: () => void }) {
-  const stages = [
-    "Calibrating observatory records",
-    "Indexing conference archives",
-    "Mapping telescope facilities",
-    "Connecting research milestones",
-    "Archive ready",
-  ];
-  const [stage, setStage] = useState(0);
-  useEffect(() => {
-    const i = setInterval(() => setStage((s) => (s + 1) % stages.length), 380);
-    return () => clearInterval(i);
-  }, [stages.length]);
-  return (
-    <div
-      className="fixed inset-0 z-[80] flex flex-col items-center justify-center bg-[oklch(0.06_0.02_265)] anim-fade-in"
-      role="status"
-      aria-live="polite"
-    >
-      <div className="absolute inset-0 starfield anim-drift opacity-60" aria-hidden />
-      <div className="absolute inset-0 vignette" aria-hidden />
-      <div className="relative flex w-[min(560px,88vw)] flex-col items-center gap-6 text-center">
-        <div className="font-mono text-[10px] uppercase tracking-[0.32em] text-primary/90">
-          Initializing Astronomical Journey Archive
-        </div>
-        <div className="font-display text-lg text-foreground">{stages[stage]}…</div>
-        <div className="relative h-[3px] w-full overflow-hidden rounded-full bg-white/10">
-          <div className="absolute inset-y-0 left-0 w-full origin-left animate-[progressBar_2.2s_ease-out_forwards] bg-grad-accent" />
-        </div>
-        <div className="pointer-events-none absolute -inset-x-8 top-1/2 h-px animate-[scanLine_2.2s_ease-out_forwards] bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
-        <button
-          type="button"
-          onClick={onSkip}
-          className="mt-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:text-foreground"
-        >
-          Skip
-        </button>
-      </div>
-      <style>{`
-        @keyframes progressBar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-        @keyframes scanLine { from { transform: translateY(-40vh); opacity: 0; } 20% { opacity: 1; } to { transform: translateY(40vh); opacity: 0; } }
-      `}</style>
-    </div>
   );
 }
 

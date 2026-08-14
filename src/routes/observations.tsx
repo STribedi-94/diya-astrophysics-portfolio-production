@@ -26,7 +26,6 @@ import { PageHero, Section } from "@/components/layout/Page";
 import { cn } from "@/lib/utils";
 import { facilities } from "@/data/facilities";
 import { ObservatoryNetworkGlobe } from "@/components/observatory/ObservatoryNetworkGlobe";
-
 import { projects } from "@/data/misc";
 import facilityUgmrt from "@/assets/facility-ugmrt.jpg";
 import facilityHct from "@/assets/facility-hct.jpg";
@@ -50,15 +49,33 @@ const NAV_SECTIONS: NavSection[] = [
 ];
 
 function PageNavigator() {
-  const [activeId, setActiveId] = useState<string>(NAV_SECTIONS[0].id);
+  const astraHashEntry =
+    typeof window !== "undefined" &&
+    window.location.hash === "#network";
+
+  const [activeId, setActiveId] = useState<string>(
+    astraHashEntry ? "network" : NAV_SECTIONS[0].id,
+  );
   const [collapsed, setCollapsed] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [holdNetwork, setHoldNetwork] = useState(astraHashEntry);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     setCollapsed(window.innerWidth < 1536);
   }, []);
+
+  useEffect(() => {
+    if (!holdNetwork || typeof window === "undefined") return;
+
+    const release = window.setTimeout(() => {
+      setHoldNetwork(false);
+      setActiveId("network");
+    }, 1100);
+
+    return () => window.clearTimeout(release);
+  }, [holdNetwork]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -74,7 +91,9 @@ function PageNavigator() {
         if (!el) continue;
         if (el.getBoundingClientRect().top - 140 <= 0) current = s.id;
       }
-      setActiveId(current);
+      if (!holdNetwork) {
+        setActiveId(current);
+      }
     };
     const onScroll = () => {
       if (raf) return;
@@ -86,7 +105,7 @@ function PageNavigator() {
       window.removeEventListener("scroll", onScroll);
       if (raf) window.cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [holdNetwork]);
 
   const scrollToId = (id: string) => {
     const el = document.getElementById(id);
