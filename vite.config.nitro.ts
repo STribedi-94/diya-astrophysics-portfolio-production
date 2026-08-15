@@ -3,21 +3,19 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
-import { cloudflare } from "@cloudflare/vite-plugin";
+import { nitro } from "nitro/vite";
 
 export default defineConfig({
   plugins: [
     tsconfigPaths(),
     tailwindcss(),
-    cloudflare({
-      viteEnvironment: {
-        name: "ssr",
-      },
-    }),
     tanstackStart({
       server: {
         entry: "server",
       },
+    }),
+    nitro({
+      preset: "cloudflare-module",
     }),
     react(),
   ],

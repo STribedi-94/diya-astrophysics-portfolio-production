@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { assetUrl } from "@/config/assets";
 
 import {
   type ObservatoryLightingPhase,
@@ -35,7 +36,7 @@ const MODEL_PROFILES: Readonly<
   Record<GroundObservatoryId, ObservatoryModelProfile>
 > = Object.freeze({
   dot: {
-    url: "/assets/observatories/3d/dot-facility-web-safe-v2.glb",
+    url: assetUrl("observatories/3d/dot-facility-web-safe-v2.glb"),
     desiredFocalHorizontalDiameter: 2.6,
     selectFocalObjects(root) {
       const matches: THREE.Object3D[] = [];
@@ -55,7 +56,7 @@ const MODEL_PROFILES: Readonly<
   },
 
   hct: {
-    url: "/assets/observatories/3d/hct-facility-web-safe-v1.glb",
+    url: assetUrl("observatories/3d/hct-facility-web-safe-v1.glb"),
     desiredFocalHorizontalDiameter: 3.8,
     selectFocalObjects(root) {
       const matches: THREE.Object3D[] = [];
@@ -76,7 +77,7 @@ const MODEL_PROFILES: Readonly<
   },
 
   ugmrt: {
-    url: "/assets/observatories/3d/ugmrt-facility-web-safe-v1.glb",
+    url: assetUrl("observatories/3d/ugmrt-facility-web-safe-v1.glb"),
     desiredFocalHorizontalDiameter: 18.0,
     selectFocalObjects(root) {
       const matches: THREE.Object3D[] = [];
