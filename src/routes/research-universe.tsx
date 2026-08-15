@@ -6,6 +6,7 @@ import { researchAreas } from "@/data/research";
 import { projects } from "@/data/misc";
 import { facilities } from "@/data/facilities";
 import { publicationsArchive } from "@/data/publications-archive";
+import { siteUrl } from "@/data/site";
 import { ArrowRight, Layers, Rocket, Telescope, BookOpen, Waves, Radio, Sparkles } from "lucide-react";
 
 const sections = [
@@ -32,7 +33,7 @@ export const Route = createFileRoute("/research-universe")({
       },
       { property: "og:type", content: "website" },
     ],
-    links: [{ rel: "canonical", href: "https://astro-diya-portfolio.lovable.app/research-universe" }],
+    links: [{ rel: "canonical", href: siteUrl("/research-universe") }],
   }),
   component: ResearchUniversePage,
 });

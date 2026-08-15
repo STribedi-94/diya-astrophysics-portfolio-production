@@ -1,3 +1,14 @@
+const configuredSiteUrl = import.meta.env.VITE_SITE_URL?.trim();
+
+export const SITE_URL = configuredSiteUrl
+  ? configuredSiteUrl.replace(/\/+$/, "")
+  : "";
+
+export function siteUrl(path = "/") {
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  return SITE_URL ? `${SITE_URL}${normalizedPath}` : normalizedPath;
+}
+
 export const site = {
   name: "Diya Ram",
   shortName: "Diya Ram",

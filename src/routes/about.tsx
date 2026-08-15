@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { Section, GlassPanel } from "@/components/layout/Page";
 import { imageService } from "@/services/images";
+import { siteUrl } from "@/data/site";
 import { SpectralDivider } from "@/components/layout/SpectralDivider";
 import {
   aboutIdentity,
@@ -49,7 +50,7 @@ export const Route = createFileRoute("/about")({
       { property: "og:type", content: "profile" },
       {
         property: "og:url",
-        content: "https://astro-diya-portfolio.lovable.app/about",
+        content: siteUrl("/about"),
       },
       { name: "twitter:card", content: "summary_large_image" },
       {
@@ -63,11 +64,11 @@ export const Route = createFileRoute("/about")({
       },
       {
         property: "og:image",
-        content: `https://astro-diya-portfolio.lovable.app${imageService.getRequiredImage("portrait-primary").imageUrl}`,
+        content: siteUrl(imageService.getRequiredImage("portrait-primary").imageUrl),
       },
       {
         name: "twitter:image",
-        content: `https://astro-diya-portfolio.lovable.app${imageService.getRequiredImage("portrait-primary").imageUrl}`,
+        content: siteUrl(imageService.getRequiredImage("portrait-primary").imageUrl),
       },
       {
         property: "og:image:alt",
@@ -75,7 +76,7 @@ export const Route = createFileRoute("/about")({
       },
     ],
     links: [
-      { rel: "canonical", href: "https://astro-diya-portfolio.lovable.app/about" },
+      { rel: "canonical", href: siteUrl("/about") },
     ],
     scripts: [
       {

@@ -36,8 +36,7 @@ import {
   type GalleryRecord,
 } from "@/data/gallery";
 import { cn } from "@/lib/utils";
-
-const SITE = "https://astro-diya-portfolio.lovable.app";
+import { siteUrl } from "@/data/site";
 
 export const Route = createFileRoute("/gallery")({
   head: () => ({
@@ -56,7 +55,7 @@ export const Route = createFileRoute("/gallery")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { rel: "canonical", href: `${SITE}/gallery` },
+      { rel: "canonical", href: siteUrl("/gallery") },
     ],
   }),
   component: GalleryPage,

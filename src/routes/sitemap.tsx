@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHero, Section, GlassPanel } from "@/components/layout/Page";
 import { NavigationAtlas } from "@/components/sitemap/NavigationAtlas";
 import { Map, MessageSquare } from "lucide-react";
+import { siteUrl } from "@/data/site";
 
 export const Route = createFileRoute("/sitemap")({
   head: () => ({
@@ -19,10 +20,10 @@ export const Route = createFileRoute("/sitemap")({
           "Explore the complete structure of Diya Ram's astrophysics portfolio through an interactive, accessible website navigation atlas.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://astro-diya-portfolio.lovable.app/sitemap" },
+      { property: "og:url", content: siteUrl("/sitemap") },
       { name: "twitter:card", content: "summary" },
     ],
-    links: [{ rel: "canonical", href: "https://astro-diya-portfolio.lovable.app/sitemap" }],
+    links: [{ rel: "canonical", href: siteUrl("/sitemap") }],
   }),
   component: SitemapPage,
 });

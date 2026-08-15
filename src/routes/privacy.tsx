@@ -20,6 +20,7 @@ import {
 } from "@/data/legal";
 import { contactIdentity } from "@/data/contact";
 import { cn } from "@/lib/utils";
+import { siteUrl } from "@/data/site";
 
 const TITLE = "Privacy Policy | Diya Ram — Observational Astrophysicist";
 const DESCRIPTION =
@@ -33,10 +34,10 @@ export const Route = createFileRoute("/privacy")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://astro-diya-portfolio.lovable.app/privacy" },
+      { property: "og:url", content: siteUrl("/privacy") },
       { name: "twitter:card", content: "summary" },
     ],
-    links: [{ rel: "canonical", href: "https://astro-diya-portfolio.lovable.app/privacy" }],
+    links: [{ rel: "canonical", href: siteUrl("/privacy") }],
   }),
   component: PrivacyPage,
 });

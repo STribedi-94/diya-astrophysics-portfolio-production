@@ -16,6 +16,7 @@ import {
   Waves,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { siteUrl } from "@/data/site";
 
 export const Route = createFileRoute("/projects/")({
   head: () => ({
@@ -34,7 +35,7 @@ export const Route = createFileRoute("/projects/")({
       },
       { property: "og:type", content: "website" },
     ],
-    links: [{ rel: "canonical", href: "https://astro-diya-portfolio.lovable.app/projects" }],
+    links: [{ rel: "canonical", href: siteUrl("/projects") }],
   }),
   component: ResearchProjectsPage,
 });

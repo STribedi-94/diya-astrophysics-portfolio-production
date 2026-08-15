@@ -7,6 +7,7 @@ import { projects } from "@/data/misc";
 import { publicationsArchive } from "@/data/publications-archive";
 import { ArrowRight, ExternalLink, Globe2, Radio, Satellite, Telescope } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { siteUrl } from "@/data/site";
 
 export const Route = createFileRoute("/facilities/")({
   head: () => ({
@@ -25,7 +26,7 @@ export const Route = createFileRoute("/facilities/")({
       },
       { property: "og:type", content: "website" },
     ],
-    links: [{ rel: "canonical", href: "https://astro-diya-portfolio.lovable.app/facilities" }],
+    links: [{ rel: "canonical", href: siteUrl("/facilities") }],
   }),
   component: ResearchFacilitiesPage,
 });

@@ -8,6 +8,7 @@ import { projects } from "@/data/misc";
 import { publicationsArchive } from "@/data/publications-archive";
 import { ArrowRight, ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { siteUrl } from "@/data/site";
 
 export const Route = createFileRoute("/research/")({
   head: () => ({
@@ -26,7 +27,7 @@ export const Route = createFileRoute("/research/")({
       },
       { property: "og:type", content: "website" },
     ],
-    links: [{ rel: "canonical", href: "https://astro-diya-portfolio.lovable.app/research" }],
+    links: [{ rel: "canonical", href: siteUrl("/research") }],
   }),
   component: ResearchAreasPage,
 });

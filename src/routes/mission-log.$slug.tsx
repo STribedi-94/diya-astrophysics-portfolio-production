@@ -13,8 +13,7 @@ import {
 } from "@/data/chronicle";
 import type { ChronicleRecord } from "@/data/chronicle";
 import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
-
-const BASE = "https://astro-diya-portfolio.lovable.app";
+import { siteUrl } from "@/data/site";
 
 type EntryLoaderData = {
   record: ChronicleRecord;
@@ -38,7 +37,7 @@ export const Route = createFileRoute("/mission-log/$slug")({
     const r = loaderData.record;
     const title = `${r.title} — Scientific Mission Log | Diya Ram`;
     const description = r.summary.slice(0, 155);
-    const url = `${BASE}/mission-log/${params.slug}`;
+    const url = siteUrl(`/mission-log/${params.slug}`);
     return {
       meta: [
         { title },
@@ -62,7 +61,7 @@ export const Route = createFileRoute("/mission-log/$slug")({
             url,
             author: { "@type": "Person", name: "Diya Ram" },
             about: r.researchTheme,
-            isPartOf: { "@type": "CollectionPage", name: "Scientific Mission Log", url: `${BASE}/mission-log` },
+            isPartOf: { "@type": "CollectionPage", name: "Scientific Mission Log", url: siteUrl("/mission-log") },
           }),
         },
       ],

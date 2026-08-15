@@ -4,8 +4,8 @@ import { researchAreas } from "@/data/research";
 import { facilities } from "@/data/facilities";
 import { projects, publications } from "@/data/misc";
 import { chronicleRecords } from "@/data/chronicle";
+import { siteUrl } from "@/data/site";
 
-const BASE_URL = "";
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
@@ -26,7 +26,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           ...publications.map((p) => ({ path: `/publications/${p.slug}` })),
         ];
         const urls = entries.map((e) =>
-          [`  <url>`, `    <loc>${BASE_URL}${e.path}</loc>`, `  </url>`].join("\n"),
+          [`  <url>`, `    <loc>${siteUrl(e.path)}</loc>`, `  </url>`].join("\n"),
         );
         const xml = [
           `<?xml version="1.0" encoding="UTF-8"?>`,

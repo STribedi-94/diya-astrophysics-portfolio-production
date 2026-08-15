@@ -32,6 +32,7 @@ import {
 } from "@/data/publications-archive";
 import { imageService } from "@/services/images";
 import { cn } from "@/lib/utils";
+import { siteUrl } from "@/data/site";
 
 export const Route = createFileRoute("/publications/")({
   head: () => ({
@@ -49,13 +50,13 @@ export const Route = createFileRoute("/publications/")({
           "A cosmic archive of first-author and collaborative research on magnetic activity in nearby M-dwarf stars.",
       },
       { property: "og:type", content: "article" },
-      { property: "og:url", content: "https://astro-diya-portfolio.lovable.app/publications" },
-      { property: "og:image", content: `https://astro-diya-portfolio.lovable.app${imageService.getRequiredImage("hubble-hero").imageUrl}` },
+      { property: "og:url", content: siteUrl("/publications") },
+      { property: "og:image", content: siteUrl(imageService.getRequiredImage("hubble-hero").imageUrl) },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: `https://astro-diya-portfolio.lovable.app${imageService.getRequiredImage("hubble-hero").imageUrl}` },
+      { name: "twitter:image", content: siteUrl(imageService.getRequiredImage("hubble-hero").imageUrl) },
     ],
     links: [
-      { rel: "canonical", href: "https://astro-diya-portfolio.lovable.app/publications" },
+      { rel: "canonical", href: siteUrl("/publications") },
       { rel: "preload", as: "image", href: imageService.getRequiredImage("hubble-hero").imageUrl },
     ],
   }),

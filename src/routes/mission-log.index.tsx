@@ -27,12 +27,13 @@ import {
   type ChronicleRecord,
 } from "@/data/chronicle";
 import { cn } from "@/lib/utils";
+import { siteUrl } from "@/data/site";
 import { Search, Radio, Rows3, LayoutGrid, GitBranch } from "lucide-react";
 
 const TITLE = "Scientific Mission Log — Diya Ram's Research Journey | Diya Ram";
 const DESCRIPTION =
   "A continuously growing scientific chronicle of Diya Ram's verified research: publications, observing programmes, conference presentations, thesis milestones, teaching, peer review and upcoming missions.";
-const URL = "https://astro-diya-portfolio.lovable.app/mission-log";
+const URL = siteUrl("/mission-log");
 
 const SECTIONS: NavSection[] = [
   { id: "mission-status", label: "Mission status" },

@@ -19,6 +19,7 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SITE_URL, siteUrl } from "@/data/site";
 import { isDemoMode, newsConfig } from "@/config/newsConfig";
 import { getNews } from "@/services/newsService";
 import {
@@ -43,7 +44,6 @@ import {
 } from "@/components/news/NewsStates";
 import { formatNewsDateTime } from "@/components/news/NewsBadges";
 
-const SITE = "https://astro-diya-portfolio.lovable.app";
 const TITLE = "Astrophysics News Hub — Global Astronomy & Space Science | Diya Ram";
 const DESCRIPTION =
   "A curated hub of astrophysics, astronomy and space-science news from trusted observatories, space agencies and research institutions, with a Research Orbit spotlight on stellar activity and radio astronomy.";
@@ -90,12 +90,12 @@ export const Route = createFileRoute("/news/")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: `${SITE}/news` },
+      { property: "og:url", content: siteUrl("/news") },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
     ],
-    links: [{ rel: "canonical", href: `${SITE}/news` }],
+    links: [{ rel: "canonical", href: siteUrl("/news") }],
     scripts: [
       {
         type: "application/ld+json",
@@ -104,8 +104,8 @@ export const Route = createFileRoute("/news/")({
           "@type": "CollectionPage",
           name: "Astrophysics News Hub",
           description: DESCRIPTION,
-          url: `${SITE}/news`,
-          isPartOf: { "@type": "WebSite", name: "Diya Ram — Observational Astrophysicist", url: SITE },
+          url: siteUrl("/news"),
+          isPartOf: { "@type": "WebSite", name: "Diya Ram — Observational Astrophysicist", url: SITE_URL },
           about: [
             { "@type": "Thing", name: "Astrophysics" },
             { "@type": "Thing", name: "Astronomy" },

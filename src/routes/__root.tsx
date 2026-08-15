@@ -7,10 +7,9 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "../components/layout/SiteHeader";
 import { SiteFooter } from "../components/layout/SiteFooter";
 import { CosmicBackground } from "../components/layout/CosmicBackground";
@@ -20,6 +19,8 @@ import {
   shellStyle,
 } from "../components/intro/CosmicEntrance";
 import { PerformanceProvider, PERF_PREPAINT } from "../lib/performance";
+import { SITE_URL, siteUrl } from "@/data/site";
+import { imageService } from "@/services/images";
 
 const ENTRANCE_PREPAINT = `(function(){try{if(location.pathname==="/"&&!sessionStorage.getItem("dr-entrance-seen")){var s=document.createElement("style");s.id="entrance-prepaint";s.textContent="html{background-color:#04060e}.app-shell{opacity:0!important}";document.head.appendChild(s)}}catch(e){}})();`;
 
@@ -27,9 +28,15 @@ function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <p className="text-sm uppercase tracking-[0.3em] text-primary/80">Signal lost</p>
-        <h1 className="mt-3 font-display text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">This page is outside the observable universe</h2>
+        <p className="text-sm uppercase tracking-[0.3em] text-primary/80">
+          Signal lost
+        </p>
+        <h1 className="mt-3 font-display text-7xl font-bold text-foreground">
+          404
+        </h1>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">
+          This page is outside the observable universe
+        </h2>
         <p className="mt-2 text-sm text-muted-foreground">
           The page you're looking for doesn't exist or has been moved.
         </p>
@@ -49,9 +56,6 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -97,7 +101,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { name: "author", content: "Diya Ram" },
       { name: "theme-color", content: "#0b1024" },
-      { property: "og:title", content: "Diya Ram — Observational Astrophysicist" },
+      {
+        property: "og:title",
+        content: "Diya Ram — Observational Astrophysicist",
+      },
       {
         property: "og:description",
         content:
@@ -105,15 +112,34 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Diya Ram — Observational Astrophysicist" },
-      { name: "twitter:description", content: "Diya Ram: observational astrophysicist studying magnetic activity of M-dwarf stars with uGMRT, HCT and DOT across optical, spectroscopic and radio wavelengths." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/QbxojdqJeZQI6PCz3G2jBy9jhmO2/social-images/social-1784384086675-3485.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/QbxojdqJeZQI6PCz3G2jBy9jhmO2/social-images/social-1784384086675-3485.webp" },
+      {
+        name: "twitter:title",
+        content: "Diya Ram — Observational Astrophysicist",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Diya Ram: observational astrophysicist studying magnetic activity of M-dwarf stars with uGMRT, HCT and DOT across optical, spectroscopic and radio wavelengths.",
+      },
+      {
+        property: "og:image",
+        content:
+          siteUrl(imageService.getRequiredImage("hubble-hero").imageUrl),
+      },
+      {
+        name: "twitter:image",
+        content:
+          siteUrl(imageService.getRequiredImage("hubble-hero").imageUrl),
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossOrigin: "anonymous",
+      },
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap",
@@ -126,7 +152,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "@context": "https://schema.org",
           "@type": "WebSite",
           name: "Diya Ram — Observational Astrophysicist",
-          url: "https://astro-diya-portfolio.lovable.app",
+          url: SITE_URL,
           about: {
             "@type": "Person",
             name: "Diya Ram",
@@ -176,7 +202,9 @@ function RootComponent() {
           style={shellStyle(entrance)}
         >
           <CosmicBackground />
-          <a href="#main-content" className="skip-link">Skip to content</a>
+          <a href="#main-content" className="skip-link">
+            Skip to content
+          </a>
           <SiteHeader />
           <main id="main-content" className="flex-1">
             <Outlet />

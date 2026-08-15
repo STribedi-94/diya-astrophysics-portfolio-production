@@ -14,9 +14,9 @@ import {
   progressLabels,
 } from "@/data/journey";
 import { profileSameAs } from "@/data/about";
+import { siteUrl } from "@/data/site";
 
-const SITE_URL = "https://astro-diya-portfolio.lovable.app";
-const CANONICAL = `${SITE_URL}/academic-journey`;
+const CANONICAL = siteUrl("/academic-journey");
 
 const chapterIds = chapterNav.map((c) => c.id);
 

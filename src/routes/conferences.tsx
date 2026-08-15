@@ -43,8 +43,7 @@ import { facilities } from "@/data/facilities";
 import { publicationsArchive } from "@/data/publications-archive";
 import { projects } from "@/data/misc";
 import { cn } from "@/lib/utils";
-
-const SITE = "https://astro-diya-portfolio.lovable.app";
+import { siteUrl } from "@/data/site";
 
 export const Route = createFileRoute("/conferences")({
   head: () => ({
@@ -65,10 +64,10 @@ export const Route = createFileRoute("/conferences")({
           "A cinematic scientific communication archive of oral talks, posters, workshops and academic exchange across Diya Ram's observational astrophysics journey.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: `${SITE}/conferences` },
+      { property: "og:url", content: siteUrl("/conferences") },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: `${SITE}/conferences` }],
+    links: [{ rel: "canonical", href: siteUrl("/conferences") }],
   }),
   component: ConferencesPage,
 });
