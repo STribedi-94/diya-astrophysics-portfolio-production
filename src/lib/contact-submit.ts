@@ -18,6 +18,8 @@ export type ContactPayload = {
   message: string;
   /** Reserved for Cloudflare Turnstile — populated once the widget is enabled. */
   turnstileToken?: string;
+  honeypot?: string;
+  formStartedAt?: number;
 };
 
 export type ContactResult = { ok: true; message: string } | { ok: false; message: string };

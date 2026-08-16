@@ -1,0 +1,38 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "astro-diya-contact-notifier",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-15",
+  "workers_dev": false,
+  "preview_urls": false,
+  "observability": {
+    "enabled": true
+  },
+  "secrets": {
+    "required": [
+      "GMAIL_CLIENT_ID",
+      "GMAIL_CLIENT_SECRET",
+      "GMAIL_REFRESH_TOKEN"
+    ]
+  },
+  "d1_databases": [
+    {
+      "binding": "CONTACT_DB",
+      "database_name": "astro-diya-contact",
+      "database_id": "b8650dd4-4bcc-47ad-b741-c232a33a2388",
+      "remote": true
+    }
+  ],
+  "queues": {
+    "consumers": [
+      {
+        "queue": "astro-diya-contact-notifications",
+        "max_batch_size": 5,
+        "max_batch_timeout": 5,
+        "max_retries": 5,
+        "retry_delay": 60,
+        "dead_letter_queue": "astro-diya-contact-notifications-dlq"
+      }
+    ]
+  }
+}
