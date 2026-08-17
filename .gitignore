@@ -47,3 +47,8 @@ asset-preparation/observatories/ugmrt/prepared/images/
 asset-preparation/observatories/ugmrt/production-ready/images/
 dot-asset-path-audit.txt
 dot-source-originals-verification.txt
+
+# Local environment files
+.env
+.env.*
+!.env.example

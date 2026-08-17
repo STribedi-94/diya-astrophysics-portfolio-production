@@ -3,8 +3,16 @@
   "name": "astro-diya",
   "main": "src/server.ts",
   "compatibility_date": "2026-08-15",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "observability": {
     "enabled": true
-  }
+  },
+  "services": [
+    {
+      "binding": "CONTACT_SERVICE",
+      "service": "astro-diya-contact"
+    }
+  ]
 }

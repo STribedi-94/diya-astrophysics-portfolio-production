@@ -1,8 +1,10 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { AlertCircle, CheckCircle2, Loader2, Send } from "lucide-react";
-import { cn } from "@/lib/utils";
+
+import { TurnstileWidget } from "@/components/contact/TurnstileWidget";
 import { contactPurposes, contactIdentity } from "@/data/contact";
 import { submitContactEnquiry } from "@/lib/contact-submit";
+import { cn } from "@/lib/utils";
 
 type Fields = {
   name: string;
@@ -71,10 +73,19 @@ export function ContactForm() {
 
   const [honeypot, setHoneypot] = useState("");
   const [errors, setErrors] = useState<Errors>({});
+
   const [status, setStatus] = useState<
     "idle" | "submitting" | "success" | "error"
   >("idle");
+
   const [feedback, setFeedback] = useState("");
+
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(
+    null,
+  );
+
+  const [turnstileResetKey, setTurnstileResetKey] = useState(0);
+  const [turnstileError, setTurnstileError] = useState("");
 
   const submittingRef = useRef(false);
   const firstErrorRef = useRef<string | null>(null);
@@ -86,6 +97,33 @@ export function ContactForm() {
     },
     [],
   );
+
+  const handleTurnstileToken = useCallback(
+    (token: string | null) => {
+      setTurnstileToken(token);
+
+      if (token) {
+        setTurnstileError("");
+
+        if (
+          status === "error" &&
+          feedback ===
+            "Please complete the security verification before sending your message."
+        ) {
+          setStatus("idle");
+          setFeedback("");
+        }
+      }
+    },
+    [feedback, status],
+  );
+
+  const handleTurnstileError = useCallback(() => {
+    setTurnstileToken(null);
+    setTurnstileError(
+      "Security verification could not be completed. Please try again.",
+    );
+  }, []);
 
   const set = (key: keyof Fields) => (value: string) => {
     setValues((current) => ({
@@ -101,7 +139,9 @@ export function ContactForm() {
     }
   };
 
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
     event.preventDefault();
 
     if (submittingRef.current) {
@@ -111,31 +151,56 @@ export function ContactForm() {
     const nextErrors = validate(values);
     setErrors(nextErrors);
 
-    const firstKey = (Object.keys(nextErrors) as (keyof Fields)[])[0];
+    const firstKey = (
+      Object.keys(nextErrors) as (keyof Fields)[]
+    )[0];
 
     if (firstKey) {
       firstErrorRef.current = `${uid}-${firstKey}`;
-      document.getElementById(`${uid}-${firstKey}`)?.focus();
+
+      document
+        .getElementById(`${uid}-${firstKey}`)
+        ?.focus();
 
       setStatus("idle");
       setFeedback("");
       return;
     }
 
+    if (!turnstileToken) {
+      setStatus("error");
+      setFeedback(
+        "Please complete the security verification before sending your message.",
+      );
+      return;
+    }
+
     submittingRef.current = true;
     setStatus("submitting");
     setFeedback("");
+    setTurnstileError("");
 
     const result = await submitContactEnquiry({
       name: values.name.trim(),
       email: values.email.trim(),
       purpose: values.purpose,
       message: values.message.trim(),
+      turnstileToken,
       honeypot,
       formStartedAt: formStartedAtRef.current,
     });
 
     submittingRef.current = false;
+
+    /*
+     * Turnstile tokens are single-use.
+     *
+     * Whether the Contact API accepted or rejected this attempt,
+     * discard the used token and mount a fresh widget for the
+     * visitor's next submission attempt.
+     */
+    setTurnstileToken(null);
+    setTurnstileResetKey((current) => current + 1);
 
     if (result.ok) {
       setStatus("success");
@@ -168,9 +233,10 @@ export function ContactForm() {
       {/*
         Anti-spam honeypot.
 
-        Human visitors never need this field. It is intentionally positioned
-        outside the visible viewport rather than using type="hidden", because
-        simple form-filling bots commonly populate normal text inputs.
+        Human visitors never need this field. It is intentionally
+        positioned outside the visible viewport rather than using
+        type="hidden", because simple form-filling bots commonly
+        populate normal text inputs.
       */}
       <div
         aria-hidden="true"
@@ -187,13 +253,18 @@ export function ContactForm() {
           tabIndex={-1}
           autoComplete="off"
           value={honeypot}
-          onChange={(event) => setHoneypot(event.target.value)}
+          onChange={(event) =>
+            setHoneypot(event.target.value)
+          }
         />
       </div>
 
       <div className="grid gap-5 md:grid-cols-2">
         <div>
-          <label htmlFor={`${uid}-name`} className={labelClass}>
+          <label
+            htmlFor={`${uid}-name`}
+            className={labelClass}
+          >
             Full name
           </label>
 
@@ -204,15 +275,22 @@ export function ContactForm() {
             autoComplete="name"
             maxLength={100}
             value={values.name}
-            onChange={(event) => set("name")(event.target.value)}
+            onChange={(event) =>
+              set("name")(event.target.value)
+            }
             aria-required="true"
-            aria-invalid={errors.name ? true : undefined}
+            aria-invalid={
+              errors.name ? true : undefined
+            }
             aria-describedby={
-              errors.name ? `${uid}-name-error` : undefined
+              errors.name
+                ? `${uid}-name-error`
+                : undefined
             }
             className={cn(
               fieldClass,
-              errors.name && "border-destructive/60",
+              errors.name &&
+                "border-destructive/60",
             )}
             placeholder="Your name"
           />
@@ -228,7 +306,10 @@ export function ContactForm() {
         </div>
 
         <div>
-          <label htmlFor={`${uid}-email`} className={labelClass}>
+          <label
+            htmlFor={`${uid}-email`}
+            className={labelClass}
+          >
             Email address
           </label>
 
@@ -239,15 +320,22 @@ export function ContactForm() {
             autoComplete="email"
             maxLength={255}
             value={values.email}
-            onChange={(event) => set("email")(event.target.value)}
+            onChange={(event) =>
+              set("email")(event.target.value)
+            }
             aria-required="true"
-            aria-invalid={errors.email ? true : undefined}
+            aria-invalid={
+              errors.email ? true : undefined
+            }
             aria-describedby={
-              errors.email ? `${uid}-email-error` : undefined
+              errors.email
+                ? `${uid}-email-error`
+                : undefined
             }
             className={cn(
               fieldClass,
-              errors.email && "border-destructive/60",
+              errors.email &&
+                "border-destructive/60",
             )}
             placeholder="you@institution.edu"
           />
@@ -264,7 +352,10 @@ export function ContactForm() {
       </div>
 
       <div className="mt-5">
-        <label htmlFor={`${uid}-purpose`} className={labelClass}>
+        <label
+          htmlFor={`${uid}-purpose`}
+          className={labelClass}
+        >
           Purpose of contact
         </label>
 
@@ -272,19 +363,28 @@ export function ContactForm() {
           id={`${uid}-purpose`}
           name="purpose"
           value={values.purpose}
-          onChange={(event) => set("purpose")(event.target.value)}
+          onChange={(event) =>
+            set("purpose")(event.target.value)
+          }
           aria-required="true"
-          aria-invalid={errors.purpose ? true : undefined}
+          aria-invalid={
+            errors.purpose ? true : undefined
+          }
           aria-describedby={
-            errors.purpose ? `${uid}-purpose-error` : undefined
+            errors.purpose
+              ? `${uid}-purpose-error`
+              : undefined
           }
           className={cn(
             fieldClass,
             "appearance-none",
-            errors.purpose && "border-destructive/60",
+            errors.purpose &&
+              "border-destructive/60",
           )}
         >
-          <option value="">Select a purpose…</option>
+          <option value="">
+            Select a purpose…
+          </option>
 
           {contactPurposes.map((purpose) => (
             <option
@@ -308,7 +408,10 @@ export function ContactForm() {
       </div>
 
       <div className="mt-5">
-        <label htmlFor={`${uid}-message`} className={labelClass}>
+        <label
+          htmlFor={`${uid}-message`}
+          className={labelClass}
+        >
           Message
         </label>
 
@@ -318,17 +421,23 @@ export function ContactForm() {
           rows={6}
           maxLength={MESSAGE_MAX}
           value={values.message}
-          onChange={(event) => set("message")(event.target.value)}
+          onChange={(event) =>
+            set("message")(event.target.value)
+          }
           aria-required="true"
-          aria-invalid={errors.message ? true : undefined}
+          aria-invalid={
+            errors.message ? true : undefined
+          }
           aria-describedby={cn(
             `${uid}-message-hint`,
-            errors.message && `${uid}-message-error`,
+            errors.message &&
+              `${uid}-message-error`,
           )}
           className={cn(
             fieldClass,
             "resize-y",
-            errors.message && "border-destructive/60",
+            errors.message &&
+              "border-destructive/60",
           )}
           placeholder="Briefly describe your enquiry, collaboration idea or invitation."
         />
@@ -359,12 +468,22 @@ export function ContactForm() {
         )}
       </div>
 
-      {/* Cloudflare Turnstile mounts here once the backend is live. */}
-      <div
-        data-turnstile-slot
-        className="mt-5 empty:mt-0"
-        aria-hidden
-      />
+      <div className="mt-5">
+        <TurnstileWidget
+          key={turnstileResetKey}
+          onToken={handleTurnstileToken}
+          onError={handleTurnstileError}
+        />
+
+        {turnstileError && (
+          <p
+            className="mt-2 text-xs text-destructive"
+            role="alert"
+          >
+            {turnstileError}
+          </p>
+        )}
+      </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-4">
         <button

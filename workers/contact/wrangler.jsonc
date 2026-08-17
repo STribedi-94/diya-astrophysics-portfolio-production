@@ -6,6 +6,14 @@
   "observability": {
     "enabled": true
   },
+  "vars": {
+    "TURNSTILE_HOSTNAME": "astro-diya.mdwarf.workers.dev"
+  },
+  "secrets": {
+    "required": [
+      "TURNSTILE_SECRET_KEY"
+    ]
+  },
   "d1_databases": [
     {
       "binding": "CONTACT_DB",
