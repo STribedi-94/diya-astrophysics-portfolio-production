@@ -20,7 +20,7 @@ interface Env {
    * Public hostname expected in a successful Turnstile Siteverify response.
    *
    * Production:
-   * astro-diya.mdwarf.workers.dev
+   * astro-diya.mdwarfs.workers.dev
    */
   TURNSTILE_HOSTNAME: string;
 }

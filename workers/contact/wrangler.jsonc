@@ -7,7 +7,7 @@
     "enabled": true
   },
   "vars": {
-    "TURNSTILE_HOSTNAME": "astro-diya.mdwarf.workers.dev"
+    "TURNSTILE_HOSTNAME": "astro-diya.mdwarfs.workers.dev"
   },
   "secrets": {
     "required": [
