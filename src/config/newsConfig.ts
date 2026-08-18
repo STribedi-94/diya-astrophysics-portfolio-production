@@ -6,9 +6,10 @@
  */
 
 import { readPublicEnv, resolvePublicUrl } from "@/config/environment";
+
 export type NewsMode = "demo" | "live";
 
-const DEFAULT_MODE: NewsMode = "demo";
+const DEFAULT_MODE: NewsMode = "live";
 const DEFAULT_API_URL = "/api/news";
 const DEFAULT_PAGE_SIZE = 12;
 

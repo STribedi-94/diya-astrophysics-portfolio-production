@@ -1,4 +1,3 @@
-
 import type { ClassifiedNewsCandidate } from "./classifier";
 import type { NewsSourceDefinition } from "./sources";
 
@@ -14,12 +13,18 @@ function articleId(
 
   let hash = 2166136261;
 
-  for (let index = 0; index < input.length; index += 1) {
+  for (
+    let index = 0;
+    index < input.length;
+    index += 1
+  ) {
     hash ^= input.charCodeAt(index);
     hash = Math.imul(hash, 16777619);
   }
 
-  return `news_${sourceId}_${(hash >>> 0).toString(16)}`;
+  return `news_${sourceId}_${(
+    hash >>> 0
+  ).toString(16)}`;
 }
 
 function slugify(value: string): string {
@@ -37,18 +42,26 @@ function fingerprint(
 ): string {
   const value = [
     candidate.sourceId,
-    candidate.title.trim().toLowerCase(),
+    candidate.title
+      .trim()
+      .toLowerCase(),
     candidate.publishedAt,
   ].join("|");
 
   let hash = 2166136261;
 
-  for (let index = 0; index < value.length; index += 1) {
+  for (
+    let index = 0;
+    index < value.length;
+    index += 1
+  ) {
     hash ^= value.charCodeAt(index);
     hash = Math.imul(hash, 16777619);
   }
 
-  return `fp_${(hash >>> 0).toString(16)}`;
+  return `fp_${(
+    hash >>> 0
+  ).toString(16)}`;
 }
 
 export async function upsertSource(
@@ -72,7 +85,7 @@ export async function upsertSource(
         created_at,
         updated_at
       )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'rss', 1, 'ok', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 'ok', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 
       ON CONFLICT(id) DO UPDATE SET
         name = excluded.name,
@@ -90,12 +103,18 @@ export async function upsertSource(
     .bind(
       source.id,
       source.name,
-      source.shortName ?? source.name,
-      source.sourceType ?? null,
-      source.websiteUrl ?? null,
+      source.shortName ??
+        source.name,
+      source.sourceType ??
+        null,
+      source.websiteUrl ??
+        null,
       source.feedUrl,
-      source.country ?? null,
-      source.language ?? "en",
+      source.country ??
+        null,
+      source.language ??
+        "en",
+      source.adapterType,
     )
     .run();
 }
@@ -117,7 +136,10 @@ export async function markSourceFailure(
       WHERE id = ?
     `)
     .bind(
-      message.slice(0, 1000),
+      message.slice(
+        0,
+        1000,
+      ),
       source.id,
     )
     .run();
@@ -147,22 +169,30 @@ export async function upsertArticle(
   db: D1Database,
   candidate: ClassifiedNewsCandidate,
 ): Promise<ArticleWriteResult> {
-  const id = articleId(
-    candidate.sourceId,
-    candidate.canonicalUrl,
-  );
+  const id =
+    articleId(
+      candidate.sourceId,
+      candidate.canonicalUrl,
+    );
 
-  const existing = await db
-    .prepare(`
-      SELECT id
-      FROM news_articles
-      WHERE canonical_url = ?
-      LIMIT 1
-    `)
-    .bind(candidate.canonicalUrl)
-    .first<{ id: string }>();
+  const existing =
+    await db
+      .prepare(`
+        SELECT id
+        FROM news_articles
+        WHERE canonical_url = ?
+        LIMIT 1
+      `)
+      .bind(
+        candidate.canonicalUrl,
+      )
+      .first<{
+        id: string;
+      }>();
 
-  const resolvedId = existing?.id ?? id;
+  const resolvedId =
+    existing?.id ??
+    id;
 
   await db
     .prepare(`
@@ -207,9 +237,22 @@ export async function upsertArticle(
         title = excluded.title,
         summary = excluded.summary,
         article_url = excluded.article_url,
-        image_url = excluded.image_url,
-        image_alt = excluded.image_alt,
-        image_credit = excluded.image_credit,
+
+        image_url = COALESCE(
+          excluded.image_url,
+          news_articles.image_url
+        ),
+
+        image_alt = COALESCE(
+          excluded.image_alt,
+          news_articles.image_alt
+        ),
+
+        image_credit = COALESCE(
+          excluded.image_credit,
+          news_articles.image_credit
+        ),
+
         author = excluded.author,
         publisher_updated_at = excluded.publisher_updated_at,
         fetched_at = excluded.fetched_at,
@@ -229,31 +272,65 @@ export async function upsertArticle(
     `)
     .bind(
       resolvedId,
-      slugify(candidate.title),
+      slugify(
+        candidate.title,
+      ),
       candidate.title,
       candidate.summary,
       candidate.sourceId,
       candidate.articleUrl,
       candidate.canonicalUrl,
-      candidate.imageUrl ?? null,
-      null,
-      null,
-      candidate.author ?? null,
+
+      candidate.imageUrl ??
+        null,
+
+      candidate.imageAlt ??
+        null,
+
+      candidate.imageCredit ??
+        null,
+
+      candidate.author ??
+        null,
+
       candidate.publishedAt,
+
       null,
-      new Date().toISOString(),
+
+      new Date()
+        .toISOString(),
+
       candidate.category,
+
       null,
       null,
-      candidate.mission ?? null,
-      candidate.observatory ?? null,
-      candidate.telescope ?? null,
+
+      candidate.mission ??
+        null,
+
+      candidate.observatory ??
+        null,
+
+      candidate.telescope ??
+        null,
+
       candidate.newsType,
-      candidate.isFeatured ? 1 : 0,
-      candidate.isResearchOrbit ? 1 : 0,
+
+      candidate.isFeatured
+        ? 1
+        : 0,
+
+      candidate.isResearchOrbit
+        ? 1
+        : 0,
+
       candidate.researchOrbitScore,
+
       candidate.language,
-      fingerprint(candidate),
+
+      fingerprint(
+        candidate,
+      ),
     )
     .run();
 
@@ -262,7 +339,9 @@ export async function upsertArticle(
       DELETE FROM news_article_topics
       WHERE article_id = ?
     `)
-    .bind(resolvedId)
+    .bind(
+      resolvedId,
+    )
     .run();
 
   await db
@@ -270,37 +349,53 @@ export async function upsertArticle(
       DELETE FROM news_article_tags
       WHERE article_id = ?
     `)
-    .bind(resolvedId)
+    .bind(
+      resolvedId,
+    )
     .run();
 
-  if (candidate.topics.length > 0) {
+  if (
+    candidate.topics.length >
+    0
+  ) {
     await db.batch(
-      candidate.topics.map((topic) =>
-        db
-          .prepare(`
-            INSERT OR IGNORE INTO news_article_topics (
-              article_id,
-              topic
-            )
-            VALUES (?, ?)
-          `)
-          .bind(resolvedId, topic),
+      candidate.topics.map(
+        (topic) =>
+          db
+            .prepare(`
+              INSERT OR IGNORE INTO news_article_topics (
+                article_id,
+                topic
+              )
+              VALUES (?, ?)
+            `)
+            .bind(
+              resolvedId,
+              topic,
+            ),
       ),
     );
   }
 
-  if (candidate.tags.length > 0) {
+  if (
+    candidate.tags.length >
+    0
+  ) {
     await db.batch(
-      candidate.tags.map((tag) =>
-        db
-          .prepare(`
-            INSERT OR IGNORE INTO news_article_tags (
-              article_id,
-              tag
-            )
-            VALUES (?, ?)
-          `)
-          .bind(resolvedId, tag),
+      candidate.tags.map(
+        (tag) =>
+          db
+            .prepare(`
+              INSERT OR IGNORE INTO news_article_tags (
+                article_id,
+                tag
+              )
+              VALUES (?, ?)
+            `)
+            .bind(
+              resolvedId,
+              tag,
+            ),
       ),
     );
   }

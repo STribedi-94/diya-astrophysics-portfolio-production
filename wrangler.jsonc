@@ -13,6 +13,10 @@
     {
       "binding": "CONTACT_SERVICE",
       "service": "astro-diya-contact"
+    },
+    {
+      "binding": "NEWS_SERVICE",
+      "service": "astro-diya-news"
     }
   ]
 }

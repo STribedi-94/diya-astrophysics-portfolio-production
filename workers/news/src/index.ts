@@ -288,10 +288,6 @@ async function handleNews(
     orderBindings,
   } = buildNewsQuery(query);
 
-  const offset =
-    (query.page - 1) *
-    query.pageSize;
-
   const countResult =
     await env.NEWS_DB
       .prepare(`
@@ -317,6 +313,22 @@ async function handleNews(
         query.pageSize,
       ),
     );
+
+  /*
+   * Clamp an out-of-range requested page to the final
+   * available page. This keeps the production API aligned
+   * with the frontend pagination contract instead of
+   * returning an artificial empty result set.
+   */
+  const resolvedPage =
+    Math.min(
+      query.page,
+      totalPages,
+    );
+
+  const offset =
+    (resolvedPage - 1) *
+    query.pageSize;
 
   const articleResult =
     await env.NEWS_DB
@@ -551,16 +563,16 @@ async function handleNews(
     featuredItems,
 
     pagination: {
-      page: query.page,
+      page: resolvedPage,
       pageSize: query.pageSize,
       totalItems,
       totalPages,
 
       hasNextPage:
-        query.page < totalPages,
+        resolvedPage < totalPages,
 
       hasPreviousPage:
-        query.page > 1,
+        resolvedPage > 1,
     },
 
     availableFilters: {

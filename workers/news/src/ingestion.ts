@@ -1,11 +1,12 @@
 import { classifyCandidate } from "./classifier";
+import { enrichCandidateImages } from "./image-enrichment";
 import {
   markSourceFailure,
   markSourceSuccess,
   upsertArticle,
   upsertSource,
 } from "./repository";
-import { fetchRssSource } from "./rss";
+import { fetchSourceCandidates } from "./source-adapter";
 import {
   NEWS_SOURCES,
   type NewsSourceDefinition,
@@ -179,7 +180,7 @@ export async function ingestSource(
 
     try {
       candidates =
-        await fetchRssSource(
+        await fetchSourceCandidates(
           source,
           controller.signal,
         );
@@ -208,12 +209,24 @@ export async function ingestSource(
           !candidate.accepted,
       );
 
+    /*
+     * Enrich only accepted astrophysics stories.
+     *
+     * Adapter-provided metadata remains authoritative when present.
+     * Article-page metadata is fetched only for accepted items that
+     * still need an image and/or summary.
+     */
+    const enrichedAccepted =
+      await enrichCandidateImages(
+        accepted,
+      );
+
     let insertedCount = 0;
     let updatedCount = 0;
 
     for (
       const candidate
-      of accepted
+      of enrichedAccepted
     ) {
       const result =
         await upsertArticle(
@@ -301,6 +314,7 @@ export async function ingestSource(
       db,
       {
         id,
+
         sourceId:
           source.id,
 
@@ -359,9 +373,8 @@ export async function ingestAllSources(
   /*
    * Process sources sequentially.
    *
-   * This intentionally keeps external feed requests
-   * controlled and ensures one failed source cannot
-   * prevent the remaining trusted sources from running.
+   * This keeps external requests controlled and guarantees
+   * that a failed source cannot stop the remaining sources.
    */
   for (
     const source

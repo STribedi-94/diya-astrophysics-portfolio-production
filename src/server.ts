@@ -20,6 +20,7 @@ type ServiceBinding = {
 
 type Env = {
   CONTACT_SERVICE: ServiceBinding;
+  NEWS_SERVICE: ServiceBinding;
 };
 
 let serverEntryPromise: Promise<ServerEntry> | undefined;
@@ -40,6 +41,12 @@ function isContactApiRequest(request: Request): boolean {
   const url = new URL(request.url);
 
   return url.pathname === "/api/contact";
+}
+
+function isNewsApiRequest(request: Request): boolean {
+  const url = new URL(request.url);
+
+  return url.pathname === "/api/news";
 }
 
 async function proxyContactRequest(
@@ -67,6 +74,57 @@ async function proxyContactRequest(
   }
 
   return env.CONTACT_SERVICE.fetch(request);
+}
+
+async function proxyNewsRequest(
+  request: Request,
+  env: Env,
+): Promise<Response> {
+  if (!env.NEWS_SERVICE) {
+    console.error(
+      "NEWS_SERVICE binding is unavailable.",
+    );
+
+    return Response.json(
+      {
+        items: [],
+        featuredItems: [],
+        pagination: {
+          page: 1,
+          pageSize: 12,
+          totalItems: 0,
+          totalPages: 1,
+          hasNextPage: false,
+          hasPreviousPage: false,
+        },
+        availableFilters: {
+          sources: [],
+          categories: [],
+          topics: [],
+          countries: [],
+          missions: [],
+          observatories: [],
+          telescopes: [],
+          newsTypes: [],
+        },
+        lastUpdated: new Date().toISOString(),
+        status: "error",
+        activeSourceCount: 0,
+        failedSourceCount: 0,
+        message:
+          "The news service is temporarily unavailable. Please try again later.",
+      },
+      {
+        status: 503,
+        headers: {
+          "Cache-Control": "no-store",
+          "X-Content-Type-Options": "nosniff",
+        },
+      },
+    );
+  }
+
+  return env.NEWS_SERVICE.fetch(request);
 }
 
 // h3 swallows in-handler throws into a normal 500 Response with body
@@ -143,6 +201,27 @@ export default {
        */
       if (isContactApiRequest(request)) {
         return await proxyContactRequest(
+          request,
+          env,
+        );
+      }
+
+      /*
+       * Keep the public Astrophysics News API same-origin.
+       *
+       * Browser:
+       *   GET /api/news
+       *
+       * Main Worker:
+       *   astro-diya
+       *
+       * Dedicated backend:
+       *   NEWS_SERVICE -> astro-diya-news
+       *
+       * D1 remains private to the dedicated News Worker.
+       */
+      if (isNewsApiRequest(request)) {
+        return await proxyNewsRequest(
           request,
           env,
         );

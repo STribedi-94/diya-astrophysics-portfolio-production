@@ -1,3 +1,6 @@
+export type NewsSourceAdapterType =
+  | "rss"
+  | "aries-html";
 
 export type NewsSourceDefinition = {
   id: string;
@@ -11,7 +14,7 @@ export type NewsSourceDefinition = {
   country?: string;
   language: string;
 
-  adapterType: "rss";
+  adapterType: NewsSourceAdapterType;
 
   defaultCategory: string;
 
@@ -70,6 +73,25 @@ export const NEWS_SOURCES: readonly NewsSourceDefinition[] = [
     language: "en",
 
     adapterType: "rss",
+
+    defaultCategory: "Astronomy",
+
+    isActive: true,
+  },
+
+  {
+    id: "aries",
+    name: "Aryabhatta Research Institute of Observational Sciences",
+    shortName: "ARIES",
+    sourceType: "Research Institute",
+
+    websiteUrl: "https://www.aries.res.in/",
+    feedUrl: "https://www.aries.res.in/announcement_scientific",
+
+    country: "India",
+    language: "en",
+
+    adapterType: "aries-html",
 
     defaultCategory: "Astronomy",
 
