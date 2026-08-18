@@ -169,11 +169,27 @@ export async function ingestSource(
     const controller =
       new AbortController();
 
+    /*
+     * RSS sources normally respond quickly, so retain the existing
+     * 12-second protection for them.
+     *
+     * ARIES is an HTML-backed institutional source and has shown
+     * materially slower response times in production. Give that
+     * adapter a larger bounded window without weakening timeout
+     * protection for the established RSS sources.
+     */
+    const sourceTimeoutMs =
+      source.adapterType === "aries-html" ||
+      source.adapterType === "iia-html" ||
+      source.adapterType === "isro-html"
+        ? 30_000
+        : 12_000;
+
     const timeout =
       setTimeout(
         () =>
           controller.abort(),
-        12_000,
+        sourceTimeoutMs,
       );
 
     let candidates;

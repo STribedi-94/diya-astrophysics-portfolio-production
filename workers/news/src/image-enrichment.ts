@@ -181,28 +181,71 @@ function isAriesArticleUrl(
 function extractAriesAnnouncementArticle(
   html: string,
 ): string | undefined {
-  const start =
+  /*
+   * Prefer the historically observed ARIES Drupal announcement
+   * article wrapper when it is present.
+   */
+  const articleStart =
     html.search(
       /<article\b[^>]*class=["'][^"']*\bnode--type-announcement\b[^"']*["'][^>]*>/i,
     );
 
-  if (start < 0) {
-    return undefined;
+  if (articleStart >= 0) {
+    const articleEnd =
+      html.indexOf(
+        "</article>",
+        articleStart,
+      );
+
+    if (articleEnd >= 0) {
+      return html.slice(
+        articleStart,
+        articleEnd + "</article>".length,
+      );
+    }
   }
 
-  const end =
-    html.indexOf(
-      "</article>",
-      start,
+  /*
+   * Current ARIES Science Nugget responses expose the scientific
+   * body through Drupal's field--name-body structure even when the
+   * older node--type-announcement wrapper is absent.
+   *
+   * Starting at the body field avoids selecting header, navigation
+   * and unrelated page images.
+   */
+  const bodyStart =
+    html.search(
+      /<div\b[^>]*class=["'][^"']*\bfield--name-body\b[^"']*["'][^>]*>/i,
     );
 
-  if (end < 0) {
+  if (bodyStart < 0) {
     return undefined;
   }
 
+  /*
+   * Prefer a structural boundary after the body field.
+   * Retain a bounded fallback if ARIES changes its surrounding
+   * Drupal wrapper again.
+   */
+  const possibleEnds = [
+    html.indexOf("</article>", bodyStart),
+    html.indexOf("</main>", bodyStart),
+  ].filter(
+    (value) =>
+      value > bodyStart,
+  );
+
+  const bodyEnd =
+    possibleEnds.length > 0
+      ? Math.min(...possibleEnds)
+      : Math.min(
+          html.length,
+          bodyStart + 192 * 1024,
+        );
+
   return html.slice(
-    start,
-    end + "</article>".length,
+    bodyStart,
+    bodyEnd,
   );
 }
 
@@ -378,14 +421,25 @@ type ArticleMetadata = {
 
 async function fetchArticleMetadata(
   articleUrl: string,
+  sourceId?: string,
 ): Promise<ArticleMetadata> {
   const controller =
     new AbortController();
 
+  /*
+   * Preserve the established timeout for normal RSS-backed sources.
+   * ARIES article pages can occasionally take substantially longer,
+   * so allow a larger but still bounded window for that source only.
+   */
+  const articleTimeoutMs =
+    sourceId === "aries"
+      ? 20_000
+      : ARTICLE_TIMEOUT_MS;
+
   const timeout =
     setTimeout(
       () => controller.abort(),
-      ARTICLE_TIMEOUT_MS,
+      articleTimeoutMs,
     );
 
   try {
@@ -547,6 +601,7 @@ export async function enrichCandidateImage(
   const metadata =
     await fetchArticleMetadata(
       candidate.articleUrl,
+      candidate.sourceId,
     );
 
   if (

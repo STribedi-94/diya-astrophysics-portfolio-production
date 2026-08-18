@@ -152,7 +152,27 @@ const TOPIC_RULES: KeywordRule[] = [
       /\bsolar magnetic\b/i,
       /\bsolar atmosphere\b/i,
       /\bsolar activity\b/i,
+      /\bsolar flares?\b/i,
+      /\bsolar spectroscopy\b/i,
+      /\bsolar x[- ]?ray\b/i,
+      /\bsolar plasma\b/i,
       /\bspace weather\b/i,
+    ],
+    weight: 2,
+  },
+  {
+    topic: "planetary-science",
+    patterns: [
+      /\bplanetary science\b/i,
+      /\blunar science\b/i,
+      /\blunar surface\b/i,
+      /\blunar composition\b/i,
+      /\blunar mineralogy\b/i,
+      /\blunar geochemistry\b/i,
+      /\bmoon(?:'s)? surface\b/i,
+      /\bmoon(?:'s)? composition\b/i,
+      /\bregolith\b/i,
+      /\blunar soil\b/i,
     ],
     weight: 2,
   },
@@ -215,6 +235,15 @@ const NON_ASTRO_NASA_PATTERNS = [
   /\bpayload processing services\b/i,
 ];
 
+const NON_RESEARCH_ANNOUNCEMENT_PATTERNS = [
+  /\bannouncement of opportunity\b/i,
+  /\bcall for proposals?\b/i,
+  /\bsolicit(?:ing|s|ed)? proposals?\b/i,
+  /\binvit(?:e|es|ed|ing) proposals?\b/i,
+  /\bproposal submission\b/i,
+  /\bsubmit proposals?\b/i,
+  /\bobserving proposals?\b/i,
+];
 const RESEARCH_ORBIT_TOPICS = new Set([
   "m-dwarfs",
   "stellar-activity",
@@ -233,6 +262,10 @@ function matchesAny(
 
 function detectMission(text: string): string | undefined {
   const missions: Array<[string, RegExp]> = [
+    ["Aditya-L1", /\baditya[- ]?l1\b/i],
+    ["AstroSat", /\bastrosat\b/i],
+    ["XPoSat", /\bxposat\b/i],
+    ["Chandrayaan-3", /\bchandrayaan[- ]?3\b/i],
     ["TESS", /\btess\b/i],
     ["Gaia", /\bgaia\b/i],
     ["Hubble", /\bhubble\b/i],
@@ -367,6 +400,28 @@ export function classifyCandidate(
   const topics: string[] = [];
   let relevanceScore = 0;
 
+
+  /*
+   * Some planetary-science results describe the measured quantity
+   * directly (for example "elemental composition") rather than using
+   * the phrase "lunar composition".
+   *
+   * Require explicit lunar context so generic terrestrial or
+   * materials-composition stories do not qualify.
+   */
+  const lunarContext =
+    /\blunar\b/i.test(text) ||
+    /\bmoon\b/i.test(text) ||
+    /\bchandrayaan(?:[- ]?3)?\b/i.test(text);
+
+  const lunarCompositionScience =
+    lunarContext &&
+    (
+      /\belemental composition\b/i.test(text) ||
+      /\bchemical composition\b/i.test(text) ||
+      /\bmineral(?:ogy|ogical)\b/i.test(text) ||
+      /\bgeochem(?:istry|ical)\b/i.test(text)
+    );
   for (const rule of TOPIC_RULES) {
     if (matchesAny(text, rule.patterns)) {
       topics.push(rule.topic);
@@ -374,6 +429,14 @@ export function classifyCandidate(
     }
   }
 
+
+  if (
+    lunarCompositionScience &&
+    !topics.includes("planetary-science")
+  ) {
+    topics.push("planetary-science");
+    relevanceScore += 2;
+  }
   if (
     source.id === "nasa" &&
     matchesAny(text, NON_ASTRO_NASA_PATTERNS)
@@ -401,7 +464,20 @@ export function classifyCandidate(
   const threshold =
     sourceAcceptanceThreshold(source);
 
+  /*
+   * Proposal calls and Announcements of Opportunity can contain rich
+   * scientific terminology while not being research-result news.
+   * Keep this source-neutral so all institutional feeds receive the
+   * same treatment.
+   */
+  const isNonResearchAnnouncement =
+    matchesAny(
+      text,
+      NON_RESEARCH_ANNOUNCEMENT_PATTERNS,
+    );
+
   const accepted =
+    !isNonResearchAnnouncement &&
     relevanceScore >= threshold;
 
   const researchOrbitScore = Math.min(
@@ -462,6 +538,8 @@ export function classifyCandidate(
 
     rejectionReason: accepted
       ? undefined
-      : "Below astrophysics relevance threshold.",
+      : isNonResearchAnnouncement
+        ? "Non-research announcement or proposal call."
+        : "Below astrophysics relevance threshold.",
   };
 }

@@ -1,4 +1,6 @@
 import { fetchAriesHtmlSource } from "./aries-html";
+import { fetchIiaHtmlSource } from "./iia-html";
+import { fetchIsroHtmlSource } from "./isro-html";
 import {
   fetchRssSource,
   type IngestedNewsCandidate,
@@ -22,6 +24,17 @@ export async function fetchSourceCandidates(
         signal,
       );
 
+    case "iia-html":
+      return fetchIiaHtmlSource(
+        source,
+        signal,
+      );
+
+    case "isro-html":
+      return fetchIsroHtmlSource(
+        source,
+        signal,
+      );
     default: {
       const exhaustiveCheck:
         never = source.adapterType;

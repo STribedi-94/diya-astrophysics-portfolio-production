@@ -1,6 +1,8 @@
 export type NewsSourceAdapterType =
   | "rss"
-  | "aries-html";
+  | "aries-html"
+  | "iia-html"
+  | "isro-html";
 
 export type NewsSourceDefinition = {
   id: string;
@@ -94,6 +96,44 @@ export const NEWS_SOURCES: readonly NewsSourceDefinition[] = [
     adapterType: "aries-html",
 
     defaultCategory: "Astronomy",
+
+    isActive: true,
+  },
+
+  {
+    id: "iia",
+    name: "Indian Institute of Astrophysics",
+    shortName: "IIA",
+    sourceType: "Research Institute",
+
+    websiteUrl: "https://www.iiap.res.in/",
+    feedUrl: "https://www.iiap.res.in/articles/research-highlights/",
+
+    country: "India",
+    language: "en",
+
+    adapterType: "iia-html",
+
+    defaultCategory: "Astronomy",
+
+    isActive: true,
+  },
+
+  {
+    id: "isro",
+    name: "Indian Space Research Organisation",
+    shortName: "ISRO",
+    sourceType: "Space Agency",
+
+    websiteUrl: "https://www.isro.gov.in/",
+    feedUrl: "https://www.isro.gov.in/ISRO_EN/index.html",
+
+    country: "India",
+    language: "en",
+
+    adapterType: "isro-html",
+
+    defaultCategory: "Space Science",
 
     isActive: true,
   },
