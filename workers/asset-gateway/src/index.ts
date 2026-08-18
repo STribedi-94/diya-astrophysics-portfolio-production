@@ -5,11 +5,22 @@ interface Env {
 const CACHE_CONTROL =
   "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800";
 
+const ALLOWED_ORIGIN = "https://astro-diya.mdwarfs.workers.dev";
+
 function securityHeaders(): HeadersInit {
   return {
     "X-Content-Type-Options": "nosniff",
     "Referrer-Policy": "no-referrer",
   };
+}
+
+function applyCorsHeaders(headers: Headers, request: Request): void {
+  const origin = request.headers.get("Origin");
+
+  if (origin === ALLOWED_ORIGIN) {
+    headers.set("Access-Control-Allow-Origin", ALLOWED_ORIGIN);
+    headers.set("Vary", "Origin");
+  }
 }
 
 function errorResponse(
@@ -65,6 +76,7 @@ function getObjectKey(request: Request): string | null {
 function applyObjectHeaders(
   headers: Headers,
   object: R2Object | R2ObjectBody,
+  request: Request,
 ): void {
   object.writeHttpMetadata(headers);
 
@@ -73,6 +85,8 @@ function applyObjectHeaders(
   headers.set("Accept-Ranges", "bytes");
   headers.set("X-Content-Type-Options", "nosniff");
   headers.set("Referrer-Policy", "no-referrer");
+
+  applyCorsHeaders(headers, request);
 
   if (!headers.has("Content-Type")) {
     headers.set("Content-Type", "application/octet-stream");
@@ -101,7 +115,7 @@ export default {
       }
 
       const headers = new Headers();
-      applyObjectHeaders(headers, object);
+      applyObjectHeaders(headers, object, request);
       headers.set("Content-Length", String(object.size));
 
       return new Response(null, {
@@ -126,7 +140,7 @@ export default {
     }
 
     const headers = new Headers();
-    applyObjectHeaders(headers, object);
+    applyObjectHeaders(headers, object, request);
 
     if (rangeHeader && object.range) {
       let offset: number;

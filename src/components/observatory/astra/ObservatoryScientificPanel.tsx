@@ -487,10 +487,10 @@ export function ObservatoryScientificPanel({
       <>
       <div
         className={cn(
-          "absolute left-3 z-[55] rounded-xl border border-white/10 bg-[oklch(0.10_0.03_265/0.90)] p-3 shadow-xl backdrop-blur-md",
+          "absolute left-3 z-[55] max-h-[38%] overflow-y-auto rounded-xl border border-white/10 bg-[oklch(0.10_0.03_265/0.90)] p-3 shadow-xl backdrop-blur-md sm:max-h-none sm:overflow-visible",
           isFullscreen
             ? "bottom-16 right-3 sm:bottom-5 sm:left-5 sm:right-auto sm:w-[21rem] sm:max-w-[calc(100vw-2.5rem)]"
-            : "bottom-3 right-3 sm:max-w-xs",
+            : "bottom-12 right-3 sm:bottom-3 sm:max-w-xs",
         )}
       >
         <div className="flex items-start justify-between gap-3">
@@ -678,10 +678,10 @@ export function ObservatoryScientificPanel({
     <>
     <div
       className={cn(
-        "absolute left-3 z-[55] max-h-[calc(100%-5.5rem)] overflow-y-auto rounded-xl border border-white/10 bg-[oklch(0.10_0.03_265/0.90)] p-3 shadow-xl backdrop-blur-md",
+        "absolute left-3 z-[55] max-h-[45%] overflow-y-auto rounded-xl border border-white/10 bg-[oklch(0.10_0.03_265/0.90)] p-3 shadow-xl backdrop-blur-md sm:max-h-[calc(100%-5.5rem)]",
         isFullscreen
           ? "bottom-16 right-3 sm:bottom-5 sm:left-5 sm:right-auto sm:w-[24rem] sm:max-w-[calc(100vw-2.5rem)]"
-          : "bottom-3 right-3 sm:w-[20rem] sm:max-w-[calc(100%-1.5rem)]",
+          : "bottom-12 right-3 sm:bottom-3 sm:w-[20rem] sm:max-w-[calc(100%-1.5rem)]",
       )}
     >
 
