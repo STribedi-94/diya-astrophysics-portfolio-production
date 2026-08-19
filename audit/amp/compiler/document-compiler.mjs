@@ -15,6 +15,7 @@ import {
 } from "../contracts/asset-record.mjs";
 import { isValidAssetId } from "../identity/asset-id.mjs";
 import { DOCUMENT_GROUPS } from "../../modules/document-groups.mjs";
+import { managerAddedDocumentRecords } from "../documents/manager-added-records.mjs";
 import {
   getDocumentWebsiteMapping,
   validateDocumentWebsiteMappings,
@@ -92,6 +93,7 @@ async function compileDocumentRecord(group, pdfPath) {
           ),
         ),
         fileName: sourceFileName,
+        mimeType: "application/pdf",
       },
 
       derivatives: {
@@ -176,6 +178,55 @@ async function compileDocumentRecord(group, pdfPath) {
   return record;
 }
 
+async function validateManagerAddedDocumentRecord(record) {
+  if (!isAssetRecord(record)) {
+    throw new TypeError(
+      `Manager-added document does not satisfy the AMP contract: ${record?.id ?? "unknown"}`,
+    );
+  }
+
+  if (record.type !== "document") {
+    throw new TypeError(
+      `Manager-added record is not a document: ${record.id}`,
+    );
+  }
+
+  if (!isValidAssetId(record.id)) {
+    throw new TypeError(
+      `Manager-added document has an invalid Asset ID: ${record.id}`,
+    );
+  }
+
+  const requiredKeys = [
+    ["source", record.source?.key],
+    ["thumbnail", record.derivatives?.thumbnail?.key],
+    ["preview", record.derivatives?.preview?.key],
+  ];
+
+  for (const [label, key] of requiredKeys) {
+    if (!key || typeof key !== "string") {
+      throw new Error(
+        `Manager-added document ${record.id} has no ${label} key.`,
+      );
+    }
+
+    const filePath = path.resolve(
+      "public",
+      "assets",
+      ...key.split("/"),
+    );
+
+    if (!(await fileExists(filePath))) {
+      throw new Error(
+        `Missing ${label} for manager-added AMP asset ${record.id}: ${filePath}`,
+      );
+    }
+  }
+
+  return record;
+}
+
+
 export async function compileDocumentRegistry() {
   const mappingValidation =
     validateDocumentWebsiteMappings();
@@ -222,12 +273,35 @@ export async function compileDocumentRegistry() {
     }
   }
 
+  const legacyRecordCount = records.length;
+
   if (
-    records.length !== mappingValidation.mappings
+    legacyRecordCount !== mappingValidation.mappings
   ) {
     throw new Error(
-      `Compiled ${records.length} documents, but ${mappingValidation.mappings} verified website mappings exist.`,
+      `Compiled ${legacyRecordCount} legacy documents, but ${mappingValidation.mappings} verified website mappings exist.`,
     );
+  }
+
+  for (const candidate of managerAddedDocumentRecords) {
+    const record =
+      await validateManagerAddedDocumentRecord(candidate);
+
+    if (assetIds.has(record.id)) {
+      throw new Error(
+        `Duplicate compiled AMP Asset ID: ${record.id}`,
+      );
+    }
+
+    if (recordIds.has(record.website.recordId)) {
+      throw new Error(
+        `Duplicate compiled website recordId: ${record.website.recordId}`,
+      );
+    }
+
+    assetIds.add(record.id);
+    recordIds.add(record.website.recordId);
+    records.push(record);
   }
 
   return records.sort((left, right) =>

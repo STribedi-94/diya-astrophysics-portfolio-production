@@ -1,13 +1,19 @@
-﻿import { spawn } from "node:child_process";
+import { spawn } from "node:child_process";
 
 function run(command, args) {
   return new Promise((resolve, reject) => {
-    const executable =
-      process.platform === "win32" && command === "npx"
-        ? "npx.cmd"
-        : command;
+    const isWindowsNpx =
+      process.platform === "win32" && command === "npx";
 
-    const child = spawn(executable, args, {
+    const executable = isWindowsNpx
+      ? process.env.ComSpec || "cmd.exe"
+      : command;
+
+    const childArgs = isWindowsNpx
+      ? ["/d", "/s", "/c", "npx.cmd", ...args]
+      : args;
+
+    const child = spawn(executable, childArgs, {
       cwd: process.cwd(),
       stdio: "inherit",
       shell: false,
@@ -15,8 +21,16 @@ function run(command, args) {
 
     child.on("error", reject);
     child.on("exit", (code) => {
-      if (code === 0) resolve();
-      else reject(new Error(`${executable} ${args.join(" ")} exited with code ${code}`));
+      if (code === 0) {
+        resolve();
+        return;
+      }
+
+      reject(
+        new Error(
+          `${executable} ${childArgs.join(" ")} exited with code ${code}`,
+        ),
+      );
     });
   });
 }
@@ -40,5 +54,11 @@ export async function validateManagedWrite(adapterPlan) {
     await run("npx", ["tsc", "--noEmit"]);
   }
 
+  return Object.freeze({ valid: true });
+}
+
+export async function validateManagedDocumentAdd() {
+  await run("node", ["audit/compile-document-registry.mjs"]);
+  await run("npx", ["tsc", "--noEmit"]);
   return Object.freeze({ valid: true });
 }

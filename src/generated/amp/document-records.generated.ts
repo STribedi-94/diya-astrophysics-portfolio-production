@@ -16,7 +16,8 @@ export const documentRecords = Object.freeze(
     "status": "active",
     "source": {
       "key": "documents/collaborative/DiyaRam_Collaborative_Paper_01.pdf.pdf",
-      "fileName": "DiyaRam_Collaborative_Paper_01.pdf.pdf"
+      "fileName": "DiyaRam_Collaborative_Paper_01.pdf.pdf",
+      "mimeType": "application/pdf"
     },
     "derivatives": {
       "thumbnail": {
@@ -52,7 +53,8 @@ export const documentRecords = Object.freeze(
     "status": "active",
     "source": {
       "key": "documents/collaborative/DiyaRam_Collaborative_Paper_02.pdf.pdf",
-      "fileName": "DiyaRam_Collaborative_Paper_02.pdf.pdf"
+      "fileName": "DiyaRam_Collaborative_Paper_02.pdf.pdf",
+      "mimeType": "application/pdf"
     },
     "derivatives": {
       "thumbnail": {
@@ -88,7 +90,8 @@ export const documentRecords = Object.freeze(
     "status": "active",
     "source": {
       "key": "documents/collaborative/DiyaRam_Collaborative_Paper_03.pdf.pdf",
-      "fileName": "DiyaRam_Collaborative_Paper_03.pdf.pdf"
+      "fileName": "DiyaRam_Collaborative_Paper_03.pdf.pdf",
+      "mimeType": "application/pdf"
     },
     "derivatives": {
       "thumbnail": {
@@ -124,7 +127,8 @@ export const documentRecords = Object.freeze(
     "status": "active",
     "source": {
       "key": "documents/proceedings/collaborative/DiyaRam_Collaborative_Conference_Proceding.pdf.pdf",
-      "fileName": "DiyaRam_Collaborative_Conference_Proceding.pdf.pdf"
+      "fileName": "DiyaRam_Collaborative_Conference_Proceding.pdf.pdf",
+      "mimeType": "application/pdf"
     },
     "derivatives": {
       "thumbnail": {
@@ -160,7 +164,8 @@ export const documentRecords = Object.freeze(
     "status": "active",
     "source": {
       "key": "documents/cv/diya-ram-cv.pdf",
-      "fileName": "diya-ram-cv.pdf"
+      "fileName": "diya-ram-cv.pdf",
+      "mimeType": "application/pdf"
     },
     "derivatives": {
       "thumbnail": {
@@ -196,7 +201,8 @@ export const documentRecords = Object.freeze(
     "status": "active",
     "source": {
       "key": "documents/first-author/Magnetic Activities of AD Leonis Flares in TESS Data and Optical Spectra.pdf",
-      "fileName": "Magnetic Activities of AD Leonis Flares in TESS Data and Optical Spectra.pdf"
+      "fileName": "Magnetic Activities of AD Leonis Flares in TESS Data and Optical Spectra.pdf",
+      "mimeType": "application/pdf"
     },
     "derivatives": {
       "thumbnail": {
@@ -232,7 +238,8 @@ export const documentRecords = Object.freeze(
     "status": "active",
     "source": {
       "key": "documents/first-author/Magnetic Activities of GJ 1151 Flares in TESS Data and Radio Observation in uGMRT.pdf",
-      "fileName": "Magnetic Activities of GJ 1151 Flares in TESS Data and Radio Observation in uGMRT.pdf"
+      "fileName": "Magnetic Activities of GJ 1151 Flares in TESS Data and Radio Observation in uGMRT.pdf",
+      "mimeType": "application/pdf"
     },
     "derivatives": {
       "thumbnail": {
@@ -268,7 +275,8 @@ export const documentRecords = Object.freeze(
     "status": "active",
     "source": {
       "key": "documents/first-author/Magnetic Activities of Wolf 359 Starspot Distribution and Quasiperiodic Pulsation Using TESS Data.pdf",
-      "fileName": "Magnetic Activities of Wolf 359 Starspot Distribution and Quasiperiodic Pulsation Using TESS Data.pdf"
+      "fileName": "Magnetic Activities of Wolf 359 Starspot Distribution and Quasiperiodic Pulsation Using TESS Data.pdf",
+      "mimeType": "application/pdf"
     },
     "derivatives": {
       "thumbnail": {
@@ -304,7 +312,8 @@ export const documentRecords = Object.freeze(
     "status": "active",
     "source": {
       "key": "documents/first-author/Probing the Magnetic Activity of GJ 398 through TESS Flare Detection and uGMRT Radio Observations.pdf",
-      "fileName": "Probing the Magnetic Activity of GJ 398 through TESS Flare Detection and uGMRT Radio Observations.pdf"
+      "fileName": "Probing the Magnetic Activity of GJ 398 through TESS Flare Detection and uGMRT Radio Observations.pdf",
+      "mimeType": "application/pdf"
     },
     "derivatives": {
       "thumbnail": {
@@ -340,7 +349,8 @@ export const documentRecords = Object.freeze(
     "status": "active",
     "source": {
       "key": "documents/proceedings/first-author/Understanding the Magnetic Activity of M Dwarfs Optical and Near-Infrared Spectroscopic Studies.pdf",
-      "fileName": "Understanding the Magnetic Activity of M Dwarfs Optical and Near-Infrared Spectroscopic Studies.pdf"
+      "fileName": "Understanding the Magnetic Activity of M Dwarfs Optical and Near-Infrared Spectroscopic Studies.pdf",
+      "mimeType": "application/pdf"
     },
     "derivatives": {
       "thumbnail": {
@@ -376,7 +386,8 @@ export const documentRecords = Object.freeze(
     "status": "active",
     "source": {
       "key": "documents/thesis/Thesis - Understanding Stellar Activity in M-dwarfs.pdf",
-      "fileName": "Thesis - Understanding Stellar Activity in M-dwarfs.pdf"
+      "fileName": "Thesis - Understanding Stellar Activity in M-dwarfs.pdf",
+      "mimeType": "application/pdf"
     },
     "derivatives": {
       "thumbnail": {

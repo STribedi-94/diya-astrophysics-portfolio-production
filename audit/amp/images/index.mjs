@@ -22,13 +22,17 @@ import {
 import {
     managedImageRecords
 } from "./managed-records.mjs";
+import {
+    managerAddedImageRecords
+} from "./manager-added-records.mjs";
 
 export const imageRecords = [
     ...galleryImageRecords,
     ...portraitImageRecords,
     ...backgroundImageRecords,
     ...globeImageRecords,
-    ...managedImageRecords
+    ...managedImageRecords,
+    ...managerAddedImageRecords
 ];
 
 export const imageRecordCount =
