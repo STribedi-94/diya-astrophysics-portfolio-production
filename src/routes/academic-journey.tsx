@@ -1,4 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { ArrowLeft, ArrowRight, Camera, Images, X } from "lucide-react";
+import { gallery } from "@/data/gallery";
+import { imageService } from "@/services/images";
 import { Section } from "@/components/layout/Page";
 import { CosmicBackground } from "@/components/layout/CosmicBackground";
 import { JourneyProgress } from "@/components/journey/JourneyProgress";
@@ -249,6 +253,217 @@ function HeroSection() {
 }
 
 /* ─── Chapter section (1–4) ─────────────────────────────────────────── */
+const chapterGalleryIds: Record<string, readonly string[]> = {
+  foundation: ["bsc-study", "bsc-light-lab"],
+  astrophysics: ["msc-moon", "msc-sports", "msc-xavotsav"],
+  doctoral: [
+    "dot-observing-team",
+    "asi-2022-poster",
+    "bosefest-2024-poster-adleo",
+    "bosefest-2025-flare",
+  ],
+};
+
+function ChapterGalleryButton({
+  chapterId,
+  chapterTitle,
+}: {
+  chapterId: string;
+  chapterTitle: string;
+}) {
+  const records = (chapterGalleryIds[chapterId] ?? [])
+    .map((id) => gallery.find((record) => record.id === id))
+    .filter((record): record is NonNullable<typeof record> => Boolean(record));
+
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const current =
+    openIndex === null || records.length === 0
+      ? null
+      : records[openIndex];
+
+  useEffect(() => {
+    if (!current) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpenIndex(null);
+      } else if (event.key === "ArrowLeft") {
+        setOpenIndex((index) =>
+          index === null
+            ? null
+            : (index - 1 + records.length) % records.length,
+        );
+      } else if (event.key === "ArrowRight") {
+        setOpenIndex((index) =>
+          index === null
+            ? null
+            : (index + 1) % records.length,
+        );
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [current, records.length]);
+
+  if (records.length === 0) return null;
+
+  const previous = () =>
+    setOpenIndex((index) =>
+      index === null
+        ? 0
+        : (index - 1 + records.length) % records.length,
+    );
+
+  const next = () =>
+    setOpenIndex((index) =>
+      index === null
+        ? 0
+        : (index + 1) % records.length,
+    );
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpenIndex(0)}
+        className="mt-6 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/[0.07] px-4 py-2 text-xs font-medium text-foreground transition-all hover:border-primary/45 hover:bg-primary/[0.12] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+      >
+        <Images className="h-3.5 w-3.5 text-primary" />
+        View Chapter Images
+        <span className="rounded-full bg-white/[0.07] px-1.5 py-0.5 font-mono text-[9px] text-primary/85">
+          {String(records.length).padStart(2, "0")}
+        </span>
+      </button>
+
+      {current && openIndex !== null && (
+        <div
+          className="fixed inset-0 z-[80] flex flex-col bg-[oklch(0.035_0.025_265/0.97)] backdrop-blur-xl"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${chapterTitle} gallery`}
+        >
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 starfield-sparse opacity-35"
+          />
+
+          <header className="relative flex items-center justify-between gap-4 border-b border-white/10 px-4 py-3 md:px-6">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.22em] text-primary/80">
+                <Camera className="h-3.5 w-3.5" />
+                Academic Journey Gallery
+              </div>
+              <div className="mt-1 truncate font-display text-sm font-semibold md:text-base">
+                {chapterTitle}
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setOpenIndex(null)}
+              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.05] transition-colors hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+              aria-label="Close chapter gallery"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </header>
+
+          <div className="relative flex min-h-0 flex-1 items-center justify-center px-14 py-4 md:px-20 md:py-6">
+            {records.length > 1 && (
+              <button
+                type="button"
+                onClick={previous}
+                aria-label="Previous image"
+                className="absolute left-3 top-1/2 z-10 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/45 backdrop-blur transition-colors hover:bg-black/65 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 md:left-6"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </button>
+            )}
+
+            <img
+              src={current.src}
+              alt={current.alt}
+              className="max-h-[62vh] max-w-full rounded-xl object-contain shadow-[0_24px_70px_-24px_black]"
+            />
+
+            {records.length > 1 && (
+              <button
+                type="button"
+                onClick={next}
+                aria-label="Next image"
+                className="absolute right-3 top-1/2 z-10 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/45 backdrop-blur transition-colors hover:bg-black/65 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 md:right-6"
+              >
+                <ArrowRight className="h-5 w-5" />
+              </button>
+            )}
+          </div>
+
+          <footer className="relative border-t border-white/10 bg-black/35 px-4 py-4 backdrop-blur md:px-6">
+            <div className="mx-auto flex max-w-5xl flex-col gap-4 md:flex-row md:items-end md:justify-between">
+              <div className="max-w-3xl">
+                <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-primary/75">
+                  {String(openIndex + 1).padStart(2, "0")} / {String(records.length).padStart(2, "0")}
+                </div>
+
+                <h3 className="mt-1 font-display text-base font-semibold">
+                  {current.title}
+                </h3>
+
+                <p className="mt-1 text-xs leading-relaxed text-muted-foreground md:text-sm">
+                  {current.shortCaption}
+                </p>
+              </div>
+
+              <Link
+                to="/gallery"
+                onClick={() => setOpenIndex(null)}
+                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full border border-primary/30 bg-primary/[0.08] px-4 py-2 text-xs font-medium text-foreground transition-colors hover:bg-primary/[0.14]"
+              >
+                View More in Full Gallery
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+
+            {records.length > 1 && (
+              <div className="mx-auto mt-4 flex max-w-5xl gap-2 overflow-x-auto pb-1">
+                {records.map((record, index) => (
+                  <button
+                    key={record.id}
+                    type="button"
+                    onClick={() => setOpenIndex(index)}
+                    className={`relative h-14 w-20 shrink-0 overflow-hidden rounded-lg border transition-all ${
+                      index === openIndex
+                        ? "border-primary/60 ring-1 ring-primary/30"
+                        : "border-white/10 opacity-60 hover:opacity-100"
+                    }`}
+                    aria-label={`Open ${record.title}`}
+                  >
+                    <img
+                      src={record.src}
+                      alt=""
+                      loading="lazy"
+                      className="h-full w-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+          </footer>
+        </div>
+      )}
+    </>
+  );
+}
+
 function ChapterSection({
   chapter,
   alignRight,
@@ -366,6 +581,11 @@ function ChapterSection({
           >
             {chapter.significance}
           </p>
+
+          <ChapterGalleryButton
+            chapterId={chapter.id}
+            chapterTitle={chapter.title}
+          />
         </article>
 
 
@@ -530,8 +750,14 @@ function ThesisSection() {
   return (
     <Section id="thesis" className="!py-16 md:!py-24">
       <div className="relative overflow-hidden rounded-3xl border border-white/10">
-        <div className="relative h-56 md:h-72">
-          <ChapterScene name="thesis" />
+        <div className="relative aspect-[3/2] bg-black">
+          <img
+            src={imageService.getRequiredImage("thesis-m-dwarf-magnetic-activity").imageUrl}
+            alt="Scientific visualisation of magnetic activity in the M-dwarf stars studied in Diya Ram's doctoral thesis"
+            className="h-full w-full object-contain"
+            loading="lazy"
+            decoding="async"
+          />
         </div>
         <div className="relative p-6 md:p-10">
           <div className="text-[11px] uppercase tracking-[0.28em] text-primary/90">

@@ -15,6 +15,7 @@ import {
 import { gallery, type GalleryRecord } from "./gallery";
 import { aboutIdentity } from "./about";
 import { documentService } from "@/services/documents";
+import { imageService } from "@/services/images";
 
 function requireDocument(recordId: string) {
   const managedDocument = documentService.getDocument(recordId);
@@ -244,6 +245,9 @@ export const thesisRecord: ArchiveRecord = {
   ],
   facilities: ["TESS", "uGMRT", "HCT (HFOSC)", "DOT (TANSPEC)"],
   wavelength: "Optical + Near-infrared + Radio",
+  thumbnail: imageService.getRequiredImage("thesis-m-dwarf-magnetic-activity").imageUrl,
+  thumbnailAlt:
+    "Scientific visualisation of magnetic activity in the M-dwarf stars studied in Diya Ram's doctoral thesis",
   related: [
     { to: "/academic-journey", label: "Academic journey" },
     { to: "/publications", label: "Thesis publications" },

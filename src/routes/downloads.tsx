@@ -575,15 +575,26 @@ function DownloadsPage() {
 
           <div className="grid gap-6 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)]">
             <div className="relative rounded-2xl border border-uv-violet/25 bg-[oklch(0.14_0.06_290_/_0.6)] p-6 backdrop-blur-md">
-              <div className="rounded-xl border border-white/10 bg-black/40 p-6 text-center">
-                <BookMarked className="mx-auto h-8 w-8 text-uv-violet" aria-hidden />
-                <p className="mt-4 font-display text-base font-semibold leading-snug">
-                  {thesisRecord.title}
-                </p>
-                <p className="mt-2 text-xs text-muted-foreground">Diya Ram · 2026</p>
-                <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/80">
-                  Metadata only
-                </p>
+              <div className="overflow-hidden rounded-xl border border-white/10 bg-black/50">
+                <div className="aspect-[3/2] bg-black">
+                  <img
+                    src={thesisRecord.thumbnail}
+                    alt={thesisRecord.thumbnailAlt ?? thesisRecord.title}
+                    className="h-full w-full object-contain"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+
+                <div className="p-5 text-center">
+                  <p className="font-display text-base font-semibold leading-snug">
+                    {thesisRecord.title}
+                  </p>
+                  <p className="mt-2 text-xs text-muted-foreground">Diya Ram · 2026</p>
+                  <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/80">
+                    Metadata only
+                  </p>
+                </div>
               </div>
               <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
                 {aboutIdentity.thesisStatus} Metadata is publicly available; the full thesis is not

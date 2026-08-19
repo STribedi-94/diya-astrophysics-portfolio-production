@@ -205,7 +205,7 @@ export const facilityAllocations = [
     role: "Low-frequency radio observations of coherent and incoherent stellar magnetic activity, and searches for radio signatures potentially linked to star–planet interaction.",
     image: ugmrtImg,
     imageCredit: "Artistic visualisation · Diya Ram Portfolio",
-    officialUrl: "https://www.ncra.tifr.res.in/ncra/gmrt",
+    officialUrl: "https://www.gmrt.ncra.tifr.res.in/",
     cta: "Explore uGMRT",
     accent: "radio-teal",
   },

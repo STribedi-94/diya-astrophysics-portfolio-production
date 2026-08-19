@@ -19,12 +19,16 @@ import {
 import {
     globeImageRecords
 } from "./globe-records.mjs";
+import {
+    managedImageRecords
+} from "./managed-records.mjs";
 
 export const imageRecords = [
     ...galleryImageRecords,
     ...portraitImageRecords,
     ...backgroundImageRecords,
-    ...globeImageRecords
+    ...globeImageRecords,
+    ...managedImageRecords
 ];
 
 export const imageRecordCount =

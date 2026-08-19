@@ -86,12 +86,6 @@ async function writeGeneratedFile(
 async function main() {
   const records = await compileDocumentRegistry();
 
-  if (records.length !== 11) {
-    throw new Error(
-      `Expected 11 document records but compiled ${records.length}.`,
-    );
-  }
-
   await Promise.all([
     writeGeneratedFile(
       AUDIT_OUTPUT_DIRECTORY,

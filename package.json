@@ -9,7 +9,10 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "assets:compile:images": "node audit/compile-image-registry.mjs",
+    "assets:compile:documents": "node audit/compile-document-registry.mjs",
+    "assets:compile": "npm run assets:compile:images && npm run assets:compile:documents"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "operationId": "example-replace-image",
+  "operation": "replace",
+  "targetType": "image",
+  "targetId": "thesis-m-dwarf-magnetic-activity",
+  "source": {
+    "file": "replacement-image.png"
+  },
+  "changes": {},
+  "options": {
+    "syncR2": false
+  }
+}

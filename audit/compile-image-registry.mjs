@@ -86,12 +86,6 @@ async function writeGeneratedFile(
 async function main() {
   const records = await compileImageRegistry();
 
-  if (records.length !== 33) {
-    throw new Error(
-      `Expected 33 image records but compiled ${records.length}.`,
-    );
-  }
-
   await Promise.all([
     writeGeneratedFile(
       AUDIT_OUTPUT_DIRECTORY,

@@ -258,7 +258,7 @@ function SideNavigator() {
       <aside
         aria-label="Gallery navigator"
         className={cn(
-          "fixed left-4 top-24 z-30 hidden lg:block transition-[width] duration-300",
+          "fixed right-4 top-24 z-30 hidden lg:block transition-[width] duration-300",
           collapsed ? "w-14" : "w-56",
         )}
       >

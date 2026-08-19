@@ -843,6 +843,36 @@ export const imageRecords = Object.freeze(
     }
   },
   {
+    "id": "image-managed-thesis-m-dwarf-magnetic-activity",
+    "type": "image",
+    "category": "managed-visual",
+    "status": "active",
+    "source": {
+      "key": "images/thesis/diya-thesis-m-dwarf-magnetic-activity-visual.png",
+      "fileName": "diya-thesis-m-dwarf-magnetic-activity-visual.png",
+      "mimeType": "image/png"
+    },
+    "derivatives": {},
+    "website": {
+      "recordId": "thesis-m-dwarf-magnetic-activity"
+    },
+    "metadata": {
+      "role": "doctoral-thesis-scientific-visual"
+    },
+    "processing": {
+      "processor": "image",
+      "profile": "managed-original"
+    },
+    "cloud": {},
+    "relationships": {
+      "consumers": [
+        "academic-journey",
+        "downloads",
+        "scientific-mission-log"
+      ]
+    }
+  },
+  {
     "id": "image-portrait-primary",
     "type": "image",
     "category": "portrait",
