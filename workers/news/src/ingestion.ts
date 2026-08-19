@@ -181,7 +181,8 @@ export async function ingestSource(
     const sourceTimeoutMs =
       source.adapterType === "aries-html" ||
       source.adapterType === "iia-html" ||
-      source.adapterType === "isro-html"
+      source.adapterType === "isro-html" ||
+      source.adapterType === "ncra-html"
         ? 30_000
         : 12_000;
 

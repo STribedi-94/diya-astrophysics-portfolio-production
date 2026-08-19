@@ -82,6 +82,80 @@ function FilterGroup({
   );
 }
 
+function SourceFilterGroups({
+  options,
+  active,
+  onToggle,
+}: Pick<PanelProps, "options" | "active" | "onToggle">) {
+  const groups = [
+    {
+      label: "International",
+      ids: ["nasa", "esa", "eso"],
+    },
+    {
+      label: "National",
+      ids: ["aries", "iia", "isro", "ncra"],
+    },
+  ];
+
+  const selected = active.source ?? [];
+
+  return (
+    <fieldset className="border-t border-white/10 py-4 first:border-t-0 first:pt-0">
+      <legend className="font-display text-xs font-semibold text-foreground">
+        Sources
+      </legend>
+
+      <div className="mt-3 space-y-4">
+        {groups.map((group) => {
+          const sources = options.sources.filter((source) =>
+            group.ids.includes(source.id.toLowerCase()),
+          );
+
+          if (sources.length === 0) return null;
+
+          return (
+            <div key={group.label}>
+              <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.16em] text-primary/90">
+                {group.label}
+              </p>
+
+              <div className="space-y-1.5">
+                {sources.map((source) => {
+                  const checked = selected.includes(source.id);
+
+                  return (
+                    <label
+                      key={source.id}
+                      className="flex cursor-pointer items-center gap-2.5 rounded-lg px-2 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-white/[0.04] hover:text-foreground"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => onToggle("source", source.id)}
+                        className="h-3.5 w-3.5 rounded border-white/20 bg-white/[0.04] accent-[oklch(0.72_0.17_220)]"
+                      />
+
+                      <span className="min-w-0 flex-1 truncate">
+                        {source.label}
+                      </span>
+
+                      {typeof source.count === "number" && (
+                        <span className="font-mono text-[10px] opacity-60">
+                          {source.count}
+                        </span>
+                      )}
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </fieldset>
+  );
+}
 function PanelBody({ options, active, onToggle, onClearAll, activeCount }: PanelProps) {
   return (
     <div>
@@ -97,9 +171,24 @@ function PanelBody({ options, active, onToggle, onClearAll, activeCount }: Panel
           </button>
         )}
       </div>
-      {MULTI_FILTER_KEYS.map((key) => (
-        <FilterGroup key={key} groupKey={key} options={options} active={active} onToggle={onToggle} />
-      ))}
+            {MULTI_FILTER_KEYS.map((key) =>
+        key === "source" ? (
+          <SourceFilterGroups
+            key={key}
+            options={options}
+            active={active}
+            onToggle={onToggle}
+          />
+        ) : (
+          <FilterGroup
+            key={key}
+            groupKey={key}
+            options={options}
+            active={active}
+            onToggle={onToggle}
+          />
+        ),
+      )}
     </div>
   );
 }

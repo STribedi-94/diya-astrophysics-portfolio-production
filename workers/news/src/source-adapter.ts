@@ -1,6 +1,7 @@
 import { fetchAriesHtmlSource } from "./aries-html";
 import { fetchIiaHtmlSource } from "./iia-html";
 import { fetchIsroHtmlSource } from "./isro-html";
+import { fetchNcraHtmlSource } from "./ncra-html";
 import {
   fetchRssSource,
   type IngestedNewsCandidate,
@@ -32,6 +33,12 @@ export async function fetchSourceCandidates(
 
     case "isro-html":
       return fetchIsroHtmlSource(
+        source,
+        signal,
+      );
+
+    case "ncra-html":
+      return fetchNcraHtmlSource(
         source,
         signal,
       );

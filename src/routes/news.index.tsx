@@ -194,7 +194,7 @@ function HubHero({
         </dl>
 
         <p className="mt-5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-          Last updated · {lastUpdated ? formatNewsDateTime(lastUpdated) : "synchronising…"}
+          Last updated · {lastUpdated ? formatNewsLastUpdated(lastUpdated) : "synchronising…"}
         </p>
 
         <div className="mt-8 flex flex-wrap gap-3">
@@ -224,6 +224,32 @@ function HubHero({
 
 /* ----------------------------------------------------------------- page */
 
+function formatNewsLastUpdated(value: string): string {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  const istDateTime = new Intl.DateTimeFormat("en-IN", {
+    timeZone: "Asia/Kolkata",
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  }).format(date);
+
+  const utcTime = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "UTC",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(date);
+
+  return `${istDateTime} IST (${utcTime} UTC)`;
+}
 function NewsHubPage() {
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
@@ -242,7 +268,7 @@ function NewsHubPage() {
   useEffect(() => {
     const next = debouncedSearch.trim() || undefined;
     if (next === (search.q ?? undefined)) return;
-    navigate({ search: (prev: NewsSearch) => ({ ...prev, q: next, page: undefined }), replace: true });
+    navigate({ resetScroll: false, search: (prev: NewsSearch) => ({ ...prev, q: next, page: undefined }), replace: true });
   }, [debouncedSearch]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const activeFilters: ActiveFilters = useMemo(() => {
@@ -293,7 +319,7 @@ function NewsHubPage() {
 
   const toggleFilter = useCallback(
     (key: MultiFilterKey, value: string) => {
-      navigate({
+      navigate({ resetScroll: false,
         search: (prev: NewsSearch) => {
           const current = (prev[key] as string[] | undefined) ?? [];
           const next = current.includes(value)
@@ -307,19 +333,19 @@ function NewsHubPage() {
   );
 
   const clearFilters = useCallback(() => {
-    navigate({
+    navigate({ resetScroll: false,
       search: (prev: NewsSearch) => ({ q: prev.q, sort: prev.sort, orbit: prev.orbit }),
     });
   }, [navigate]);
 
   const setSort = useCallback(
     (sort: NewsSort) =>
-      navigate({ search: (prev: NewsSearch) => ({ ...prev, sort: sort === "newest" ? undefined : sort, page: undefined }) }),
+      navigate({ resetScroll: false, search: (prev: NewsSearch) => ({ ...prev, sort: sort === "newest" ? undefined : sort, page: undefined }) }),
     [navigate],
   );
 
   const toggleOrbit = useCallback(
-    () => navigate({ search: (prev: NewsSearch) => ({ ...prev, orbit: prev.orbit ? undefined : true, page: undefined }) }),
+    () => navigate({ resetScroll: false, search: (prev: NewsSearch) => ({ ...prev, orbit: prev.orbit ? undefined : true, page: undefined }) }),
     [navigate],
   );
 
@@ -629,29 +655,68 @@ function NewsHubPage() {
               headlines and short summaries are shown for attribution and context only.
             </p>
           </header>
-          <ul className="mt-6 flex flex-wrap gap-2.5">
-            {options.sources.map((source) => (
-              <li key={source.id}>
-                <button
-                  type="button"
-                  onClick={() => toggleFilter("source", source.id)}
-                  aria-pressed={(activeFilters.source ?? []).includes(source.id)}
-                  className={cn(
-                    "inline-flex min-h-10 items-center gap-2 rounded-full border px-4 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
-                    (activeFilters.source ?? []).includes(source.id)
-                      ? "border-primary/50 bg-primary/15"
-                      : "border-white/12 bg-white/[0.03] text-muted-foreground hover:border-primary/40 hover:text-foreground",
-                  )}
+          <div className="mt-7 grid gap-6 md:grid-cols-2">
+            {[
+              {
+                label: "International",
+                ids: ["nasa", "esa", "eso"],
+              },
+              {
+                label: "National",
+                ids: ["aries", "iia", "isro", "ncra"],
+              },
+            ].map((group) => {
+              const sources = options.sources.filter((source) =>
+                group.ids.includes(source.id.toLowerCase()),
+              );
+
+              if (sources.length === 0) return null;
+
+              return (
+                <div
+                  key={group.label}
+                  className="rounded-2xl border border-white/10 bg-white/[0.025] p-4"
                 >
-                  <Telescope className="h-3.5 w-3.5 shrink-0" aria-hidden />
-                  <span className="truncate">{source.label}</span>
-                  {typeof source.count === "number" && (
-                    <span className="font-mono text-[10px] opacity-70">{source.count}</span>
-                  )}
-                </button>
-              </li>
-            ))}
-          </ul>
+                  <h3 className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
+                    {group.label}
+                  </h3>
+
+                  <ul className="mt-3 flex flex-wrap gap-2.5">
+                    {sources.map((source) => (
+                      <li key={source.id}>
+                        <button
+                          type="button"
+                          onClick={() => toggleFilter("source", source.id)}
+                          aria-pressed={(activeFilters.source ?? []).includes(source.id)}
+                          className={cn(
+                            "inline-flex min-h-10 items-center gap-2 rounded-full border px-4 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
+                            (activeFilters.source ?? []).includes(source.id)
+                              ? "border-primary/50 bg-primary/15"
+                              : "border-white/12 bg-white/[0.03] text-muted-foreground hover:border-primary/40 hover:text-foreground",
+                          )}
+                        >
+                          <Telescope
+                            className="h-3.5 w-3.5 shrink-0"
+                            aria-hidden
+                          />
+
+                          <span className="truncate">
+                            {source.label}
+                          </span>
+
+                          {typeof source.count === "number" && (
+                            <span className="font-mono text-[10px] opacity-70">
+                              {source.count}
+                            </span>
+                          )}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
         </section>
       ) : null}
 

@@ -2,7 +2,8 @@ export type NewsSourceAdapterType =
   | "rss"
   | "aries-html"
   | "iia-html"
-  | "isro-html";
+  | "isro-html"
+  | "ncra-html";
 
 export type NewsSourceDefinition = {
   id: string;
@@ -134,6 +135,24 @@ export const NEWS_SOURCES: readonly NewsSourceDefinition[] = [
     adapterType: "isro-html",
 
     defaultCategory: "Space Science",
+
+    isActive: true,
+  },
+  {
+    id: "ncra",
+    name: "National Centre for Radio Astrophysics",
+    shortName: "NCRA",
+    sourceType: "Research Institute",
+
+    websiteUrl: "https://www.ncra.tifr.res.in/",
+    feedUrl: "https://www.ncra.tifr.res.in/research/recent-results",
+
+    country: "India",
+    language: "en",
+
+    adapterType: "ncra-html",
+
+    defaultCategory: "Astronomy",
 
     isActive: true,
   },
