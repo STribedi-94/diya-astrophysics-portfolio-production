@@ -12,11 +12,18 @@
   "services": [
     {
       "binding": "CONTACT_SERVICE",
-      "service": "astro-diya-contact"
+      "service": "astro-diya-contact",
+      "remote": true
     },
     {
       "binding": "NEWS_SERVICE",
-      "service": "astro-diya-news"
+      "service": "astro-diya-news",
+      "remote": true
+    },
+    {
+      "binding": "STATISTICS_SERVICE",
+      "service": "astro-diya-statistics",
+      "remote": true
     }
   ]
 }

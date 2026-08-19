@@ -34,8 +34,8 @@ export function CreatorCard({
       type="button"
       aria-label={creator.a11yLabel}
       className={cn(
-        "group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs text-muted-foreground transition-all",
-        "hover:border-white/20 hover:bg-white/[0.06] hover:text-foreground",
+        "group relative isolate inline-flex max-w-full items-center gap-2 rounded-full border border-primary/50 bg-primary/[0.10] px-4 py-2 text-xs text-foreground shadow-[0_0_20px_rgba(99,102,241,0.25),0_0_45px_rgba(139,92,246,0.16)] backdrop-blur-md transition-all duration-300 sm:px-5 sm:py-2.5",
+        "hover:border-primary/80 hover:bg-primary/[0.16] hover:text-foreground hover:shadow-[0_0_28px_rgba(99,102,241,0.38),0_0_60px_rgba(139,92,246,0.22)]",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
       )}
     >
@@ -64,7 +64,7 @@ export function CreatorCard({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <span className={cn("inline-block", className)}>{trigger ?? defaultTrigger}</span>
+        <span className={cn("relative z-20 inline-block max-w-full overflow-visible", className)}>{trigger ?? defaultTrigger}</span>
       </DialogTrigger>
       <DialogContent className="max-w-md border-white/10 bg-[oklch(0.10_0.04_265_/_0.95)] backdrop-blur-xl">
         <DialogHeader>

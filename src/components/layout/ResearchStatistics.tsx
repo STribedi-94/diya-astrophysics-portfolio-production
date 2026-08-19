@@ -1,11 +1,6 @@
+import { useEffect, useState } from "react";
 import { Eye, Globe2, Activity } from "lucide-react";
 
-/**
- * Data contract for the global Research Statistics block.
- * The project has no persistent analytics source, so the hook reports an
- * honest "unavailable" state. When a real aggregate-statistics source is
- * connected, return { status: "ready", data } from here — the UI needs no change.
- */
 export type ResearchStatsData = {
   visitors: number;
   countries: number;
@@ -17,8 +12,94 @@ export type ResearchStatsState =
   | { status: "ready"; data: ResearchStatsData }
   | { status: "unavailable" };
 
+const VISITOR_STORAGE_KEY = "diya-research-visitor-id";
+const SESSION_STORAGE_KEY = "diya-research-session-id";
+
+function createAnonymousId(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+
+  return `${Date.now().toString(36)}_${Math.random().toString(36).slice(2)}_${Math.random()
+    .toString(36)
+    .slice(2)}`;
+}
+
+function getOrCreateId(storage: Storage, key: string): string {
+  const existing = storage.getItem(key);
+
+  if (existing && /^[A-Za-z0-9_-]{16,128}$/.test(existing)) {
+    return existing;
+  }
+
+  const created = createAnonymousId();
+  storage.setItem(key, created);
+  return created;
+}
+
+function isResearchStatsData(value: unknown): value is ResearchStatsData {
+  if (!value || typeof value !== "object") return false;
+
+  const data = value as Partial<ResearchStatsData>;
+
+  return (
+    typeof data.visitors === "number" &&
+    Number.isFinite(data.visitors) &&
+    typeof data.countries === "number" &&
+    Number.isFinite(data.countries) &&
+    typeof data.sessions === "number" &&
+    Number.isFinite(data.sessions)
+  );
+}
+
 function useResearchStatistics(): ResearchStatsState {
-  return { status: "unavailable" };
+  const [state, setState] = useState<ResearchStatsState>({ status: "loading" });
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function load() {
+      try {
+        const visitorId = getOrCreateId(localStorage, VISITOR_STORAGE_KEY);
+        const sessionId = getOrCreateId(sessionStorage, SESSION_STORAGE_KEY);
+
+        const response = await fetch("/api/statistics", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ visitorId, sessionId }),
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(`Statistics request failed with HTTP ${response.status}`);
+        }
+
+        const data = (await response.json()) as unknown;
+
+        if (!isResearchStatsData(data)) {
+          throw new Error("Statistics response was invalid.");
+        }
+
+        if (!controller.signal.aborted) {
+          setState({ status: "ready", data });
+        }
+      } catch (error) {
+        if (controller.signal.aborted) return;
+
+        console.error("[statistics] Unable to load aggregate research statistics.", error);
+        setState({ status: "unavailable" });
+      }
+    }
+
+    void load();
+
+    return () => controller.abort();
+  }, []);
+
+  return state;
 }
 
 const metrics = [
@@ -26,22 +107,22 @@ const metrics = [
     key: "visitors" as const,
     label: "Visitors",
     icon: Eye,
-    descriptor: "Aggregate website visits",
-    help: "Total aggregate visits recorded by the website statistics source.",
+    descriptor: "Unique anonymous browsers",
+    help: "Distinct anonymous browser identifiers recorded by the portfolio statistics service.",
   },
   {
     key: "countries" as const,
     label: "Countries",
     icon: Globe2,
-    descriptor: "Broad regions represented",
-    help: "Number of broad visitor countries represented in aggregate statistics.",
+    descriptor: "Countries represented",
+    help: "Distinct broad visitor countries observed by Cloudflare at the server edge.",
   },
   {
     key: "sessions" as const,
     label: "Research Sessions",
     icon: Activity,
-    descriptor: "Aggregate browsing sessions",
-    help: "Aggregate website sessions as defined by the statistics source.",
+    descriptor: "Anonymous browsing sessions",
+    help: "Distinct anonymous browser sessions recorded by the portfolio statistics service.",
   },
 ];
 
@@ -57,6 +138,7 @@ export function ResearchStatistics() {
       >
         Research Statistics
       </h2>
+
       <ul className="mt-3 space-y-2">
         {metrics.map((m) => {
           const Icon = m.icon;
@@ -67,6 +149,7 @@ export function ResearchStatistics() {
               : state.status === "loading"
                 ? null
                 : "—";
+
           return (
             <li
               key={m.key}
@@ -95,8 +178,9 @@ export function ResearchStatistics() {
           );
         })}
       </ul>
+
       <p className="mt-2 text-[10px] leading-relaxed text-muted-foreground">
-        Aggregate website metrics. These figures do not identify individual visitors.
+        Anonymous aggregate website metrics. No personally identifying visitor information is shown.
       </p>
     </section>
   );

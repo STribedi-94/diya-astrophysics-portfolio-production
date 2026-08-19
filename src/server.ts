@@ -21,6 +21,7 @@ type ServiceBinding = {
 type Env = {
   CONTACT_SERVICE: ServiceBinding;
   NEWS_SERVICE: ServiceBinding;
+  STATISTICS_SERVICE: ServiceBinding;
 };
 
 let serverEntryPromise: Promise<ServerEntry> | undefined;
@@ -47,6 +48,12 @@ function isNewsApiRequest(request: Request): boolean {
   const url = new URL(request.url);
 
   return url.pathname === "/api/news";
+}
+
+function isStatisticsApiRequest(request: Request): boolean {
+  const url = new URL(request.url);
+
+  return url.pathname === "/api/statistics";
 }
 
 async function proxyContactRequest(
@@ -129,6 +136,28 @@ async function proxyNewsRequest(
 
 // h3 swallows in-handler throws into a normal 500 Response with body
 // {"unhandled":true,"message":"HTTPError"} — try/catch alone never fires for those.
+async function proxyStatisticsRequest(
+  request: Request,
+  env: Env,
+): Promise<Response> {
+  if (!env.STATISTICS_SERVICE) {
+    console.error("STATISTICS_SERVICE binding is unavailable.");
+
+    return Response.json(
+      { error: "The statistics service is temporarily unavailable." },
+      {
+        status: 503,
+        headers: {
+          "Cache-Control": "no-store",
+          "X-Content-Type-Options": "nosniff",
+        },
+      },
+    );
+  }
+
+  return env.STATISTICS_SERVICE.fetch(request);
+}
+
 async function normalizeCatastrophicSsrResponse(
   response: Response,
 ): Promise<Response> {
@@ -222,6 +251,13 @@ export default {
        */
       if (isNewsApiRequest(request)) {
         return await proxyNewsRequest(
+          request,
+          env,
+        );
+      }
+
+      if (isStatisticsApiRequest(request)) {
+        return await proxyStatisticsRequest(
           request,
           env,
         );

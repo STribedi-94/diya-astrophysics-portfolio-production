@@ -119,7 +119,7 @@ export function SiteFooter() {
           Observational Astrophysics · M-dwarf magnetic activity · Multi-wavelength research
         </div>
       </div>
-      <div className="container-page relative flex justify-center border-t border-white/5 py-5">
+      <div className="container-page relative isolate z-20 flex justify-center overflow-visible border-t border-primary/20 px-3 py-8 sm:px-6 sm:py-10">
         <CreatorCard />
       </div>
 
