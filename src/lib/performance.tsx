@@ -92,6 +92,44 @@ function probeCapability(): "weak" | "unknown" | "capable" {
   return "unknown";
 }
 
+/**
+ * Estimate browser rendering pressure independently from raw hardware power.
+ *
+ * High-DPI panels and Windows display scaling can make a relatively small
+ * CSS viewport expensive to rasterise even on otherwise capable hardware.
+ * This signal limits automatic visual upgrades without classifying the
+ * computer itself as weak.
+ */
+function probeRenderPressure(): "normal" | "elevated" | "high" {
+  if (typeof window === "undefined") return "normal";
+
+  const width = Math.max(window.innerWidth || 0, 1);
+  const height = Math.max(window.innerHeight || 0, 1);
+  const dpr = Math.max(window.devicePixelRatio || 1, 1);
+
+  const cssPixels = width * height;
+  const physicalPixels = cssPixels * dpr * dpr;
+
+  const shortViewport = height <= 820;
+  const compactViewport = width <= 1440;
+
+  if (
+    physicalPixels >= 5_000_000 ||
+    (dpr >= 1.75 && shortViewport && compactViewport)
+  ) {
+    return "high";
+  }
+
+  if (
+    physicalPixels >= 3_000_000 ||
+    (dpr >= 1.5 && (shortViewport || compactViewport))
+  ) {
+    return "elevated";
+  }
+
+  return "normal";
+}
+
 function detectWebGL(): boolean {
   if (typeof document === "undefined") return true;
   try {
@@ -128,7 +166,8 @@ export function PerformanceProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     setWebgl(detectWebGL());
     const capability = probeCapability();
-    if (capability === "weak") {
+    const renderPressure = probeRenderPressure();
+    if (capability === "weak" || renderPressure === "high") {
       setAutoMode("performance");
       return;
     }
@@ -146,7 +185,12 @@ export function PerformanceProvider({ children }: { children: ReactNode }) {
       const fps = (frames * 1000) / (t - start);
       upgraded.current = true;
       if (fps < 34) setAutoMode("performance");
-      else if (fps >= 50 && capability !== "unknown") setAutoMode("cinematic");
+      else if (
+        fps >= 50 &&
+        capability !== "unknown" &&
+        renderPressure === "normal"
+      )
+        setAutoMode("cinematic");
       else setAutoMode("balanced");
     };
 

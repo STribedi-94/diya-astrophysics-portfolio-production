@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { usePerf } from "@/lib/performance";
 
 export function PageHero({
   eyebrow,
@@ -14,10 +15,15 @@ export function PageHero({
   children?: ReactNode;
   className?: string;
 }) {
+  const { mode } = usePerf();
+  const light =
+    mode === "performance" ||
+    mode === "reduced-motion";
+
   return (
     <section className={cn("relative overflow-hidden pt-32 pb-16 md:pt-40 md:pb-20", className)}>
       <div className="absolute inset-0 bg-grad-hero opacity-70" aria-hidden />
-      <div className="absolute inset-0 starfield anim-drift opacity-70" aria-hidden />
+      <div className={`absolute inset-0 starfield opacity-70 ${light ? "" : "anim-drift"}`} aria-hidden />
       <div className="absolute inset-0 grid-cosmic opacity-40" aria-hidden />
       <div
         className="pointer-events-none absolute -top-40 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full opacity-40 blur-3xl"
@@ -27,7 +33,7 @@ export function PageHero({
       <div className="container-page relative">
         {eyebrow && (
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-primary/90">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary anim-pulse-slow" />
+            <span className={`h-1.5 w-1.5 rounded-full bg-primary ${light ? "" : "anim-pulse-slow"}`} />
             {eyebrow}
           </div>
         )}

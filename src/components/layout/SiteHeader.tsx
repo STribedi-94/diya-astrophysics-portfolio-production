@@ -396,17 +396,18 @@ export function SiteHeader() {
             <Link
               to="/news"
               className={cn(
-                "hidden shrink-0 whitespace-nowrap rounded-full",
+                "hidden shrink-0 items-center whitespace-nowrap rounded-full lg:inline-flex",
                 "bg-gradient-to-r from-[#22c6ff] via-[#2799ff] to-[#9969ff]",
-                "px-4 py-2 text-[11px] font-semibold text-[#06101e]",
+                "px-2.5 py-2 text-[10px] font-semibold text-[#06101e]",
+                "xl:px-3 xl:text-[11px] 2xl:px-4",
                 "shadow-[0_0_22px_-7px_rgba(60,177,255,0.92)]",
                 "transition-all duration-300",
                 "hover:scale-[1.025] hover:shadow-[0_0_30px_-7px_rgba(88,150,255,1)]",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70",
-                "2xl:inline-flex",
               )}
             >
-              News & Updates
+              <span className="xl:hidden">News</span>
+              <span className="hidden xl:inline">News & Updates</span>
             </Link>
 
             {/*

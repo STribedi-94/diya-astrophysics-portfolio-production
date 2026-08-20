@@ -377,7 +377,7 @@ function NewsHubPage() {
       <HubHero
         lastUpdated={data?.lastUpdated}
         statusLabel={statusLabel}
-        sourceCount={data?.activeSourceCount ?? options?.sources.length ?? 0}
+        sourceCount={data ? (data.activeSourceCount ?? 0) + (data.failedSourceCount ?? 0) : (options?.sources.length ?? 0)}
         totalItems={data?.pagination.totalItems ?? 0}
         orbitCount={options?.topics.length ?? 0}
       />
