@@ -25,6 +25,7 @@ import {
 import { PageHero, Section, GlassPanel } from "@/components/layout/Page";
 import { ChronicleNavigator } from "@/components/chronicle/ChronicleNavigator";
 import { cn } from "@/lib/utils";
+import { siteUrl } from "@/data/site";
 
 export const Route = createFileRoute("/teaching")({
   head: () => ({
@@ -42,8 +43,10 @@ export const Route = createFileRoute("/teaching")({
           "Undergraduate teaching, Master's mentorship and research-led scientific training by Diya Ram.",
       },
       { property: "og:type", content: "profile" },
+      { property: "og:url", content: siteUrl("/teaching") },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: siteUrl("/teaching") }],
   }),
   component: TeachingPage,
 });

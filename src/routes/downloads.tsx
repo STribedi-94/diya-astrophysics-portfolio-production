@@ -60,6 +60,7 @@ import { RecordCard } from "@/components/downloads/RecordCard";
 import { DocumentViewer } from "@/components/downloads/DocumentViewer";
 import { imageService } from "@/services/images";
 import { cn } from "@/lib/utils";
+import { siteUrl } from "@/data/site";
 
 export const Route = createFileRoute("/downloads")({
   head: () => ({
@@ -77,8 +78,10 @@ export const Route = createFileRoute("/downloads")({
           "An orbital archive of peer-reviewed research, doctoral scholarship, scientific presentations and verified academic records.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: siteUrl("/downloads") },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: siteUrl("/downloads") }],
   }),
   component: DownloadsPage,
 });

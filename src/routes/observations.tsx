@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { siteUrl } from "@/data/site";
 import { useEffect, useMemo, useState } from "react";
 import {
   Telescope,
@@ -1080,6 +1081,7 @@ export const Route = createFileRoute("/observations")({
           "A cinematic, researcher-led observing journey: planning, telescope operations, calibration and interpretation across optical, near-infrared and radio wavelengths.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: siteUrl("/observations") },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Observations — From Photon to Publication · Diya Ram" },
       {
@@ -1088,6 +1090,7 @@ export const Route = createFileRoute("/observations")({
           "How Diya Ram's astronomical observations become peer-reviewed science across uGMRT, HCT, DOT and TESS.",
       },
     ],
+    links: [{ rel: "canonical", href: siteUrl("/observations") }],
   }),
   component: ObservationsPage,
 });

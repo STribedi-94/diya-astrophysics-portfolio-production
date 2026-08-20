@@ -2,12 +2,14 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { PageHero, Section, GlassPanel } from "@/components/layout/Page";
 import { publicationsArchive } from "@/data/publications-archive";
 import { ExternalLink } from "lucide-react";
+import { siteUrl } from "@/data/site";
 
 export const Route = createFileRoute("/publications/$slug")({
   head: ({ params }) => {
     const p = publicationsArchive.find((x) => x.slug === params.slug);
     const title = p ? `${p.title} — Diya Ram` : "Publication — Diya Ram";
     const description = p?.shortSummary ?? "Peer-reviewed publication record.";
+    const url = siteUrl(`/publications/${params.slug}`);
     return {
       meta: [
         { title },
@@ -15,8 +17,12 @@ export const Route = createFileRoute("/publications/$slug")({
         { property: "og:title", content: title },
         { property: "og:description", content: description },
         { property: "og:type", content: "article" },
+        { property: "og:url", content: url },
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
       ],
+      links: [{ rel: "canonical", href: url }],
     };
   },
   loader: ({ params }) => {

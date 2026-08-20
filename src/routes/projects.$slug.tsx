@@ -6,15 +6,27 @@ import { facilities } from "@/data/facilities";
 import { researchAreas } from "@/data/research";
 import { publicationsArchive } from "@/data/publications-archive";
 import { ArrowRight } from "lucide-react";
+import { siteUrl } from "@/data/site";
 
 export const Route = createFileRoute("/projects/$slug")({
   head: ({ params }) => {
-    const p = projects.find((x) => x.slug === params.slug);
+    const item = projects.find((x) => x.slug === params.slug);
+    const title = item ? `${item.title} — Diya Ram` : "Project — Diya Ram";
+    const description = item?.question ?? "Observational astrophysics research project by Diya Ram.";
+    const url = siteUrl(`/projects/${params.slug}`);
     return {
       meta: [
-        { title: p ? `${p.title} — Diya Ram` : "Project — Diya Ram" },
-        { name: "description", content: p?.question ?? "Research project." },
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "article" },
+        { property: "og:url", content: url },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
       ],
+      links: [{ rel: "canonical", href: url }],
     };
   },
   loader: ({ params }) => {

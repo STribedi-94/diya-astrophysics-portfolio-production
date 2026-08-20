@@ -15,14 +15,14 @@ export const Route = createFileRoute("/sitemap.xml")({
           "/", "/about", "/research-universe", "/research", "/publications",
           "/observations", "/facilities", "/projects", "/academic-journey",
           "/teaching", "/conferences", "/gallery", "/downloads", "/news",
-          "/contact", "/privacy", "/sitemap",
+          "/contact", "/privacy", "/sitemap", "/mission-log",
         ];
         const entries = [
           ...staticPaths.map((path) => ({ path, changefreq: "weekly", priority: "0.8" })),
           ...researchAreas.map((a) => ({ path: `/research/${a.slug}` })),
           ...facilities.map((f) => ({ path: `/facilities/${f.slug}` })),
           ...projects.map((p) => ({ path: `/projects/${p.slug}` })),
-          ...chronicleRecords.map((n) => ({ path: `/news/${n.slug}` })),
+          ...chronicleRecords.map((n) => ({ path: `/mission-log/${n.slug}` })),
           ...publications.map((p) => ({ path: `/publications/${p.slug}` })),
         ];
         const urls = entries.map((e) =>

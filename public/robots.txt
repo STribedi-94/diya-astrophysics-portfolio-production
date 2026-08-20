@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://astro-diya.mdwarfs.workers.dev/sitemap.xml

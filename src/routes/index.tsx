@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Download, Sparkles, Telescope, Radio, LineChart } from "lucide-react";
 import { site } from "@/data/site";
+import { siteUrl } from "@/data/site";
 import { researchAreas } from "@/data/research";
 import { facilities } from "@/data/facilities";
 import { cvDownloadUrl } from "@/data/about";
@@ -19,7 +20,9 @@ export const Route = createFileRoute("/")({
         content:
           "Diya Ram: observational astrophysicist studying magnetic activity of M-dwarf stars with uGMRT, HCT and DOT across optical, spectroscopic and radio wavelengths.",
       },
+      { property: "og:url", content: siteUrl("/") },
     ],
+    links: [{ rel: "canonical", href: siteUrl("/") }],
   }),
   component: Home,
 });

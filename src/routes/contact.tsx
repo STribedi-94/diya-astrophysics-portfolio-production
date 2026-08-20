@@ -14,6 +14,7 @@ import { Section } from "@/components/layout/Page";
 import { profileLinks } from "@/data/about";
 import { contactIdentity, privacyNote, reviewLinks } from "@/data/contact";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { siteUrl } from "@/data/site";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -31,8 +32,10 @@ export const Route = createFileRoute("/contact")({
           "Reach Diya Ram for research collaboration, observing campaigns, invited talks and academic enquiries in observational stellar astrophysics.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: siteUrl("/contact") },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: siteUrl("/contact") }],
   }),
   component: ContactPage,
 });
