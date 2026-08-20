@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { researchAreas } from "@/data/research";
 import { facilities } from "@/data/facilities";
-import { projects, publications } from "@/data/misc";
+import { projects } from "@/data/misc";
+import { publicationsArchive } from "@/data/publications-archive";
 import { chronicleRecords } from "@/data/chronicle";
 import { siteUrl } from "@/data/site";
 
@@ -23,7 +24,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           ...facilities.map((f) => ({ path: `/facilities/${f.slug}` })),
           ...projects.map((p) => ({ path: `/projects/${p.slug}` })),
           ...chronicleRecords.map((n) => ({ path: `/mission-log/${n.slug}` })),
-          ...publications.map((p) => ({ path: `/publications/${p.slug}` })),
+          ...publicationsArchive.map((p) => ({ path: `/publications/${p.slug}` })),
         ];
         const urls = entries.map((e) =>
           [`  <url>`, `    <loc>${siteUrl(e.path)}</loc>`, `  </url>`].join("\n"),
