@@ -93,6 +93,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "google-site-verification", content: "JSQBlr5XcOa2igogqq01yq6pP-1RnZRVe5JuhRXO76g" },
       { title: "Diya Ram — Observational Astrophysicist" },
       {
         name: "description",
